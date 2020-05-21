@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
-    name='Measurements',
+    name='Named',
     url='https://github.com/HausReport/ClubRaiders',
     author='Erlaed',
     author_email='Erlaed@fdev.not',
