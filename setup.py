@@ -5,7 +5,7 @@ setup(
     name='Named',
     url='https://github.com/HausReport/ClubRaiders',
     author='Erlaed',
-    author_email='Erlaed@fdev.not',
+    author_email='Erlaed2@fdev.not',
     # Needed to actually package something
     packages=['named'],
     # Needed for dependencies
