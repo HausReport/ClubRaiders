@@ -81,3 +81,27 @@ class InhabitedSystem(NamedItem):
         name = self.jsonLine[ 'name' ]
         power = self.getPowerLabel()
         return f'{name} ({dist}ly) - {power}'
+
+    #
+    # Octant of galaxy measured from Etionses
+    #
+    def getOctant(self):
+        tmp = 0
+        if(getX() > 49.5): tmp +=1
+        if(getY() > -104): tmp +=2
+        if(getZ() > 6.3): tmp +=4
+        return tmp
+
+
+
+    #
+    #
+    #
+    #
+    #
+    #import plotly.io as pio
+    #pio.orca.config
+    #!wget https://repo.continuum.io/miniconda/Miniconda3-4.5.4-Linux-x86_64.sh && bash Miniconda3-4.5.4-Linux-x86_64.sh -bfp /usr/local
+    #!conda install -c plotly plotly-orca==1.2.1 psutil requests
+    #fig.write_image("images/fig1.jpeg")
+    #!conda install -c plotly plotly-orca

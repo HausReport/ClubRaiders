@@ -14,7 +14,7 @@ setup(
     version='0.1',
     # The license can be anything you like
     license='MIT',
-    description='An example of a python package from pre-existing code',
+    description='Placeholder description',
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
 )
