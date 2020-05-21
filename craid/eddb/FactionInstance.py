@@ -1,5 +1,5 @@
-from named.Faction import Faction
-from named.InhabitedSystem import InhabitedSystem
+from craid.eddb.Faction import Faction
+from craid.eddb.InhabitedSystem import InhabitedSystem
 import datetime
 
 class FactionInstance(Faction):

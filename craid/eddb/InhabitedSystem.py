@@ -1,6 +1,6 @@
-from named.Constants import MINOR_FACTION_ID, POWER_STATE, GOVERNMENT, MINOR_FACTION_PRESENCES, HAS_ANARCHY
+from craid.eddb.Constants import MINOR_FACTION_ID, POWER_STATE, MINOR_FACTION_PRESENCES
 
-from named.NamedItem import NamedItem
+from craid.eddb.NamedItem import NamedItem
 
 
 class InhabitedSystem(NamedItem):

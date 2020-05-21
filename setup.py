@@ -7,11 +7,11 @@ setup(
     author='Erlaed',
     author_email='Erlaed2@fdev.not',
     # Needed to actually package something
-    packages=['named'],
+    packages=['craid'],
     # Needed for dependencies
     #install_requires=['numpy'],
     # *strongly* suggested for sharing
-    version='0.21',
+    version='0.22',
     # The license can be anything you like
     license='MIT',
     description='Placeholder description',

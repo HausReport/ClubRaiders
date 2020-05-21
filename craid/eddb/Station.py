@@ -1,4 +1,4 @@
-from named.NamedItem import NamedItem
+from craid.eddb.NamedItem import NamedItem
 
 class Station(NamedItem):
 

@@ -1,4 +1,4 @@
-from regions.Region import Region
+from craid.regions.Region import Region
 
 turnerReach  = Region('Turner Reach',  -270, -200, -350, -175, -175, -250, "circle", "blue")
 siriusReach  = Region('Sirius Reach',  -270,  -50, -375, -100, -125,   50, "rect",   "yellow")

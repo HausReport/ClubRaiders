@@ -2,10 +2,10 @@ import json
 
 import pandas as pd
 
-import Club
-from named.Faction import Faction
-from named.FactionInstance import FactionInstance
-from named.InhabitedSystem import InhabitedSystem
+from craid import Club
+from craid.eddb.Faction import Faction
+from craid.eddb.FactionInstance import FactionInstance
+from craid.eddb.InhabitedSystem import InhabitedSystem
 
 all_factions_dict: Faction = {}
 # all_stations_dict : Station = {}
