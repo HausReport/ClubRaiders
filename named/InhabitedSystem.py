@@ -79,10 +79,5 @@ class InhabitedSystem(NamedItem):
 
     def getSystemLine(self):
         name = self.jsonLine[ 'name' ]
-        dist = 0  # str(round(self.jsonLine[ 'dist' ], 1))
-        # id = str(self.jsonLine[ ID ])
-        # nCount = str(self.jsonLine[ NEIGHBOR_COUNT ])
-        # hasAnarchy = str(self.jsonLine[ HAS_ANARCHY ])
-        # stationString = "empty"
         power = self.getPowerLabel()
         return f'{name} ({dist}ly) - {power}'
