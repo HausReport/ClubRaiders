@@ -87,9 +87,9 @@ class InhabitedSystem(NamedItem):
     #
     def getOctant(self):
         tmp = 0
-        if(getX() > 49.5): tmp +=1
-        if(getY() > -104): tmp +=2
-        if(getZ() > 6.3): tmp +=4
+        if(self.getX() > 49.5): tmp +=1
+        if(self.getY() > -104): tmp +=2
+        if(self.getZ() > 6.3): tmp +=4
         return tmp
 
 
