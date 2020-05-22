@@ -1,3 +1,4 @@
+import datetime
 import json
 from typing import List
 
@@ -111,6 +112,7 @@ def getDataFrame(csa):
     isHomeSystem:   List[bool] = []
     population:     List[int] = []
     influence:      List[float] = []
+    updated:        List[datetime.datetime] = []
 
     for xcs in csa:
         cs: FactionInstance = xcs
@@ -125,7 +127,7 @@ def getDataFrame(csa):
         isHomeSystem.append(cs.isHomeSystem())
         population.append(cs.getPopulation())
         influence.append(cs.getInfluence())
-
+        updated.append(cs.getUpdatedDateTime())
 
     data = {
         'systemName': systemName,
@@ -136,7 +138,8 @@ def getDataFrame(csa):
         'allegiance': allegiances,
         'isHomeSystem': isHomeSystem,
         'population': population,
-        'influence': influence
+        'influence': influence,
+        'updated': updated
     }
 
     #

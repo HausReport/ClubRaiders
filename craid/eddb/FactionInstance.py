@@ -23,6 +23,9 @@ class FactionInstance(Faction):
     
     def getUpdated(self):
       return self.mySystem.getUpdated()
+
+    def getUpdatedDateTime(self):
+      return datetime.datetime.fromtimestamp( int(self.mySystem.getUpdated()))
     
     def getX(self):
       return self.mySystem.getX()
@@ -78,7 +81,7 @@ class FactionInstance(Faction):
       z = '{:04.2f}'.format(self.getZ())
       sinf = '{:04.2f}'.format(self.getInfluence())
       allg = self.get_allegiance()
-      ds = self.getUpdatedString();
+      ds = self.getUpdatedString()
       return [facname,sysname,x,y,z,allg,sinf,war,ds]
 
     def isHomeSystem(self):
