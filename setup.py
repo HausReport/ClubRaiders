@@ -16,7 +16,7 @@ setup(
     # Needed for dependencies
     #install_requires=['numpy'],
     # *strongly* suggested for sharing
-    version='0.33',
+    version='0.34',
     # The license can be anything you like
     license='MIT',
     description='Placeholder description',
