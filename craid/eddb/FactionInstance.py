@@ -87,9 +87,7 @@ class FactionInstance(Faction):
     def isHomeSystem(self):
         factionHomeSystemId: int = self.get_homesystem_id()
         systemId = self.getSystemID()
-        hs = True
-        if (systemId == factionHomeSystemId): hs = False
-        return hs
+        return systemId == factionHomeSystemId
 
     def controlsSystem(self):
         cid = self.mySystem.getControllingFactionId()
