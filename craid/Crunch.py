@@ -113,6 +113,7 @@ def getDataFrame(csa):
     population:     List[int] = []
     influence:      List[float] = []
     updated:        List[datetime.datetime] = []
+    controlsSystem: List[bool] = []
 
     for xcs in csa:
         cs: FactionInstance = xcs
@@ -128,6 +129,7 @@ def getDataFrame(csa):
         population.append(cs.getPopulation())
         influence.append(cs.getInfluence())
         updated.append(cs.getUpdatedDateTime())
+        controlsSystem.append(cs.controlsSystem())
 
     data = {
         'systemName': systemName,
@@ -139,7 +141,8 @@ def getDataFrame(csa):
         'isHomeSystem': isHomeSystem,
         'population': population,
         'influence': influence,
-        'updated': updated
+        'updated': updated,
+        'control': controlsSystem
     }
 
     #

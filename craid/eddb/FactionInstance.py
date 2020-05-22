@@ -90,3 +90,8 @@ class FactionInstance(Faction):
         hs = True
         if (systemId == factionHomeSystemId): hs = False
         return hs
+
+    def controlsSystem(self):
+        cid = self.mySystem.getControllingFactionId()
+        mid: int = int(self.get_id())
+        return cid is mid

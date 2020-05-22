@@ -9,7 +9,11 @@ class InhabitedSystem(NamedItem):
     def __init__(self, name='', id=0):
         super().__init__(name, id)
 
-    def __init__(self, jsonString):
+    def __init__(self, jsonString: str):
+#        """
+#
+#        :type jsonString: str
+#        """
         super().__init__(jsonString[ NamedItem.NAME ], jsonString[ NamedItem.ID ])
         self.jsonLine = jsonString
         self.hasAnarchy = False
@@ -96,6 +100,8 @@ class InhabitedSystem(NamedItem):
     def getPopulation(self):
         return self.jsonLine[ 'population' ]
 
+    def getControllingFactionId(self):
+        return int(self.jsonLine[ 'controlling_minor_faction_id' ])
 
 
     #
