@@ -114,6 +114,7 @@ def getDataFrame(csa):
     influence:      List[float] = []
     updated:        List[datetime.datetime] = []
     controlsSystem: List[bool] = []
+    vulnerableString: List[str] = []
 
     for xcs in csa:
         cs: FactionInstance = xcs
@@ -130,6 +131,7 @@ def getDataFrame(csa):
         influence.append(cs.getInfluence())
         updated.append(cs.getUpdatedDateTime())
         controlsSystem.append(cs.controlsSystem())
+        vulnerableString.append(cs.getVulnerableString())
 
     data = {
         'systemName': systemName,
@@ -142,7 +144,8 @@ def getDataFrame(csa):
         'population': population,
         'influence': influence,
         'updated': updated,
-        'control': controlsSystem
+        'control': controlsSystem,
+        "vulnerable": vulnerableString
     }
 
     #
