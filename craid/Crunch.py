@@ -1,4 +1,6 @@
 import json
+from typing import List
+
 import pandas as pd
 from craid import Club
 from craid.eddb.Faction import Faction
@@ -19,10 +21,11 @@ def desiredState(state_dict):
 
 
 def getSystemsArray():
-    #all_factions_dict: Faction = {}            #private
-    club_factions_dict: Faction = {}           #private
-    all_systems_dict: InhabitedSystem = {}     #private
-    club_systems_arr: FactionInstance = [ ]    #make this one avaiable
+    #all_factions_dict: Faction         = {}    #private
+    club_factions_dict: Faction         = {}    #private
+    all_systems_dict: InhabitedSystem   = {}    #private
+    club_systems_arr: FactionInstance   = []    #make this one avaiable
+
     with open("data/factions.jsonl", 'r') as handle:
         for line in handle:
             lCurFaction = json.loads(line)
@@ -45,11 +48,9 @@ def getSystemsArray():
             foo = InhabitedSystem(sys)
             all_systems_dict[ tid ] = foo
 
-
-
-    for tsys in all_systems_dict.values():
-        ttsys: InhabitedSystem = tsys
-        mfp = ttsys.getMinorFactionPresences()
+    for cSystemX in all_systems_dict.values():
+        cSystem: InhabitedSystem = cSystemX
+        mfp = cSystem.getMinorFactionPresences()
         for faction_ptr in mfp:
             if faction_ptr is None:
                 continue
@@ -58,27 +59,30 @@ def getSystemsArray():
                 continue
             if faction_id in club_factions_dict:
                 fac = club_factions_dict[ faction_id ]
-                facname = fac.get_name2()
-                if (facname.startswith("*")): continue  # filters player factions
+                factionName: str = fac.get_name2()
+                if factionName.startswith("*"): continue  # filters player factions
 
-                sysname = ttsys.get_name()
-                facHome = fac.get_homesystem_id()
-                sysid = ttsys.get_id()
-                vulnerable = True
-                if (sysid == facHome): vulnerable = False
+                #sysname = cSystem.get_name()
+                #factionHomeSystemId: int = fac.get_homesystem_id()
+                #vulnerable = True
+                #if (systemId == factionHomeSystemId): vulnerable = False
 
-                govt = ttsys.getGovernment()
+
+                #systemId = cSystem.get_id()
+                #vulnerable = not fac.isHomeSystem(systemId)
+
+                govt = cSystem.getGovernment()
                 # allg = fac.get_allegiance()
 
                 inf = faction_ptr[ 'influence' ]
                 # sinf = '{:04.2f}'.format(inf)
                 # print(sinf)
 
-                # updated = ttsys.getUpdated();
+                # updated = cSystem.getUpdated();
                 # date = datetime.datetime.utcfromtimestamp(updated)
                 # ds = date.strftime("%m/%d/%Y %H:%M:%S")
 
-                active_states = json.dumps(faction_ptr[ 'active_states' ])
+                #active_states = json.dumps(faction_ptr[ 'active_states' ])
                 hasWar = desiredState(faction_ptr[ 'active_states' ])
                 if (govt == "Anarchy"):
                     hasWar = -16
@@ -87,23 +91,26 @@ def getSystemsArray():
                 if (hasWar == 104 and inf > 10.0):
                     hasWar = 0
 
-                sysIns = FactionInstance(fac, ttsys, inf, hasWar)
+                sysIns = FactionInstance(fac, cSystem, inf, hasWar)
                 club_systems_arr.append(sysIns)
-                # print(facname + "," + sysname)
+                # print(factionName + "," + sysname)
                 # print("=====================================================================================")
-                # print(facname + "," + sysname + "," + x + "," + y + "," + z + "," + allg + "," + sinf + "," + war+ "," + ds )  # + "," + allg)
+                # print(factionName + "," + sysname + "," + x + "," + y + "," + z + "," + allg + "," + sinf + "," + war+ "," + ds )  # + "," + allg)
 
     return club_systems_arr
 
 #=========================================================!!!!!!!!!!!!!!!
 def getDataFrame(csa):
 
-    xs = [ ]
-    ys = [ ]
-    zs = [ ]
-    factionName = [ ]
-    systemName = [ ]
-    allgs = [ ]
+    xCoords:        List[int] = []
+    yCoords:        List[int] = []
+    zCoords:        List[int] = []
+    factionName:    List[str] = []
+    systemName:     List[str] = []
+    allegiances:    List[str] = []
+    isHomeSystem:   List[bool] = []
+    population:     List[int] = []
+    influence:      List[float] = []
 
     for xcs in csa:
         cs: FactionInstance = xcs
@@ -111,18 +118,25 @@ def getDataFrame(csa):
         # if (vulnerable == False): continue
         factionName.append(cs.get_name())
         systemName.append(cs.getSystemName())
-        xs.append(cs.getX())
-        ys.append(cs.getY())
-        zs.append(cs.getZ())
-        allgs.append(cs.get_allegiance())
+        xCoords.append(cs.getX())
+        yCoords.append(cs.getY())
+        zCoords.append(cs.getZ())
+        allegiances.append(cs.get_allegiance())
+        isHomeSystem.append(cs.isHomeSystem())
+        population.append(cs.getPopulation())
+        influence.append(cs.getInfluence())
+
 
     data = {
         'systemName': systemName,
         'factionName': factionName,
-        'x': xs,
-        'y': ys,
-        'z': zs,
-        'allegiance': allgs
+        'x': xCoords,
+        'y': yCoords,
+        'z': zCoords,
+        'allegiance': allegiances,
+        'isHomeSystem': isHomeSystem,
+        'population': population,
+        'influence': influence
     }
 
     #

@@ -12,6 +12,8 @@ class FactionInstance(Faction):
         self.vulnerable: int = xvulnerable
         #print("Hi")
 
+    def getPopulation(self):
+        return self.mySystem.getPopulation()
 
     def getSystemID(self):
       return self.mySystem.get_id()
@@ -78,3 +80,10 @@ class FactionInstance(Faction):
       allg = self.get_allegiance()
       ds = self.getUpdatedString();
       return [facname,sysname,x,y,z,allg,sinf,war,ds]
+
+    def isHomeSystem(self):
+        factionHomeSystemId: int = self.get_homesystem_id()
+        systemId = self.getSystemID()
+        hs = True
+        if (systemId == factionHomeSystemId): hs = False
+        return hs

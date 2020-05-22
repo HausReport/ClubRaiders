@@ -16,10 +16,11 @@ class InhabitedSystem(NamedItem):
         self.powerState = jsonString[ POWER_STATE ]
 
     def isProbablyAGoodBHSystem(self):
-        if not self.jsonLine[ 'primary_economy' ]:
+        econ = self.jsonLine[ 'primary_economy' ]
+        if not econ:
             return False
-        if (not self.jsonLine[ 'primary_economy' ].startswith('Extract')) and (
-                not self.jsonLine[ 'primary_economy' ].startswith('Refine')):
+        if (not econ.startswith('Extract')) and (
+                not econ.startswith('Refine')):
             return False
         return True
 
@@ -77,10 +78,10 @@ class InhabitedSystem(NamedItem):
         powerState = self.getPowerState()
         return f'{power}-{powerState}'
 
-    def getSystemLine(self):
-        name = self.jsonLine[ 'name' ]
-        power = self.getPowerLabel()
-        return f'{name} ({dist}ly) - {power}'
+    #def getSystemLine(self):
+    #    name = self.jsonLine[ 'name' ]
+    #    power = self.getPowerLabel()
+    #    return f'{name} ({dist}ly) - {power}'
 
     #
     # Octant of galaxy measured from Etionses
@@ -91,6 +92,9 @@ class InhabitedSystem(NamedItem):
         if(self.getY() > -104): tmp +=2
         if(self.getZ() > 6.3): tmp +=4
         return tmp
+
+    def getPopulation(self):
+        return self.jsonLine[ 'population' ]
 
 
 
