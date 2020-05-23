@@ -56,23 +56,23 @@ def getSystemsArray():
     #
     # Populate list of player factions & x,y,zs
     #
-    facList = []
+    xFacList = []
     fac: FactionInstance
     for fac in player_factions_dict:
         sid = fac.getSystemID()
         sys: InhabitedSystem = all_systems_dict.get(sid)
         if(sys is None): continue
-        sName = sys.get_name()
-        x = sys.getX()
-        y = sys.getY()
-        z = sys.getZ()
+        sName :str = sys.get_name()
+        x :float = sys.getX()
+        y :float = sys.getY()
+        z :float = sys.getZ()
         item = (sName, (x, y, z))
         facList.add(item)
     #
     # Make nifty list of club faction presences
     #
-    for cSystemX in all_systems_dict.values():
-        cSystem: InhabitedSystem = cSystemX
+    cSystem: InhabitedSystem
+    for cSystem in all_systems_dict.values():
         mfp = cSystem.getMinorFactionPresences()
         for faction_ptr in mfp:
             if faction_ptr is None:
@@ -138,8 +138,8 @@ def getDataFrame(csa):
     controlsSystem: List[bool] = []
     vulnerableString: List[str] = []
 
-    for xcs in csa:
-        cs: FactionInstance = xcs
+    cs: FactionInstance
+    for cs in csa:
         factionName.append(cs.get_name())
         systemName.append(cs.getSystemName())
         xCoords.append(cs.getX())
