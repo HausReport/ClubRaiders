@@ -58,7 +58,7 @@ def getSystemsArray():
     #
     xFacList = []
     fac: FactionInstance
-    for fac in player_factions_dict:
+    for fac in player_factions_dict.values():
         sid = fac.getSystemID()
         sys: InhabitedSystem = all_systems_dict.get(sid)
         if(sys is None): continue
