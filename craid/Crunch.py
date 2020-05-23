@@ -120,7 +120,7 @@ def getSystemsArray():
                 # print("=====================================================================================")
                 # print(factionName + "," + sysname + "," + x + "," + y + "," + z + "," + allg + "," + sinf + "," + war+ "," + ds )  # + "," + allg)
 
-    return [club_systems_arr, facList]
+    return [club_systems_arr, xFacList]
 
 #=========================================================!!!!!!!!!!!!!!!
 def getDataFrame(csa):
