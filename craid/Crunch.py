@@ -1,6 +1,6 @@
 import datetime
 import json
-from typing import List
+from typing import List, Dict, Tuple
 
 import pandas as pd
 from craid import Club
@@ -54,20 +54,33 @@ def getSystemsArray():
 
 
     #
-    # Populate list of player factions & x,y,zs
+    # Populate dict of player factions & x,y,zs
     #
-    xFacList = []
+    xFacList = {}
     fac: Faction
     for fac in player_factions_dict.values():
         sid = fac.get_homesystem_id()
         sys: InhabitedSystem = all_systems_dict.get(sid)
         if(sys is None): continue
+        sName :str = fac.get_name2()
+        x :float = sys.getX()
+        y :float = sys.getY()
+        z :float = sys.getZ()
+        #item = (sName, (x, y, z))
+        xFacList[sName] = (x,y,z) #.append(item)
+
+    #
+    # Populate dict of system name & x,y,zs
+    #
+    xSysList: Dict[str, Tuple[float, float, float]] = {}
+    sys: InhabitedSystem
+    for sys in player_factions_dict.values():
+        if(sys is None): continue
         sName :str = sys.get_name()
         x :float = sys.getX()
         y :float = sys.getY()
         z :float = sys.getZ()
-        item = (sName, (x, y, z))
-        xFacList.append(item)
+        xSysList[sName] = (x,y,z) #.append(item)
 
     #
     # Make nifty list of club faction presences
@@ -121,7 +134,7 @@ def getSystemsArray():
                 # print("=====================================================================================")
                 # print(factionName + "," + sysname + "," + x + "," + y + "," + z + "," + allg + "," + sinf + "," + war+ "," + ds )  # + "," + allg)
 
-    return [club_systems_arr, xFacList]
+    return [club_systems_arr, xFacList, xSysList]
 
 #=========================================================!!!!!!!!!!!!!!!
 def getDataFrame(csa):
