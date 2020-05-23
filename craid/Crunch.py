@@ -52,6 +52,25 @@ def getSystemsArray():
             foo = InhabitedSystem(sys)
             all_systems_dict[ tid ] = foo
 
+
+    #
+    # Populate list of player factions & x,y,zs
+    #
+    facList = []
+    fac: FactionInstance
+    for fac in player_factions_dict:
+        sid = fac.getSystemID()
+        sys: InhabitedSystem = all_systems_dict.get(sid)
+        if(sys is None): continue
+        sName = sys.get_name()
+        x = sys.getX()
+        y = sys.getY()
+        z = sys.getZ()
+        item = (sName, (x, y, z))
+        facList.add(item)
+    #
+    # Make nifty list of club faction presences
+    #
     for cSystemX in all_systems_dict.values():
         cSystem: InhabitedSystem = cSystemX
         mfp = cSystem.getMinorFactionPresences()
@@ -101,7 +120,7 @@ def getSystemsArray():
                 # print("=====================================================================================")
                 # print(factionName + "," + sysname + "," + x + "," + y + "," + z + "," + allg + "," + sinf + "," + war+ "," + ds )  # + "," + allg)
 
-    return [club_systems_arr, player_factions_dict]
+    return [club_systems_arr, facList]
 
 #=========================================================!!!!!!!!!!!!!!!
 def getDataFrame(csa):
