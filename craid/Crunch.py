@@ -23,6 +23,7 @@ def desiredState(state_dict):
 
 def getSystemsArray():
     #all_factions_dict: Faction         = {}    #private
+    player_factions_dict: Faction       = {}    #private
     club_factions_dict: Faction         = {}    #private
     all_systems_dict: InhabitedSystem   = {}    #private
     club_systems_arr: FactionInstance   = []    #make this one avaiable
@@ -33,6 +34,8 @@ def getSystemsArray():
             lCurFactionId = int(lCurFaction[ 'id' ])
             curFaction = Faction(lCurFaction)
             #all_factions_dict[ lCurFactionId ] = curFaction
+            if curFaction.is_player():
+                player_factions_dict[ lCurFactionId ] = curFaction
             if Club.proClubFaction(curFaction):
                 club_factions_dict[ lCurFactionId ] = curFaction
 
@@ -98,7 +101,7 @@ def getSystemsArray():
                 # print("=====================================================================================")
                 # print(factionName + "," + sysname + "," + x + "," + y + "," + z + "," + allg + "," + sinf + "," + war+ "," + ds )  # + "," + allg)
 
-    return club_systems_arr
+    return [club_systems_arr, player_factions_dict]
 
 #=========================================================!!!!!!!!!!!!!!!
 def getDataFrame(csa):
@@ -118,8 +121,6 @@ def getDataFrame(csa):
 
     for xcs in csa:
         cs: FactionInstance = xcs
-        # vulnerable = cs.isVulnerable()
-        # if (vulnerable == False): continue
         factionName.append(cs.get_name())
         systemName.append(cs.getSystemName())
         xCoords.append(cs.getX())
