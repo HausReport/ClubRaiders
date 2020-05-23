@@ -62,7 +62,7 @@ def getSystemsArray():
         sid = fac.get_homesystem_id()
         sys: InhabitedSystem = all_systems_dict.get(sid)
         if(sys is None): continue
-        sName :str = fac.get_name2()
+        sName :str = fac.get_name()
         x :float = sys.getX()
         y :float = sys.getY()
         z :float = sys.getZ()
