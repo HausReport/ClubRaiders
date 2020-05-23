@@ -67,7 +67,7 @@ def getSystemsArray():
         y :float = sys.getY()
         z :float = sys.getZ()
         item = (sName, (x, y, z))
-        facList.add(item)
+        xFacList.add(item)
     #
     # Make nifty list of club faction presences
     #
