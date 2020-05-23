@@ -57,9 +57,9 @@ def getSystemsArray():
     # Populate list of player factions & x,y,zs
     #
     xFacList = []
-    fac: FactionInstance
+    fac: Faction
     for fac in player_factions_dict.values():
-        sid = fac.getSystemID()
+        sid = fac.get_homesystem_id()
         sys: InhabitedSystem = all_systems_dict.get(sid)
         if(sys is None): continue
         sName :str = sys.get_name()
