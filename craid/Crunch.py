@@ -74,7 +74,7 @@ def getSystemsArray():
     #
     xSysList: Dict[str, Tuple[float, float, float]] = {}
     sys: InhabitedSystem
-    for sys in player_factions_dict.values():
+    for sys in all_systems_dict.values():
         if(sys is None): continue
         sName :str = sys.get_name()
         x :float = sys.getX()
