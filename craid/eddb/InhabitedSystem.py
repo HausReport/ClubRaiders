@@ -6,8 +6,8 @@ from craid.eddb.NamedItem import NamedItem
 class InhabitedSystem(NamedItem):
     global all_factions_dict
 
-    def __init__(self, name='', id=0):
-        super().__init__(name, id)
+    def __init__(self, name='', eddbId=0):
+        super().__init__(name, eddbId)
 
     def __init__(self, jsonString: str):
 #        """
@@ -27,6 +27,9 @@ class InhabitedSystem(NamedItem):
                 not econ.startswith('Refine')):
             return False
         return True
+
+    def getEddbSystemUrl(self):
+        return "https://eddb.io/system/" + self.get_id
 
     def getMinorFactionPresences(self):
         return self.jsonLine[ MINOR_FACTION_PRESENCES ]

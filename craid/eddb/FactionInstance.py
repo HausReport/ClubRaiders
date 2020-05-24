@@ -14,11 +14,17 @@ class FactionInstance(Faction):
         self.vulnerable: int = xvulnerable
         # print("Hi")
 
+    def getInaraFactionUrl(self):
+        return "https://inara.cz/galaxy-minorfaction/" + self.getFactionID()
+
+    def getFactionID(self):
+        return self.get_id
+
     def getPopulation(self):
         return self.mySystem.getPopulation()
 
     def getSystemID(self):
-        return self.mySystem.get_id()
+        return self.mySystem.get_id
 
     def getSystemName(self):
         return self.mySystem.get_name()
@@ -121,5 +127,5 @@ class FactionInstance(Faction):
 
     def controlsSystem(self):
         cid = self.mySystem.getControllingFactionId()
-        mid: int = int(self.get_id())
+        mid: int = int(self.get_id)
         return cid == mid

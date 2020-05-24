@@ -1,3 +1,4 @@
+import math
 from typing import Dict, Tuple, List
 
 import dash
@@ -21,37 +22,10 @@ nrows = df.shape[0]
 
 df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
 
-#distance = np.zeros(nrows)
-#distances: List[float] = [0.0] * nrowslAl
-#df.assign(distance=distances)
-
-# @font-face {
-# font-family: myFirstFont;
-# src: url(sansation_light.woff);
-# }
-#
-# div {
-# font-family: myFirstFont;
-# }
-
 colors = {
     'background': '#111111',
     'text': '#7FDBFF'
 }
-
-
-#def generate_table(dataframe: pd.DataFrame, max_rows: int = 10):
-    #return html.Table([
-        #html.Thead(
-            #html.Tr([ html.Th(col) for col in dataframe.columns ])
-        #),
-        #html.Tbody([
-            #html.Tr([
-                #html.Td(dataframe.iloc[ i ][ col ]) for col in dataframe.columns
-            #]) for i in range(min(len(dataframe), max_rows))
-        #])
-    #])
-
 
 external_stylesheets = [ 'https://raw.githubusercontent.com/HausReport/ClubRaiders/master/craid/css/Raiders.css']
 #['https://codepen.io/chriddyp/pen/bWLwgP.css' ]
@@ -61,8 +35,8 @@ external_stylesheets = [ 'https://raw.githubusercontent.com/HausReport/ClubRaide
 # filter_query = "{control} contains false && {influence} < 25"
 
 
-name = __name__
-name = "Club Raiders"
+#name = __name__
+name: str = "Club Raiders"
 app = dash.Dash(name, external_stylesheets=external_stylesheets)
 
 opts = []
@@ -73,7 +47,7 @@ for it in systems.keys():
 
 #print( df.columns )
 
-tab : dash_table.DataTable =      dash_table.DataTable(
+tab : dash_table.DataTable = dash_table.DataTable(
         id='datatable-interactivity',
         columns=[
             {"name": 'systemName', "id": 'systemName', "deletable": False, "selectable": False},
@@ -88,11 +62,6 @@ tab : dash_table.DataTable =      dash_table.DataTable(
             {"name": 'control', "id": 'control', "deletable": False, "selectable": False},
             {"name": 'vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
             {"name": 'distance', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
-            #{"name": i,
-             #"id": i,
-             #"deletable": False,
-             #"selectable": False}
-            #for i in df.columns
         ],
         data=df.to_dict('records'),
         editable=False,
@@ -132,15 +101,71 @@ app.layout = html.Div([
     html.Div(id='datatable-interactivity-container')
 ])
 
+
+#@app.callback(
+    #[dash.dependencies.Output('datatable-interactivity', 'data'),
+     #dash.dependencies.Output('datatable-interactivity', 'columns')],
+    #[dash.dependencies.Input('demo-dropdown', 'value')])
+def update_output(value):
+    nrows = df.shape[ 0 ]
+    columns: List[Dict[str, str]] = [{"name": 'distance', "id": 'distance'}]
+    x, y, z = 0.0, 0.0, 0.0
+    # try:
+    #     spl = value.split(",")
+    #     x = float(spl[1])
+    #     y = float(spl[2])
+    #     z = float(spl[3])
+    # except:
+    #     print("woops")
+
+    for i in range(0, nrows):
+        x1= df.at[i,'x']
+        dis = math.sqrt( (x-x1)**2)
+        df.at[i,'distance'] = dis
+    return [df['distance'].to_dict('records'), columns]  # tried "rows" and "records"
+
+
+# @app.callback(
+#     [dash.dependencies.Output('datatable-interactivity', 'data'),
+#      dash.dependencies.Output('datatable-interactivity', 'columns')],
+#     [dash.dependencies.Input('demo-dropdown', 'value')])
+# def update_output(value):
+#     nrows = df.shape[ 0 ]
+#     #ret = df['distance'] #'[1] * nrows
+#     columns = [{"name": 'distance', "id": 'distance'}]
+#     #tab['data']
+#     x = 0.0
+#     y = 0.0
+#     z = 0.0
+#     try:
+#         spl = value.split(",")
+#         x = float(spl[1])
+#         y = float(spl[2])
+#         z = float(spl[3])
+#     except:
+#         print("woops")
+#         #print( str(x) + str(y) + str(z))
+#
+#     for i in range(0, nrows):
+#         x1= df.at[i,'x']
+#         dis = math.sqrt( (x-x1)**2)
+#         df.at[i,'distance'] = dis
+#         #ret[i]= str(dis)
+#         #ret = df[ 'distance' ]  # '[1] * nrows
+#     print(dis)
+#     #for row in df.itertuples():
+#         #val: float = df.get(row.Index,'distance')
+#         #dis = abs( x-val)
+#         #df.set_value(row.Index, dis, 'distance' )
+#     #for i in range(0, nrows):
+#         #df['distance'] = df
+#     #return [ret.to_list(), columns]
+#     return [df['distance'].to_dict(), columns]
+
 @app.callback(
     dash.dependencies.Output('dd-output-container', 'children'),
     [dash.dependencies.Input('demo-dropdown', 'value')])
 def update_output(value):
-    spl = value.split(",")
-    x = float(spl[1])
-    y = float(spl[2])
-    z = float(spl[3])
-    print( str(x) + str(y) + str(z))
     return 'Selected system "{}" '.format(value)
 
 @app.callback(

@@ -3,10 +3,11 @@ class NamedItem:
     NAME = 'name'
     ID = 'id'
 
-    def __init__(self, name='', id=0):
+    def __init__(self, name='', eddbId=0):
         self._name = name
-        self._id = id
+        self._id = eddbId
 
+    @property
     def get_id(self):
         return self._id
 
