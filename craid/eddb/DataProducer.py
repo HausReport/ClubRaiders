@@ -5,7 +5,7 @@ from typing import List, Dict, Tuple
 import pandas as pd
 from pandas import DataFrame
 
-from craid.club import Club
+from craid.club import FactionNameFilter
 from craid.eddb.Faction import Faction
 from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.InhabitedSystem import InhabitedSystem
@@ -39,7 +39,7 @@ def getDataArrays():
             # all_factions_dict[ lCurFactionId ] = curFaction
             if curFaction.is_player():
                 player_factions_dict[ lCurFactionId ] = curFaction
-            if Club.proClubFaction(curFaction):
+            if FactionNameFilter.proClubFaction(curFaction):
                 club_factions_dict[ lCurFactionId ] = curFaction
 
     # with open(stations_file, 'r') as handle:
