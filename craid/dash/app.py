@@ -12,8 +12,6 @@ from dash.dependencies import Input, Output
 # import dash_core_components.Markdown as md
 import craid.eddb.DataProducer as dp
 
-# df = pd.read_csv('https://gist.githubusercontent.com/chriddyp/c78bf172206ce24f77d6363a2d754b59/raw/c353e8ef842413cae56ae3920b8fd78468aa4cb2/usa-agricultural-exports-2011.csv')
-
 arrs = dp.getDataArrays()
 csa = arrs[0]
 systems: Dict[str, Tuple[float, float, float]] = arrs[2]
@@ -50,7 +48,7 @@ for it in systems.keys():
 
 # print( df.columns )
 
-tab: dash_table.DataTable = dash_table.DataTable(
+datatable: dash_table.DataTable = dash_table.DataTable(
     id='datatable-interactivity',
     columns=[
         {"name": 'systemName', "id": 'systemName', "deletable": False, "selectable": False},
@@ -100,7 +98,7 @@ hdr_layout = html.Div([
 ], style={'width': '99%', 'display': 'inline-block'})
 
 tab1_layout = html.Div([
-    tab,
+    datatable,
     html.Div(id='datatable-interactivity-container')
 ])
 
@@ -169,7 +167,7 @@ def render_content(tab):
 
 @app.callback(
     [dash.dependencies.Output('datatable-interactivity', 'data'),
-      dash.dependencies.Output('datatable-interactivity', 'columns')],
+    dash.dependencies.Output('datatable-interactivity', 'columns')],
     [dash.dependencies.Input('demo-dropdown', 'value')])
 def update_output(value):
     _cols: List[Dict[str, str]] = [{"name": 'distance', "id": 'distance'}]
@@ -255,7 +253,7 @@ def update_output(value):
 @app.callback(
     Output('datatable-interactivity-container', "children"),
     [Input('datatable-interactivity', "derived_virtual_data"),
-      Input('datatable-interactivity', "derived_virtual_selected_rows")])
+    Input('datatable-interactivity', "derived_virtual_selected_rows")])
 def update_graphs(rows, derived_virtual_selected_rows):
     # When the table is first rendered, `derived_virtual_data` and
     # `derived_virtual_selected_rows` will be `None`. This is due to an
