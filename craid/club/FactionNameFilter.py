@@ -44,7 +44,7 @@ def proClubFaction(CurFaction):
     if "Worldcraft" in curName: return True
     if "Worster" in curName: return True
     if "Wreaken" in curName: return True
-    if "Zaonce" in curName: return True
+    #if "Zaonce" in curName: return True
 
     return False
 
