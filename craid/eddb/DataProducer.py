@@ -5,7 +5,7 @@ from typing import List, Dict, Tuple
 import pandas as pd
 from pandas import DataFrame
 
-from craid import Club
+from craid.club import Club
 from craid.eddb.Faction import Faction
 from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.InhabitedSystem import InhabitedSystem
@@ -24,7 +24,7 @@ def desiredState(state_dict):
     return 0
 
 
-def getSystemsArray():
+def getDataArrays():
     # all_factions_dict: Faction                     = {}    #private
     player_factions_dict: Dict[ int, Faction ] = {}  # private
     club_factions_dict: Dict[ int, Faction ] = {}  # private

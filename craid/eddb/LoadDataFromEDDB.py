@@ -6,7 +6,7 @@ import requests
 #https://stackoverflow.com/questions/29314287/python-requests-download-only-if-newer
 
 def load_data():
-    if not os.path.exists('data'):
+    if not os.path.exists('../data'):
         os.makedirs('data')
     if (True is True):
         #
@@ -14,7 +14,7 @@ def load_data():
         #
         url = 'https://eddb.io/archive/v6/systems_populated.jsonl'
         r = requests.get(url, allow_redirects=True)
-        open('data/systems_populated.jsonl', 'wb').write(r.content)
+        open('../data/systems_populated.jsonl', 'wb').write(r.content)
 
         # url = 'https://eddb.io/archive/v6/stations.jsonl'
         # r = requests.get(url, allow_redirects=True)
@@ -22,7 +22,7 @@ def load_data():
 
         url = 'https://eddb.io/archive/v6/factions.jsonl'
         r = requests.get(url, allow_redirects=True)
-        open('data/factions.jsonl', 'wb').write(r.content)
+        open('../data/factions.jsonl', 'wb').write(r.content)
 
 if __name__ == '__main__':
     load_data()
