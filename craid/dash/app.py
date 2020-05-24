@@ -1,4 +1,4 @@
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
 
 import dash
 import dash_core_components as dcc
@@ -6,6 +6,7 @@ import dash_html_components as html
 import dash_table
 import pandas as pd
 from dash.dependencies import Input, Output
+import numpy as np
 
 import craid.eddb.DataProducer as dp
 
@@ -15,6 +16,14 @@ arrs = dp.getDataArrays()
 csa = arrs[ 0 ]
 systems: Dict[ str, Tuple[ float, float, float ] ] = arrs[2]
 df = dp.getDataFrame(csa)
+
+nrows = df.shape[0]
+
+df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
+
+#distance = np.zeros(nrows)
+#distances: List[float] = [0.0] * nrowslAl
+#df.assign(distance=distances)
 
 # @font-face {
 # font-family: myFirstFont;
@@ -31,20 +40,26 @@ colors = {
 }
 
 
-def generate_table(dataframe: pd.DataFrame, max_rows: int = 10):
-    return html.Table([
-        html.Thead(
-            html.Tr([ html.Th(col) for col in dataframe.columns ])
-        ),
-        html.Tbody([
-            html.Tr([
-                html.Td(dataframe.iloc[ i ][ col ]) for col in dataframe.columns
-            ]) for i in range(min(len(dataframe), max_rows))
-        ])
-    ])
+#def generate_table(dataframe: pd.DataFrame, max_rows: int = 10):
+    #return html.Table([
+        #html.Thead(
+            #html.Tr([ html.Th(col) for col in dataframe.columns ])
+        #),
+        #html.Tbody([
+            #html.Tr([
+                #html.Td(dataframe.iloc[ i ][ col ]) for col in dataframe.columns
+            #]) for i in range(min(len(dataframe), max_rows))
+        #])
+    #])
 
 
-external_stylesheets = [ 'https://codepen.io/chriddyp/pen/bWLwgP.css' ]
+external_stylesheets = [ 'https://raw.githubusercontent.com/HausReport/ClubRaiders/master/craid/css/Raiders.css']
+#['https://codepen.io/chriddyp/pen/bWLwgP.css' ]
+
+
+# filter_query = "{country} contains ol && {lifeExp} < 10"
+# filter_query = "{control} contains false && {influence} < 25"
+
 
 name = __name__
 name = "Club Raiders"
@@ -53,28 +68,31 @@ app = dash.Dash(name, external_stylesheets=external_stylesheets)
 opts = []
 for it in systems.keys():
    val: Tuple = systems.get(it)
-   opts.append({'label': it, 'value': str(val)})
+   opts.append({'label': it, 'value': str(it) + "," + str(val[0]) + "," + str(val[1]) + "," + str(val[2])})
 
-app.layout = html.Div([
-    dcc.Dropdown(
-        id='demo-dropdown',
-        options=opts,
-        #[
-            #{'label': 'New York City', 'value': 'NYC'},
-            #{'label': 'Montreal', 'value': 'MTL'},
-            #{'label': 'San Francisco', 'value': 'SF'}
-        #],
-        value='NYC'
-    ),
-    html.Div(id='dd-output-container'),
-    dash_table.DataTable(
+
+#print( df.columns )
+
+tab : dash_table.DataTable =      dash_table.DataTable(
         id='datatable-interactivity',
         columns=[
-            {"name": i,
-             "id": i,
-             "deletable": False,
-             "selectable": False}
-            for i in df.columns
+            {"name": 'systemName', "id": 'systemName', "deletable": False, "selectable": False},
+            {"name": 'factionName', "id": 'factionName', "deletable": False, "selectable": False},
+            {"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+            {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+            {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+            {"name": 'isHomeSystem', "id": 'isHomeSystem', "deletable": False, "selectable": False},
+            {"name": 'population', "id": 'population', "deletable": False, "selectable": False, "type": "numeric"},
+            {"name": 'influence', "id": 'influence', "deletable": False, "selectable": False, "type": "numeric"},
+            {"name": 'updated', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
+            {"name": 'control', "id": 'control', "deletable": False, "selectable": False},
+            {"name": 'vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
+            {"name": 'distance', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
+            #{"name": i,
+             #"id": i,
+             #"deletable": False,
+             #"selectable": False}
+            #for i in df.columns
         ],
         data=df.to_dict('records'),
         editable=False,
@@ -89,10 +107,41 @@ app.layout = html.Div([
         page_action="native",
         page_current=0,
         page_size=100,
-    ),
+    )
+
+#for x1 in tab.available_properties:
+    #print( str(x1) )
+
+app.layout = html.Div([
+    html.Div([
+        html.Label("System:"),
+        dcc.Dropdown(
+            id='demo-dropdown',
+            options=opts,
+            #[
+                #{'label': 'New York City', 'value': 'NYC'},
+                #{'label': 'Montreal', 'value': 'MTL'},
+                #{'label': 'San Francisco', 'value': 'SF'}
+            #],
+            value='Alioth',
+            placeholder='Select star system'
+        ),
+        html.Div(id='dd-output-container')
+    ],style={'width': '99%', 'display': 'inline-block'}),
+    tab,
     html.Div(id='datatable-interactivity-container')
 ])
 
+@app.callback(
+    dash.dependencies.Output('dd-output-container', 'children'),
+    [dash.dependencies.Input('demo-dropdown', 'value')])
+def update_output(value):
+    spl = value.split(",")
+    x = float(spl[1])
+    y = float(spl[2])
+    z = float(spl[3])
+    print( str(x) + str(y) + str(z))
+    return 'Selected system "{}" '.format(value)
 
 @app.callback(
     Output('datatable-interactivity', 'style_data_conditional'),
@@ -144,7 +193,8 @@ def update_graphs(rows, derived_virtual_selected_rows):
                     "xaxis": {"automargin": True},
                     "yaxis": {
                         "automargin": True,
-                        "title": {"text": column}
+                        "title": {"text": column},
+                        "type": "log"
                     },
                     "height": 250,
                     "margin": {"t": 10, "l": 10, "r": 10},

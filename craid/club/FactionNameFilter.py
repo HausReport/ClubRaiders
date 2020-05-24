@@ -17,7 +17,7 @@ def proClubFaction(CurFaction):
     if "CQC Holding" in curName: return True
     # if "Crimson State" in curName: return True
     if "Emperor's Dawn" in curName: return True
-    if "Emperor's Grace" in curName: return True
+    #if "Emperor's Grace" in curName: return True
     if "Gallant" in curName: return True
     if "Greenventure" in curName: return True
     if "Hodack Prison Colony" in curName: return True
