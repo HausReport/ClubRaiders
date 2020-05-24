@@ -13,9 +13,9 @@ def proClubFaction(CurFaction):
     if "Abroin Universal PLC" in curName: return True
     if "Aegis" in curName: return True
     if "Benton" in curName: return True
-    #if "Blue Netcoms" in curName: return True
+    # if "Blue Netcoms" in curName: return True
     if "CQC Holding" in curName: return True
-    #if "Crimson State" in curName: return True
+    # if "Crimson State" in curName: return True
     if "Emperor's Dawn" in curName: return True
     if "Emperor's Grace" in curName: return True
     if "Gallant" in curName: return True
@@ -26,9 +26,9 @@ def proClubFaction(CurFaction):
     if "Reyan BPS" in curName: return True
     if "Reynhardt IntelliSys" in curName: return True
     if "Rockforth" in curName: return True
-    #if "Silver Allied" in curName: return True
-    #if "Silver United" in curName: return True
-    #if "Silver Universal" in curName: return True
+    # if "Silver Allied" in curName: return True
+    # if "Silver United" in curName: return True
+    # if "Silver Universal" in curName: return True
     if "Sirius Atmos" in curName: return True
     if "Sirius Cater" in curName: return True
     if "Sirius Corporation" in curName: return True

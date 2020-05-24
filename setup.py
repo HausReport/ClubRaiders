@@ -1,9 +1,5 @@
-import io
-import os
-import sys
-from shutil import rmtree
+from setuptools import setup
 
-from setuptools import find_packages, setup, Command
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
     name='craid',

@@ -1,5 +1,6 @@
 from craid.eddb.NamedItem import NamedItem
 
+
 class Faction(NamedItem):
 
     # getters/setters for id & name in superclass
@@ -16,7 +17,7 @@ class Faction(NamedItem):
     def get_homesystem_id(self):
         return self.jsonLine[ 'home_system_id' ]
 
-    #def get_active_states(self):
+    # def get_active_states(self):
     #    return json.dumps(self.jsonLine) #[ 'active_states' ]
 
     def is_anarchy(self):
@@ -35,7 +36,7 @@ class Faction(NamedItem):
         return self.get_allegiance() == 'Independent'
 
     def is_player(self):
-        return self.jsonLine[ 'is_player_faction'] == True
+        return self.jsonLine[ 'is_player_faction' ] == True
 
     def get_name2(self):
         p_ind = ""

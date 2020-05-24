@@ -2,6 +2,8 @@ import os
 
 import requests
 
+#logic for caching at:
+#https://stackoverflow.com/questions/29314287/python-requests-download-only-if-newer
 
 def load_data():
     if not os.path.exists('data'):
@@ -21,3 +23,6 @@ def load_data():
         url = 'https://eddb.io/archive/v6/factions.jsonl'
         r = requests.get(url, allow_redirects=True)
         open('data/factions.jsonl', 'wb').write(r.content)
+
+if __name__ == '__main__':
+    load_data()
