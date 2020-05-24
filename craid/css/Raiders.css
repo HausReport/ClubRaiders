@@ -137,7 +137,8 @@ body {
   line-height: 1.6;
   font-weight: 400;
   font-family: "EuroStyle Normal","Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: rgb(88, 88, 88); }
+  color: orange;
+  background-color: black; }
 
 
 /* Typography
