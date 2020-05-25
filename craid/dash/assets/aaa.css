@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500&display=swap');
+
+body {
+ font-family: "Fira Sans", "Roboto", "Tahoma", "Calibri", sans-serif;
+ font-size: 16px; line-height: 18px;
+ background-color: black;
+ color: orange;
+}
+h1, h2, h3, h4, h5, h6 {
+    background-color: black;
+    color: orange;
+}
+div {
+    background-color: black;
+    color: orange;
+}
+table, th, td, tr {
+    background-color: black;
+    color: orange;
+}
+input {
+    background-color: black;
+    color: orange;
+}
+input[type=text]:focus {
+    background-color: dark-grey;
+    color: yellow;
+}
+span.Select-value-label {
+    background-color: dark-grey;
+    color: yellow;
+}

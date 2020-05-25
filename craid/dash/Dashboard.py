@@ -36,8 +36,8 @@ def getMarkdown(which: str) -> dcc.Markdown:
 df[ 'distance' ] = pd.Series(np.zeros(nrows), index=df.index)
 
 colors = {
-    'background': '#111111',
-    'text': '#7FDBFF'
+    'background': 'black',
+    'text': 'orange'
 }
 
 external_stylesheets = [ 'https://raw.githubusercontent.com/HausReport/ClubRaiders/master/craid/css/Raiders.css' ]
@@ -49,7 +49,9 @@ external_stylesheets = [ 'https://raw.githubusercontent.com/HausReport/ClubRaide
 
 # name = __name__
 name: str = "Club Raiders"
-app = dash.Dash(name, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
+app = dash.Dash(__name__)
+print(__name__)
+#, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
 app.config[ 'suppress_callback_exceptions' ] = True
 app.config.suppress_callback_exceptions = True
 
@@ -96,6 +98,19 @@ datatable: dash_table.DataTable = dash_table.DataTable(
     page_action="native",
     page_current=0,
     page_size=100,
+    style_header={
+        'backgroundColor': 'black',
+        'color': 'gold'},
+    #style_header_conditional={
+        #'backgroundColor': 'green',
+        #'color': 'gold'},
+    #style_filter_conditional={
+        #'backgroundColor': 'black',
+        #'color': 'gold'},
+    style_cell={
+        'backgroundColor': 'black',
+        'color': 'orange'
+    },
 )
 
 # tput("datatable-interactivity", "filtering_settings"),
@@ -108,12 +123,20 @@ datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
 
 
 hdr_layout = html.Div([
+    html.Div(
+        className="app-header",
+        children=[
+            html.Div('Plotly Dash', className="app-header--title")
+        ]
+    ),
     html.Label("Choose a System:"),
     dcc.Dropdown(
         id='demo-dropdown',
         options=opts,
         value='Alioth',
-        placeholder='Select star system'
+        placeholder='Select star system',
+        style = { 'backgroundColor': 'black',
+                   'color': 'gold'},
     ),
     html.Label("or a Squadron:"),
     dcc.Dropdown(
@@ -138,13 +161,36 @@ tab1_layout = html.Div([
 # =============================================================
 app.layout = html.Div([
     hdr_layout,
-    dcc.Tabs(id='tabs-example', value='tab-1', children=[
-        dcc.Tab(label='Overview', value='tab-1'),
-        dcc.Tab(label='Combat Zones', value='tab-2'),
-        dcc.Tab(label='Bounty Hunting', value='tab-3'),
-        dcc.Tab(label='Trade/Exploration/Missions', value='tab-4'),
-        dcc.Tab(label='Scouting', value='tab-5'),
-    ]),
+    dcc.Tabs(id='tabs-example', value='tab-1',
+             parent_className='custom-tabs',
+             className='custom-tabs-container',
+             children=[
+                dcc.Tab(label='Overview',
+                        value='tab-1',
+                        className='custom-tab',
+                        selected_className='custom-tab--selected'
+                        ),
+                dcc.Tab(label='Combat Zones',
+                        value='tab-2',
+                        className='custom-tab',
+                        selected_className='custom-tab--selected'
+                        ),
+                dcc.Tab(label='Bounty Hunting',
+                        value='tab-3',
+                        className='custom-tab',
+                        selected_className='custom-tab--selected'
+                        ),
+                dcc.Tab(label='Trade/Exploration/Missions',
+                        value='tab-4',
+                        className='custom-tab',
+                        selected_className='custom-tab--selected'
+                        ),
+                dcc.Tab(label='Scouting',
+                        value='tab-5',
+                        className='custom-tab',
+                        selected_className='custom-tab--selected'
+                        ),
+            ]),
     html.Div(id='tabs-example-content'),
     datatable,
     html.Div(id='datatable-interactivity-container')
@@ -273,8 +319,8 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
 
     dff = df if rows is None else pd.DataFrame(rows)
 
-    colors = [ '#7FDBFF' if i in derived_virtual_selected_rows else '#0074D9'
-               for i in range(len(dff)) ]
+    #colors = [ '#7FDBFF' if i in derived_virtual_selected_rows else '#0074D9'
+               #for i in range(len(dff)) ]
 
     if active_cell:
         print("You selected row " + str(active_cell))
