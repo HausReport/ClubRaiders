@@ -1,5 +1,4 @@
 class NamedItem:
-
     NAME = 'name'
     ID = 'id'
 
@@ -7,7 +6,6 @@ class NamedItem:
         self._name = name
         self._id = eddbId
 
-    @property
     def get_id(self):
         return self._id
 

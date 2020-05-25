@@ -5,4 +5,3 @@ class CombatZones:
 
     def getSort(self):
         return [{'column_id': 'distance', 'direction': 'asc'}]
-

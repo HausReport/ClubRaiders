@@ -13,13 +13,13 @@ from dash.dependencies import Input, Output
 import craid.eddb.DataProducer as dp
 
 currentData = dp.getDataArrays()
-clubSystemInstances = currentData[ 'allClubSystemInstances' ]
+clubSystemInstances = currentData['allClubSystemInstances']
 
-systemNameToXYZ: Dict[ str, Tuple[ float, float, float ] ] = currentData[ 'systemNameToXYZ' ]
-playerFactionNameToHomeSystemName: Dict[ str, str ] = currentData[ 'playerFactionNameToSystemName' ]
+systemNameToXYZ: Dict[str, Tuple[float, float, float]] = currentData['systemNameToXYZ']
+playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
 df = dp.getDataFrame(clubSystemInstances)
 
-nrows = df.shape[ 0 ]
+nrows = df.shape[0]
 
 
 #
@@ -33,14 +33,14 @@ def getMarkdown(which: str) -> dcc.Markdown:
 
 # suppress_callback_exceptions=True
 
-df[ 'distance' ] = pd.Series(np.zeros(nrows), index=df.index)
+df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
 
 colors = {
     'background': 'black',
-    'text': 'orange'
+    'text'      : 'orange'
 }
 
-external_stylesheets = [ 'https://raw.githubusercontent.com/HausReport/ClubRaiders/master/craid/css/Raiders.css' ]
+#external_stylesheets = ['https://raw.githubusercontent.com/HausReport/ClubRaiders/master/craid/css/Raiders.css']
 # ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 
@@ -49,19 +49,19 @@ external_stylesheets = [ 'https://raw.githubusercontent.com/HausReport/ClubRaide
 
 # name = __name__
 name: str = "Club Raiders"
-app = dash.Dash(__name__)
+app = dash.Dash(__name__) #,requests_pathname_prefix='')
 print(__name__)
-#, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
-app.config[ 'suppress_callback_exceptions' ] = True
+# , external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
+#app.config['suppress_callback_exceptions'] = True
 app.config.suppress_callback_exceptions = True
 
-opts = [ ]
-keys: List[ str ] = sorted(systemNameToXYZ.keys())
+opts = []
+keys: List[str] = sorted(systemNameToXYZ.keys())
 for it in keys:
     opts.append({'label': it, 'value': it})
 
-fopts = [ ]
-keys: List[ str ] = sorted(playerFactionNameToHomeSystemName.keys())
+fopts = []
+keys: List[str] = sorted(playerFactionNameToHomeSystemName.keys())
 for it in keys:
     val: str = playerFactionNameToHomeSystemName.get(it)
     if val is not None:
@@ -70,9 +70,9 @@ for it in keys:
 theColumns = [
     {"name": 'systemName', "id": 'systemName', "deletable": False, "selectable": False},
     {"name": 'factionName', "id": 'factionName', "deletable": False, "selectable": False},
-    #{"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-    #{"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-    #{"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+    # {"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+    # {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+    # {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
     {"name": 'isHomeSystem', "id": 'isHomeSystem', "deletable": False, "selectable": False},
     {"name": 'population', "id": 'population', "deletable": False, "selectable": False, "type": "numeric"},
     {"name": 'influence', "id": 'influence', "deletable": False, "selectable": False, "type": "numeric"},
@@ -93,24 +93,24 @@ datatable: dash_table.DataTable = dash_table.DataTable(
     column_selectable=False,  # "single",
     row_selectable=False,  # "multi",
     row_deletable=False,
-    selected_columns=[ ],
-    selected_rows=[ ],
+    selected_columns=[],
+    selected_rows=[],
     page_action="native",
     page_current=0,
     page_size=100,
     style_header={
         'backgroundColor': 'black',
-        'color': 'gold'},
-    #style_header_conditional={
-        #'backgroundColor': 'green',
-        #'color': 'gold'},
-    #style_filter_conditional={
-        #'backgroundColor': 'black',
-        #'color': 'gold'},
+        'color'          : 'gold'},
+    # style_header_conditional={
+    # 'backgroundColor': 'green',
+    # 'color': 'gold'},
+    # style_filter_conditional={
+    # 'backgroundColor': 'black',
+    # 'color': 'gold'},
     style_cell={
         'backgroundColor': 'black',
-        'color': 'orange'
-    },
+        'color'          : 'orange'
+    }
 )
 
 # tput("datatable-interactivity", "filtering_settings"),
@@ -135,14 +135,14 @@ hdr_layout = html.Div([
         options=opts,
         value='Alioth',
         placeholder='Select star system',
-        style = { 'backgroundColor': 'black',
-                   'color': 'gold'},
+        style={'backgroundColor': 'black',
+               'color'          : 'gold'},
     ),
     html.Label("or a Squadron:"),
     dcc.Dropdown(
         id='demo-dropdown2',
         options=fopts,
-        value='',#Anti Xeno Initiative',
+        value='',  # Anti Xeno Initiative',
         placeholder='Select player faction'
     ),
 
@@ -159,38 +159,42 @@ tab1_layout = html.Div([
 # =============================================================
 # Tab handlers
 # =============================================================
+#app.layout = html.Div([
+    #hdr_layout
+    #])
+
 app.layout = html.Div([
     hdr_layout,
     dcc.Tabs(id='tabs-example', value='tab-1',
              parent_className='custom-tabs',
              className='custom-tabs-container',
              children=[
-                dcc.Tab(label='Overview',
-                        value='tab-1',
-                        className='custom-tab',
-                        selected_className='custom-tab--selected'
-                        ),
-                dcc.Tab(label='Combat Zones',
-                        value='tab-2',
-                        className='custom-tab',
-                        selected_className='custom-tab--selected'
-                        ),
-                dcc.Tab(label='Bounty Hunting',
-                        value='tab-3',
-                        className='custom-tab',
-                        selected_className='custom-tab--selected'
-                        ),
-                dcc.Tab(label='Trade/Exploration/Missions',
-                        value='tab-4',
-                        className='custom-tab',
-                        selected_className='custom-tab--selected'
-                        ),
-                dcc.Tab(label='Scouting',
-                        value='tab-5',
-                        className='custom-tab',
-                        selected_className='custom-tab--selected'
-                        ),
-            ]),
+                 dcc.Tab(label='Overview',
+                         value='tab-1',
+                         className='custom-tab',
+                         selected_className='custom-tab--selected'
+                         ),
+                 dcc.Tab(label='Combat Zones',
+                         value='tab-2',
+                         className='custom-tab',
+                         selected_className='custom-tab--selected'
+                         ),
+                 dcc.Tab(label='Bounty Hunting',
+                         value='tab-3',
+                         className='custom-tab',
+                         selected_className='custom-tab--selected'
+                         ),
+                 dcc.Tab(label='Trade/Exploration/Missions',
+                         value='tab-4',
+                         className='custom-tab',
+                         selected_className='custom-tab--selected'
+                         ),
+                 dcc.Tab(label='Scouting',
+                         value='tab-5',
+                         className='custom-tab',
+                         selected_className='custom-tab--selected'
+                         ),
+             ]),
     html.Div(id='tabs-example-content'),
     datatable,
     html.Div(id='datatable-interactivity-container')
@@ -198,7 +202,7 @@ app.layout = html.Div([
 
 
 @app.callback(Output('tabs-example-content', 'children'),
-              [ Input('tabs-example', 'value') ])
+              [Input('tabs-example', 'value')])
 def render_content(tab):
     if tab == 'tab-1':
         return tab1_layout
@@ -245,24 +249,24 @@ def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
 # Callback handlers below
 # =============================================================
 @app.callback(
-    [ Output('datatable-interactivity', 'data'), Output('datatable-interactivity', 'columns') ],
-    [ Input('demo-dropdown', 'value') ])
+    [Output('datatable-interactivity', 'data'), Output('datatable-interactivity', 'columns')],
+    [Input('demo-dropdown', 'value')])
 def update_output(val1):
     value = val1
     pos = fSystemNameToXYZ(value)
-    x = pos[ 0 ]
-    y = pos[ 1 ]
-    z = pos[ 2 ]
+    x = pos[0]
+    y = pos[1]
+    z = pos[2]
 
     for ind in df.index:
-        x1: float = df.at[ ind, 'x' ]
-        y1: float = df.at[ ind, 'y' ]
-        z1: float = df.at[ ind, 'z' ]
+        x1: float = df.at[ind, 'x']
+        y1: float = df.at[ind, 'y']
+        z1: float = df.at[ind, 'z']
         dis: float = math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2)
-        df.at[ ind, 'distance' ] = dis
+        df.at[ind, 'distance'] = dis
 
     # print(df[ 'distance' ].dtypes)
-    #print(datatable.sort_by)
+    # print(datatable.sort_by)
     _cols = theColumns
     # [
     #     {"name": i, "id": i} for i in df.columns
@@ -272,14 +276,14 @@ def update_output(val1):
 
 @app.callback(
     dash.dependencies.Output('system-notifier', 'children'),
-    [ dash.dependencies.Input('demo-dropdown', 'value') ])
+    [dash.dependencies.Input('demo-dropdown', 'value')])
 def update_output2(value):
     return 'Selected system "{}" '.format(value)
 
 
 @app.callback(
     dash.dependencies.Output('demo-dropdown', 'value'),
-    [ dash.dependencies.Input('demo-dropdown2', 'value') ])
+    [dash.dependencies.Input('demo-dropdown2', 'value')])
 def update_outputr3(value):
     return value
 
@@ -301,9 +305,9 @@ def update_outputr3(value):
 
 @app.callback(
     Output('datatable-interactivity-container', "children"),
-    [ Input('datatable-interactivity', "derived_virtual_data"),
-      Input('datatable-interactivity', "derived_virtual_selected_rows"),
-      Input('datatable-interactivity', 'active_cell') ])
+    [Input('datatable-interactivity', "derived_virtual_data"),
+     Input('datatable-interactivity', "derived_virtual_selected_rows"),
+     Input('datatable-interactivity', 'active_cell')])
 def update_graphs(rows, derived_virtual_selected_rows, active_cell):
     # When the table is first rendered, `derived_virtual_data` and
     # `derived_virtual_selected_rows` will be `None`. This is due to an
@@ -315,12 +319,12 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
     # `derived_virtual_data=df.to_rows('dict')` when you initialize
     # the component.
     if derived_virtual_selected_rows is None:
-        derived_virtual_selected_rows = [ ]
+        derived_virtual_selected_rows = []
 
     dff = df if rows is None else pd.DataFrame(rows)
 
-    #colors = [ '#7FDBFF' if i in derived_virtual_selected_rows else '#0074D9'
-               #for i in range(len(dff)) ]
+    # colors = [ '#7FDBFF' if i in derived_virtual_selected_rows else '#0074D9'
+    # for i in range(len(dff)) ]
 
     if active_cell:
         print("You selected row " + str(active_cell))
@@ -332,30 +336,32 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
         dcc.Graph(
             id=column,
             figure={
-                "data": [
+                "data"  : [
                     {
-                        "x": dff[ "systemName" ],
-                        "y": dff[ column ],
-                        "type": "bar",
+                        "x"     : dff["systemName"],
+                        "y"     : dff[column],
+                        "type"  : "bar",
                         "marker": {"color": colors},
                     }
                 ],
                 "layout": {
-                    "xaxis": {"automargin": True},
-                    "yaxis": {
+                    "xaxis"        : {"automargin": True},
+                    "yaxis"        : {
                         "automargin": True,
-                        "title": {"text": column},
-                        "type": "log"
+                        "title"     : {"text": column},
+                        "type"      : "log"
                     },
-                    "height": 250,
-                    "margin": {"t": 10, "l": 10, "r": 10},
+                    "paper_bgcolor": 'rgba(0,0,0,0)',  # TODO fix color & bg
+                    "plot_bgcolor" : 'rgba(0,0,0,0)',  # TODO: fix color & bg
+                    "height"       : 250,
+                    "margin"       : {"t": 10, "l": 10, "r": 10},
                 },
             },
         )
         # check if column exists - user may have deleted it
         # If `column.deletable=False`, then you don't
         # need to do this check.
-        for column in [ "influence", "population", "gdpPercap" ] if column in dff
+        for column in ["influence", "population", "gdpPercap"] if column in dff
     ]
 
 
@@ -364,20 +370,21 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
     [Input('datatable-interactivity', 'sort_by')])
 def update_table(sort_by):
     if sort_by is None:
-        return("Sort empty")
+        return ("Sort empty")
     if len(sort_by) == 0:
-        return("Sort empty")
+        return ("Sort empty")
     else:
         return "Current sort: " + str(sort_by)
+
 
 @app.callback(
     dash.dependencies.Output('filter-notifier', 'children'),
     [Input('datatable-interactivity', 'filter_query')])
 def update_table(query):
     if query is None:
-        return("Sort empty")
+        return ("Sort empty")
     if len(query) == 0:
-        return("Sort empty")
+        return ("Sort empty")
     else:
         return "Current filter: " + str(query)
 

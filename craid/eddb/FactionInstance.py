@@ -1,30 +1,30 @@
 import datetime
 
+from Vulnerability import Vulnerability
 from craid.eddb.Faction import Faction
 from craid.eddb.InhabitedSystem import InhabitedSystem
-
 
 class FactionInstance(Faction):
 
     # getters/setters for id & name in superclass
-    def __init__(self, par, xtsys, xinfluence, xvulnerable):
+    def __init__(self, par, inhabSys: InhabitedSystem, inf: float, vuln: Vulnerability):
         super().__init__(par.jsonLine)
-        self.mySystem: InhabitedSystem = xtsys
-        self.influence: float = xinfluence
-        self.vulnerable: int = xvulnerable
+        self.mySystem: InhabitedSystem = inhabSys
+        self.influence: float = inf
+        self.vulnerable: Vulnerability = vuln
         # print("Hi")
 
     def getInaraFactionUrl(self):
         return "https://inara.cz/galaxy-minorfaction/" + self.getFactionID()
 
     def getFactionID(self):
-        return self.get_id
+        return self.get_id()
 
     def getPopulation(self):
         return self.mySystem.getPopulation()
 
     def getSystemID(self):
-        return self.mySystem.get_id
+        return self.mySystem.get_id()
 
     def getSystemName(self):
         return self.mySystem.get_name()
@@ -53,44 +53,49 @@ class FactionInstance(Faction):
     #
     # At the moment, it's determined on data load.
     #
-    def isVulnerable(self):
-        if (self.vulnerable == 0): return False
-        return True
+    #def isVulnerable(self):
+    #    return self.vulnerable is not 0
 
     def getVulnerableString(self):
-        if (self.vulnerable == 0): return ""
-        war = "Civil War"
-        if (self.vulnerable == 104): war = "LowInf+Inf Fail"
-        if (self.vulnerable == -15): war = "Low Influence"
-        if (self.vulnerable == -16): war = "Anarchy"
-        if (self.vulnerable == 73): war = "War"
-        if (self.vulnerable == 65): war = "Election"
-        if (self.vulnerable == 96): war = war + "/Retreat"
-        return war
+        assert self.vulnerable is not None, 'null vulnerable'
+        retval: str = self.vulnerable.getShortString()
+        assert retval is not None, 'null vulnerable 2'
+        return retval
 
-        # "16,Boom"
-        # "32,Bust"
-        # "37,Famine"
-        # "48,Civil Unrest"
-        # "64,Civil War"
-        # "65,Election"
-        # "66,Civil Liberty"
-        # "67,Expansion"
-        # "69,Lockdown"
-        # "72,Outbreak"
-        # "73,War"
-        # "80,None"
-        # "81,Pirate Attack"
-        # "101,Investment"
-        # "102,Blight"
-        # "103,Drought"
-        # "104,Infrastructure Failure"
-        # "105,Natural Disaster"
-        # "106,Public Holiday"
-        # "107,Terrorist Attack"
+
+        # if (self.vulnerable == 0): return ""
+        # war = "Civil War"
+        # if (self.vulnerable == 104): war = "LowInf+Inf Fail"
+        # if (self.vulnerable == -15): war = "Low Influence"
+        # if (self.vulnerable == -16): war = "Anarchy"
+        # if (self.vulnerable == 73): war = "War"
+        # if (self.vulnerable == 65): war = "Election"
+        # if (self.vulnerable == 96): war = war + "/Retreat"
+        # return war
+        #
+        # # "16,Boom"
+        # # "32,Bust"
+        # # "37,Famine"
+        # # "48,Civil Unrest"
+        # # "64,Civil War"
+        # # "65,Election"
+        # # "66,Civil Liberty"
+        # # "67,Expansion"
+        # # "69,Lockdown"
+        # # "72,Outbreak"
+        # # "73,War"
+        # # "80,None"
+        # # "81,Pirate Attack"
+        # # "101,Investment"
+        # # "102,Blight"
+        # # "103,Drought"
+        # # "104,Infrastructure Failure"
+        # # "105,Natural Disaster"
+        # # "106,Public Holiday"
+        # # "107,Terrorist Attack"
 
     def getUpdatedString(self):
-        updated = self.getUpdated();
+        updated = self.getUpdated()
         date = datetime.datetime.utcfromtimestamp(updated)
         ds = date.strftime("%d-%b-%Y %H:%M")
         return ds
@@ -100,25 +105,26 @@ class FactionInstance(Faction):
         war = self.getVulnerableString()
         sysname = self.getSystemName()
         x = '{:04.2f}'.format(self.getX())
-        y = '{:04.2f}'.format(self.getY())
-        z = '{:04.2f}'.format(self.getZ())
-        sinf = '{:04.2f}'.format(self.getInfluence())
+        y = '{:04.2f}'.format(self.getY)
+        z = '{:04.2f}'.format(self.getZ)
+        sinf = '{:04.2f}'.format(self.getInfluence)
         allg = self.get_allegiance()
-        ds = self.getUpdatedString();
-        print(
-            facname + "," + sysname + "," + x + "," + y + "," + z + "," + allg + "," + sinf + "," + war + "," + ds)  # + "," + allg)
+        ds = self.getUpdatedString()
+        print(f"{facname},{sysname},{x},{y},{z},{allg},{sinf},{war},{ds}")
+        #    facname + "," + sysname + "," + x + "," + y + "," + z + "," + allg +
+        #    "," + sinf + "," + war + "," + ds)  # + "," + allg)
 
     def asArray(self):
         facname = self.get_name2()
         war = self.getVulnerableString()
         sysname = self.getSystemName()
         x = '{:04.2f}'.format(self.getX())
-        y = '{:04.2f}'.format(self.getY())
-        z = '{:04.2f}'.format(self.getZ())
-        sinf = '{:04.2f}'.format(self.getInfluence())
+        y = '{:04.2f}'.format(self.getY)
+        z = '{:04.2f}'.format(self.getZ)
+        sinf = '{:04.2f}'.format(self.getInfluence)
         allg = self.get_allegiance()
         ds = self.getUpdatedString()
-        return [ facname, sysname, x, y, z, allg, sinf, war, ds ]
+        return [facname, sysname, x, y, z, allg, sinf, war, ds]
 
     def isHomeSystem(self):
         factionHomeSystemId: int = self.get_homesystem_id()
@@ -127,5 +133,5 @@ class FactionInstance(Faction):
 
     def controlsSystem(self):
         cid = self.mySystem.getControllingFactionId()
-        mid: int = int(self.get_id)
+        mid: int = int(self.get_id())
         return cid == mid

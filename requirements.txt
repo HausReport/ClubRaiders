@@ -3,3 +3,4 @@ pandas~=1.0.3
 requests~=2.23.0
 setuptools~=40.8.0
 numpy~=1.18.4
+python-dateutil~=2.8.1

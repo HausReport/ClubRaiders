@@ -3,25 +3,54 @@ import json
 from typing import List, Dict, Tuple
 
 import pandas as pd
-from pandas import DataFrame
 
+from Vulnerability import Vulnerability
 from craid.club import FactionNameFilter
 from craid.eddb.Faction import Faction
 from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.InhabitedSystem import InhabitedSystem
 
-
 # all_stations_dict : Station = {}
-
-def desiredState(state_dict):
-    for state in state_dict:
-        if (state[ 'id' ] == 64): return 64
-        if (state[ 'id' ] == 65): return 65
-        if (state[ 'id' ] == 73): return 73
-        if (state[ 'id' ] == 96): return 96
-        if (state[ 'id' ] == 104): return 104
-
-    return 0
+# def desiredState(state_dict):
+#     ret = []
+#     if STATE_RETREAT in state_dict: ret.append(STATE_RETREAT) #96
+#     STATE_WAR = 73
+#     STATE_CIVIL_WAR = 64
+#     STATE_ELECTION = 65
+#
+#     STATE_OUTBREAK = 72
+#     STATE_INFRASTRUCTURE_FAILURE = 104
+#     STATE_EXPANSION = 67
+#
+#     ','.join(ret)
+#     #STATE_BOOM = 16
+#     #STATE_BUST = 32
+#     #STATE_FAMINE = 37
+#     #STATE_CIVIL_UNREST = 48
+#     #STATE_CIVIL_LIBERTY = 66
+#     #STATE_LOCKDOWN = 69
+#     #STATE_NONE = 80
+#     #STATE_PIRATE_ATTACK = 81
+#     #STATE_INVESTMENT = 101
+#     #STATE_BLIGHT = 102
+#     #STATE_DROUGHT = 103
+#     #STATE_NATURAL_DISASTER = 105
+#     #STATE_PUBLIC_HOLIDAY = 106
+#     #STATE_TERRORIST_ATTACK = 107
+#
+#     for state in state_dict:
+#         if (state['id'] == 64):
+#             return 64
+#         if (state['id'] == 65):
+#             return 65
+#         if (state['id'] == 73):
+#             return 73
+#         if (state['id'] == 96):
+#             return 96
+#         if (state['id'] == 104):
+#             return 104
+#
+#     return 0
 
 
 #
@@ -29,23 +58,23 @@ def desiredState(state_dict):
 #
 def getDataArrays():
     # all_factions_dict: Faction                     = {}    #private
-    playerFactionIdToInfo: Dict[ int, Faction ] = {}  # private
-    clubFactionIdToInfo: Dict[ int, Faction ] = {}  # private
-    systemIdToInfo: Dict[ int, InhabitedSystem ] = {}  # private
-    allClubSystemInstances: List[ FactionInstance ] = [ ]  # make this one avaiable
-    playerFactionNameToSystemName: Dict[ str, str ] = {}
-    systemNameToXYZ: Dict[ str, Tuple[ float, float, float ] ] = {}
+    playerFactionIdToInfo: Dict[int, Faction] = {}  # private
+    clubFactionIdToInfo: Dict[int, Faction] = {}  # private
+    systemIdToInfo: Dict[int, InhabitedSystem] = {}  # private
+    allClubSystemInstances: List[FactionInstance] = []  # make this one avaiable
+    playerFactionNameToSystemName: Dict[str, str] = {}
+    systemNameToXYZ: Dict[str, Tuple[float, float, float]] = {}
 
     with open("../data/factions.jsonl", 'r') as handle:
         for line in handle:
             facLine: dict = json.loads(line)
-            lCurFactionId = int(facLine[ 'id' ])
+            lCurFactionId = int(facLine['id'])
             curFaction = Faction(facLine)
             # all_factions_dict[ lCurFactionId ] = curFaction
             if curFaction.is_player():
-                playerFactionIdToInfo[ lCurFactionId ] = curFaction
+                playerFactionIdToInfo[lCurFactionId] = curFaction
             if FactionNameFilter.proClubFaction(curFaction):
-                clubFactionIdToInfo[ lCurFactionId ] = curFaction
+                clubFactionIdToInfo[lCurFactionId] = curFaction
 
     # with open(stations_file, 'r') as handle:
     #      for line in handle:
@@ -56,9 +85,9 @@ def getDataArrays():
     with open("../data/systems_populated.jsonl", 'r') as handle:
         for line in handle:
             sysLine: dict = json.loads(line)
-            tid = int(sysLine[ 'id' ])
+            tid = int(sysLine['id'])
             foo = InhabitedSystem(sysLine)
-            systemIdToInfo[ tid ] = foo
+            systemIdToInfo[tid] = foo
 
     #
     # Populate dict of player factions & home system names
@@ -67,27 +96,30 @@ def getDataArrays():
     for fac in playerFactionIdToInfo.values():
         sid: int = fac.get_homesystem_id()
         tSys: InhabitedSystem = systemIdToInfo.get(sid)
-        if (tSys is None): continue
+        if (tSys is None):
+            continue
         factionName: str = fac.get_name()
         systemName: str = tSys.get_name()
-        if (systemName is None): continue
+        if (systemName is None):
+            continue
         # x: float = tSys.getX()
         # y: float = tSys.getY()
         # z: float = tSys.getZ()
         # item = (sName, (x, y, z))
-        playerFactionNameToSystemName[ factionName ] = systemName  # (x, y, z)  # .append(item)
+        playerFactionNameToSystemName[factionName] = systemName  # (x, y, z)  # .append(item)
 
     #
     # Populate dict of system name & x,y,zs
     #
     tSys: InhabitedSystem
     for tSys in systemIdToInfo.values():
-        if (tSys is None): continue
+        if (tSys is None):
+            continue
         factionName: str = tSys.get_name()
         x: float = tSys.getX()
         y: float = tSys.getY()
         z: float = tSys.getZ()
-        systemNameToXYZ[ factionName ] = (x, y, z)  # .append(item)
+        systemNameToXYZ[factionName] = (x, y, z)  # .append(item)
 
     #
     # Make nifty list of club faction presences
@@ -98,13 +130,14 @@ def getDataArrays():
         for faction_ptr in mfp:
             if faction_ptr is None:
                 continue
-            faction_id = int(faction_ptr[ 'minor_faction_id' ])
+            faction_id = int(faction_ptr['minor_faction_id'])
             if faction_id is None:
                 continue
             if faction_id in clubFactionIdToInfo:
-                fac = clubFactionIdToInfo[ faction_id ]
+                fac = clubFactionIdToInfo[faction_id]
                 factionName: str = fac.get_name2()
-                if factionName.startswith("*"): continue  # filters player factions
+                if factionName.startswith("*"):
+                    continue  # filters player factions
 
                 # sysname = cSystem.get_name()
                 # factionHomeSystemId: int = fac.get_homesystem_id()
@@ -117,7 +150,7 @@ def getDataArrays():
                 govt = cSystem.getGovernment()
                 # allg = fac.get_allegiance()
 
-                inf = faction_ptr[ 'influence' ]
+                inf = faction_ptr['influence']
                 # sinf = '{:04.2f}'.format(inf)
                 # print(sinf)
 
@@ -125,74 +158,72 @@ def getDataArrays():
                 # date = datetime.datetime.utcfromtimestamp(updated)
                 # ds = date.strftime("%m/%d/%Y %H:%M:%S")
 
-                # active_states = json.dumps(faction_ptr[ 'active_states' ])
-                hasWar = desiredState(faction_ptr[ 'active_states' ])
-                if (govt == "Anarchy"):
-                    hasWar = -16
-                if (hasWar == 0 and 3.5 >= inf > 0.0):
-                    hasWar = -15
-                if (hasWar == 104 and inf > 10.0):
-                    hasWar = 0
+                vuln : Vulnerability = Vulnerability(govt, inf, faction_ptr['active_states'])
+                # HERE
+                # # active_states = json.dumps(faction_ptr[ 'active_states' ])
+                # hasWar = desiredState(faction_ptr['active_states'])
+                # if (govt == "Anarchy"):
+                #     hasWar = -16
+                # if (hasWar == 0 and 4.5 >= inf > 0.0):
+                #     hasWar = -15
+                # if (hasWar == 104 and inf > 10.0):
+                #     hasWar = 0
 
-                sysIns = FactionInstance(fac, cSystem, inf, hasWar)
+                sysIns = FactionInstance(fac, cSystem, inf, vuln)
                 allClubSystemInstances.append(sysIns)
-                # print(factionName + "," + sysname)
-                # print("=====================================================================================")
-                # print(factionName + "," + sysname + "," + x + "," + y + "," + z + "," + allg + "," + sinf + "," + war+ "," + ds )  # + "," + allg)
 
-    # return [ allClubSystemInstances, xFacList, xSysList, systemIdToInfo ]
-    return {'playerFactionIdToInfo': playerFactionIdToInfo,
-            'clubFactionIdToInfo': clubFactionIdToInfo,
-            'systemIdToInfo': systemIdToInfo,
-            'allClubSystemInstances': allClubSystemInstances,
-            'systemNameToXYZ': systemNameToXYZ,
+    return {'playerFactionIdToInfo'        : playerFactionIdToInfo,
+            'clubFactionIdToInfo'          : clubFactionIdToInfo,
+            'systemIdToInfo'               : systemIdToInfo,
+            'allClubSystemInstances'       : allClubSystemInstances,
+            'systemNameToXYZ'              : systemNameToXYZ,
             'playerFactionNameToSystemName': playerFactionNameToSystemName
             }
 
 
 # =========================================================!!!!!!!!!!!!!!!
-def getDataFrame(csa: List[ FactionInstance ]) -> object:
-    xCoords: List[ int ] = [ ]
-    yCoords: List[ int ] = [ ]
-    zCoords: List[ int ] = [ ]
-    factionName: List[ str ] = [ ]
-    systemName: List[ str ] = [ ]
-    allegiances: List[ str ] = [ ]
-    isHomeSystem: List[ bool ] = [ ]
-    population: List[ int ] = [ ]
-    influence: List[ float ] = [ ]
-    updated: List[ datetime.datetime ] = [ ]
-    controlsSystem: List[ bool ] = [ ]
-    vulnerableString: List[ str ] = [ ]
+def getDataFrame(csa: List[FactionInstance]) -> object:
+    x_coordinate: List[int] = []
+    y_coordinate: List[int] = []
+    z_coordinate: List[int] = []
+    factionName: List[str] = []
+    systemName: List[str] = []
+    allegiances: List[str] = []
+    isHomeSystem: List[bool] = []
+    population: List[int] = []
+    influence: List[float] = []
+    updated: List[datetime.datetime] = []
+    controlsSystem: List[bool] = []
+    vulnerableString: List[str] = []
 
-    cs: FactionInstance
-    for cs in csa:
-        factionName.append(cs.get_name())
-        systemName.append(cs.getSystemName())
-        xCoords.append(cs.getX())
-        yCoords.append(cs.getY())
-        zCoords.append(cs.getZ())
-        allegiances.append(cs.get_allegiance())
-        isHomeSystem.append(cs.isHomeSystem())
-        population.append(cs.getPopulation())
-        influence.append(cs.getInfluence())
-        updated.append(cs.getUpdatedDateTime())
-        controlsSystem.append(cs.controlsSystem())
-        vulnerableString.append(cs.getVulnerableString())
+    factionInstance: FactionInstance
+    for factionInstance in csa:
+        factionName.append(factionInstance.get_name())
+        systemName.append(factionInstance.getSystemName())
+        x_coordinate.append(factionInstance.getX())
+        y_coordinate.append(factionInstance.getY())
+        z_coordinate.append(factionInstance.getZ())
+        allegiances.append(factionInstance.get_allegiance())
+        isHomeSystem.append(factionInstance.isHomeSystem())
+        population.append(factionInstance.getPopulation())
+        influence.append(factionInstance.getInfluence())
+        updated.append(factionInstance.getUpdatedDateTime())
+        controlsSystem.append(factionInstance.controlsSystem())
+        vulnerableString.append(factionInstance.getVulnerableString())
 
     data = {
-        'systemName': systemName,
-        'factionName': factionName,
-        'x': xCoords,
-        'y': yCoords,
-        'z': zCoords,
-        'allegiance': allegiances,
+        'systemName'  : systemName,
+        'factionName' : factionName,
+        'x'           : x_coordinate,
+        'y'           : y_coordinate,
+        'z'           : z_coordinate,
+        'allegiance'  : allegiances,
         'isHomeSystem': isHomeSystem,
-        'population': population,
-        'influence': influence,
-        'updated': updated,
-        'control': controlsSystem,
-        "vulnerable": vulnerableString
+        'population'  : population,
+        'influence'   : influence,
+        'updated'     : updated,
+        'control'     : controlsSystem,
+        "vulnerable"  : vulnerableString
     }
 
     #

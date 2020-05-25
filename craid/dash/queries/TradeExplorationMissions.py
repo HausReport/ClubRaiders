@@ -5,4 +5,3 @@ class TradeExplorationMissions:
 
     def getSort(self):
         return [{'column_id': 'influence', 'direction': 'asc'}]
-

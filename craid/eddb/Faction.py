@@ -5,17 +5,17 @@ class Faction(NamedItem):
 
     # getters/setters for id & name in superclass
     def __init__(self, jsonString):
-        super().__init__(jsonString[ NamedItem.NAME ], jsonString[ NamedItem.ID ])
+        super().__init__(jsonString[NamedItem.NAME], jsonString[NamedItem.ID])
         self.jsonLine = jsonString
 
     def get_allegiance(self):
-        return self.jsonLine[ 'allegiance' ]
+        return self.jsonLine['allegiance']
 
     def get_government(self):
-        return self.jsonLine[ 'government' ]
+        return self.jsonLine['government']
 
     def get_homesystem_id(self):
-        return self.jsonLine[ 'home_system_id' ]
+        return self.jsonLine['home_system_id']
 
     # def get_active_states(self):
     #    return json.dumps(self.jsonLine) #[ 'active_states' ]
@@ -36,7 +36,7 @@ class Faction(NamedItem):
         return self.get_allegiance() == 'Independent'
 
     def is_player(self):
-        return self.jsonLine[ 'is_player_faction' ] == True
+        return self.jsonLine['is_player_faction'] is True
 
     def get_name2(self):
         p_ind = ""
@@ -46,5 +46,5 @@ class Faction(NamedItem):
 
     def factionStringShort(self):
         name = self.get_name2()
-        allegiance = self.get_allegiance()[ 0:3 ].upper()
+        allegiance = self.get_allegiance()[0:3].upper()
         return f'[{allegiance}] - {name}'

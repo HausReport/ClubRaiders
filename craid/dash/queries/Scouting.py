@@ -1,7 +1,9 @@
 from datetime import datetime, timezone
-#from this import Scouting
 
 from dateutil.relativedelta import *
+
+
+# from this import Scouting
 
 class Scouting:
 
@@ -15,7 +17,7 @@ class Scouting:
     def getSort(self):
         return [{'column_id': 'distance', 'direction': 'asc'}]
 
-if __name__ == '__main__':
-   s = Scouting()
-   print(s.getFilter())
 
+if __name__ == '__main__':
+    s = Scouting()
+    print(s.getFilter())
