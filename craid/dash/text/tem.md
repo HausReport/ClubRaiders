@@ -1,12 +1,25 @@
-Bounty Hunting
+Trade/Exploration/Missions
 ==============
 
-Bounty hunting improves the influence of a system's *controlling faction.*  Bounty hunting in club-controlled systems isn't
-helpful to our goals, but in systems where they're present but not controlling, it can be very effective.  Turning in a bounty
-at an Interstellar Factor negates most or all of the effect.
+Trade and turning in exploration data help a *station's controlling faction*.
+Completing a mission helps whichever faction gives the mission. 
 
-We have no reliable information about Compromised Navigation Beacons.  We know that Hazardous Resource Extraction Sites (Haz-RES) are 
-very common in systems with refinery and extraction economies.  Almost every system that has a ringed planet will have resource
-extraction sites: viewing the system in https://eddb.io can help you plan.
+###Trade
+Current thinking is that trading a mix of cargoes affects influence more than a single cargo.  For example selling 750 doodads
+at once might equate to an inf+ mission, whereas selling a load of 150 apples, 150 banannas, 150 canteloupes, 150 dates, and 150 eggplants might equate to completing an
+inf+++++ mission.  The influence goes to the controlling faction of the station where the goods are sold at a profit.
+
+###Exploration
+Current thinking is selling exploration data in batches of 4 million credits is an effective way to generate influence for a station's controlling faction.  An excellent
+way to make quick money exploring is by use of of the "Road to Riches" tool at http://edtools.ddns.net/expl.php.  The dashboard tool at https://www.edsm.net/ can be used to
+make a good estimate of the current value of exploration data you have on board.
+
+###Missions
+The influence given for completing a mission ranges from inf+ to inf+++++.
+Failing a mission is thought to have no effect on influence.
+ 
+
+
+
 
 More info at https://forums.frontier.co.uk/threads/transactions-bgs-guide-best-current-thinking.424397/
