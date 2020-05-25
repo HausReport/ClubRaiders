@@ -1,6 +1,7 @@
 from craid.eddb.Constants import MINOR_FACTION_ID, POWER_STATE, MINOR_FACTION_PRESENCES
 
 from craid.eddb.NamedItem import NamedItem
+import urllib.parse
 
 
 class InhabitedSystem(NamedItem):
@@ -29,7 +30,10 @@ class InhabitedSystem(NamedItem):
         return True
 
     def getEddbSystemUrl(self):
-        return "https://eddb.io/system/" + self.get_id
+        return "https://eddb.io/system/" + self.get_id()
+
+    def getRoadToRichesUrl(self):
+        return "http://edtools.ddns.net/expl.php?s=Alioth" + urllib.parse.quote(self.get_name())
 
     def getMinorFactionPresences(self):
         return self.jsonLine[ MINOR_FACTION_PRESENCES ]
