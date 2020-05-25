@@ -54,12 +54,12 @@ app.config[ 'suppress_callback_exceptions' ] = True
 app.config.suppress_callback_exceptions = True
 
 opts = [ ]
-keys: List[str] = sorted(systemNameToXYZ.keys())
+keys: List[ str ] = sorted(systemNameToXYZ.keys())
 for it in keys:
     opts.append({'label': it, 'value': it})
 
 fopts = [ ]
-keys: List[str] = sorted(playerFactionNameToHomeSystemName.keys())
+keys: List[ str ] = sorted(playerFactionNameToHomeSystemName.keys())
 for it in keys:
     val: str = playerFactionNameToHomeSystemName.get(it)
     if val is not None:
@@ -68,9 +68,9 @@ for it in keys:
 theColumns = [
     {"name": 'systemName', "id": 'systemName', "deletable": False, "selectable": False},
     {"name": 'factionName', "id": 'factionName', "deletable": False, "selectable": False},
-    {"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-    {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-    {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+    #{"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+    #{"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+    #{"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
     {"name": 'isHomeSystem', "id": 'isHomeSystem', "deletable": False, "selectable": False},
     {"name": 'population', "id": 'population', "deletable": False, "selectable": False, "type": "numeric"},
     {"name": 'influence', "id": 'influence', "deletable": False, "selectable": False, "type": "numeric"},
@@ -119,11 +119,14 @@ hdr_layout = html.Div([
     dcc.Dropdown(
         id='demo-dropdown2',
         options=fopts,
-        value='Anti Xeno Initiative',
+        value='',#Anti Xeno Initiative',
         placeholder='Select player faction'
     ),
 
-    html.Div(id='dd-output-container')
+    html.Div(id='system-notifier'),
+    html.Div(id='filter-notifier'),
+    html.Div(id='sort-notifier'),
+
 ], style={'width': '99%', 'display': 'inline-block'})
 
 tab1_layout = html.Div([
@@ -181,11 +184,12 @@ def render_content(tab):
             html.H3('Tab content 7')
         ])
 
-def fSystemNameToXYZ(sName: str): # -> tuple(3): #float, float, float):
+
+def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
     #
     # value should be a valid system name
     #
-    #pos: Tuple[ float, float, float ]
+    # pos: Tuple[ float, float, float ]
     pos = systemNameToXYZ.get(sName)
     if (pos is None): pos = (0, 0, 0)
     return pos
@@ -195,8 +199,8 @@ def fSystemNameToXYZ(sName: str): # -> tuple(3): #float, float, float):
 # Callback handlers below
 # =============================================================
 @app.callback(
-    [Output('datatable-interactivity', 'data'), Output('datatable-interactivity', 'columns') ],
-    [Input('demo-dropdown', 'value')] )
+    [ Output('datatable-interactivity', 'data'), Output('datatable-interactivity', 'columns') ],
+    [ Input('demo-dropdown', 'value') ])
 def update_output(val1):
     value = val1
     pos = fSystemNameToXYZ(value)
@@ -211,22 +215,25 @@ def update_output(val1):
         dis: float = math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2)
         df.at[ ind, 'distance' ] = dis
 
-    print(df[ 'distance' ].dtypes)
+    # print(df[ 'distance' ].dtypes)
+    #print(datatable.sort_by)
     _cols = theColumns
     # [
     #     {"name": i, "id": i} for i in df.columns
     # ]
     return df.to_dict('records'), _cols
 
+
 @app.callback(
-    dash.dependencies.Output('dd-output-container', 'children'),
-    [ dash.dependencies.Input('demo-dropdown', 'value')] )
+    dash.dependencies.Output('system-notifier', 'children'),
+    [ dash.dependencies.Input('demo-dropdown', 'value') ])
 def update_output2(value):
     return 'Selected system "{}" '.format(value)
 
+
 @app.callback(
-     dash.dependencies.Output('demo-dropdown', 'value'),
-     [ dash.dependencies.Input('demo-dropdown2', 'value') ] )
+    dash.dependencies.Output('demo-dropdown', 'value'),
+    [ dash.dependencies.Input('demo-dropdown2', 'value') ])
 def update_outputr3(value):
     return value
 
@@ -304,6 +311,29 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
         # need to do this check.
         for column in [ "influence", "population", "gdpPercap" ] if column in dff
     ]
+
+
+@app.callback(
+    dash.dependencies.Output('sort-notifier', 'children'),
+    [Input('datatable-interactivity', 'sort_by')])
+def update_table(sort_by):
+    if sort_by is None:
+        return("Sort empty")
+    if len(sort_by) == 0:
+        return("Sort empty")
+    else:
+        return "Current sort: " + str(sort_by)
+
+@app.callback(
+    dash.dependencies.Output('filter-notifier', 'children'),
+    [Input('datatable-interactivity', 'filter_query')])
+def update_table(query):
+    if query is None:
+        return("Sort empty")
+    if len(query) == 0:
+        return("Sort empty")
+    else:
+        return "Current filter: " + str(query)
 
 
 if __name__ == '__main__':
