@@ -1,6 +1,3 @@
-Trade/Exploration/Missions
-==============
-
 Trade and turning in exploration data help a *station's controlling faction*.
 Completing a mission helps whichever faction gives the mission. 
 

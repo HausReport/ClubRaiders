@@ -24,12 +24,17 @@ def desiredState(state_dict):
     return 0
 
 
+#
+# Expensive function - run once, use result many times
+#
 def getDataArrays():
     # all_factions_dict: Faction                     = {}    #private
-    player_factions_dict: Dict[ int, Faction ] = {}  # private
-    club_factions_dict: Dict[ int, Faction ] = {}  # private
-    all_systems_dict: Dict[ int, InhabitedSystem ] = {}  # private
-    club_systems_arr: List[ FactionInstance ] = [ ]  # make this one avaiable
+    playerFactionIdToInfo: Dict[ int, Faction ] = {}  # private
+    clubFactionIdToInfo: Dict[ int, Faction ] = {}  # private
+    systemIdToInfo: Dict[ int, InhabitedSystem ] = {}  # private
+    allClubSystemInstances: List[ FactionInstance ] = [ ]  # make this one avaiable
+    playerFactionNameToSystemName: Dict[ str, str ] = {}
+    systemNameToXYZ: Dict[ str, Tuple[ float, float, float ] ] = {}
 
     with open("../data/factions.jsonl", 'r') as handle:
         for line in handle:
@@ -38,9 +43,9 @@ def getDataArrays():
             curFaction = Faction(facLine)
             # all_factions_dict[ lCurFactionId ] = curFaction
             if curFaction.is_player():
-                player_factions_dict[ lCurFactionId ] = curFaction
+                playerFactionIdToInfo[ lCurFactionId ] = curFaction
             if FactionNameFilter.proClubFaction(curFaction):
-                club_factions_dict[ lCurFactionId ] = curFaction
+                clubFactionIdToInfo[ lCurFactionId ] = curFaction
 
     # with open(stations_file, 'r') as handle:
     #      for line in handle:
@@ -53,42 +58,42 @@ def getDataArrays():
             sysLine: dict = json.loads(line)
             tid = int(sysLine[ 'id' ])
             foo = InhabitedSystem(sysLine)
-            all_systems_dict[ tid ] = foo
+            systemIdToInfo[ tid ] = foo
 
     #
-    # Populate dict of player factions & x,y,zs
+    # Populate dict of player factions & home system names
     #
-    xFacList = {}
     fac: Faction
-    for fac in player_factions_dict.values():
+    for fac in playerFactionIdToInfo.values():
         sid: int = fac.get_homesystem_id()
-        tSys: InhabitedSystem = all_systems_dict.get(sid)
+        tSys: InhabitedSystem = systemIdToInfo.get(sid)
         if (tSys is None): continue
-        sName: str = fac.get_name()
-        x: float = tSys.getX()
-        y: float = tSys.getY()
-        z: float = tSys.getZ()
+        factionName: str = fac.get_name()
+        systemName: str = tSys.get_name()
+        if (systemName is None): continue
+        # x: float = tSys.getX()
+        # y: float = tSys.getY()
+        # z: float = tSys.getZ()
         # item = (sName, (x, y, z))
-        xFacList[ sName ] = (x, y, z)  # .append(item)
+        playerFactionNameToSystemName[ factionName ] = systemName  # (x, y, z)  # .append(item)
 
     #
     # Populate dict of system name & x,y,zs
     #
-    xSysList: Dict[ str, Tuple[ float, float, float ] ] = {}
     tSys: InhabitedSystem
-    for tSys in all_systems_dict.values():
+    for tSys in systemIdToInfo.values():
         if (tSys is None): continue
-        sName: str = tSys.get_name()
+        factionName: str = tSys.get_name()
         x: float = tSys.getX()
         y: float = tSys.getY()
         z: float = tSys.getZ()
-        xSysList[ sName ] = (x, y, z)  # .append(item)
+        systemNameToXYZ[ factionName ] = (x, y, z)  # .append(item)
 
     #
     # Make nifty list of club faction presences
     #
     cSystem: InhabitedSystem
-    for cSystem in all_systems_dict.values():
+    for cSystem in systemIdToInfo.values():
         mfp = cSystem.getMinorFactionPresences()
         for faction_ptr in mfp:
             if faction_ptr is None:
@@ -96,8 +101,8 @@ def getDataArrays():
             faction_id = int(faction_ptr[ 'minor_faction_id' ])
             if faction_id is None:
                 continue
-            if faction_id in club_factions_dict:
-                fac = club_factions_dict[ faction_id ]
+            if faction_id in clubFactionIdToInfo:
+                fac = clubFactionIdToInfo[ faction_id ]
                 factionName: str = fac.get_name2()
                 if factionName.startswith("*"): continue  # filters player factions
 
@@ -130,16 +135,23 @@ def getDataArrays():
                     hasWar = 0
 
                 sysIns = FactionInstance(fac, cSystem, inf, hasWar)
-                club_systems_arr.append(sysIns)
+                allClubSystemInstances.append(sysIns)
                 # print(factionName + "," + sysname)
                 # print("=====================================================================================")
                 # print(factionName + "," + sysname + "," + x + "," + y + "," + z + "," + allg + "," + sinf + "," + war+ "," + ds )  # + "," + allg)
 
-    return [ club_systems_arr, xFacList, xSysList ]
+    # return [ allClubSystemInstances, xFacList, xSysList, systemIdToInfo ]
+    return {'playerFactionIdToInfo': playerFactionIdToInfo,
+            'clubFactionIdToInfo': clubFactionIdToInfo,
+            'systemIdToInfo': systemIdToInfo,
+            'allClubSystemInstances': allClubSystemInstances,
+            'systemNameToXYZ': systemNameToXYZ,
+            'playerFactionNameToSystemName': playerFactionNameToSystemName
+            }
 
 
 # =========================================================!!!!!!!!!!!!!!!
-def getDataFrame(csa: List[ FactionInstance ] ) -> DataFrame:
+def getDataFrame(csa: List[ FactionInstance ]) -> object:
     xCoords: List[ int ] = [ ]
     yCoords: List[ int ] = [ ]
     zCoords: List[ int ] = [ ]

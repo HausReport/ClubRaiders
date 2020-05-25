@@ -12,33 +12,35 @@ from dash.dependencies import Input, Output
 # import dash_core_components.Markdown as md
 import craid.eddb.DataProducer as dp
 
-arrs = dp.getDataArrays()
-csa = arrs[0]
-systems: Dict[str, Tuple[float, float, float]] = arrs[2]
-pFactions: Dict[str, Tuple[float, float, float]] = arrs[1]
-df = dp.getDataFrame(csa)
+currentData = dp.getDataArrays()
+clubSystemInstances = currentData[ 'allClubSystemInstances' ]
 
-nrows = df.shape[0]
+systemNameToXYZ: Dict[ str, Tuple[ float, float, float ] ] = currentData[ 'systemNameToXYZ' ]
+playerFactionNameToHomeSystemName: Dict[ str, str ] = currentData[ 'playerFactionNameToSystemName' ]
+df = dp.getDataFrame(clubSystemInstances)
+
+nrows = df.shape[ 0 ]
+
 
 #
 # load a markdown file from /data
 #
 def getMarkdown(which: str) -> dcc.Markdown:
-    with open("text/"+which+".md", "r", encoding="utf-8") as input_file:
+    with open("text/" + which + ".md", "r", encoding="utf-8") as input_file:
         text = input_file.read()
         return dcc.Markdown(text)
 
 
 # suppress_callback_exceptions=True
 
-df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
+df[ 'distance' ] = pd.Series(np.zeros(nrows), index=df.index)
 
 colors = {
     'background': '#111111',
     'text': '#7FDBFF'
 }
 
-external_stylesheets = ['https://raw.githubusercontent.com/HausReport/ClubRaiders/master/craid/css/Raiders.css']
+external_stylesheets = [ 'https://raw.githubusercontent.com/HausReport/ClubRaiders/master/craid/css/Raiders.css' ]
 # ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 
@@ -48,38 +50,39 @@ external_stylesheets = ['https://raw.githubusercontent.com/HausReport/ClubRaider
 # name = __name__
 name: str = "Club Raiders"
 app = dash.Dash(name, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
-app.config['suppress_callback_exceptions'] = True
+app.config[ 'suppress_callback_exceptions' ] = True
 app.config.suppress_callback_exceptions = True
 
-opts = []
-for it in systems.keys():
-    val: Tuple = systems.get(it)
-    opts.append({'label': it, 'value': str(it) + "," + str(val[0]) + "," + str(val[1]) + "," + str(val[2])})
+opts = [ ]
+keys: List[str] = sorted(systemNameToXYZ.keys())
+for it in keys:
+    opts.append({'label': it, 'value': it})
 
-fopts = []
-for it in pFactions.keys():
-    val: Tuple = systems.get(it)
-    if( val != None):
-        opts.append({'label': it, 'value': str(it) + "," + str(val[0]) + "," + str(val[1]) + "," + str(val[2])})
+fopts = [ ]
+keys: List[str] = sorted(playerFactionNameToHomeSystemName.keys())
+for it in keys:
+    val: str = playerFactionNameToHomeSystemName.get(it)
+    if val is not None:
+        fopts.append({'label': it, 'value': val})
 
 theColumns = [
-        {"name": 'systemName', "id": 'systemName', "deletable": False, "selectable": False},
-        {"name": 'factionName', "id": 'factionName', "deletable": False, "selectable": False},
-        {"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-        {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-        {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-        {"name": 'isHomeSystem', "id": 'isHomeSystem', "deletable": False, "selectable": False},
-        {"name": 'population', "id": 'population', "deletable": False, "selectable": False, "type": "numeric"},
-        {"name": 'influence', "id": 'influence', "deletable": False, "selectable": False, "type": "numeric"},
-        {"name": 'updated', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
-        {"name": 'control', "id": 'control', "deletable": False, "selectable": False},
-        {"name": 'vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
-        {"name": 'distance', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
-    ]
+    {"name": 'systemName', "id": 'systemName', "deletable": False, "selectable": False},
+    {"name": 'factionName', "id": 'factionName', "deletable": False, "selectable": False},
+    {"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+    {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+    {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
+    {"name": 'isHomeSystem', "id": 'isHomeSystem', "deletable": False, "selectable": False},
+    {"name": 'population', "id": 'population', "deletable": False, "selectable": False, "type": "numeric"},
+    {"name": 'influence', "id": 'influence', "deletable": False, "selectable": False, "type": "numeric"},
+    {"name": 'updated', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
+    {"name": 'control', "id": 'control', "deletable": False, "selectable": False},
+    {"name": 'vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
+    {"name": 'distance', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
+]
 datatable: dash_table.DataTable = dash_table.DataTable(
     id='datatable-interactivity',
-    columns= theColumns,
-    #hidden_columns = {'x','y','z'},   causes an exception re serialization
+    columns=theColumns,
+    # hidden_columns = {'x','y','z'},   causes an exception re serialization
     data=df.to_dict('records'),
     editable=False,
     filter_action="native",
@@ -88,8 +91,8 @@ datatable: dash_table.DataTable = dash_table.DataTable(
     column_selectable=False,  # "single",
     row_selectable=False,  # "multi",
     row_deletable=False,
-    selected_columns=[],
-    selected_rows=[],
+    selected_columns=[ ],
+    selected_rows=[ ],
     page_action="native",
     page_current=0,
     page_size=100,
@@ -98,20 +101,21 @@ datatable: dash_table.DataTable = dash_table.DataTable(
 # tput("datatable-interactivity", "filtering_settings"),
 # tab.available_properties['filter_query'] = "{control} contains false && {influence} < 25"
 datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
-#datatable.filter_query = "{isHomeSystem} contains false && {vulnerable} contains War"
-#datatable.hidden_columns = {'x','y','z'}
+# datatable.filter_query = "{isHomeSystem} contains false && {vulnerable} contains War"
+# datatable.hidden_columns = {'x','y','z'}
 # for x1 in tab.available_properties:
 # print( str(x1) )
 
 
 hdr_layout = html.Div([
-    html.Label("System:"),
+    html.Label("Choose a System:"),
     dcc.Dropdown(
         id='demo-dropdown',
         options=opts,
         value='Alioth',
         placeholder='Select star system'
     ),
+    html.Label("or a Squadron:"),
     dcc.Dropdown(
         id='demo-dropdown2',
         options=fopts,
@@ -123,7 +127,7 @@ hdr_layout = html.Div([
 ], style={'width': '99%', 'display': 'inline-block'})
 
 tab1_layout = html.Div([
-    getMarkdown("bh")
+    getMarkdown("overview")
 ])
 
 # =============================================================
@@ -144,9 +148,8 @@ app.layout = html.Div([
 ])
 
 
-
 @app.callback(Output('tabs-example-content', 'children'),
-              [Input('tabs-example', 'value')])
+              [ Input('tabs-example', 'value') ])
 def render_content(tab):
     if tab == 'tab-1':
         return tab1_layout
@@ -159,15 +162,15 @@ def render_content(tab):
         ])
     elif tab == 'tab-3':
         return html.Div([
-            html.H3('Tab content 3')
+            getMarkdown("bh")
         ])
     elif tab == 'tab-4':
         return html.Div([
-            html.H3('Tab content 4')
+            getMarkdown("tem")
         ])
     elif tab == 'tab-5':
         return html.Div([
-            html.H3('Tab content 5')
+            getMarkdown("scouting")
         ])
     elif tab == 'tab-6':
         return html.Div([
@@ -178,32 +181,37 @@ def render_content(tab):
             html.H3('Tab content 7')
         ])
 
+def fSystemNameToXYZ(sName: str): # -> tuple(3): #float, float, float):
+    #
+    # value should be a valid system name
+    #
+    #pos: Tuple[ float, float, float ]
+    pos = systemNameToXYZ.get(sName)
+    if (pos is None): pos = (0, 0, 0)
+    return pos
+
 
 # =============================================================
 # Callback handlers below
 # =============================================================
 @app.callback(
-    [dash.dependencies.Output('datatable-interactivity', 'data'),
-    dash.dependencies.Output('datatable-interactivity', 'columns')],
-    [dash.dependencies.Input('demo-dropdown', 'value')])
-def update_output(value):
-    x, y, z = 0.0, 0.0, 0.0
-    try:
-        spl = value.split(",")
-        x = float(spl[1])
-        y = float(spl[2])
-        z = float(spl[3])
-    except:
-        print("woops")
+    [Output('datatable-interactivity', 'data'), Output('datatable-interactivity', 'columns') ],
+    [Input('demo-dropdown', 'value')] )
+def update_output(val1):
+    value = val1
+    pos = fSystemNameToXYZ(value)
+    x = pos[ 0 ]
+    y = pos[ 1 ]
+    z = pos[ 2 ]
 
     for ind in df.index:
-        x1: float = df.at[ind, 'x']
-        y1: float = df.at[ind, 'y']
-        z1: float = df.at[ind, 'z']
+        x1: float = df.at[ ind, 'x' ]
+        y1: float = df.at[ ind, 'y' ]
+        z1: float = df.at[ ind, 'z' ]
         dis: float = math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2)
-        df.at[ind, 'distance'] = dis
+        df.at[ ind, 'distance' ] = dis
 
-    print(df['distance'].dtypes)
+    print(df[ 'distance' ].dtypes)
     _cols = theColumns
     # [
     #     {"name": i, "id": i} for i in df.columns
@@ -212,9 +220,15 @@ def update_output(value):
 
 @app.callback(
     dash.dependencies.Output('dd-output-container', 'children'),
-    [dash.dependencies.Input('demo-dropdown', 'value')])
-def update_output(value):
+    [ dash.dependencies.Input('demo-dropdown', 'value')] )
+def update_output2(value):
     return 'Selected system "{}" '.format(value)
+
+@app.callback(
+     dash.dependencies.Output('demo-dropdown', 'value'),
+     [ dash.dependencies.Input('demo-dropdown2', 'value') ] )
+def update_outputr3(value):
+    return value
 
 
 # @app.callback(
@@ -234,9 +248,9 @@ def update_output(value):
 
 @app.callback(
     Output('datatable-interactivity-container', "children"),
-    [Input('datatable-interactivity', "derived_virtual_data"),
-    Input('datatable-interactivity', "derived_virtual_selected_rows"),
-    Input('datatable-interactivity', 'active_cell')])
+    [ Input('datatable-interactivity', "derived_virtual_data"),
+      Input('datatable-interactivity', "derived_virtual_selected_rows"),
+      Input('datatable-interactivity', 'active_cell') ])
 def update_graphs(rows, derived_virtual_selected_rows, active_cell):
     # When the table is first rendered, `derived_virtual_data` and
     # `derived_virtual_selected_rows` will be `None`. This is due to an
@@ -248,27 +262,27 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
     # `derived_virtual_data=df.to_rows('dict')` when you initialize
     # the component.
     if derived_virtual_selected_rows is None:
-        derived_virtual_selected_rows = []
+        derived_virtual_selected_rows = [ ]
 
     dff = df if rows is None else pd.DataFrame(rows)
 
-    colors = ['#7FDBFF' if i in derived_virtual_selected_rows else '#0074D9'
-               for i in range(len(dff))]
+    colors = [ '#7FDBFF' if i in derived_virtual_selected_rows else '#0074D9'
+               for i in range(len(dff)) ]
 
     if active_cell:
         print("You selected row " + str(active_cell))
-    #active_row_id = active_cell['row_id'] if active_cell else None
-    #if( active_row_id != None):
-        #print("You selected row " + active_row_id)
-    #print("You selected row " + dff["systemName"][0])
+    # active_row_id = active_cell['row_id'] if active_cell else None
+    # if( active_row_id != None):
+    # print("You selected row " + active_row_id)
+    # print("You selected row " + dff["systemName"][0])
     return [
         dcc.Graph(
             id=column,
             figure={
                 "data": [
                     {
-                        "x": dff["systemName"],
-                        "y": dff[column],
+                        "x": dff[ "systemName" ],
+                        "y": dff[ column ],
                         "type": "bar",
                         "marker": {"color": colors},
                     }
@@ -288,7 +302,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
         # check if column exists - user may have deleted it
         # If `column.deletable=False`, then you don't
         # need to do this check.
-        for column in ["influence", "population", "gdpPercap"] if column in dff
+        for column in [ "influence", "population", "gdpPercap" ] if column in dff
     ]
 
 
