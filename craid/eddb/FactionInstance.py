@@ -4,6 +4,7 @@ from Vulnerability import Vulnerability
 from craid.eddb.Faction import Faction
 from craid.eddb.InhabitedSystem import InhabitedSystem
 
+
 class FactionInstance(Faction):
 
     # getters/setters for id & name in superclass

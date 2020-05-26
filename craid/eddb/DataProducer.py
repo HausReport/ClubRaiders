@@ -10,6 +10,7 @@ from craid.eddb.Faction import Faction
 from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.InhabitedSystem import InhabitedSystem
 
+
 # all_stations_dict : Station = {}
 # def desiredState(state_dict):
 #     ret = []
