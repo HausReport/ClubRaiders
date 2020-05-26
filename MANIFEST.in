@@ -1,1 +1,2 @@
-recursive-include craid *.md
+#
+global-include *.md

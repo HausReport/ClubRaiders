@@ -9,8 +9,9 @@ from craid.eddb.NamedItem import NamedItem
 class InhabitedSystem(NamedItem):
     #global all_factions_dict
 
-    def __init__(self, name='', eddbId=0):
-        super().__init__(name, eddbId)
+    #idef __init__(self, name='', eddbId=0):
+    #    super().__init__(name, eddbId)
+    #    self.jsonLine = None
 
     def __init__(self, jsonString: str):
         #        """
