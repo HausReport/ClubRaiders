@@ -13,7 +13,7 @@ setup(
     # Needed for dependencies
     install_requires=['numpy', 'dash', 'pandas', 'requests', 'setuptools'],
     # *strongly* suggested for sharing
-    version='0.52',
+    version='0.53',
     # The license can be anything you like
     license='MIT',
     description='Placeholder description',

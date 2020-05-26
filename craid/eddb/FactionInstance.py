@@ -1,6 +1,6 @@
 import datetime
 
-from Vulnerability import Vulnerability
+from craid.eddb.Vulnerability import Vulnerability
 from craid.eddb.Faction import Faction
 from craid.eddb.InhabitedSystem import InhabitedSystem
 

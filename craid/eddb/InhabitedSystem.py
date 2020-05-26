@@ -1,7 +1,7 @@
 import urllib.parse
 from typing import Dict
 
-from Faction import Faction
+from craid.eddb.Faction import Faction
 from craid.eddb.Constants import MINOR_FACTION_ID, POWER_STATE, MINOR_FACTION_PRESENCES
 from craid.eddb.NamedItem import NamedItem
 
