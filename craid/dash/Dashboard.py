@@ -17,7 +17,7 @@ clubSystemInstances = currentData['allClubSystemInstances']
 
 systemNameToXYZ: Dict[str, Tuple[float, float, float]] = currentData['systemNameToXYZ']
 playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
-df = dp.getDataFrame(clubSystemInstances)
+df: pd.DataFrame = dp.getDataFrame(clubSystemInstances)
 
 nrows = df.shape[0]
 
@@ -241,7 +241,7 @@ def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
     #
     # pos: Tuple[ float, float, float ]
     pos = systemNameToXYZ.get(sName)
-    if (pos is None): pos = (0, 0, 0)
+    if pos is None: pos = (0, 0, 0)
     return pos
 
 
@@ -370,9 +370,9 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
     [Input('datatable-interactivity', 'sort_by')])
 def update_table(sort_by):
     if sort_by is None:
-        return ("Sort empty")
+        return "Sort empty"
     if len(sort_by) == 0:
-        return ("Sort empty")
+        return "Sort empty"
     else:
         return "Current sort: " + str(sort_by)
 
@@ -382,9 +382,9 @@ def update_table(sort_by):
     [Input('datatable-interactivity', 'filter_query')])
 def update_table(query):
     if query is None:
-        return ("Sort empty")
+        return "Sort empty"
     if len(query) == 0:
-        return ("Sort empty")
+        return "Sort empty"
     else:
         return "Current filter: " + str(query)
 

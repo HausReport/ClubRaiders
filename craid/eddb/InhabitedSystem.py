@@ -56,8 +56,8 @@ class InhabitedSystem(NamedItem):
             ret.append(curFaction)
         return ret
 
-    def hasAnarchyFaction(self):
-        fList = self.getFactions()
+    def hasAnarchyFaction(self, all_factions_dict):
+        fList = self.getFactions(all_factions_dict)
         for fac in fList:
             if fac.is_anarchy():
                 return True

@@ -11,9 +11,9 @@ setup(
     packages=['craid', 'craid.eddb', 'craid.club', 'craid.css', 'craid.dash', 'craid.dash.queries', 'craid.dash.text',
               'craid.eddb', 'craid.club.regions'],
     # Needed for dependencies
-    # install_requires=['numpy'],
+    install_requires=['numpy', 'dash', 'pandas', 'requests', 'setuptools'],
     # *strongly* suggested for sharing
-    version='0.49',
+    version='0.50',
     # The license can be anything you like
     license='MIT',
     description='Placeholder description',

@@ -56,7 +56,7 @@ from craid.eddb.InhabitedSystem import InhabitedSystem
 #
 # Expensive function - run once, use result many times
 #
-def getDataArrays():
+def getDataArrays() -> Dict[str,object]:
     # all_factions_dict: Faction                     = {}    #private
     playerFactionIdToInfo: Dict[int, Faction] = {}  # private
     clubFactionIdToInfo: Dict[int, Faction] = {}  # private
@@ -96,11 +96,11 @@ def getDataArrays():
     for fac in playerFactionIdToInfo.values():
         sid: int = fac.get_homesystem_id()
         tSys: InhabitedSystem = systemIdToInfo.get(sid)
-        if (tSys is None):
+        if tSys is None:
             continue
         factionName: str = fac.get_name()
         systemName: str = tSys.get_name()
-        if (systemName is None):
+        if systemName is None:
             continue
         # x: float = tSys.getX()
         # y: float = tSys.getY()
@@ -113,7 +113,7 @@ def getDataArrays():
     #
     tSys: InhabitedSystem
     for tSys in systemIdToInfo.values():
-        if (tSys is None):
+        if tSys is None:
             continue
         factionName: str = tSys.get_name()
         x: float = tSys.getX()
@@ -182,7 +182,7 @@ def getDataArrays():
 
 
 # =========================================================!!!!!!!!!!!!!!!
-def getDataFrame(csa: List[FactionInstance]) -> object:
+def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
     x_coordinate: List[int] = []
     y_coordinate: List[int] = []
     z_coordinate: List[int] = []

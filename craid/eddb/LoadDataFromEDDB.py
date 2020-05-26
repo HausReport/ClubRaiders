@@ -9,7 +9,7 @@ import requests
 def load_data():
     if not os.path.exists('../data'):
         os.makedirs('data')
-    if (True is True):
+    if True is True:
         #
         # Gets the most recent data dumps from eddb.io
         #

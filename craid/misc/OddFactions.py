@@ -42,8 +42,8 @@ with open(factions_file, 'r') as handle:
         factions_dict[lCurFactionId] = curFaction
 
 
-def getFactionById(id):
-    return factions_dict.get(id)
+def getFactionById(_id):
+    return factions_dict.get(_id)
 
 
 for systemName in systems_dict.values():
@@ -85,6 +85,6 @@ for faction in factions_dict.values():
     for ct in rare_words_dict.keys():
         words = name.split()
         for word in words:
-            if (word == ct):
+            if word == ct:
                 print(ct + "\t" + str(rare_words_dict[ct]) + "\t" + name + "\t" + str(faction.get_homesystem_id()))
                 break

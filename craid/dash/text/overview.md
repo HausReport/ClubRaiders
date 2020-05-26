@@ -3,4 +3,4 @@ factions working to expand the influence of the shadowy organization known as **
 and make it accessible to individual commanders and squadrons who want to join the fight against The Club. The primary goal of this ***Club Raiders*** project is to "identify, engage, and eradicate" factions that support The Club.
 
 Outside its home system, if a faction is kept below 2.5% influence it will retreat from the system, decreasing The Club's 
-galactic influence.
+galactic influence.  A very few factions instances are seen to be immune to retreating.
