@@ -1,30 +1,34 @@
-from craid.dash.queries.CombatZones import CombatZones
-from craid.dash.queries.Scouting import Scouting
+from craid.dashbd.queries.CombatZones import CombatZones
+from craid.dashbd.queries.Scouting import Scouting
 
-from craid.dash.queries.TradeExplorationMissions import TradeExplorationMissions
+from craid.dashbd.queries.TradeExplorationMissions import TradeExplorationMissions
 
 
 class QueryFactory:
+    cz = CombatZones()
+    sc = Scouting()
+    tem = TradeExplorationMissions()
 
-    def __init__(self):
-        self.cz = CombatZones()
-        self.sc = Scouting()
-        self.tem = TradeExplorationMissions()
-
-    def getCombatZonesSort(self):
+    @staticmethod
+    def getCombatZonesSort():
         return CombatZones.getSort()
 
-    def getCombatZonesFilter(self):
+    @staticmethod
+    def getCombatZonesFilter():
         return CombatZones.getFilter()
 
-    def getScoutingSort(self):
+    @staticmethod
+    def getScoutingSort():
         return Scouting.getSort()
 
-    def getScoutingFilter(self):
+    @staticmethod
+    def getScoutingFilter():
         return Scouting.getFilter()
 
-    def getTradeExplorationMissionsSort(self):
+    @staticmethod
+    def getTradeExplorationMissionsSort():
         return TradeExplorationMissions.getSort()
 
-    def getTradeExplorationMissionsFilter(self):
+    @staticmethod
+    def getTradeExplorationMissionsFilter():
         return TradeExplorationMissions.getFilter()

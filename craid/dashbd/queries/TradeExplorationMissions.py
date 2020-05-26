@@ -1,9 +1,9 @@
 class TradeExplorationMissions:
 
     @staticmethod
-    def getFilter(self):
+    def getFilter():
         return "{isHomeSystem} contains false && {distance} < 125"
 
     @staticmethod
-    def getSort(self):
+    def getSort():
         return [{'column_id': 'influence', 'direction': 'asc'}]

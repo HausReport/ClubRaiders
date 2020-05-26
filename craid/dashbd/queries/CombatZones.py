@@ -1,7 +1,7 @@
 class CombatZones:
 
     @staticmethod
-    def getFilter(self):
+    def getFilter():
         return "{isHomeSystem} contains false && {distance} < 125 && {vulnerable} contains War"
 
     @staticmethod

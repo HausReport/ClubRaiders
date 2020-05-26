@@ -8,15 +8,15 @@ from dateutil.relativedelta import *
 class Scouting:
 
     @staticmethod
-    def getFilter(self):
+    def getFilter():
         now = datetime.now(timezone.utc)
-        lastweek = now + relativedelta(weeks=-1)
+        lastWeek = now + relativedelta(weeks=-1)
 
-        targ = lastweek.strftime("%Y-%m-%d")
-        return "{updated} < " + targ
+        targetDate = lastWeek.strftime("%Y-%m-%d")
+        return "{updated} < " + targetDate
 
     @staticmethod
-    def getSort(self):
+    def getSort():
         return [{'column_id': 'distance', 'direction': 'asc'}]
 
 
