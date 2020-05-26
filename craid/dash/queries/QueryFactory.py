@@ -12,19 +12,19 @@ class QueryFactory:
         self.tem = TradeExplorationMissions()
 
     def getCombatZonesSort(self):
-        return self.cz.getSort()
+        return CombatZones.getSort()
 
     def getCombatZonesFilter(self):
-        return self.cz.getFilter()
+        return CombatZones.getFilter()
 
     def getScoutingSort(self):
-        return self.sc.getSort()
+        return Scouting.getSort()
 
     def getScoutingFilter(self):
-        return self.sc.getFilter()
+        return Scouting.getFilter()
 
     def getTradeExplorationMissionsSort(self):
-        return self.tem.getSort()
+        return TradeExplorationMissions.getSort()
 
     def getTradeExplorationMissionsFilter(self):
-        return self.tem.getFilter()
+        return TradeExplorationMissions.getFilter()

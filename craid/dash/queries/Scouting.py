@@ -22,4 +22,4 @@ class Scouting:
 
 if __name__ == '__main__':
     s = Scouting()
-    print(s.getFilter())
+    print(Scouting.getFilter())
