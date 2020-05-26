@@ -271,7 +271,7 @@ def update_output(val1):
         y1: float = df.at[ind, 'y']
         z1: float = df.at[ind, 'z']
         dis: float = math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2)
-        df.at[ind, 'distance'] = dis
+        df.at[ind, 'distance'] = int(round(dis))  # TODO: demoted this from float to int because no formatting in datatable
 
     # print(df[ 'distance' ].dtypes)
     # print(datatable.sort_by)
@@ -331,11 +331,16 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
 
     dff = df if rows is None else pd.DataFrame(rows)
 
-    # colors = [ '#7FDBFF' if i in derived_virtual_selected_rows else '#0074D9'
-    # for i in range(len(dff)) ]
+    dcolors = [ 'gold' if i in derived_virtual_selected_rows else 'orange'
+                for i in range(len(dff)) ]
 
     if active_cell:
         print("You selected row " + str(active_cell))
+        #row = rows[active_cell['row']]
+        sysId = rows[active_cell['row']]['sysId']
+        facId = rows[active_cell['row']]['facId']
+        print( str(sysId) + "/" + str(facId) )
+        #print("I think that's system %d and faction %d", dff['sysId'], dff['facId'])
     # active_row_id = active_cell['row_id'] if active_cell else None
     # if( active_row_id != None):
     # print("You selected row " + active_row_id)

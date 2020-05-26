@@ -1,10 +1,15 @@
-import pandas as pd
+from typing import Dict
 
+import pandas as pd
 
 class Oracle:
 
     def __init__(self, df: pd.DataFrame):
         super().__init__()
+        self.test = "fantastic test!"
+
+        if df == None:
+            return
         self.frame: pd.DataFrame = df
         frame = self.frame
         #
@@ -111,3 +116,20 @@ class Oracle:
         #
         #
         #
+    boo = dict({'buffy': 'trade', 'angel': 'los angeles'})
+
+    def template(self, template: str) -> str:
+        pass
+#         #boo: Dict[str, str] = {'buffy': 'travesty!'}
+#         #boo = dict({'buffy': 'trade', 'angel': 'los angeles'})
+#         temp = Template(str)
+#         temp.
+#         #return temp.render(lo )
+#         return temp.render(locals())
+#
+#
+# if __name__ == '__main__':
+#     boo = dict({'buffy': 'trade', 'angel': 'los angeles'})
+#     #boo: Dict[str, str] = {'buffy':'travesty!'}
+#     seer: Oracle = Oracle(None)
+#     print(seer.template("This is a @boo.buffy"))

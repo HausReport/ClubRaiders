@@ -67,6 +67,8 @@ def getDataArrays() -> Dict[str,object]:
     allClubSystemInstances: List[FactionInstance] = []  # make this one avaiable
     playerFactionNameToSystemName: Dict[str, str] = {}
     systemNameToXYZ: Dict[str, Tuple[float, float, float]] = {}
+    sysIdFacIdToFactionInstance: Dict[ Tuple[int,int], FactionInstance] = {}
+
 
     #with open("../data/factions.jsonl", 'r') as handle:
     #with LoadDataFromEDDB.find_data_file('factions.jsonl') as handle:
@@ -140,6 +142,7 @@ def getDataArrays() -> Dict[str,object]:
         z: float = tSys.getZ()
         systemNameToXYZ[factionName] = (x, y, z)  # .append(item)
 
+
     #
     # Make nifty list of club faction presences
     #
@@ -190,21 +193,24 @@ def getDataArrays() -> Dict[str,object]:
 
                 sysIns = FactionInstance(fac, cSystem, inf, vuln)
                 allClubSystemInstances.append(sysIns)
+                system_id : int = cSystem.get_id()
+                sysIdFacIdToFactionInstance[ (system_id, faction_id)] = sysIns
 
     return {'playerFactionIdToInfo'        : playerFactionIdToInfo,
             'clubFactionIdToInfo'          : clubFactionIdToInfo,
             'systemIdToInfo'               : systemIdToInfo,
             'allClubSystemInstances'       : allClubSystemInstances,
             'systemNameToXYZ'              : systemNameToXYZ,
-            'playerFactionNameToSystemName': playerFactionNameToSystemName
+            'playerFactionNameToSystemName': playerFactionNameToSystemName,
+            'sysIdFacIdToFactionInstance'  : sysIdFacIdToFactionInstance
             }
 
 
 # =========================================================!!!!!!!!!!!!!!!
 def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
-    x_coordinate: List[int] = []
-    y_coordinate: List[int] = []
-    z_coordinate: List[int] = []
+    x_coordinate: List[float] = []
+    y_coordinate: List[float] = []
+    z_coordinate: List[float] = []
     factionName: List[str] = []
     systemName: List[str] = []
     allegiances: List[str] = []
@@ -214,6 +220,8 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
     updated: List[datetime.datetime] = []
     controlsSystem: List[bool] = []
     vulnerableString: List[str] = []
+    sysId: List[int] = []
+    facId: List[int] = []
 
     factionInstance: FactionInstance
     for factionInstance in csa:
@@ -226,9 +234,11 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         isHomeSystem.append(factionInstance.isHomeSystem())
         population.append(factionInstance.getPopulation())
         influence.append(factionInstance.getInfluence())
-        updated.append(factionInstance.getUpdatedDateTime())
+        updated.append(factionInstance.getUpdatedDateTime().date())  #TODO: demoted to date because no formatting in datatable
         controlsSystem.append(factionInstance.controlsSystem())
         vulnerableString.append(factionInstance.getVulnerableString())
+        sysId.append(factionInstance.getSystemID())
+        facId.append(factionInstance.getFactionID())
 
     data = {
         'systemName'  : systemName,
@@ -242,7 +252,9 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         'influence'   : influence,
         'updated'     : updated,
         'control'     : controlsSystem,
-        "vulnerable"  : vulnerableString
+        'vulnerable'  : vulnerableString,
+        'sysId'       : sysId,
+        'facId'       : facId
     }
 
     #

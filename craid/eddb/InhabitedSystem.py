@@ -32,6 +32,9 @@ class InhabitedSystem(NamedItem):
             return False
         return True
 
+    def getInaraNearestShipyardUrl(self):
+        return "https://inara.cz/galaxy-nearest/14/" + self.getFactionID()
+
     def getEddbSystemUrl(self):
         return "https://eddb.io/system/" + self.get_id()
 
