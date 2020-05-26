@@ -12,8 +12,9 @@ setup(
               'craid.dashbd.text', 'craid.eddb', 'craid.club.regions'],
     # Needed for dependencies
     install_requires=['numpy', 'dash', 'pandas', 'requests', 'setuptools'],
+    include_package_data=True,
     # *strongly* suggested for sharing
-    version='0.62',
+    version='0.63',
     # The license can be anything you like
     license='BSD-3',
     description='Placeholder description',

@@ -5,4 +5,3 @@ setuptools~=40.8.0
 numpy~=1.18.4
 python-dateutil~=2.8.1
 
--r /craid/dashbd/text/*
