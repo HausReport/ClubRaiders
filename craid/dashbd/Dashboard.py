@@ -9,8 +9,8 @@ import numpy as np
 import pandas as pd
 from dash.dependencies import Input, Output
 import logging
-# import dash_core_components.Markdown as md
 import craid.eddb.DataProducer as dp
+from pkg_resources import resource_string as resource_bytes
 
 #logging.basicConfig(filename='example.log',level=logging.DEBUG)
 logging.getLogger().addHandler(logging.StreamHandler())
@@ -30,9 +30,12 @@ nrows = df.shape[0]
 # load a markdown file from /data
 #
 def getMarkdown(which: str) -> dcc.Markdown:
-    with open("text/" + which + ".md", "r", encoding="utf-8") as input_file:
-        text = input_file.read()
-        return dcc.Markdown(text)
+    text = resource_bytes('craid.dashbd.text', which+".md").decode('utf-8')
+    return dcc.Markdown(text)
+
+    #with open("text/" + which + ".md", "r", encoding="utf-8") as input_file:
+        #text = input_file.read()
+        #return dcc.Markdown(text)
 
 
 # suppress_callback_exceptions=True
