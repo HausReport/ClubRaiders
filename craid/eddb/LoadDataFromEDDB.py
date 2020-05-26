@@ -53,7 +53,7 @@ class LoadDataFromEDDB:
         cur = Path("../data")
         #fName: str = os.path.join(cur.parent, "data", shortName)
         fName: str = os.path.join(cur, shortName)
-        logging.info("Checking for: " + fName)
+        logging.info("1- Checking for: " + fName)
 
 
         #
@@ -62,14 +62,14 @@ class LoadDataFromEDDB:
         tmpDir = tempfile.gettempdir()
         if not os.path.exists(fName):
             fName = os.path.join(tmpDir, shortName)
-            logging.info("Checking for: " + fName)
+            logging.info("2- Checking for: " + fName)
 
         #
         # If neither exist, download the file to the temp dir
         #
         if not os.path.exists(fName):
             fName = LoadDataFromEDDB.download_file(shortName, tmpDir)
-            logging.info("Checking for: " + fName)
+            logging.info("3- Checking for: " + fName)
 
         if not os.path.exists(fName):
             logging.error("No data file: " + fName)
