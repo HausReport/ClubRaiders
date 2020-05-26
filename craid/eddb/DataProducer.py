@@ -70,10 +70,12 @@ def getDataArrays() -> Dict[str,object]:
 
     #with open("../data/factions.jsonl", 'r') as handle:
     #with LoadDataFromEDDB.find_data_file('factions.jsonl') as handle:
+    nLines: int = 0
     for thing in LoadDataFromEDDB.find_data_file('factions.jsonl'):
         logging.debug("Back in dp")
         line = thing.readline()
         while line:
+            nLines +=1
             facLine: dict = json.loads(line)
             lCurFactionId = int(facLine['id'])
             curFaction = Faction(facLine)
@@ -84,6 +86,7 @@ def getDataArrays() -> Dict[str,object]:
                 clubFactionIdToInfo[lCurFactionId] = curFaction
             line = thing.readline()
 
+    logging.info("Read %s lines of faction data", str(nLines))
     # with open(stations_file, 'r') as handle:
     #      for line in handle:
     #         station = json.loads(line)
@@ -91,15 +94,20 @@ def getDataArrays() -> Dict[str,object]:
     #         current_station = stations_dict.get(system_id)
 
     #with open("../data/systems_populated.jsonl", 'r') as handle:
+    nLines = 0
     for thing in LoadDataFromEDDB.find_data_file('systems_populated.jsonl'):
         logging.debug("Back in dp")
         line = thing.readline()
         while line:
+            nLines +=1
             sysLine: dict = json.loads(line)
             tid = int(sysLine['id'])
             foo = InhabitedSystem(sysLine)
             systemIdToInfo[tid] = foo
             line = thing.readline()
+
+
+    logging.info("Read %s lines of systems data", str(nLines))
     #
     # Populate dict of player factions & home system names
     #
