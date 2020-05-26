@@ -5,7 +5,7 @@ from typing import List, Dict, Tuple
 
 import pandas as pd
 
-from Vulnerability import Vulnerability
+from craid.eddb.Vulnerability import Vulnerability
 from craid.club import FactionNameFilter
 from craid.eddb.Faction import Faction
 from craid.eddb.FactionInstance import FactionInstance
