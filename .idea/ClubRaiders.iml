@@ -6,9 +6,9 @@
       <sourceFolder url="file://$MODULE_DIR$/craid/club" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/craid/club/regions" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/craid/css" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/craid/dash" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/craid/dash/queries" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/craid/dash/text" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/craid/dashbd" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/craid/dashbd/queries" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/craid/dashbd/text" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/craid/data" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/craid/eddb" isTestSource="false" />
     </content>
