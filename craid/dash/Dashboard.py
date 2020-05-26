@@ -8,9 +8,13 @@ import dash_table
 import numpy as np
 import pandas as pd
 from dash.dependencies import Input, Output
-
+import logging
 # import dash_core_components.Markdown as md
 import craid.eddb.DataProducer as dp
+
+#logging.basicConfig(filename='example.log',level=logging.DEBUG)
+logging.getLogger().addHandler(logging.StreamHandler())
+logging.getLogger().level = logging.DEBUG
 
 currentData = dp.getDataArrays()
 clubSystemInstances = currentData['allClubSystemInstances']

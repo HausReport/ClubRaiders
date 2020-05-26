@@ -1,5 +1,6 @@
 import datetime
 import json
+import logging
 from typing import List, Dict, Tuple
 
 import pandas as pd
@@ -9,6 +10,7 @@ from craid.club import FactionNameFilter
 from craid.eddb.Faction import Faction
 from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.LoadDataFromEDDB import LoadDataFromEDDB
 
 
 # all_stations_dict : Station = {}
@@ -66,9 +68,12 @@ def getDataArrays() -> Dict[str,object]:
     playerFactionNameToSystemName: Dict[str, str] = {}
     systemNameToXYZ: Dict[str, Tuple[float, float, float]] = {}
 
-    with open("../data/factions.jsonl", 'r') as handle:
-        for line in handle:
-            facLine: dict = json.loads(line)
+    #with open("../data/factions.jsonl", 'r') as handle:
+    #with LoadDataFromEDDB.find_data_file('factions.jsonl') as handle:
+    for line in LoadDataFromEDDB.find_data_file('factions.jsonl'):
+            logging.debug("Back in dp")
+        #for line in handle:
+            facLine: dict = json.loads(line.readline())
             lCurFactionId = int(facLine['id'])
             curFaction = Faction(facLine)
             # all_factions_dict[ lCurFactionId ] = curFaction
@@ -83,12 +88,13 @@ def getDataArrays() -> Dict[str,object]:
     #         system_id = station[ SYSTEM_ID ]
     #         current_station = stations_dict.get(system_id)
 
-    with open("../data/systems_populated.jsonl", 'r') as handle:
-        for line in handle:
-            sysLine: dict = json.loads(line)
-            tid = int(sysLine['id'])
-            foo = InhabitedSystem(sysLine)
-            systemIdToInfo[tid] = foo
+    #with open("../data/systems_populated.jsonl", 'r') as handle:
+    for line in LoadDataFromEDDB.find_data_file('systems_populated.jsonl'):
+        logging.debug("Back in dp")
+        sysLine: dict = json.loads(line.readline())
+        tid = int(sysLine['id'])
+        foo = InhabitedSystem(sysLine)
+        systemIdToInfo[tid] = foo
 
     #
     # Populate dict of player factions & home system names
