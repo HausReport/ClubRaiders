@@ -28,6 +28,7 @@ nrows = df.shape[0]
 
 #
 # load a markdown file from /data
+# https://importlib-resources.readthedocs.io/en/latest/using.html
 #
 def getMarkdown(which: str) -> dcc.Markdown:
     text = resource_bytes('craid.dashbd.text', which+".md").decode('utf-8')

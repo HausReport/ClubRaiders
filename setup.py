@@ -13,9 +13,9 @@ setup(
     # Needed for dependencies
     install_requires=['numpy', 'dash', 'pandas', 'requests', 'setuptools'],
     # *strongly* suggested for sharing
-    version='0.58',
+    version='0.60',
     # The license can be anything you like
-    license='MIT',
+    license='BSD-3',
     description='Placeholder description',
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
