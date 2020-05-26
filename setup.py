@@ -13,7 +13,7 @@ setup(
     # Needed for dependencies
     install_requires=['numpy', 'dash', 'pandas', 'requests', 'setuptools'],
     # *strongly* suggested for sharing
-    version='0.61',
+    version='0.62',
     # The license can be anything you like
     license='BSD-3',
     description='Placeholder description',
