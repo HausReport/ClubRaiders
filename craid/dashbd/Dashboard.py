@@ -1,5 +1,6 @@
+import logging
 import math
-from typing import Dict, Tuple, List
+from typing import Dict, Tuple
 
 import dash
 import dash_core_components as dcc
@@ -8,87 +9,64 @@ import dash_table
 import numpy as np
 import pandas as pd
 from dash.dependencies import Input, Output
-import logging
-import craid.eddb.DataProducer as dp
-from pkg_resources import resource_string as resource_bytes
 
-#logging.basicConfig(filename='example.log',level=logging.DEBUG)
+import craid.dashbd
+import craid.dashbd.AnnoyingCrap as crap
+import craid.eddb.DataProducer as dp
+
+#
+# Set up logging
+#
+# logging.basicConfig(filename='example.log',level=logging.DEBUG)
+from FactionInstance import FactionInstance
+
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
 
+#
+# Load data
+#
 currentData = dp.getDataArrays()
 clubSystemInstances = currentData['allClubSystemInstances']
+sysIdFacIdToFactionInstance = currentData['sysIdFacIdToFactionInstance']
 
 systemNameToXYZ: Dict[str, Tuple[float, float, float]] = currentData['systemNameToXYZ']
 playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
 df: pd.DataFrame = dp.getDataFrame(clubSystemInstances)
 
+#
+# Massage data
+#
 nrows = df.shape[0]
-
-
-#
-# load a markdown file from /data
-# https://importlib-resources.readthedocs.io/en/latest/using.html
-#
-def getMarkdown(which: str) -> dcc.Markdown:
-    text = resource_bytes('craid.dashbd.text', which+".md").decode('utf-8')
-    return dcc.Markdown(text)
-
-    #with open("text/" + which + ".md", "r", encoding="utf-8") as input_file:
-        #text = input_file.read()
-        #return dcc.Markdown(text)
-
-
-# suppress_callback_exceptions=True
-
 df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
 
+#
+# Flotsam
+#
 colors = {
     'background': 'black',
     'text'      : 'orange'
 }
-
-#external_stylesheets = ['https://raw.githubusercontent.com/HausReport/ClubRaiders/master/craid/css/Raiders.css']
+# external_stylesheets = ['https://raw.githubusercontent.com/HausReport/ClubRaiders/master/craid/css/Raiders.css']
 # ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-
 # filter_query = "{country} contains ol && {lifeExp} < 10"
 
-
-# name = __name__
-name: str = "Club Raiders"
-app = dash.Dash(__name__) #,requests_pathname_prefix='')
+#
+# Start the app framework
+#
+app = dash.Dash(__name__)  # ,requests_pathname_prefix='')
 print(__name__)
 # , external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
-#app.config['suppress_callback_exceptions'] = True
+# app.config['suppress_callback_exceptions'] = True
 app.config.suppress_callback_exceptions = True
 
-opts = []
-keys: List[str] = sorted(systemNameToXYZ.keys())
-for it in keys:
-    opts.append({'label': it, 'value': it})
+#
+# Initialize some UI elements
+#
+opts = crap.getFirstDropdown(systemNameToXYZ)
+fopts = crap.getSecondDropdown(playerFactionNameToHomeSystemName)
+theColumns = crap.getTheColumns()
 
-fopts = []
-keys: List[str] = sorted(playerFactionNameToHomeSystemName.keys())
-for it in keys:
-    val: str = playerFactionNameToHomeSystemName.get(it)
-    if val is not None:
-        fopts.append({'label': it, 'value': val})
-
-theColumns = [
-    {"name": 'systemName', "id": 'systemName', "deletable": False, "selectable": False},
-    {"name": 'factionName', "id": 'factionName', "deletable": False, "selectable": False},
-    # {"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-    # {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-    # {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-    {"name": 'isHomeSystem', "id": 'isHomeSystem', "deletable": False, "selectable": False},
-    {"name": 'population', "id": 'population', "deletable": False, "selectable": False, "type": "numeric"},
-    {"name": 'influence', "id": 'influence', "deletable": False, "selectable": False, "type": "numeric"},
-    {"name": 'updated', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
-    {"name": 'control', "id": 'control', "deletable": False, "selectable": False},
-    {"name": 'vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
-    {"name": 'distance', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
-]
 datatable: dash_table.DataTable = dash_table.DataTable(
     id='datatable-interactivity',
     columns=theColumns,
@@ -121,6 +99,9 @@ datatable: dash_table.DataTable = dash_table.DataTable(
     }
 )
 
+#
+# Holding place for filter query logic
+#
 # tput("datatable-interactivity", "filtering_settings"),
 # tab.available_properties['filter_query'] = "{control} contains false && {influence} < 25"
 datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
@@ -130,6 +111,9 @@ datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
 # print( str(x1) )
 
 
+#
+# Layout the header
+#
 hdr_layout = html.Div([
     html.Div(
         className="app-header",
@@ -160,87 +144,99 @@ hdr_layout = html.Div([
 
 ], style={'width': '99%', 'display': 'inline-block'})
 
-tab1_layout = html.Div([
-    getMarkdown("overview")
-])
+# TODO: get a hook to tab1 and print its properties to find color settings
+# tab1: dcc.Tab = something
 
-# =============================================================
-# Tab handlers
-# =============================================================
-#app.layout = html.Div([
-    #hdr_layout
-    #])
-
+#
+# Layout the main application
+#
 app.layout = html.Div([
     hdr_layout,
     dcc.Tabs(id='tabs-example', value='tab-1',
              parent_className='custom-tabs',
              className='custom-tabs-container',
+             style={'primary': 'red'},
              children=[
                  dcc.Tab(label='Overview',
                          value='tab-1',
                          className='custom-tab',
-                         selected_className='custom-tab--selected'
+                         selected_className='custom-tab--selected',
+                         style={'backgroundColor': '#3C3C3C',
+                                'color'          : 'gold',
+                                'primary'        : 'red'}
                          ),
                  dcc.Tab(label='Combat Zones',
                          value='tab-2',
                          className='custom-tab',
-                         selected_className='custom-tab--selected'
+                         selected_className='custom-tab--selected',
+                         style={'backgroundColor': '#3C3C3C',
+                                'color'          : 'gold',
+                                'primary'        : 'red'}
                          ),
                  dcc.Tab(label='Bounty Hunting',
                          value='tab-3',
                          className='custom-tab',
-                         selected_className='custom-tab--selected'
+                         selected_className='custom-tab--selected',
+                         style={'backgroundColor': '#3C3C3C',
+                                'color'          : 'gold',
+                                'primary'        : 'red'}
                          ),
                  dcc.Tab(label='Trade/Exploration/Missions',
                          value='tab-4',
                          className='custom-tab',
-                         selected_className='custom-tab--selected'
+                         selected_className='custom-tab--selected',
+                         style={'backgroundColor': '#3C3C3C',
+                                'color'          : 'gold',
+                                'primary'        : 'red'}
                          ),
                  dcc.Tab(label='Scouting',
                          value='tab-5',
                          className='custom-tab',
-                         selected_className='custom-tab--selected'
+                         selected_className='custom-tab--selected',
+                         style={'backgroundColor': '#3C3C3C',
+                                'color'          : 'gold',
+                                'primary'        : 'red'}
                          ),
              ]),
-    html.Div(id='tabs-example-content'),
-    datatable,
+    html.Div(id='tabs-example-content', style={'backgroundColor': 'green'}),
+    ## ###### START TABLE MADNESS
+    ## look into flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+    html.Table(style={'backgroundColor': 'hotpink'},  # 'width': '100%'},
+               children=[
+                   html.Colgroup(children=[
+                       html.Col(style={'width': '75%;'}),
+                       html.Col(style={'width': '25%;'}),
+                   ]),
+                   html.Tr(children=[
+                       html.Td(rowSpan="2",
+                               children=[
+                                   datatable,
+                               ]),
+                       html.Td(style={'width'           : '100%;',
+                                      'background-color': '#888888'},
+                               children=[
+                                   html.Label("Hi There!", id='faction-drilldown', style={'width': '100%'}),
+                               ]),
+                   ]),
+                   html.Tr(children=[
+                       html.Td(style={'width'           : '100%;',
+                                      'background-color': '#888888'},
+                               children=[
+                                   html.Label("Hi There!", id='system-drilldown', style={'width': '100%'}),
+                               ]),
+                   ])
+               ]),
+    ## ###### FINISH TABLE MADNESS
     html.Div(id='datatable-interactivity-container')
 ])
 
-
+# =============================================================
+# Tab handlers
+# =============================================================
 @app.callback(Output('tabs-example-content', 'children'),
               [Input('tabs-example', 'value')])
 def render_content(tab):
-    if tab == 'tab-1':
-        return tab1_layout
-        # return html.Div([
-        #    html.H3('Tab content 1')
-        # ])
-    elif tab == 'tab-2':
-        return html.Div([
-            getMarkdown("cz")
-        ])
-    elif tab == 'tab-3':
-        return html.Div([
-            getMarkdown("bh")
-        ])
-    elif tab == 'tab-4':
-        return html.Div([
-            getMarkdown("tem")
-        ])
-    elif tab == 'tab-5':
-        return html.Div([
-            getMarkdown("scouting")
-        ])
-    elif tab == 'tab-6':
-        return html.Div([
-            html.H3('Tab content 6')
-        ])
-    elif tab == 'tab-7':
-        return html.Div([
-            html.H3('Tab content 7')
-        ])
+    return craid.dashbd.AnnoyingCrap.render_content(tab)
 
 
 def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
@@ -271,7 +267,8 @@ def update_output(val1):
         y1: float = df.at[ind, 'y']
         z1: float = df.at[ind, 'z']
         dis: float = math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2)
-        df.at[ind, 'distance'] = int(round(dis))  # TODO: demoted this from float to int because no formatting in datatable
+        df.at[ind, 'distance'] = int(
+            round(dis))  # TODO: demoted this from float to int because no formatting in datatable
 
     # print(df[ 'distance' ].dtypes)
     # print(datatable.sort_by)
@@ -319,7 +316,7 @@ def update_outputr3(value):
 def update_graphs(rows, derived_virtual_selected_rows, active_cell):
     # When the table is first rendered, `derived_virtual_data` and
     # `derived_virtual_selected_rows` will be `None`. This is due to an
-    # idiosyncracy in Dash (unsupplied properties are always None and Dash
+    # idiosyncrasy in Dash (unsupplied properties are always None and Dash
     # calls the dependent callbacks when the component is first rendered).
     # So, if `rows` is `None`, then the component was just rendered
     # and its value will be the same as the component's dataframe.
@@ -331,16 +328,18 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
 
     dff = df if rows is None else pd.DataFrame(rows)
 
-    dcolors = [ 'gold' if i in derived_virtual_selected_rows else 'orange'
-                for i in range(len(dff)) ]
+    dataColors = ['gold' if i in derived_virtual_selected_rows else 'orange'
+                  for i in range(len(dff))]
 
     if active_cell:
         print("You selected row " + str(active_cell))
-        #row = rows[active_cell['row']]
+        # row = rows[active_cell['row']]
         sysId = rows[active_cell['row']]['sysId']
         facId = rows[active_cell['row']]['facId']
-        print( str(sysId) + "/" + str(facId) )
-        #print("I think that's system %d and faction %d", dff['sysId'], dff['facId'])
+        print(str(sysId) + "/" + str(facId))
+        theFac: FactionInstance = sysIdFacIdToFactionInstance.get( (sysId,facId))
+        if theFac is not None:
+            print("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
     # active_row_id = active_cell['row_id'] if active_cell else None
     # if( active_row_id != None):
     # print("You selected row " + active_row_id)
@@ -354,7 +353,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
                         "x"     : dff["systemName"],
                         "y"     : dff[column],
                         "type"  : "bar",
-                        "marker": {"color": colors},
+                        "marker": {"color": dataColors},
                     }
                 ],
                 "layout": {

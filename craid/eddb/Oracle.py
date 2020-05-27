@@ -1,109 +1,118 @@
+import string
 from typing import Dict
 
 import pandas as pd
+
+class PassThroughDict(dict):
+    def __init__(self, *args, **kwargs):
+        dict.__init__(self, *args, **kwargs)
+    def __missing__(self, key):
+        return key
 
 class Oracle:
 
     def __init__(self, df: pd.DataFrame):
         super().__init__()
-        self.test = "fantastic test!"
+        self.dict: PassThroughDict[str,str] = PassThroughDict()
+        self.dict['test'] = "test string"
 
-        if df == None:
+        if df is None:
             return
+
         self.frame: pd.DataFrame = df
         frame = self.frame
         #
         #
         #
-        self.systems_active = "{:,}".format(frame['systemName'].count())
-        self.systems_active_pop = "{:,}".format(frame['population'].sum(axis=0))
-        self.systems_control = "{:,}".format(frame['control'].sum())
-        self.systems_control_perc = 1.0 * self.systems_control / self.systems_active
+        dict['systems_active']          = "{:,}".format(frame['systemName'].count())
+        dict['systems_active_pop']      = "{:,}".format(frame['population'].sum(axis=0))
+        dict['systems_control']         = "{:,}".format(frame['control'].sum())
+        dict['systems_control_perc']    = 1.0 * self.systems_control / self.systems_active
 
         #
         # Westernmost presence
         #
         idx = frame['x'].idxmin()  # westerly
-        self.west_fac_name = frame.at[idx, 'factionName']
-        self.west_sys_name = frame.at[idx, 'systemName']
-        self.west_sys_x = "{:,}".format(abs(int(frame.at[idx, 'x'])))
+        dict['west_fac_name']   = frame.at[idx, 'factionName']
+        dict['west_sys_name']   = frame.at[idx, 'systemName']
+        dict['west_sys_x']      = "{:,}".format(abs(int(frame.at[idx, 'x'])))
 
         #
         # Easternmost presence
         #
         idx = frame['x'].idxmax()  # westerly
-        self.east_fac_name = frame.at[idx, 'factionName']
-        self.east_sys_name = frame.at[idx, 'systemName']
-        self.east_sys_x = "{:,}".format(abs(int(frame.at[idx, 'x'])))
+        dict['east_fac_name']   = frame.at[idx, 'factionName']
+        dict['east_sys_name']   = frame.at[idx, 'systemName']
+        dict['east_sys_x']      = "{:,}".format(abs(int(frame.at[idx, 'x'])))
 
         #
         # Northernmost presence (z because E:D)
         #
         idx = frame['z'].idxmax()  # s'ly
-        self.north_fac_name = frame.at[idx, 'factionName']
-        self.north_sys_name = frame.at[idx, 'systemName']
-        self.north_sys_z = "{:,}".format(abs(int(frame.at[idx, 'z'])))
+        dict['north_fac_name']  = frame.at[idx, 'factionName']
+        dict['north_sys_name']  = frame.at[idx, 'systemName']
+        dict['north_sys_z']     = "{:,}".format(abs(int(frame.at[idx, 'z'])))
 
         #
         # Southernmost presence
         #
         idx = frame['z'].idxmin()  # n'ly
-        self.south_fac_name = frame.at[idx, 'factionName']
-        self.south_sys_name = frame.at[idx, 'systemName']
-        self.south_sys_z = "{:,}".format(abs(int(frame.at[idx, 'z'])))
+        dict['south_fac_name']  = frame.at[idx, 'factionName']
+        dict['south_sys_name']  = frame.at[idx, 'systemName']
+        dict['south_sys_z']     = "{:,}".format(abs(int(frame.at[idx, 'z'])))
 
         #
         # Zenithnmost presence (y because E:D)
         #
         idx = frame['y'].idxmax()  # u'ly
-        self.zenith_fac_name = frame.at[idx, 'factionName']
-        self.zenith_sys_name = frame.at[idx, 'systemName']
-        self.zenith_sys_y = "{:,}".format(abs(int(frame.at[idx, 'y'])))
+        dict['zenith_fac_name'] = frame.at[idx, 'factionName']
+        dict['zenith_sys_name'] = frame.at[idx, 'systemName']
+        dict['zenith_sys_y']    = "{:,}".format(abs(int(frame.at[idx, 'y'])))
 
         #
         # Nadirmost presence
         #
         idx = frame['z'].idxmin()  # d'ly
-        self.nadir_fac_name = frame.at[idx, 'factionName']
-        self.nadir_sys_name = frame.at[idx, 'systemName']
-        self.nadir_sys_y = "{:,}".format(abs(int(frame.at[idx, 'y'])))
+        dict['nadir_fac_name']  = frame.at[idx, 'factionName']
+        dict['nadir_sys_name']  = frame.at[idx, 'systemName']
+        dict['nadir_sys_y']     = "{:,}".format(abs(int(frame.at[idx, 'y'])))
 
         #
         # Population stats
         #
-        self.population_min = "{:,}".format(frame['population'].min())
-        self.population_max = "{:,}".format(frame['population'].max())
-        self.population_avg = "{:,}".format(frame['population'].mean())
-        self.population_sum = "{:,}".format(frame['population'].sum(axis=0))
+        dict['population_min'] = "{:,}".format(frame['population'].min())
+        dict['population_max'] = "{:,}".format(frame['population'].max())
+        dict['population_avg'] = "{:,}".format(frame['population'].mean())
+        dict['population_sum'] = "{:,}".format(frame['population'].sum(axis=0))
 
         self.caxx = frame['population'].describe()
-        self.population_50p = "{:,}".format(self.caxx[5])
-        self.population_25p = "{:,}".format(self.caxx[4])
+        dict['population_50p'] = "{:,}".format(self.caxx[5])
+        dict['population_25p'] = "{:,}".format(self.caxx[4])
 
         #
         # Influence stats
         #
-        self.influence_min = frame['influence'].min()
-        self.influence_max = frame['influence'].max()
-        self.influence_avg = frame['influence'].mean()
-        self.influence_sum = frame['influence'].sum(axis=0)
+        dict['influence_min'] = "{0:,.2f}".format(frame['influence'].min())
+        dict['influence_max'] = "{0:,.2f}".format(frame['influence'].max())
+        dict['influence_avg'] = "{0:,.2f}".format(frame['influence'].mean())
+        dict['influence_sum'] = "{0:,.2f}".format(frame['influence'].sum(axis=0))
 
         self.caxx = frame['influence'].describe()
-        self.influence_50p = self.caxx[5]
-        self.influence_25p = self.caxx[4]
+        dict['influence_50p'] = "{0:,.2f}".format(self.caxx[5])
+        dict['influence_25p'] = "{0:,.2f}".format(self.caxx[4])
 
         #
         #
         #
         uncontrolled = frame[~frame['control']]
-        self.uncontrol_influence_min = uncontrolled['influence'].min()
-        self.uncontrol_influence_max = uncontrolled['influence'].max()
-        self.uncontrol_influence_avg = uncontrolled['influence'].mean()
-        self.uncontrol_influence_sum = uncontrolled['influence'].sum(axis=0)
+        dict['uncontrol_influence_min'] = "{0:,.2f}".format(uncontrolled['influence'].min())
+        dict['uncontrol_influence_max'] = "{0:,.2f}".format(uncontrolled['influence'].max())
+        dict['uncontrol_influence_avg'] = "{0:,.2f}".format(uncontrolled['influence'].mean())
+        dict['uncontrol_influence_sum'] = "{0:,.2f}".format(uncontrolled['influence'].sum(axis=0))
 
         gaxx = uncontrolled['influence'].describe()
-        self.uncontrol_influence_50p = gaxx[5]
-        self.uncontrol_influence_25p = gaxx[4]
+        dict['uncontrol_influence_50p'] = "{0:,.2f}".format(gaxx[5])
+        dict['uncontrol_influence_25p'] = "{0:,.2f}".format(gaxx[4])
 
         #
         #
@@ -116,20 +125,25 @@ class Oracle:
         #
         #
         #
-    boo = dict({'buffy': 'trade', 'angel': 'los angeles'})
 
-    def template(self, template: str) -> str:
-        pass
+    def template(self, msg: str) -> str:
+        template = string.Template(msg)
+        output = template.substitute(self.dict)
+        return output
+
+
 #         #boo: Dict[str, str] = {'buffy': 'travesty!'}
 #         #boo = dict({'buffy': 'trade', 'angel': 'los angeles'})
 #         temp = Template(str)
 #         temp.
 #         #return temp.render(lo )
 #         return temp.render(locals())
-#
-#
-# if __name__ == '__main__':
-#     boo = dict({'buffy': 'trade', 'angel': 'los angeles'})
-#     #boo: Dict[str, str] = {'buffy':'travesty!'}
-#     seer: Oracle = Oracle(None)
-#     print(seer.template("This is a @boo.buffy"))
+
+
+if __name__ == '__main__':
+    #myDict = dict({'girl': 'buffy', 'town': 'sunnydale'})
+    msg = "[$test]: $girl lives in $town"
+    seer: Oracle = Oracle(None)
+    output = seer.template(msg)
+
+    print(output)

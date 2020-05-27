@@ -2,12 +2,15 @@ import logging
 import os
 import tempfile
 from pathlib import Path
+import datetime, time
 
 import requests
 
 
 # logic for caching at:
 # https://stackoverflow.com/questions/29314287/python-requests-download-only-if-newer
+import urllib3
+
 
 class LoadDataFromEDDB:
 
@@ -64,10 +67,15 @@ class LoadDataFromEDDB:
             fName = os.path.join(tmpDir, shortName)
             logging.info("2- Checking for: " + fName)
 
+        fileIsOutOfDate: bool = False
+        #fileIsOutOfDate = LoadDataFromEDDB.fileIsOutOfDate(fName, shortName)
+        # for some reason I saw this get called like 3 times
+
+
         #
         # If neither exist, download the file to the temp dir
         #
-        if not os.path.exists(fName):
+        if fileIsOutOfDate or not os.path.exists(fName):
             fName = LoadDataFromEDDB.download_file(shortName, tmpDir)
             logging.info("3- Checking for: " + fName)
 
@@ -78,6 +86,27 @@ class LoadDataFromEDDB:
             logging.info("found data file: %s", fName)
             with open(fName, 'r') as handle:
                 yield handle
+
+    @staticmethod
+    def fileIsOutOfDate(fName: str, shortName: str):
+        http = urllib3.PoolManager()
+        url = "https://eddb.io/archive/v6/" + shortName #factions.jsonl"
+
+        u = http.request('HEAD', url)
+        meta = u.info()
+        print(meta)
+        print("Server Last Modified: " + str(meta.getheaders("Last-Modified")))
+
+        meta_modifiedtime = time.mktime(datetime.datetime.strptime(
+            ''.join(meta.getheaders("Last-Modified")), "%a, %d %b %Y %X GMT").timetuple())
+
+        file = fName
+        if os.path.getmtime(file) < meta_modifiedtime:  # change > to <
+            print("CPU file is older than server file.")
+            return True
+        else:
+            print("CPU file is NOT older than server file.")
+            return False
 
 
 

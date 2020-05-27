@@ -222,6 +222,7 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
     vulnerableString: List[str] = []
     sysId: List[int] = []
     facId: List[int] = []
+    difficulty: List[float] = []
 
     factionInstance: FactionInstance
     for factionInstance in csa:
@@ -239,6 +240,7 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         vulnerableString.append(factionInstance.getVulnerableString())
         sysId.append(factionInstance.getSystemID())
         facId.append(factionInstance.getFactionID())
+        difficulty.append(factionInstance.getDifficulty())
 
     data = {
         'systemName'  : systemName,
@@ -254,7 +256,8 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         'control'     : controlsSystem,
         'vulnerable'  : vulnerableString,
         'sysId'       : sysId,
-        'facId'       : facId
+        'facId'       : facId,
+        'difficulty'  : difficulty
     }
 
     #

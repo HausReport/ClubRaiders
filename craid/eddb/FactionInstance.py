@@ -33,6 +33,47 @@ class FactionInstance(Faction):
     def getUpdated(self):
         return self.mySystem.getUpdated()
 
+    # <1, A single player can easily retreat
+    # 1-100, A single player can retreatA
+    # >50, Recommended for small groups
+    # >100, requires significant team
+    # excel formula = (D10/15000)*(E10^2)/ 1000
+    # d=pop, e = inf
+    def getDifficulty(self) -> float:
+        max = 999999.0
+        if not self.canRetreat():
+            return max
+        e10 = self.getInfluence()
+        if e10 == 0.0:
+            return max
+        d10 = self.getPopulation()
+        ret = (d10 / 15000.0) * (e10 ** 2.0) / 1000.0
+
+        if(ret<0.0): ret = 0.0
+        if(ret>max): ret = max
+        return round(ret,1)  #TODO: trimmed to 3 decimals since no format support
+
+    def getDifficultyString(self) -> str:
+        val = self.getDifficulty()
+        # "Forcing a retreat from this system would "
+        if val<.5   : return "be extremely easy for one commander"
+        if val<1   : return "be very easy for one commander"
+        if val<10   : return "be easy for one commander"
+        if val<25   : return "be easy"
+        if val<50   : return "take some work for one commander"
+        if val<100   : return "be possible for one commander"
+        if val<1000   : return "require group effort"
+        if val<10000 : return "require a gargantuan effort"
+        if val<100000 : return "be well-nigh impossible"
+        return "seem an impossibility"
+
+    def canRetreat(self) -> bool:
+        if self.isHomeSystem(): return False
+
+        # TODO: handle special cases here
+
+        return True
+
     def getUpdatedDateTime(self):
         return datetime.datetime.fromtimestamp(int(self.mySystem.getUpdated()))
 
