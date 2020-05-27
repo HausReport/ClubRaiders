@@ -29,24 +29,38 @@ class Station(NamedItem):
     def __init__(self, jsonString):
         super().__init__(jsonString[NamedItem.NAME], jsonString[NamedItem.ID])
         self.jsonLine = jsonString
+        self.club = False
 
     def getDistanceToStar(self) -> int:
-        return int(self.jsonLine['distance_to_star'])
+        xxx = self.jsonLine.get('distance_to_star')
+        if xxx is None: return -999999
+        return int(xxx)
 
     def hasLargePads(self) -> bool:
-        return self.jsonLine['max_landing_pad_size'] == "L"
+        if not self.hasDocking() : return False
+        xxx = self.jsonLine.get('max_landing_pad_size')
+        if xxx is None: return False
+        return xxx == "true"
 
     def hasMarket(self) -> bool:
-        return self.jsonLine['has_market'] == "true"
+        xxx = self.jsonLine.get('has_market')
+        if xxx is None: return False
+        return xxx == "true"
 
     def hasBlackMarket(self) -> bool:
-        return self.jsonLine['has_black_market'] == "true"
+        xxx = self.jsonLine.get('controlling_minor_faction_id')
+        if xxx is None: return False
+        return xxx == "true"
 
     def hasShipyard(self) -> bool:
-        return self.jsonLine['has_shipyard'] == "true"
+        xxx = self.jsonLine.get('has_shipyard')
+        if xxx is None: return False
+        return xxx == "true"
 
     def hasDocking(self) -> bool:
-        return self.jsonLine['has_docking'] == "true"
+        xxx = self.jsonLine.get('has_docking')
+        if xxx is None: return False
+        return xxx == "true"
 
     def isOrbital(self) -> bool:
         return not self.isPlanetary()
@@ -57,15 +71,20 @@ class Station(NamedItem):
         #return self.jsonLine['body'] is not None
 
     def okCandidate(self) -> bool:
-        if not self.hasDocking(): return False
+        if not self.hasDocking():
+            return False
+        if self.jsonLine['controlling_minor_faction'] == None:
+            return False
+        return True
 
     def getTypeString(self) -> str:
         return self.jsonLine['type']
 
-    def getTypeString(self) -> str:
-        return self.jsonLine['type']
+    #def getTypeString(self) -> str:
+        #return self.jsonLine['type']
 
-
+    def getControllingFactionId(self) -> int:
+        return self.jsonLine['controlling_minor_faction_id']
 
     # def getc_allegiance(self):
     #     return self.jsonLine['allegiance']
@@ -73,3 +92,8 @@ class Station(NamedItem):
     #     return self.jsonLine['allegiance']
     # def getc_allegiance(self):
     #     return self.jsonLine['allegiance']
+    def setClub(self, param):
+        self.club = param
+
+    def isClub(self):
+        return self.club

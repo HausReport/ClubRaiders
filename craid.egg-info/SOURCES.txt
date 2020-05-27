@@ -11,7 +11,7 @@ craid/club/__init__.py
 craid/club/regions/Region.py
 craid/club/regions/RegionFactory.py
 craid/club/regions/__init__.py
-craid/css/__init__.py
+craid/dashbd/AnnoyingCrap.py
 craid/dashbd/Dashboard.py
 craid/dashbd/__init__.py
 craid/dashbd/assets/__init__.py
@@ -23,8 +23,10 @@ craid/dashbd/queries/__init__.py
 craid/dashbd/text/__init__.py
 craid/dashbd/text/bh.md
 craid/dashbd/text/cz.md
+craid/dashbd/text/faction-template.md
 craid/dashbd/text/overview.md
 craid/dashbd/text/scouting.md
+craid/dashbd/text/system-template.md
 craid/dashbd/text/tem.md
 craid/eddb/Constants.py
 craid/eddb/DataProducer.py
@@ -34,6 +36,8 @@ craid/eddb/FactionStates.py
 craid/eddb/InhabitedSystem.py
 craid/eddb/LoadDataFromEDDB.py
 craid/eddb/NamedItem.py
+craid/eddb/Oracle.py
+craid/eddb/PassThroughDict.py
 craid/eddb/Station.py
 craid/eddb/Vulnerability.py
 craid/eddb/__init__.py

@@ -1,10 +1,11 @@
 import string
 import urllib.parse
-from typing import Dict
+from typing import Dict, List
 
 from PassThroughDict import PassThroughDict
-from craid.eddb.Faction import Faction
+from Station import Station
 from craid.eddb.Constants import MINOR_FACTION_ID, POWER_STATE, MINOR_FACTION_PRESENCES
+from craid.eddb.Faction import Faction
 from craid.eddb.NamedItem import NamedItem
 
 
@@ -21,9 +22,10 @@ class InhabitedSystem(NamedItem):
         #        :type jsonString: str
         #        """
         super().__init__(jsonString[NamedItem.NAME], jsonString[NamedItem.ID])
-        self.jsonLine = jsonString
-        self.hasAnarchy = False
-        self.powerState = jsonString[POWER_STATE]
+        self.jsonLine: str = jsonString
+        self.hasAnarchy: bool = False
+        self.powerState: str = jsonString[POWER_STATE]
+        self.stations : List[Station] = []
 
     def getMinorFactionPresences(self):
         return self.jsonLine[MINOR_FACTION_PRESENCES]
@@ -153,3 +155,52 @@ class InhabitedSystem(NamedItem):
         template = string.Template(msg)
         output = template.substitute(myDict)
         return output
+
+    def addStation(self, sta: Station):
+        self.stations.append(sta)
+
+    def enemyControlledStations(self):
+        ret: List[Station] = []
+        for sta in self.stations:
+            if sta.isClub():
+                ret.add(sta)
+
+    def nonEnemyControlledStations(self):
+        ret : List[Station] = []
+        for sta in self.stations:
+            if not sta.isClub():
+                ret.add(sta)
+
+    def appendStationsTableToString(self, targ: str) -> str:
+        ret: str = ""
+
+        ret = "\n\n\n<table>\n"
+        for sta in self.stations:
+            ret += "\t<tr>\n"
+            ret += "\t\t<td>"
+            ret += sta.get_name()
+            ret += "</td>\n"
+            ret += "\t\t<td>"
+            ret += str(sta.get_id())
+            ret += "</td>\n"
+            ret += "\t\t<td>"
+            ret += str(sta.getDistanceToStar())
+            ret += "</td>\n"
+            ret += "\t\t<td>"
+            ret += str(sta.hasLargePads())
+            ret += "</td>\n"
+            ret += "\t\t<td>"
+            ret += str(sta.isClub())
+            ret += "</td>\n"
+            ret += "\t\t<td>"
+            ret += str(sta.hasShipyard())
+            ret += "</td>\n"
+            ret += "\t\t<td>"
+            ret += str(sta.hasBlackMarket())
+            ret += "</td>\n"
+            ret += "\t</tr>\n"
+
+        ret += "</table>\n"
+        theret = targ + ret  + "\n\n\n"
+        print(theret)
+        return theret

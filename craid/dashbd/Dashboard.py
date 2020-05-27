@@ -359,6 +359,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
             ts = crap.getString("system-template")
             theSys  = theFac.getSystem()
             systemInfo = theSys.template(ts)
+            systemInfo = theSys.appendStationsTableToString(systemInfo)
 
     factionWidget = dcc.Markdown(factionInfo)
     systemWidget = dcc.Markdown(systemInfo)

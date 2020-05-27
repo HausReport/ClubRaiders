@@ -1,12 +1,11 @@
+import datetime
 import logging
 import os
 import tempfile
+import time
 from pathlib import Path
-import datetime, time
 
 import requests
-
-
 # logic for caching at:
 # https://stackoverflow.com/questions/29314287/python-requests-download-only-if-newer
 import urllib3

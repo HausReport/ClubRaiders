@@ -8,7 +8,7 @@ setup(
     author_email='Erlaed2@fdev.not',
     # Needed to actually package something
     # packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
-    packages=['craid', 'craid.eddb', 'craid.club', 'craid.css', 'craid.dashbd', 'craid.dashbd.assets','craid.dashbd.queries',
+    packages=['craid', 'craid.eddb', 'craid.club', 'craid.dashbd', 'craid.dashbd.assets','craid.dashbd.queries',
               'craid.dashbd.text', 'craid.eddb', 'craid.club.regions'],
     # Needed for dependencies
     install_requires=['numpy', 'dash', 'pandas', 'requests', 'setuptools'],
