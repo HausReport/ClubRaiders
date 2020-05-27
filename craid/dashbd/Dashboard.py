@@ -13,19 +13,22 @@ from dash.dependencies import Input, Output
 import craid.dashbd
 import craid.dashbd.AnnoyingCrap as crap
 import craid.eddb.DataProducer as dp
-
 #
 # Set up logging
 #
 # logging.basicConfig(filename='example.log',level=logging.DEBUG)
 from FactionInstance import FactionInstance
+from Oracle import Oracle
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
 
 #
 # Load data
+# https://community.plotly.com/t/why-global-code-runs-twice/12514
 #
+#currentData:  Dict[str,object]
+#if currentData is None:
 currentData = dp.getDataArrays()
 clubSystemInstances = currentData['allClubSystemInstances']
 sysIdFacIdToFactionInstance = currentData['sysIdFacIdToFactionInstance']
@@ -115,12 +118,12 @@ datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
 # Layout the header
 #
 hdr_layout = html.Div([
-    html.Div(
-        className="app-header",
-        children=[
-            html.Div('Plotly Dash', className="app-header--title")
-        ]
-    ),
+    # html.Div(
+    #     className="app-header",
+    #     children=[
+    #         html.Div('Plotly Dash', className="app-header--title")
+    #     ]
+    # ),
     html.Label("Choose a System:"),
     dcc.Dropdown(
         id='demo-dropdown',
@@ -201,34 +204,31 @@ app.layout = html.Div([
     html.Div(id='tabs-example-content', style={'backgroundColor': 'green'}),
     ## ###### START TABLE MADNESS
     ## look into flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
-    html.Table(style={'backgroundColor': 'hotpink'},  # 'width': '100%'},
-               children=[
-                   html.Colgroup(children=[
-                       html.Col(style={'width': '75%;'}),
-                       html.Col(style={'width': '25%;'}),
-                   ]),
-                   html.Tr(children=[
-                       html.Td(rowSpan="2",
-                               children=[
-                                   datatable,
-                               ]),
-                       html.Td(style={'width'           : '100%;',
-                                      'background-color': '#888888'},
-                               children=[
-                                   html.Label("Hi There!", id='faction-drilldown', style={'width': '100%'}),
-                               ]),
-                   ]),
-                   html.Tr(children=[
-                       html.Td(style={'width'           : '100%;',
-                                      'background-color': '#888888'},
-                               children=[
-                                   html.Label("Hi There!", id='system-drilldown', style={'width': '100%'}),
-                               ]),
-                   ])
-               ]),
+    html.Div(className="wrapper",
+             children=[
+                 html.Header(className='header'),
+                 html.Article(className='main', children=[
+                    datatable,
+                 ]),
+                 html.Aside(className="aside aside-2", children=[
+                     html.Article("Hi There!", id='faction-drilldown', style={'width': '100%'}),
+                     html.Article("Hi There!", id='system-drilldown', style={'width': '100%'}),
+                 ]),
+                 html.Footer(className='footer', children=[
+                    html.Div(id='datatable-interactivity-container')
+                 ])
+             ])
+    ])
+
+# <div class="wrapper">
+#   <header class="header">Header</header>
+#   <article class="main">
+#     <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+#   </article>
+#   <aside class="aside aside-2">Aside 2</aside>
+#   <footer class="footer">Footer</footer>
+# </div>
     ## ###### FINISH TABLE MADNESS
-    html.Div(id='datatable-interactivity-container')
-])
 
 # =============================================================
 # Tab handlers
@@ -309,7 +309,9 @@ def update_outputr3(value):
 
 
 @app.callback(
-    Output('datatable-interactivity-container', "children"),
+    [ Output('faction-drilldown', 'children'),
+      Output('system-drilldown', 'children'),
+      Output('datatable-interactivity-container', "children")],
     [Input('datatable-interactivity', "derived_virtual_data"),
      Input('datatable-interactivity', "derived_virtual_selected_rows"),
      Input('datatable-interactivity', 'active_cell')])
@@ -331,6 +333,10 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
     dataColors = ['gold' if i in derived_virtual_selected_rows else 'orange'
                   for i in range(len(dff))]
 
+    factionInfo: str = "Nothing available"
+    systemInfo: str = "Nothing available"
+
+
     if active_cell:
         print("You selected row " + str(active_cell))
         # row = rows[active_cell['row']]
@@ -340,11 +346,28 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
         theFac: FactionInstance = sysIdFacIdToFactionInstance.get( (sysId,facId))
         if theFac is not None:
             print("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
+            factionInfo = theFac.get_name()
+            systemInfo = theFac.getSystemName()
+
+
+            gg : pd.DataFrame = df[df['factionName'].str.match(factionInfo)]
+            seer: Oracle = Oracle(gg)
+            factionInfo = crap.getString("faction-template")
+            output = seer.template(factionInfo)
+            factionInfo = theFac.template(output)
+
+            ts = crap.getString("system-template")
+            theSys  = theFac.getSystem()
+            systemInfo = theSys.template(ts)
+
+    factionWidget = dcc.Markdown(factionInfo)
+    systemWidget = dcc.Markdown(systemInfo)
+
     # active_row_id = active_cell['row_id'] if active_cell else None
     # if( active_row_id != None):
     # print("You selected row " + active_row_id)
     # print("You selected row " + dff["systemName"][0])
-    return [
+    theGraphs = [
         dcc.Graph(
             id=column,
             figure={
@@ -373,12 +396,13 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
         # check if column exists - user may have deleted it
         # If `column.deletable=False`, then you don't
         # need to do this check.
-        for column in ["influence", "population", "gdpPercap"] if column in dff
-    ]
+        for column in ["difficulty", "influence", "population"] if column in dff]
+
+    return factionWidget, systemWidget, [theGraphs[0], theGraphs[1], theGraphs[2] ]
 
 
 @app.callback(
-    dash.dependencies.Output('sort-notifier', 'children'),
+    Output('sort-notifier', 'children'),
     [Input('datatable-interactivity', 'sort_by')])
 def update_table(sort_by):
     if sort_by is None:

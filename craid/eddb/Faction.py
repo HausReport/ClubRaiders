@@ -48,3 +48,7 @@ class Faction(NamedItem):
         name = self.get_name2()
         allegiance = self.get_allegiance()[0:3].upper()
         return f'[{allegiance}] - {name}'
+
+    # FIXME: inara faction ids seem different from eddb's
+    def getInaraFactionUrl(self):
+        return "https://inara.cz/galaxy-minorfaction/" + str(self.get_id())

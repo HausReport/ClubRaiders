@@ -1,8 +1,10 @@
 import datetime
+import string
 
-from craid.eddb.Vulnerability import Vulnerability
+from PassThroughDict import PassThroughDict
 from craid.eddb.Faction import Faction
 from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.Vulnerability import Vulnerability
 
 
 class FactionInstance(Faction):
@@ -15,8 +17,8 @@ class FactionInstance(Faction):
         self.vulnerable: Vulnerability = vuln
         # print("Hi")
 
-    def getInaraFactionUrl(self):
-        return "https://inara.cz/galaxy-minorfaction/" + self.getFactionID()
+    def getSystem(self):
+        return self.mySystem
 
     def getFactionID(self):
         return self.get_id()
@@ -177,3 +179,17 @@ class FactionInstance(Faction):
         cid = self.mySystem.getControllingFactionId()
         mid: int = int(self.get_id())
         return cid == mid
+
+    ## FIXME: can't convert homesystem id to string because i don't have the dict
+    def template(self, msg: str) -> str:
+        myDict : PassThroughDict[str,str] = PassThroughDict()
+
+        myDict['home_system'] = str(self.get_homesystem_id())#, #self.getHomeSystemName() ,
+        myDict['allegiance'] = str(self.get_allegiance())
+        myDict['government'] = str(self.get_government())
+        myDict['inara_link'] = self.getInaraFactionUrl()
+        myDict['faction_name'] = self.get_name()
+
+        template = string.Template(msg)
+        output = template.substitute(myDict)
+        return output

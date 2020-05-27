@@ -13,6 +13,9 @@ def getMarkdown(which: str) -> dcc.Markdown:
     text = resource_bytes('craid.dashbd.text', which + ".md").decode('utf-8')
     return dcc.Markdown(text)
 
+def getString(which: str) -> dcc.Markdown:
+    text = resource_bytes('craid.dashbd.text', which + ".md").decode('utf-8')
+    return text
 
 def getFirstDropdown(_systemNameToXYZ):
     opts = []
@@ -39,12 +42,12 @@ def getTheColumns():
         # {"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
         # {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
         # {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-        {"name": 'isHomeSystem', "id": 'isHomeSystem', "deletable": True, "selectable": False},
-        {"name": 'population', "id": 'population', "deletable": True, "selectable": False, "type": "numeric"},
-        {"name": 'influence', "id": 'influence', "deletable": True, "selectable": False, "type": "numeric"},
+        {"name": 'isHomeSystem', "id": 'isHomeSystem', "deletable": False, "hideable": True, "selectable": False},
+        {"name": 'population', "id": 'population', "deletable": False, "hideable": True, "selectable": False, "type": "numeric"},
+        {"name": 'influence', "id": 'influence', "deletable": False, "hideable": True, "selectable": False, "type": "numeric"},
         {"name": 'difficulty', "id": 'difficulty', "deletable": False, "selectable": False, "type": "numeric"},
         {"name": 'updated', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
-        {"name": 'control', "id": 'control', "deletable": True, "selectable": False},
+        {"name": 'control', "id": 'control', "deletable": False, "hideable": True, "selectable": False},
         {"name": 'vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
         {"name": 'distance', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
     ]
