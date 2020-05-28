@@ -2,7 +2,11 @@
   display: flex;
   flex-flow: row wrap;
   font-weight: bold;
-  text-align: center;
+  text-align: left;
+}
+
+.h1, .h2, .h3 {
+    text-align: left;
 }
 
 .wrapper > * {
@@ -27,8 +31,7 @@
   background: gold;
   display: flex;
   flex-flow: col wrap;
-  font-weight: bold;
-  text-align: center;
+  text-align: left;
 }
 
 .aside-2 {

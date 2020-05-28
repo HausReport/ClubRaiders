@@ -1,12 +1,21 @@
+import math
 import string
 import urllib.parse
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List
+
+from dateutil.relativedelta import *
 
 from PassThroughDict import PassThroughDict
 from Station import Station
 from craid.eddb.Constants import MINOR_FACTION_ID, POWER_STATE, MINOR_FACTION_PRESENCES
 from craid.eddb.Faction import Faction
 from craid.eddb.NamedItem import NamedItem
+
+
+def boolToTorF(myArgument: bool) -> str:
+    if myArgument: return "T"
+    return "F"
 
 
 class InhabitedSystem(NamedItem):
@@ -25,7 +34,7 @@ class InhabitedSystem(NamedItem):
         self.jsonLine: str = jsonString
         self.hasAnarchy: bool = False
         self.powerState: str = jsonString[POWER_STATE]
-        self.stations : List[Station] = []
+        self.stations: List[Station] = []
 
     def getMinorFactionPresences(self):
         return self.jsonLine[MINOR_FACTION_PRESENCES]
@@ -37,7 +46,7 @@ class InhabitedSystem(NamedItem):
         for faction_ptr in minor_faction_presences:
             if faction_ptr is None:
                 continue
-            faction_id = faction_ptr[MINOR_FACTION_ID]
+            faction_id: int = int(faction_ptr[MINOR_FACTION_ID])
             if faction_id is None:
                 continue
             curFaction = all_factions_dict.get(faction_id)
@@ -54,23 +63,20 @@ class InhabitedSystem(NamedItem):
         return False
 
     # ======================================================================
-    def getAllegiance(self):
+    def getAllegiance(self) -> str:
         return self.jsonLine['allegiance']
 
-    def getGovernment(self):
+    def getGovernment(self) -> str:
         return self.jsonLine['government']
 
-    def getUpdated(self):
-        return self.jsonLine['updated_at']
+    def getX(self) -> float:
+        return float(self.jsonLine['x'])
 
-    def getX(self):
-        return self.jsonLine['x']
+    def getY(self) -> float:
+        return float(self.jsonLine['y'])
 
-    def getY(self):
-        return self.jsonLine['y']
-
-    def getZ(self):
-        return self.jsonLine['z']
+    def getZ(self) -> float:
+        return float(self.jsonLine['z'])
 
     def getPowerState(self):
         return self.jsonLine[POWER_STATE]
@@ -96,8 +102,8 @@ class InhabitedSystem(NamedItem):
             tmp += 4
         return tmp
 
-    def getPopulation(self):
-        return self.jsonLine['population']
+    def getPopulation(self) -> int:
+        return int(self.jsonLine['population'])
 
     def getControllingFactionId(self):
         return int(self.jsonLine['controlling_minor_faction_id'])
@@ -110,6 +116,37 @@ class InhabitedSystem(NamedItem):
                 not econ.startswith('Refine')):
             return False
         return True
+
+    def getUpdated(self) -> str:
+        return self.jsonLine['updated_at']
+
+    def getUpdatedDateTime(self) -> datetime:
+        return datetime.utcfromtimestamp(self.getUpdated())
+
+    def getUpdatedString(self) -> str:
+        upd = self.getUpdatedDateTime()
+        now = datetime.utcnow() #timezone.utc)
+
+        print(upd)
+        print(now)
+
+        time_elapsed: timedelta = now - upd
+
+        print( now - upd)
+        days = time_elapsed.days
+
+        print (days)
+        if days <= 1:
+            return "Scouted within the last day."
+
+        if days <= 6:
+            return "Scouted within the last " + str(days) + " days."
+
+        weeks = math.ceil(days /7)
+        if weeks <=6:
+            return "Scouted within the last " + str( weeks ) + " weeks."
+
+        return "Really, really needs to be scouted."
 
     def getInaraNearestShipyardUrl(self):
         return "https://inara.cz/galaxy-nearest/14/" + str(self.get_id())
@@ -132,8 +169,8 @@ class InhabitedSystem(NamedItem):
         ## FIXME: need faction name
         myDict['controlling_faction'] = "{:,}".format(self.getControllingFactionId())
         myDict['population'] = "{:,}".format(self.getPopulation())
-        myDict['inara_link'] = self.getInaraSystemUrl()
-        myDict['eddb_link'] = self.getEddbSystemUrl()
+        myDict['inara_link'] = "[link](" + self.getInaraSystemUrl() + ")"
+        myDict['eddb_link'] = "[link](" + self.getEddbSystemUrl() + ")"
 
         myDict['nearest_shipyard'] = self.getInaraNearestShipyardUrl()
         myDict['r2r_link'] = self.getRoadToRichesUrl()
@@ -149,8 +186,10 @@ class InhabitedSystem(NamedItem):
         if bhVal: bh = "Probably"
         myDict['bounty_hunting'] = bh
 
-        myDict['power']       = self.getPower()
+        myDict['power'] = self.getPower()
         myDict['power_state'] = self.getPowerState()
+
+        myDict['scouting_msg'] = self.getUpdatedString()
 
         template = string.Template(msg)
         output = template.substitute(myDict)
@@ -163,44 +202,68 @@ class InhabitedSystem(NamedItem):
         ret: List[Station] = []
         for sta in self.stations:
             if sta.isClub():
-                ret.add(sta)
+                ret.append(sta)
 
     def nonEnemyControlledStations(self):
-        ret : List[Station] = []
+        ret: List[Station] = []
         for sta in self.stations:
             if not sta.isClub():
-                ret.add(sta)
+                ret.append(sta)
 
     def appendStationsTableToString(self, targ: str) -> str:
-        ret: str = ""
-
-        ret = "\n\n\n<table>\n"
+        ret: str = "\n\n"
+        ret += "|name | ls | LPad | Club | Yard | BM |\n"
+        ret += "| --- | --- | --- | --- | --- | --- |\n"
         for sta in self.stations:
-            ret += "\t<tr>\n"
-            ret += "\t\t<td>"
+            ret += "| "
             ret += sta.get_name()
-            ret += "</td>\n"
-            ret += "\t\t<td>"
-            ret += str(sta.get_id())
-            ret += "</td>\n"
-            ret += "\t\t<td>"
+            ret += " | "
             ret += str(sta.getDistanceToStar())
-            ret += "</td>\n"
-            ret += "\t\t<td>"
-            ret += str(sta.hasLargePads())
-            ret += "</td>\n"
-            ret += "\t\t<td>"
-            ret += str(sta.isClub())
-            ret += "</td>\n"
-            ret += "\t\t<td>"
-            ret += str(sta.hasShipyard())
-            ret += "</td>\n"
-            ret += "\t\t<td>"
-            ret += str(sta.hasBlackMarket())
-            ret += "</td>\n"
-            ret += "\t</tr>\n"
+            ret += " | "
+            ret += boolToTorF(sta.hasLargePads())
+            ret += " | "
+            ret += boolToTorF(sta.isClub())
+            ret += " | "
+            ret += boolToTorF(sta.hasShipyard())
+            ret += "  | "
+            ret += boolToTorF(sta.hasBlackMarket())
+            ret += "  | "
+            ret += "\n"
 
-        ret += "</table>\n"
-        theret = targ + ret  + "\n\n\n"
+        theret = targ + ret + "\n\n\n"
         print(theret)
         return theret
+
+    # def appendStationsTableToStringOld(self, targ: str) -> str:
+    #     ret: str = ""
+    #
+    #     ret = "\n\n\n<table>\n"
+    #     for sta in self.stations:
+    #         ret += "\t<tr>\n"
+    #         ret += "\t\t<td>"
+    #         ret += sta.get_name()
+    #         ret += "</td>\n"
+    #         ret += "\t\t<td>"
+    #         ret += str(sta.get_id())
+    #         ret += "</td>\n"
+    #         ret += "\t\t<td>"
+    #         ret += str(sta.getDistanceToStar())
+    #         ret += "</td>\n"
+    #         ret += "\t\t<td>"
+    #         ret += str(sta.hasLargePads())
+    #         ret += "</td>\n"
+    #         ret += "\t\t<td>"
+    #         ret += str(sta.isClub())
+    #         ret += "</td>\n"
+    #         ret += "\t\t<td>"
+    #         ret += str(sta.hasShipyard())
+    #         ret += "</td>\n"
+    #         ret += "\t\t<td>"
+    #         ret += str(sta.hasBlackMarket())
+    #         ret += "</td>\n"
+    #         ret += "\t</tr>\n"
+    #
+    #     ret += "</table>\n"
+    #     theret = targ + ret  + "\n\n\n"
+    #     print(theret)
+    #     return theret

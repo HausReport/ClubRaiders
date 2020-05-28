@@ -216,7 +216,7 @@ def getDataArrays() -> Dict[str, object]:
             nLines += 1
             if( nLines % 50000 ==0):
                 logging.debug("Read %d lines...", nLines)
-            staLine: dict = ujson.loads(line)
+            staLine = ujson.loads(line)
 
             #I didn't appreciate how many stations there were...
             # hard coding the weeding out of non-faction, non-dockable
