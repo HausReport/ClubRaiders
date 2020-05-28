@@ -7,6 +7,8 @@
 
 .h1, .h2, .h3 {
     text-align: left;
+    background-color: gold;
+    color: black;
 }
 
 .wrapper > * {
