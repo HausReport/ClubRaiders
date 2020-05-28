@@ -1,1 +1,2 @@
-python -m craid.dashbd.Dashboard
+python craid/dashbd/Dashboard.py
+#python -m craid.dashbd.Dashboard
