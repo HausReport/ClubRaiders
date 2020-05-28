@@ -16,45 +16,54 @@ class LoadDataFromEDDB:
     def __init__(self):
         pass
 
+    # Hint: To enable compression, add the
+    # Accept-Encoding: gzip, deflate, sdch entry to your request header.
     @staticmethod
     def download_file(shortName: str, targetDirectory: str) -> str:
+
+        headers = {
+            "User-Agent"     : "ClubRaiders Application",
+            "Accept-Encoding": "gzip, deflate, sdch",
+        }
+
         assert os.path.exists(targetDirectory), "data dir doesn't exist: [" + targetDirectory + "]"
-        url = 'https://eddb.io/archive/v6/' + shortName
+        url = 'https://eddb.io/archive/v6/' + shortName + ".gz"
         logging.info("downloading data file: %s", url)
-        r = requests.get(url, allow_redirects=True)
+        r = requests.get(url, allow_redirects=True, headers=headers)
         # tmpDir = tempfile.gettempdir()
-        fName = os.path.join(targetDirectory, shortName)
+        fName = os.path.join(targetDirectory, shortName + ".gz")
         open(fName, 'wb').write(r.content)
         return fName
 
+    # @staticmethod
+    # def load_data():
+    #     if not os.path.exists('../data'):
+    #         os.makedirs('data')
+    #     if True is True:
+    #         #
+    #         # Gets the most recent data dumps from eddb.io
+    #         #
+    #         url = 'https://eddb.io/archive/v6/systems_populated.jsonl'
+    #         r = requests.get(url, allow_redirects=True)
+    #         open('../data/systems_populated.jsonl', 'wb').write(r.content)
+    #
+    #         # url = 'https://eddb.io/archive/v6/stations.jsonl'
+    #         # r = requests.get(url, allow_redirects=True)
+    #         # open('data/stations.jsonl', 'wb').write(r.content)
+    #
+    #         url = 'https://eddb.io/archive/v6/factions.jsonl'
+    #         r = requests.get(url, allow_redirects=True)
+    #         open('../data/factions.jsonl', 'wb').write(r.content)
+
     @staticmethod
-    def load_data():
-        if not os.path.exists('../data'):
-            os.makedirs('data')
-        if True is True:
-            #
-            # Gets the most recent data dumps from eddb.io
-            #
-            url = 'https://eddb.io/archive/v6/systems_populated.jsonl'
-            r = requests.get(url, allow_redirects=True)
-            open('../data/systems_populated.jsonl', 'wb').write(r.content)
-
-            # url = 'https://eddb.io/archive/v6/stations.jsonl'
-            # r = requests.get(url, allow_redirects=True)
-            # open('data/stations.jsonl', 'wb').write(r.content)
-
-            url = 'https://eddb.io/archive/v6/factions.jsonl'
-            r = requests.get(url, allow_redirects=True)
-            open('../data/factions.jsonl', 'wb').write(r.content)
-
-    @staticmethod
-    def find_data_file(shortName: str):
+    def find_data_file(_shortName: str):
+        shortName = _shortName + ".gz"
         #
         # If data dir exists, use that one
         #
         cur = Path("../data")
         #fName: str = os.path.join(cur.parent, "data", shortName)
-        fName: str = os.path.join(cur, shortName)
+        fName: str = os.path.join(cur, shortName )
         logging.info("1- Checking for: " + fName)
 
 
@@ -87,7 +96,8 @@ class LoadDataFromEDDB:
                 yield handle
 
     @staticmethod
-    def fileIsOutOfDate(fName: str, shortName: str):
+    def fileIsOutOfDate(fName: str, _shortName: str):
+        shortName = _shortName + ".gz"
         http = urllib3.PoolManager()
         url = "https://eddb.io/archive/v6/" + shortName #factions.jsonl"
 
