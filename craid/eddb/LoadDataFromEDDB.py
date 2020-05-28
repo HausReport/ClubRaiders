@@ -1,4 +1,5 @@
 import datetime
+import gzip
 import logging
 import os
 import tempfile
@@ -27,12 +28,13 @@ class LoadDataFromEDDB:
         }
 
         assert os.path.exists(targetDirectory), "data dir doesn't exist: [" + targetDirectory + "]"
-        url = 'https://eddb.io/archive/v6/' + shortName + ".gz"
+        url = 'https://eddb.io/archive/v6/' + shortName
         logging.info("downloading data file: %s", url)
         r = requests.get(url, allow_redirects=True, headers=headers)
         # tmpDir = tempfile.gettempdir()
         fName = os.path.join(targetDirectory, shortName + ".gz")
-        open(fName, 'wb').write(r.content)
+        #open(fName, 'wb').write(r.content)
+        gzip.open(fName, 'wb').write(r.content)
         return fName
 
     # @staticmethod
@@ -57,13 +59,13 @@ class LoadDataFromEDDB:
 
     @staticmethod
     def find_data_file(_shortName: str):
-        shortName = _shortName + ".gz"
+        shortName = _shortName
         #
         # If data dir exists, use that one
         #
         cur = Path("../data")
         #fName: str = os.path.join(cur.parent, "data", shortName)
-        fName: str = os.path.join(cur, shortName )
+        fName: str = os.path.join(cur, shortName ) + ".gz"
         logging.info("1- Checking for: " + fName)
 
 
@@ -72,7 +74,7 @@ class LoadDataFromEDDB:
         #
         tmpDir = tempfile.gettempdir()
         if not os.path.exists(fName):
-            fName = os.path.join(tmpDir, shortName)
+            fName = os.path.join(tmpDir, shortName)  + ".gz"
             logging.info("2- Checking for: " + fName)
 
         fileIsOutOfDate: bool = False
@@ -85,21 +87,25 @@ class LoadDataFromEDDB:
         #
         if fileIsOutOfDate or not os.path.exists(fName):
             fName = LoadDataFromEDDB.download_file(shortName, tmpDir)
+            #fName +=".gz"  added in download_file
             logging.info("3- Checking for: " + fName)
+
 
         if not os.path.exists(fName):
             logging.error("No data file: " + fName)
             assert False, "Couldn't get data file" + fName
+            return None
         else:
             logging.info("found data file: %s", fName)
-            with open(fName, 'r') as handle:
-                yield handle
+            #with open(fName, 'r') as handle:
+            return fName
+
+
 
     @staticmethod
     def fileIsOutOfDate(fName: str, _shortName: str):
-        shortName = _shortName + ".gz"
         http = urllib3.PoolManager()
-        url = "https://eddb.io/archive/v6/" + shortName #factions.jsonl"
+        url = "https://eddb.io/archive/v6/" + _shortName #factions.jsonl"
 
         u = http.request('HEAD', url)
         meta = u.info()
@@ -109,7 +115,7 @@ class LoadDataFromEDDB:
         meta_modifiedtime = time.mktime(datetime.datetime.strptime(
             ''.join(meta.getheaders("Last-Modified")), "%a, %d %b %Y %X GMT").timetuple())
 
-        file = fName
+        file = fName + ".gz"
         if os.path.getmtime(file) < meta_modifiedtime:  # change > to <
             print("CPU file is older than server file.")
             return True

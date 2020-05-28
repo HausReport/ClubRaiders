@@ -1,11 +1,10 @@
 import math
 import string
 import urllib.parse
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
 from typing import Dict, List
 
-from dateutil.relativedelta import *
-
+from Aware import Aware
 from PassThroughDict import PassThroughDict
 from Station import Station
 from craid.eddb.Constants import MINOR_FACTION_ID, POWER_STATE, MINOR_FACTION_PRESENCES
@@ -18,23 +17,18 @@ def boolToTorF(myArgument: bool) -> str:
     return "F"
 
 
-class InhabitedSystem(NamedItem):
-    # global all_factions_dict
-
-    # idef __init__(self, name='', eddbId=0):
-    #    super().__init__(name, eddbId)
-    #    self.jsonLine = None
+class InhabitedSystem(Aware):
 
     def __init__(self, jsonString: str):
-        #        """
-        #
-        #        :type jsonString: str
-        #        """
-        super().__init__(jsonString[NamedItem.NAME], jsonString[NamedItem.ID])
-        self.jsonLine: str = jsonString
+        super().__init__(jsonString) #[NamedItem.NAME], jsonString[NamedItem.ID])
+        #self.jsonLine: str = jsonString
         self.hasAnarchy: bool = False
         self.powerState: str = jsonString[POWER_STATE]
         self.stations: List[Station] = []
+
+    def getControllingFactionName(self):
+        cf: int = self.getControllingFactionId()
+        return super().getFactionNameById(cf)
 
     def getMinorFactionPresences(self):
         return self.jsonLine[MINOR_FACTION_PRESENCES]
@@ -167,7 +161,8 @@ class InhabitedSystem(NamedItem):
         myDict['allegiance'] = str(self.getAllegiance())
         myDict['government'] = str(self.getGovernment())
         ## FIXME: need faction name
-        myDict['controlling_faction'] = "{:,}".format(self.getControllingFactionId())
+        myDict['controlling_faction'] = self.getControllingFactionName()
+        #"{:,}".format(self.getControllingFactionId())
         myDict['population'] = "{:,}".format(self.getPopulation())
         myDict['inara_link'] = "[link](" + self.getInaraSystemUrl() + ")"
         myDict['eddb_link'] = "[link](" + self.getEddbSystemUrl() + ")"
@@ -211,12 +206,13 @@ class InhabitedSystem(NamedItem):
                 ret.append(sta)
 
     def appendStationsTableToString(self, targ: str) -> str:
+
         ret: str = "\n\n"
-        ret += "|Name | ls | LPad | Club | Yard | BM |\n"
-        ret += "| --- | --- | --- | --- | --- | --- |\n"
+        ret += "|Name | ls | LPad | Club | Yard | BM | CF | \n"
+        ret += "| --- | --- | --- | --- | --- | --- | --- |\n"
         for sta in self.stations:
             ret += "| "
-            ret += sta.get_name()
+            ret += sta.getEddbUrl() #get_name()
             ret += " | "
             ret += "{:,}".format(sta.getDistanceToStar())
             ret += " | "
@@ -227,6 +223,8 @@ class InhabitedSystem(NamedItem):
             ret += boolToTorF(sta.hasShipyard())
             ret += "  | "
             ret += boolToTorF(sta.hasBlackMarket())
+            ret += "  | "
+            ret += sta.getControllingFactionName()
             ret += "  | "
             ret += "\n"
 

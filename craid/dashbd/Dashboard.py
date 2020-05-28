@@ -86,7 +86,7 @@ datatable: dash_table.DataTable = dash_table.DataTable(
     selected_rows=[],
     page_action="native",
     page_current=0,
-    page_size=100,
+    page_size=20,
     style_header={
         'backgroundColor': 'black',
         'color'          : 'gold'},
@@ -130,22 +130,20 @@ hdr_layout = html.Div([
         options=opts,
         value='Alioth',
         placeholder='Select star system',
-        style={'backgroundColor': 'black',
-               'color'          : 'gold'},
+        className="myDropdown",
     ),
     html.Label("or a Squadron:"),
     dcc.Dropdown(
         id='demo-dropdown2',
         options=fopts,
         value='',  # Anti Xeno Initiative',
-        placeholder='Select player faction'
+        placeholder='Select player faction',
+        className="myDropdown",
     ),
 
-    html.Div(id='system-notifier'),
-    html.Div(id='filter-notifier'),
-    html.Div(id='sort-notifier'),
+    html.Div(id='system-notifier')
 
-], style={'width': '99%', 'display': 'inline-block'})
+], className="strict-horizontal")
 
 # TODO: get a hook to tab1 and print its properties to find color settings
 # tab1: dcc.Tab = something
@@ -158,7 +156,7 @@ app.layout = html.Div([
     dcc.Tabs(id='tabs-example', value='tab-1',
              parent_className='custom-tabs',
              className='custom-tabs-container',
-             style={'primary': 'red'},
+             style={'primary': 'red', 'primaryColor':'red', 'selected':'red'},
              children=[
                  dcc.Tab(label='Overview',
                          value='tab-1',
@@ -206,7 +204,20 @@ app.layout = html.Div([
     ## look into flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
     html.Div(className="wrapper",
              children=[
-                 html.Header(className='header'),
+                 html.Header(className='header', children=[
+                    html.Div(className="strict-horizontal", children=[
+                        html.Div(className="strict-horizontal", children=([
+                            html.Label("Current filter:", style={'flex-grow':'0','vertical-align':'middle'}),
+                            html.Label(id='filter-notifier', className="filter-notifier"),
+                            html.Button("Clear filter", className="myButton"),
+                        ])),
+                        html.Div(className="strict-horizontal", style={'vertical-align':'middle'}, children=([
+                            html.Label("Current sort:", style={'flex-grow':'0','vertical-align':'middle'}),
+                            html.Label(id='sort-notifier',   className="sort-notifier"),
+                            html.Button("Clear sort", className="myButton"),
+                            ])),
+                    ]),
+                 ]),
                  html.Article(className='main', children=[
                     datatable,
                  ]),
@@ -407,11 +418,11 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
     [Input('datatable-interactivity', 'sort_by')])
 def update_table(sort_by):
     if sort_by is None:
-        return "Sort empty"
+        return "None"
     if len(sort_by) == 0:
-        return "Sort empty"
+        return "None"
     else:
-        return "Current sort: " + str(sort_by)
+        return str(sort_by)
 
 
 @app.callback(
@@ -419,11 +430,11 @@ def update_table(sort_by):
     [Input('datatable-interactivity', 'filter_query')])
 def update_table(query):
     if query is None:
-        return "Sort empty"
+        return "None"
     if len(query) == 0:
-        return "Sort empty"
+        return "None"
     else:
-        return "Current filter: " + str(query)
+        return str(query)
 
 
 if __name__ == '__main__':

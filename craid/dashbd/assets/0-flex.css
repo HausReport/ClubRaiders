@@ -1,8 +1,42 @@
 .wrapper {
   display: flex;
   flex-flow: row wrap;
-  font-weight: bold;
   text-align: left;
+}
+
+.strict-horizontal {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: no-wrap;
+  text-align: left;
+}
+
+.myButton {
+    display: flex;
+    background:url(clear-32.png) no-repeat;
+    cursor:pointer;
+    width: 64px;
+    height: 64px;
+    border: none;
+    flex-grow: 0;
+}
+
+.myDropdown {
+    display: flex;
+    background-color: black;
+    color: gold;
+    flex-grow: 4;
+}
+
+.filter-notifier {
+    display: flex;
+    flex-grow: 1;
+}
+
+
+.sort-notifier {
+    display: flex;
+    flex-grow: 1;
 }
 
 .h1, .h2, .h3 {
@@ -17,16 +51,16 @@
 }
 
 .header {
-  background: tomato;
+  background: black;
 }
 
 .footer {
-  background: lightgreen;
+  background: black;
 }
 
 .main {
   text-align: left;
-  background: deepskyblue;
+  background: black;
 }
 
 .aside-1 {

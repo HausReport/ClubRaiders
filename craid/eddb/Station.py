@@ -1,5 +1,4 @@
-from typing import Dict
-
+from Aware import Aware
 from craid.eddb.NamedItem import NamedItem
 
 
@@ -26,13 +25,13 @@ from craid.eddb.NamedItem import NamedItem
 # No Good for us
 # "type_id": 23, "type": "Non-Dockable Orbital",
 
-class Station(NamedItem):
+class Station(Aware):
 
     # getters/setters for id & name in superclass
     def __init__(self, jsonString: str):
-        super().__init__(jsonString[NamedItem.NAME], jsonString[NamedItem.ID])
+        super().__init__(jsonString) #[NamedItem.NAME], jsonString[NamedItem.ID])
         #self.jsonLine: Dict[str, str] = jsonString
-        self.jsonLine = jsonString
+        #self.jsonLine = jsonString
         self.club: bool = False
 
     def getDistanceToStar(self) -> int:
@@ -79,7 +78,7 @@ class Station(NamedItem):
     def okCandidate(self) -> bool:
         if not self.hasDocking():
             return False
-        if self.jsonLine['controlling_minor_faction'] == None:
+        if self.jsonLine['controlling_minor_faction'] is None:
             return False
         return True
 
@@ -92,6 +91,9 @@ class Station(NamedItem):
     def getControllingFactionId(self) -> int:
         return self.jsonLine['controlling_minor_faction_id']
 
+    def getControllingFactionName(self) -> str:
+        return Aware.getFactionNameById(self.getControllingFactionId())
+
     # def getc_allegiance(self):
     #     return self.jsonLine['allegiance']
     # def getc_allegiance(self):
@@ -101,5 +103,11 @@ class Station(NamedItem):
     def setClub(self, param):
         self.club = param
 
-    def isClub(self):
+    def isClub(self) -> bool:
         return self.club
+
+    def getEddbUrl(self):
+        return '[' + self.get_name() + "](https://eddb.io/station/" + str(self.get_id()) + ")"
+
+    def getEddbUrlHtml(self):
+        return '<a href="https://eddb.io/station/' + str(self.get_id()) + '">' + self.get_name() + '</a>'

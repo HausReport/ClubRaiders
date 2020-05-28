@@ -2,9 +2,10 @@ import datetime
 import logging
 from typing import List, Dict, Tuple, Set
 
+import json_lines
 import pandas as pd
-import ujson
 
+from Aware import Aware
 from Station import Station
 from craid.club import FactionNameFilter
 from craid.eddb.Faction import Faction
@@ -64,33 +65,36 @@ def getDataArrays() -> Dict[str, object]:
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.DEBUG
 
-    # all_factions_dict: Faction                     = {}    #private
+    all_systems_dict: Dict[int, InhabitedSystem] = {}  # private
+    all_factions_dict: Dict[int,Faction]       = {}    #private
+
     playerFactionIdToInfo: Dict[int, Faction] = {}  # private
-    clubFactionIdToInfo: Dict[int, Faction] = {}  # private
-    systemIdToInfo: Dict[int, InhabitedSystem] = {}  # private
-    allClubSystemInstances: List[FactionInstance] = []  # make this one avaiable
     playerFactionNameToSystemName: Dict[str, str] = {}
-    systemNameToXYZ: Dict[str, Tuple[float, float, float]] = {}
-    sysIdFacIdToFactionInstance: Dict[Tuple[int, int], FactionInstance] = {}
+
+
+    clubFactionIdToInfo: Dict[int, Faction] = {}  # private
+    allClubSystemInstances: List[FactionInstance] = []  # make this one avaiable
     clubSystemLookup: Set[int] = set()
+    sysIdFacIdToFactionInstance: Dict[Tuple[int, int], FactionInstance] = {}
+
+    systemNameToXYZ: Dict[str, Tuple[float, float, float]] = {}
 
     # with open("../data/factions.jsonl", 'r') as handle:
     # with LoadDataFromEDDB.find_data_file('factions.jsonl') as handle:
     nLines: int = 0
-    for thing in LoadDataFromEDDB.find_data_file('factions.jsonl'):
-        logging.debug("Back in dp")
-        line = thing.readline()
-        while line:
+    fName = LoadDataFromEDDB.find_data_file('factions.jsonl')
+    with json_lines.open(fName, broken=True) as handle:
+        for facLine in handle:
             nLines += 1
-            facLine: dict = ujson.loads(line)
             lCurFactionId = int(facLine['id'])
             curFaction = Faction(facLine)
-            # all_factions_dict[ lCurFactionId ] = curFaction
+            all_factions_dict[ lCurFactionId ] = curFaction
+
+
             if curFaction.is_player():
                 playerFactionIdToInfo[lCurFactionId] = curFaction
             if FactionNameFilter.proClubFaction(curFaction):
                 clubFactionIdToInfo[lCurFactionId] = curFaction
-            line = thing.readline()
 
     logging.info("Read %s lines of faction data", str(nLines))
     # with open(stations_file, 'r') as handle:
@@ -101,18 +105,17 @@ def getDataArrays() -> Dict[str, object]:
 
     # with open("../data/systems_populated.jsonl", 'r') as handle:
     nLines = 0
-    for thing in LoadDataFromEDDB.find_data_file('systems_populated.jsonl'):
-        logging.debug("Back in dp")
-        line = thing.readline()
-        while line:
+    fName = LoadDataFromEDDB.find_data_file('systems_populated.jsonl')
+    with json_lines.open(fName, broken=True) as handle:
+        for sysLine in handle:
             nLines += 1
-            sysLine: dict = ujson.loads(line)
             tid = int(sysLine['id'])
             foo = InhabitedSystem(sysLine)
-            systemIdToInfo[tid] = foo
-            line = thing.readline()
+            all_systems_dict[tid] = foo
 
     logging.info("Read %s lines of systems data", str(nLines))
+    Aware.setSystemsDict(all_systems_dict)
+    Aware.setFactionsDict(all_factions_dict)
 
     #
     # Populate dict of player factions & home system names
@@ -120,7 +123,7 @@ def getDataArrays() -> Dict[str, object]:
     fac: Faction
     for fac in playerFactionIdToInfo.values():
         sid: int = fac.get_homesystem_id()
-        tSys: InhabitedSystem = systemIdToInfo.get(sid)
+        tSys: InhabitedSystem = all_systems_dict.get(sid)
         if tSys is None:
             continue
         factionName: str = fac.get_name()
@@ -137,7 +140,7 @@ def getDataArrays() -> Dict[str, object]:
     # Populate dict of system name & x,y,zs
     #
     tSys: InhabitedSystem
-    for tSys in systemIdToInfo.values():
+    for tSys in all_systems_dict.values():
         if tSys is None:
             continue
         factionName: str = tSys.get_name()
@@ -150,7 +153,7 @@ def getDataArrays() -> Dict[str, object]:
     # Make nifty list of club faction presences
     #
     cSystem: InhabitedSystem
-    for cSystem in systemIdToInfo.values():
+    for cSystem in all_systems_dict.values():
         mfp = cSystem.getMinorFactionPresences()
         for faction_ptr in mfp:
             if faction_ptr is None:
@@ -163,38 +166,11 @@ def getDataArrays() -> Dict[str, object]:
                 factionName: str = fac.get_name2()
                 if factionName.startswith("*"):
                     continue  # filters player factions
-
-                # sysname = cSystem.get_name()
-                # factionHomeSystemId: int = fac.get_homesystem_id()
-                # vulnerable = True
-                # if (systemId == factionHomeSystemId): vulnerable = False
-
-                # systemId = cSystem.get_id()
-                # vulnerable = not fac.isHomeSystem(systemId)
-
                 govt = cSystem.getGovernment()
-                # allg = fac.get_allegiance()
-
                 inf = faction_ptr['influence']
-                # sinf = '{:04.2f}'.format(inf)
-                # print(sinf)
+                vulnerabilities: Vulnerability = Vulnerability(govt, inf, faction_ptr['active_states'])
 
-                # updated = cSystem.getUpdated();
-                # date = datetime.datetime.utcfromtimestamp(updated)
-                # ds = date.strftime("%m/%d/%Y %H:%M:%S")
-
-                vuln: Vulnerability = Vulnerability(govt, inf, faction_ptr['active_states'])
-                # HERE
-                # # active_states = json.dumps(faction_ptr[ 'active_states' ])
-                # hasWar = desiredState(faction_ptr['active_states'])
-                # if (govt == "Anarchy"):
-                #     hasWar = -16
-                # if (hasWar == 0 and 4.5 >= inf > 0.0):
-                #     hasWar = -15
-                # if (hasWar == 104 and inf > 10.0):
-                #     hasWar = 0
-
-                sysIns = FactionInstance(fac, cSystem, inf, vuln)
+                sysIns = FactionInstance(fac, cSystem, inf, vulnerabilities)
                 allClubSystemInstances.append(sysIns)
                 system_id: int = cSystem.get_id()
 
@@ -204,36 +180,35 @@ def getDataArrays() -> Dict[str, object]:
 
     logging.info("Populated club faction presences")
 
+
     #
     # Only now, can we populate lists of stations in **club** systems
     #
     nLines: int = 0
     nAdded: int = 0
-    for thing in LoadDataFromEDDB.find_data_file('stations.jsonl'):
-        logging.debug("Back in dp")
-        line = thing.readline()
-        while line:
+    fName = LoadDataFromEDDB.find_data_file('stations.jsonl')
+    with json_lines.open(fName, broken=True) as handle:
+        for staLine in handle:
             nLines += 1
             if( nLines % 50000 ==0):
                 logging.debug("Read %d lines...", nLines)
-            staLine = ujson.loads(line)
 
             #I didn't appreciate how many stations there were...
             # hard coding the weeding out of non-faction, non-dockable
             # stations before the clubSystemLookout
-            if staLine['has_docking']:
+            if True is True: #staLine['has_docking']:  show assets?
                 cmf = staLine.get('controlling_minor_faction_id')
                 if cmf is not None:
                     lCurSystemId = int(staLine['system_id'])
                     if lCurSystemId in clubSystemLookup:
 
-                        curSys: InhabitedSystem = systemIdToInfo[lCurSystemId]
+                        curSys: InhabitedSystem = all_systems_dict[lCurSystemId]
                         if curSys is not None:
                             #lCurStationId = int(staLine['id'])
                             sta : Station = Station(staLine)
 
-                            controlFac = sta.getControllingFactionId()
-                            # controlFac is not none at this point
+                            controlFac: int = sta.getControllingFactionId()
+                            # controlFac is not none at this point    c
                             nAdded +=1
                             if nAdded % 25 == 0:
                                 logging.debug("Adding station %d...",nAdded)
@@ -242,14 +217,13 @@ def getDataArrays() -> Dict[str, object]:
                                 sta.setClub(True)
 
                             curSys.addStation(sta)
-            line = thing.readline()
 
     logging.info("Read %s lines of station data", str(nLines))
     logging.info("Added %d stations", nAdded)
 
     return {'playerFactionIdToInfo'        : playerFactionIdToInfo,
             'clubFactionIdToInfo'          : clubFactionIdToInfo,
-            'systemIdToInfo'               : systemIdToInfo,
+            'all_systems_dict'               : all_systems_dict,
             'allClubSystemInstances'       : allClubSystemInstances,
             'systemNameToXYZ'              : systemNameToXYZ,
             'playerFactionNameToSystemName': playerFactionNameToSystemName,

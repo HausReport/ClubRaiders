@@ -32,6 +32,9 @@ class FactionInstance(Faction):
     def getSystemName(self):
         return self.mySystem.get_name()
 
+    def getSystemNameById(self, _id):
+        return super().getSystemNameiById()
+    
     def getUpdated(self):
         return self.mySystem.getUpdated()
 
@@ -184,7 +187,7 @@ class FactionInstance(Faction):
     def template(self, msg: str) -> str:
         myDict : PassThroughDict[str,str] = PassThroughDict()
 
-        myDict['home_system'] = str(self.get_homesystem_id())#, #self.getHomeSystemName() ,
+        myDict['home_system'] = self.get_homesystem_name()
         myDict['allegiance'] = str(self.get_allegiance())
         myDict['government'] = str(self.get_government())
         myDict['inara_link'] = self.getInaraFactionUrl()

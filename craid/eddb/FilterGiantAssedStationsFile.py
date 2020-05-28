@@ -1,17 +1,13 @@
-import datetime
 import logging
-from typing import List, Dict, Tuple, Set
+from typing import List, Dict, Set
 
-import pandas as pd
 import ujson
 
 from Station import Station
 from craid.club import FactionNameFilter
 from craid.eddb.Faction import Faction
-from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.InhabitedSystem import InhabitedSystem
 from craid.eddb.LoadDataFromEDDB import LoadDataFromEDDB
-from craid.eddb.Vulnerability import Vulnerability
 
 
 #
@@ -120,7 +116,7 @@ def getDataArrays():
                     if lCurSystemId in clubSystemLookup:
 
                         curSys: InhabitedSystem = systemIdToInfo[lCurSystemId]
-                        if curSys != None:
+                        if curSys is not None:
                             sta: Station = Station(staLine)
                             logging.debug("Adding station...", nLines)
                             nAdded += 1
