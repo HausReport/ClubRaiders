@@ -212,13 +212,13 @@ class InhabitedSystem(NamedItem):
 
     def appendStationsTableToString(self, targ: str) -> str:
         ret: str = "\n\n"
-        ret += "|name | ls | LPad | Club | Yard | BM |\n"
+        ret += "|Name | ls | LPad | Club | Yard | BM |\n"
         ret += "| --- | --- | --- | --- | --- | --- |\n"
         for sta in self.stations:
             ret += "| "
             ret += sta.get_name()
             ret += " | "
-            ret += str(sta.getDistanceToStar())
+            ret += "{:,}".format(sta.getDistanceToStar())
             ret += " | "
             ret += boolToTorF(sta.hasLargePads())
             ret += " | "

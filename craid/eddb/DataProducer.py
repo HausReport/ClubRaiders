@@ -235,7 +235,8 @@ def getDataArrays() -> Dict[str, object]:
                             controlFac = sta.getControllingFactionId()
                             # controlFac is not none at this point
                             nAdded +=1
-                            logging.debug("Adding station %d...",nAdded)
+                            if nAdded % 25 == 0:
+                                logging.debug("Adding station %d...",nAdded)
 
                             if controlFac in clubSystemLookup:
                                 sta.setClub(True)

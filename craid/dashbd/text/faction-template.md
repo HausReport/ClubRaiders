@@ -10,8 +10,7 @@
 | Controlled Systems | $systems_control |
 | Total Pop.  | $population_sum       |
 | Total Inf.  | $influence_sum        |
-| Placeholder |Text        |
-| Placeholder |Text        |
+
 
 
 

@@ -15,8 +15,7 @@
 | Inara System Info | $inara_link        |
 | EDDB System Info | $eddb_link |
 | Bounty Hunting | $bounty_hunting        |
-| Placeholder |Text        |
-| Placeholder |Text        |
+
 
 # Stations
 
