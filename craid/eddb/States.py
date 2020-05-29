@@ -33,7 +33,7 @@ class Vulnerability:
             if xid is Constants.STATE_CIVIL_LIBERTY: self.state_list.append(xid)
             if xid is Constants.STATE_PUBLIC_HOLIDAY: self.state_list.append(xid)
             if xid is Constants.STATE_PIRATE_ATTACK: self.state_list.append(xid)
-            if xid is Constants.INVESTMENT: self.state_list.append(xid)
+            if xid is Constants.STATE_INVESTMENT: self.state_list.append(xid)
 
             # if xid is Constants.STATE_RETREAT: self.state_list.append(xid)
             # if xid is Constants.STATE_RETREAT: self.state_list.append(xid)

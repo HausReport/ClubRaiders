@@ -28,12 +28,14 @@ def load_factions() -> [Dict[int, Faction], Dict[int, Faction], Dict[int, Factio
             nLines += 1
             lCurFactionId = int(facLine['id'])
             curFaction = Faction(facLine)
+            if FactionNameFilter.proClubFaction(curFaction):
+                curFaction.setClub(True)
+
             all_factions_dict[lCurFactionId] = curFaction
 
             if curFaction.is_player():
                 playerFactionIdToInfo[lCurFactionId] = curFaction
-            if FactionNameFilter.proClubFaction(curFaction):
-                curFaction.setClub(True)
+            if curFaction.isClub():
                 clubFactionIdToInfo[lCurFactionId] = curFaction
 
     logging.info("Read %s lines of faction data", str(nLines))

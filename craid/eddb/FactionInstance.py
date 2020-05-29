@@ -2,8 +2,6 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
-#
-#   SPDX-License-Identifier: BSD-3-Clause
 
 import datetime
 import string
@@ -11,7 +9,7 @@ import string
 from PassThroughDict import PassThroughDict
 from craid.eddb.Faction import Faction
 from craid.eddb.InhabitedSystem import InhabitedSystem
-from craid.eddb.Vulnerability import Vulnerability
+from craid.eddb.States import Vulnerability
 
 
 class FactionInstance(Faction):
@@ -41,8 +39,8 @@ class FactionInstance(Faction):
     def getSystemNameById(self, _id):
         return super().getSystemNameiById()
 
-    def getUpdated(self):
-        return self.mySystem.getUpdated()
+    #def getUpdated(self):
+    #    return self.mySystem.getUpdated()
 
     # <1, A single player can easily retreat
     # 1-100, A single player can retreatA
@@ -85,8 +83,8 @@ class FactionInstance(Faction):
 
         return True
 
-    def getUpdatedDateTime(self):
-        return datetime.datetime.fromtimestamp(int(self.mySystem.getUpdated()))
+    def getUpdatedDateTime(self) -> datetime:
+        return self.mySystem.getUpdatedDateTime()
 
     def getX(self):
         return self.mySystem.getX()
@@ -147,8 +145,7 @@ class FactionInstance(Faction):
         # # "107,Terrorist Attack"
 
     def getUpdatedString(self):
-        updated = self.getUpdated()
-        date = datetime.datetime.utcfromtimestamp(updated)
+        date = self.mySystem.getUpdatedDateTime()
         ds = date.strftime("%d-%b-%Y %H:%M")
         return ds
 

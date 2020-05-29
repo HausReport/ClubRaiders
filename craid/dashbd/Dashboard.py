@@ -1,3 +1,8 @@
+#   Copyright (c) 2020 Club Raiders Project
+#   https://github.com/HausReport/ClubRaiders
+#
+#   SPDX-License-Identifier: BSD-3-Clause
+
 import logging
 import math
 from typing import Dict, Tuple, List
@@ -418,6 +423,8 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
         # need to do this check.
         for column in ["difficulty", "influence", "population"] if column in dff]
 
+    if len(theGraphs) == 0:
+        return factionWidget, systemWidget, [None, None, None]
     return factionWidget, systemWidget, [theGraphs[0], theGraphs[1], theGraphs[2]]
 
 

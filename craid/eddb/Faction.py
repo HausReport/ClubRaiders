@@ -8,7 +8,6 @@ from Aware import Aware
 
 
 class Faction(Aware):
-    # systemsDict: None #Dict[int, InhabitedSystem] = None  typing this causes a circular import problem
 
     # getters/setters for id & name in superclass
     def __init__(self, jsonString):
@@ -67,7 +66,7 @@ class Faction(Aware):
     #     return "https://inara.cz/galaxy-minorfaction/" + str(self.get_id())
 
     def setClub(self, param: bool) -> None:
-        print("setting club to :" + str(param))
+        #print("setting club to :" + str(param))
         self.club = param
 
     def isClub(self) -> bool:

@@ -53,3 +53,4 @@ class Aware(NamedItem):
         # sd Dict[int, Faction] = Aware.factionsDict
         fac: Faction = Aware.factionsDict.get(facId)
         return fac
+

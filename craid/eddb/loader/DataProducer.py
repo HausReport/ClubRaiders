@@ -3,22 +3,14 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 
-import logging
-from typing import List, Dict, Tuple, Set
-
-import json_lines
+from typing import Dict
 
 from Aware import Aware
-from Station import Station
-from craid.eddb.FactionInstance import FactionInstance
-from craid.eddb.InhabitedSystem import InhabitedSystem
-from craid.eddb.Vulnerability import Vulnerability
 from loader.CreateClubFactionInstances import getFactionInstances
 from loader.CreateFactions import load_factions
 from loader.CreateStationsInClubSystems import loadStationsInClubSystems
 from loader.CreateSystemNameToPositionMap import loadSystemNameToPositionMap
 from loader.CreateSystems import load_systems
-from loader.LoadDataFromEDDB import LoadDataFromEDDB
 
 
 #
@@ -51,7 +43,7 @@ def getDataArrays() -> Dict[str, object]:
     # Make (2?) nifty list(s) of club faction presences
     #
     allClubSystemInstances, clubSystemLookup, sysIdFacIdToFactionInstance \
-            = getFactionInstances(all_systems_dict, clubFactionIdToInfo)
+            = getFactionInstances(all_systems_dict, clubFactionIdToInfo, all_factions_dict)
 
     #
     # Only now, can we populate lists of stations in **club** systems

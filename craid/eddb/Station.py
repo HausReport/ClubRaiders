@@ -99,14 +99,8 @@ class Station(Aware):
         fac: Faction = Aware.getFactionById(self.getControllingFactionId())
         return fac.get_name2()
 
-    # def getc_allegiance(self):
-    #     return self.jsonLine['allegiance']
-    # def getc_allegiance(self):
-    #     return self.jsonLine['allegiance']
-    # def getc_allegiance(self):
-    #     return self.jsonLine['allegiance']
     def setClub(self, param: bool):
-        print("setting club to :" + str(param))
+        #print("setting club to :" + str(param))
         self.club = param
 
     def isClub(self) -> bool:
