@@ -35,21 +35,22 @@ def getSecondDropdown(playerFactionNameToHomeSystemName):
     return fopts
 
 
+## "hidden": True,  is not a thing, unfortunately
 def getTheColumns():
     return [
-        {"name": 'systemName', "id": 'systemName', "deletable": False, "selectable": False},
-        {"name": 'factionName', "id": 'factionName', "deletable": False, "selectable": False},
+        {"name": 'System', "id": 'systemName', "deletable": False, "selectable": False},
+        {"name": 'Faction', "id": 'factionName', "deletable": False, "selectable": False},
         # {"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
         # {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
         # {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-        {"name": 'isHomeSystem', "id": 'isHomeSystem', "deletable": False, "hideable": True, "selectable": False},
-        {"name": 'population', "id": 'population', "deletable": False, "hideable": True, "selectable": False, "type": "numeric"},
-        {"name": 'influence', "id": 'influence', "deletable": False, "hideable": True, "selectable": False, "type": "numeric"},
-        {"name": 'difficulty', "id": 'difficulty', "deletable": False, "selectable": False, "type": "numeric"},
-        {"name": 'updated', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
-        {"name": 'control', "id": 'control', "deletable": False, "hideable": True, "selectable": False},
-        {"name": 'vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
-        {"name": 'distance', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
+        {"name": 'Home', "id": 'isHomeSystem', "deletable": False, "hideable": True, "selectable": False},
+        {"name": 'Population', "id": 'population', "deletable": False, "hideable": True, "selectable": False, "type": "numeric"},
+        {"name": 'Inf.', "id": 'influence', "deletable": False, "hideable": True, "selectable": False, "type": "numeric"},
+        {"name": 'Difficulty', "id": 'difficulty', "deletable": False, "selectable": False, "type": "numeric"},
+        {"name": 'Scouted', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
+        {"name": 'Control', "id": 'control', "deletable": False, "hideable": True, "selectable": False},
+        {"name": 'Vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
+        {"name": 'Dist.', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
     ]
 
 

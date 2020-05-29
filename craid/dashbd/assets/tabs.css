@@ -1,5 +1,5 @@
 .custom-tabs-container {
-    width: 85%;
+    width: 100%;
 }
 .custom-tabs {
     background-color: black;
@@ -14,13 +14,14 @@
     color: orange;
 }
 
-.tab {
+.mytab {
     background-color: black;
     color: orange;
 }
 
-.custom-tab {
+.crap-tab {
     background-color: black;
+    backgroundColor: black;
     color: orange;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
@@ -29,14 +30,20 @@
     border-right: 0px !important;
     border-bottom: 0px !important;
     padding: 12px !important;
-    font-family: "system-ui";
     display: flex !important;
     align-items: center;
     justify-content: center;
 }
-.custom-tab--selected {
-    color: orange;
+
+.mytab-selected {
+    color: yellow;
     background-color: black;
+}
+
+
+.craptab-selected{
+    backgroundColor: black;
+    background: black;
     box-shadow: 1px 1px 0px white;
     border-left: 1px solid lightgrey !important;
     border-right: 1px solid lightgrey !important;

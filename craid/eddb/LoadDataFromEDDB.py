@@ -4,6 +4,7 @@ import logging
 import os
 import tempfile
 import time
+import traceback
 from pathlib import Path
 
 import requests
@@ -29,11 +30,9 @@ class LoadDataFromEDDB:
 
         assert os.path.exists(targetDirectory), "data dir doesn't exist: [" + targetDirectory + "]"
         url = 'https://eddb.io/archive/v6/' + shortName
-        logging.info("downloading data file: %s", url)
-        r = requests.get(url, allow_redirects=True, headers=headers)
-        # tmpDir = tempfile.gettempdir()
         fName = os.path.join(targetDirectory, shortName + ".gz")
-        #open(fName, 'wb').write(r.content)
+        logging.info("2 - downloading [%s] to [%s] data file.", url, fName)
+        r = requests.get(url, allow_redirects=True, headers=headers)
         gzip.open(fName, 'wb').write(r.content)
         return fName
 
@@ -63,32 +62,33 @@ class LoadDataFromEDDB:
         #
         # If data dir exists, use that one
         #
-        cur = Path("../data")
+        #cur = Path("../data")
         #fName: str = os.path.join(cur.parent, "data", shortName)
-        fName: str = os.path.join(cur, shortName ) + ".gz"
-        logging.info("1- Checking for: " + fName)
-
+        #fName: str = os.path.join(cur, shortName ) + ".gz"
+        #logging.info("1- Checking for: " + fName)
+        #traceback.print_stack()
 
         #
         # If not, check the temp dir
         #
         tmpDir = tempfile.gettempdir()
-        if not os.path.exists(fName):
-            fName = os.path.join(tmpDir, shortName)  + ".gz"
-            logging.info("2- Checking for: " + fName)
+        #if not os.path.exists(fName):
+        fName = os.path.join(tmpDir, shortName)  + ".gz"
+        #logging.info("1- Checking for: " + fName)
 
         fileIsOutOfDate: bool = False
-        #fileIsOutOfDate = LoadDataFromEDDB.fileIsOutOfDate(fName, shortName)
-        # for some reason I saw this get called like 3 times
+
+       # TODO: Need some extra logic here.  Like, if the day of the file is less than today, don't even check headers
+       # fileIsOutOfDate = LoadDataFromEDDB.fileIsOutOfDate(fName, shortName)
 
 
         #
         # If neither exist, download the file to the temp dir
         #
         if fileIsOutOfDate or not os.path.exists(fName):
+            logging.info("1- downloading to: " + fName)
             fName = LoadDataFromEDDB.download_file(shortName, tmpDir)
             #fName +=".gz"  added in download_file
-            logging.info("3- Checking for: " + fName)
 
 
         if not os.path.exists(fName):
@@ -96,7 +96,7 @@ class LoadDataFromEDDB:
             assert False, "Couldn't get data file" + fName
             return None
         else:
-            logging.info("found data file: %s", fName)
+            logging.info("Found data file: %s", fName)
             #with open(fName, 'r') as handle:
             return fName
 
@@ -115,7 +115,7 @@ class LoadDataFromEDDB:
         meta_modifiedtime = time.mktime(datetime.datetime.strptime(
             ''.join(meta.getheaders("Last-Modified")), "%a, %d %b %Y %X GMT").timetuple())
 
-        file = fName + ".gz"
+        file = fName
         if os.path.getmtime(file) < meta_modifiedtime:  # change > to <
             print("CPU file is older than server file.")
             return True

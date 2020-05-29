@@ -1,7 +1,7 @@
 
 # $faction_name
  
-| Syntax      | Description |
+|       |  |
 | :---------- | :---------- |
 | Home System | $home_system       |
 | Allegiance  | $allegiance       |

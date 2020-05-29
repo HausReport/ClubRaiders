@@ -18,6 +18,24 @@ table, th, td, tr {
     background-color: black;
     color: orange;
 }
+
+a:link {
+  color: gold;
+  text-decoration: none;
+}
+
+a:visited {
+  color: coral;
+}
+
+a:hover {
+  background-color: yellow;
+}
+
+a:active {
+  color: lightgoldenrodyellow;
+}
+
 input {
     background-color: black;
     color: orange;

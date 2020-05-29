@@ -46,33 +46,28 @@ class Station(Aware):
         return xxx == "L"
 
     def hasMarket(self) -> bool:
-        xxx = self.jsonLine.get("has_market")
-        if xxx is None: return False
-        return xxx == "true"
+        xxx: bool = self.jsonLine.get("has_market")
+        return xxx
 
     def hasBlackMarket(self) -> bool:
-        yyy: str = self.jsonLine.get('has_black_market')
-        #print("xxx=" + yyy)
-        if yyy is None: return False
-        #print("xxx is tddrue={}", yyy)
-        return yyy == "true"
+        xxx: bool= self.jsonLine.get('has_black_market')
+        return xxx
+
 
     def hasShipyard(self) -> bool:
-        xxx = self.jsonLine.get('has_shipyard')
-        if xxx is None: return False
-        return xxx == "true"
+        xxx: bool = self.jsonLine.get('has_shipyard')
+        return xxx
 
     def hasDocking(self) -> bool:
-        xxx = self.jsonLine.get('has_docking')
-        if xxx is None: return False
-        return xxx == "true"
+        xxx: bool = self.jsonLine.get('has_docking')
+        return xxx
 
     def isOrbital(self) -> bool:
         return not self.isPlanetary()
 
     def isPlanetary(self) -> bool:
-        if self.jsonLine['is_planetary']: return True
-        return False
+        xxx: bool = self.jsonLine.get('is_planetary')
+        return xxx
         # return self.jsonLine['body'] is not None
 
     def okCandidate(self) -> bool:
@@ -89,7 +84,9 @@ class Station(Aware):
     # return self.jsonLine['type']
 
     def getControllingFactionId(self) -> int:
-        return self.jsonLine['controlling_minor_faction_id']
+        zzz: int = int(self.jsonLine['controlling_minor_faction_id'])
+        ##print("cf id: " + str(zzz))
+        return zzz
 
     def getControllingFactionName(self) -> str:
         return Aware.getFactionNameById(self.getControllingFactionId())
@@ -100,12 +97,17 @@ class Station(Aware):
     #     return self.jsonLine['allegiance']
     # def getc_allegiance(self):
     #     return self.jsonLine['allegiance']
-    def setClub(self, param):
+    def setClub(self, param: bool):
+        print( "setting club to :" + str(param))
         self.club = param
 
     def isClub(self) -> bool:
         return self.club
 
+## FIXME: miners_tool urls are pretty obfuscated, too
+# FIXME: this is pretty obfuscated, don't see how it works yet
+#    def getEddbSellToUrl(self):
+#        https: // eddb.io / trade / single / sellSystemId = & sellStationId =
     def getEddbUrl(self):
         return '[' + self.get_name() + "](https://eddb.io/station/" + str(self.get_id()) + ")"
 

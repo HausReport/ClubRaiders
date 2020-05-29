@@ -11,20 +11,29 @@
   text-align: left;
 }
 
+
 .myButton {
     display: flex;
     background:url(clear-32.png) no-repeat;
     cursor:pointer;
-    width: 64px;
-    height: 64px;
+    width: 32px;
+    height: 32px;
     border: none;
-    flex-grow: 0;
+    flex-grow: 1;
+}
+
+.myLabel {
+    display: flex;
+    background-color: black;
+    color: gold:
+    flex-grow: 1;
 }
 
 .myDropdown {
     display: flex;
     background-color: black;
     color: gold;
+    width: 300px;
     flex-grow: 4;
 }
 

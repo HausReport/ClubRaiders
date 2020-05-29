@@ -1,4 +1,5 @@
 import math
+import pprint
 import string
 import urllib.parse
 from datetime import datetime, timedelta
@@ -7,21 +8,16 @@ from typing import Dict, List
 from Aware import Aware
 from PassThroughDict import PassThroughDict
 from Station import Station
+from TextDecoration import boolToTorBlank, boolToYesOrNo
 from craid.eddb.Constants import MINOR_FACTION_ID, POWER_STATE, MINOR_FACTION_PRESENCES
 from craid.eddb.Faction import Faction
-from craid.eddb.NamedItem import NamedItem
-
-
-def boolToTorF(myArgument: bool) -> str:
-    if myArgument: return "T"
-    return "F"
 
 
 class InhabitedSystem(Aware):
 
     def __init__(self, jsonString: str):
-        super().__init__(jsonString) #[NamedItem.NAME], jsonString[NamedItem.ID])
-        #self.jsonLine: str = jsonString
+        super().__init__(jsonString)  # [NamedItem.NAME], jsonString[NamedItem.ID])
+        # self.jsonLine: str = jsonString
         self.hasAnarchy: bool = False
         self.powerState: str = jsonString[POWER_STATE]
         self.stations: List[Station] = []
@@ -32,6 +28,37 @@ class InhabitedSystem(Aware):
 
     def getMinorFactionPresences(self):
         return self.jsonLine[MINOR_FACTION_PRESENCES]
+
+    def getMinorFactionsAsMarkdown(self):
+        foo: Dict[int, Faction] = self.getMinorFactionsAsDict()
+
+        ret: str = "\n\n"
+        f: Faction
+        for f in foo.values():
+            pre: str = f.get_name2()  # adds * for pf
+            if pre.startswith("*"):
+                pre = pre + "*"  # italicize it
+
+            # TODO: signify club factions somehow..  interesting idea
+            # was to redefine strikethru (s in css) to display as orangered
+            # with no decoration - tilde and <s> don't work </s>
+            ret = ret + "\n*  " + pre
+
+        return ret + "\n\n"
+
+    def getMinorFactionsAsDict(self):
+        ret: Dict[int, Faction] = {}
+        mfp: Dict = self.getMinorFactionPresences()
+        for faction_ptr in mfp:
+            faction_id: int = int(faction_ptr['minor_faction_id'])
+            fac: Faction = super().getFactionById(faction_id)
+            if fac is not None:
+                ret[faction_id] = fac
+
+        #pprint.pprint( ret )
+        print(" mfd size = " + str(len(list(mfp))))
+        print(" ret size = " + str(len(list(ret.keys()))))
+        return ret
 
     def getFactions(self, all_factions_dict: Dict[int, Faction]):
         ret = []
@@ -114,33 +141,30 @@ class InhabitedSystem(Aware):
     def getUpdated(self) -> str:
         return self.jsonLine['updated_at']
 
+    def needsPermit(self) -> bool:
+        prm :bool = self.jsonLine.get('needs_permit')
+        return prm
+
     def getUpdatedDateTime(self) -> datetime:
         return datetime.utcfromtimestamp(self.getUpdated())
 
     def getUpdatedString(self) -> str:
         upd = self.getUpdatedDateTime()
-        now = datetime.utcnow() #timezone.utc)
-
-        print(upd)
-        print(now)
-
+        now = datetime.utcnow()  # timezone.utc)
         time_elapsed: timedelta = now - upd
-
-        print( now - upd)
         days = time_elapsed.days
 
-        print (days)
         if days <= 1:
             return "Scouted within the last day."
 
         if days <= 6:
             return "Scouted within the last " + str(days) + " days."
 
-        weeks = math.ceil(days /7)
-        if weeks <=6:
-            return "Scouted within the last " + str( weeks ) + " weeks."
+        weeks = math.ceil(days / 7)
+        if weeks <= 6:
+            return "*Scouted " + str(weeks) + " weeks ago.*"
 
-        return "Really, really needs to be scouted."
+        return "**Really, really needs to be scouted.**"
 
     def getInaraNearestShipyardUrl(self):
         return "https://inara.cz/galaxy-nearest/14/" + str(self.get_id())
@@ -162,7 +186,7 @@ class InhabitedSystem(Aware):
         myDict['government'] = str(self.getGovernment())
         ## FIXME: need faction name
         myDict['controlling_faction'] = self.getControllingFactionName()
-        #"{:,}".format(self.getControllingFactionId())
+        # "{:,}".format(self.getControllingFactionId())
         myDict['population'] = "{:,}".format(self.getPopulation())
         myDict['inara_link'] = "[link](" + self.getInaraSystemUrl() + ")"
         myDict['eddb_link'] = "[link](" + self.getEddbSystemUrl() + ")"
@@ -186,8 +210,16 @@ class InhabitedSystem(Aware):
 
         myDict['scouting_msg'] = self.getUpdatedString()
 
+        myDict['station_list'] = self.getStationsTableString()
+
+        myDict['faction_list'] = self.getMinorFactionsAsMarkdown()
+
+        myDict['needs_permit'] = boolToYesOrNo(self.needsPermit())
+
+
+
         template = string.Template(msg)
-        output = template.substitute(myDict)
+        output  = template.substitute(myDict)
         return output
 
     def addStation(self, sta: Station):
@@ -205,31 +237,33 @@ class InhabitedSystem(Aware):
             if not sta.isClub():
                 ret.append(sta)
 
-    def appendStationsTableToString(self, targ: str) -> str:
+    def getStationsTableString(self) -> str:
 
         ret: str = "\n\n"
-        ret += "|Name | ls | LPad | Club | Yard | BM | CF | \n"
-        ret += "| --- | --- | --- | --- | --- | --- | --- |\n"
+        ret += "|Name | ls | Orb | LPad | Club | Yard | BM | CF | \n"
+        ret += "| --- | --- |--- | --- | --- | --- | --- | --- |\n"
         for sta in self.stations:
             ret += "| "
-            ret += sta.getEddbUrl() #get_name()
+            ret += sta.getEddbUrl()  # get_name()
             ret += " | "
             ret += "{:,}".format(sta.getDistanceToStar())
             ret += " | "
-            ret += boolToTorF(sta.hasLargePads())
+            ret += boolToTorBlank(sta.isOrbital())
             ret += " | "
-            ret += boolToTorF(sta.isClub())
+            ret += boolToTorBlank(sta.hasLargePads())
             ret += " | "
-            ret += boolToTorF(sta.hasShipyard())
+            ret += boolToTorBlank(sta.isClub())
+            ret += " | "
+            ret += boolToTorBlank(sta.hasShipyard())
             ret += "  | "
-            ret += boolToTorF(sta.hasBlackMarket())
+            ret += boolToTorBlank(sta.hasBlackMarket())
             ret += "  | "
             ret += sta.getControllingFactionName()
             ret += "  | "
             ret += "\n"
 
-        theret = targ + ret + "\n\n\n"
-        print(theret)
+        theret = ret + "\n\n\n"
+        # print(theret)
         return theret
 
     # def appendStationsTableToStringOld(self, targ: str) -> str:

@@ -3,17 +3,17 @@ class NamedItem:
     ID = 'id'
 
     def __init__(self, name='', eddbId=0):
-        self._name = name
-        self._id = eddbId
+        self._name : str = name
+        self._id : int = eddbId
 
-    def get_id(self):
+    def get_id(self) -> int:
         return self._id
 
-    def set_id(self, x):
+    def set_id(self, x: int):
         self._id = x
 
-    def get_name(self):
+    def get_name(self) -> str:
         return self._name
 
-    def set_name(self, x):
+    def set_name(self, x: str):
         self._name = x

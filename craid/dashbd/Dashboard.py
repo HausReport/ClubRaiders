@@ -1,11 +1,12 @@
 import logging
 import math
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
 
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
+import flask
 import numpy as np
 import pandas as pd
 from dash.dependencies import Input, Output
@@ -22,6 +23,15 @@ from Oracle import Oracle
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
+
+# FIXME: it'd be nice to let users link directly to certain factions, systems, etc...
+# getting the url isn't trivial, see
+# https://dash.plotly.com/dash-core-components/location
+# https://community.plotly.com/t/get-full-url-string-instead-of-only-pathname/23376
+#loc = dcc.Location(id="location-url")
+#print(loc.href)
+#if flask.has_request_context():
+   #print(" url = " + str(flask.request.host_url))
 
 #
 # Load data
@@ -86,7 +96,7 @@ datatable: dash_table.DataTable = dash_table.DataTable(
     selected_rows=[],
     page_action="native",
     page_current=0,
-    page_size=20,
+    page_size=30,
     style_header={
         'backgroundColor': 'black',
         'color'          : 'gold'},
@@ -124,15 +134,16 @@ hdr_layout = html.Div([
     #         html.Div('Plotly Dash', className="app-header--title")
     #     ]
     # ),
-    html.Label("Choose a System:"),
+    html.Label("Choose a System:", className="myLabel"),
     dcc.Dropdown(
         id='demo-dropdown',
         options=opts,
         value='Alioth',
         placeholder='Select star system',
         className="myDropdown",
+        #autoFocus=True,
     ),
-    html.Label("or a Squadron:"),
+    html.Label("or a Squadron:", className="myLabel"),
     dcc.Dropdown(
         id='demo-dropdown2',
         options=fopts,
@@ -140,9 +151,6 @@ hdr_layout = html.Div([
         placeholder='Select player faction',
         className="myDropdown",
     ),
-
-    html.Div(id='system-notifier')
-
 ], className="strict-horizontal")
 
 # TODO: get a hook to tab1 and print its properties to find color settings
@@ -160,43 +168,28 @@ app.layout = html.Div([
              children=[
                  dcc.Tab(label='Overview',
                          value='tab-1',
-                         className='custom-tab',
-                         selected_className='custom-tab--selected',
-                         style={'backgroundColor': '#3C3C3C',
-                                'color'          : 'gold',
-                                'primary'        : 'red'}
+                         className='mytab',
+                         selected_className='mytab-selected',
                          ),
                  dcc.Tab(label='Combat Zones',
                          value='tab-2',
-                         className='custom-tab',
-                         selected_className='custom-tab--selected',
-                         style={'backgroundColor': '#3C3C3C',
-                                'color'          : 'gold',
-                                'primary'        : 'red'}
+                         className='mytab',
+                         selected_className='mytab-selected',
                          ),
                  dcc.Tab(label='Bounty Hunting',
                          value='tab-3',
-                         className='custom-tab',
-                         selected_className='custom-tab--selected',
-                         style={'backgroundColor': '#3C3C3C',
-                                'color'          : 'gold',
-                                'primary'        : 'red'}
+                         className='mytab',
+                         selected_className='mytab-selected',
                          ),
                  dcc.Tab(label='Trade/Exploration/Missions',
                          value='tab-4',
-                         className='custom-tab',
-                         selected_className='custom-tab--selected',
-                         style={'backgroundColor': '#3C3C3C',
-                                'color'          : 'gold',
-                                'primary'        : 'red'}
+                         className='mytab',
+                         selected_className='mytab-selected',
                          ),
                  dcc.Tab(label='Scouting',
                          value='tab-5',
-                         className='custom-tab',
-                         selected_className='custom-tab--selected',
-                         style={'backgroundColor': '#3C3C3C',
-                                'color'          : 'gold',
-                                'primary'        : 'red'}
+                         className='mytab',
+                         selected_className='mytab-selected',
                          ),
              ]),
     html.Div(id='tabs-example-content', style={'backgroundColor': 'green'}),
@@ -209,12 +202,12 @@ app.layout = html.Div([
                         html.Div(className="strict-horizontal", children=([
                             html.Label("Current filter:", style={'flex-grow':'0','vertical-align':'middle'}),
                             html.Label(id='filter-notifier', className="filter-notifier"),
-                            html.Button("Clear filter", className="myButton"),
+                            html.Button("Clear filter", id="clear-filter", className="myButton"),
                         ])),
                         html.Div(className="strict-horizontal", style={'vertical-align':'middle'}, children=([
                             html.Label("Current sort:", style={'flex-grow':'0','vertical-align':'middle'}),
                             html.Label(id='sort-notifier',   className="sort-notifier"),
-                            html.Button("Clear sort", className="myButton"),
+                            html.Button("Clear sort", id="clear-sort", className="myButton"),
                             ])),
                     ]),
                  ]),
@@ -290,11 +283,11 @@ def update_output(val1):
     return df.to_dict('records'), _cols
 
 
-@app.callback(
-    dash.dependencies.Output('system-notifier', 'children'),
-    [dash.dependencies.Input('demo-dropdown', 'value')])
-def update_output2(value):
-    return 'Selected system "{}" '.format(value)
+#@app.callback(
+    #dash.dependencies.Output('system-notifier', 'children'),
+    #[dash.dependencies.Input('demo-dropdown', 'value')])
+#def update_output2(value):
+    #return 'Selected system "{}" '.format(value)
 
 
 @app.callback(
@@ -325,8 +318,10 @@ def update_outputr3(value):
       Output('datatable-interactivity-container', "children")],
     [Input('datatable-interactivity', "derived_virtual_data"),
      Input('datatable-interactivity', "derived_virtual_selected_rows"),
-     Input('datatable-interactivity', 'active_cell')])
-def update_graphs(rows, derived_virtual_selected_rows, active_cell):
+     Input('datatable-interactivity', 'active_cell'),
+     Input('datatable-interactivity', "page_current"),
+     Input('datatable-interactivity', "page_size")])
+def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, page_size):
     # When the table is first rendered, `derived_virtual_data` and
     # `derived_virtual_selected_rows` will be `None`. This is due to an
     # idiosyncrasy in Dash (unsupplied properties are always None and Dash
@@ -344,15 +339,27 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
     dataColors = ['gold' if i in derived_virtual_selected_rows else 'orange'
                   for i in range(len(dff))]
 
-    factionInfo: str = "Nothing available"
-    systemInfo: str = "Nothing available"
+    factionInfo: str = "Nothing selected"
+    systemInfo: str = "Nothing selected"
 
 
     if active_cell:
-        print("You selected row " + str(active_cell))
-        # row = rows[active_cell['row']]
-        sysId = rows[active_cell['row']]['sysId']
-        facId = rows[active_cell['row']]['facId']
+        row = active_cell['row']
+        # shitty documentation:
+        # print("You selected row " + str(active_cell))
+        # print("active cell row: " + str(active_cell['row']))
+        # print("rows: "  + str(rows[row]))
+        # print("dvsr len: "  + str( len(derived_virtual_selected_rows)))
+        # print("page # {%d} with {%d} rows per page ",page_cur,page_size)
+        # print("logical row:" + str( logical_row))
+        # #print("I think the actual row is " + str(derived_virtual_selected_rows[0]))
+        # # row = rows[active_cell['row']]
+        # #sysId = rows[active_cell['row']]['sysId']
+        # #facId = rows[active_cell['row']]['facId']
+
+        logical_row =  row + page_cur*page_size
+        sysId = rows[logical_row]['sysId']
+        facId = rows[logical_row]['facId']
         print(str(sysId) + "/" + str(facId))
         theFac: FactionInstance = sysIdFacIdToFactionInstance.get( (sysId,facId))
         if theFac is not None:
@@ -370,7 +377,9 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
             ts = crap.getString("system-template")
             theSys  = theFac.getSystem()
             systemInfo = theSys.template(ts)
-            systemInfo = theSys.appendStationsTableToString(systemInfo)
+            #systemInfo = theSys.appendStationsTableToString(systemInfo)
+            #systemInfo = systemInfo + "\n\n"
+            #systemInfo = systemInfo + theSys.getMinorFactionsAsMarkdown()
 
     factionWidget = dcc.Markdown(factionInfo)
     systemWidget = dcc.Markdown(systemInfo)
@@ -413,16 +422,42 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell):
     return factionWidget, systemWidget, [theGraphs[0], theGraphs[1], theGraphs[2] ]
 
 
+
+#
+# Clear sort button
+#
+@app.callback(
+    Output('datatable-interactivity', 'sort_by'),
+    [Input('clear-sort', 'n_clicks')] )
+def clear_sort(n_clicks):
+    #return [ {} ]
+    print( str(n_clicks))
+    return [{'column_id': '', 'direction': 'asc'}]
+    #return [{'column_id': 'difficulty', 'direction': 'asc'}]
+
+#
+# Clear sort button
+#
+@app.callback(
+    Output('datatable-interactivity', 'filter_query'),
+    [Input('clear-filter', 'n_clicks')] )
+def clear_sort(n_clicks):
+    return ""
+
 @app.callback(
     Output('sort-notifier', 'children'),
     [Input('datatable-interactivity', 'sort_by')])
-def update_table(sort_by):
+def update_table(sort_by: List):
     if sort_by is None:
         return "None"
+
+    foo = sort_by[0]
+    if foo['column_id'] =='':
+        sort_by.remove(foo)
     if len(sort_by) == 0:
         return "None"
-    else:
-        return str(sort_by)
+
+    return str(sort_by)
 
 
 @app.callback(

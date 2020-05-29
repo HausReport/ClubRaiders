@@ -7,3 +7,4 @@ very common in systems with refinery and extraction economies.  Almost every sys
 extraction sites: viewing the system on [EDDB](https://eddb.io) can help you plan.
 
 More info at [Best Current Thinking on BGS](https://forums.frontier.co.uk/threads/transactions-bgs-guide-best-current-thinking.424397/).
+

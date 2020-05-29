@@ -5,20 +5,24 @@
 
 *$scouting_msg*
 
-| Syntax      | Description |
+|       |  |
 | :---------- | :---------- |
 | Allegiance  | $allegiance       |
 | Government  | $government       |
 | Power       | $power - $power_state
 | Controlling Faction | $controlling_faction |
+| Needs permit | $needs_permit |
 | Population  | $population       |
-| Inara System Info | $inara_link        |
 | EDDB System Info | $eddb_link |
 | Bounty Hunting | $bounty_hunting        |
 
 
 # Stations
 
+$station_list
 
+# Minor Factions
+
+$faction_list
 
 
