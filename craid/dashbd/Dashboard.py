@@ -6,14 +6,14 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
-import flask
 import numpy as np
 import pandas as pd
 from dash.dependencies import Input, Output
 
 import craid.dashbd
 import craid.dashbd.AnnoyingCrap as crap
-import craid.eddb.DataProducer as dp
+import loader.CreateDataFrame
+import loader.DataProducer as dp
 #
 # Set up logging
 #
@@ -28,24 +28,24 @@ logging.getLogger().level = logging.DEBUG
 # getting the url isn't trivial, see
 # https://dash.plotly.com/dash-core-components/location
 # https://community.plotly.com/t/get-full-url-string-instead-of-only-pathname/23376
-#loc = dcc.Location(id="location-url")
-#print(loc.href)
-#if flask.has_request_context():
-   #print(" url = " + str(flask.request.host_url))
+# loc = dcc.Location(id="location-url")
+# print(loc.href)
+# if flask.has_request_context():
+# print(" url = " + str(flask.request.host_url))
 
 #
 # Load data
 # https://community.plotly.com/t/why-global-code-runs-twice/12514
 #
-#currentData:  Dict[str,object]
-#if currentData is None:
+# currentData:  Dict[str,object]
+# if currentData is None:
 currentData = dp.getDataArrays()
 clubSystemInstances = currentData['allClubSystemInstances']
 sysIdFacIdToFactionInstance = currentData['sysIdFacIdToFactionInstance']
 
 systemNameToXYZ: Dict[str, Tuple[float, float, float]] = currentData['systemNameToXYZ']
 playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
-df: pd.DataFrame = dp.getDataFrame(clubSystemInstances)
+df: pd.DataFrame = loader.CreateDataFrame.getDataFrame(clubSystemInstances)
 
 #
 # Massage data
@@ -141,7 +141,7 @@ hdr_layout = html.Div([
         value='Alioth',
         placeholder='Select star system',
         className="myDropdown",
-        #autoFocus=True,
+        # autoFocus=True,
     ),
     html.Label("or a Squadron:", className="myLabel"),
     dcc.Dropdown(
@@ -164,7 +164,7 @@ app.layout = html.Div([
     dcc.Tabs(id='tabs-example', value='tab-1',
              parent_className='custom-tabs',
              className='custom-tabs-container',
-             style={'primary': 'red', 'primaryColor':'red', 'selected':'red'},
+             style={'primary': 'red', 'primaryColor': 'red', 'selected': 'red'},
              children=[
                  dcc.Tab(label='Overview',
                          value='tab-1',
@@ -198,31 +198,32 @@ app.layout = html.Div([
     html.Div(className="wrapper",
              children=[
                  html.Header(className='header', children=[
-                    html.Div(className="strict-horizontal", children=[
-                        html.Div(className="strict-horizontal", children=([
-                            html.Label("Current filter:", style={'flex-grow':'0','vertical-align':'middle'}),
-                            html.Label(id='filter-notifier', className="filter-notifier"),
-                            html.Button("Clear filter", id="clear-filter", className="myButton"),
-                        ])),
-                        html.Div(className="strict-horizontal", style={'vertical-align':'middle'}, children=([
-                            html.Label("Current sort:", style={'flex-grow':'0','vertical-align':'middle'}),
-                            html.Label(id='sort-notifier',   className="sort-notifier"),
-                            html.Button("Clear sort", id="clear-sort", className="myButton"),
-                            ])),
-                    ]),
+                     html.Div(className="strict-horizontal", children=[
+                         html.Div(className="strict-horizontal", children=([
+                             html.Label("Current filter:", style={'flex-grow': '0', 'vertical-align': 'middle'}),
+                             html.Label(id='filter-notifier', className="filter-notifier"),
+                             html.Button("Clear filter", id="clear-filter", className="myButton"),
+                         ])),
+                         html.Div(className="strict-horizontal", style={'vertical-align': 'middle'}, children=([
+                             html.Label("Current sort:", style={'flex-grow': '0', 'vertical-align': 'middle'}),
+                             html.Label(id='sort-notifier', className="sort-notifier"),
+                             html.Button("Clear sort", id="clear-sort", className="myButton"),
+                         ])),
+                     ]),
                  ]),
                  html.Article(className='main', children=[
-                    datatable,
+                     datatable,
                  ]),
                  html.Aside(className="aside aside-2", children=[
                      html.Article("Hi There!", id='faction-drilldown', style={'width': '100%'}),
                      html.Article("Hi There!", id='system-drilldown', style={'width': '100%'}),
                  ]),
                  html.Footer(className='footer', children=[
-                    html.Div(id='datatable-interactivity-container')
+                     html.Div(id='datatable-interactivity-container')
                  ])
              ])
-    ])
+])
+
 
 # <div class="wrapper">
 #   <header class="header">Header</header>
@@ -232,7 +233,7 @@ app.layout = html.Div([
 #   <aside class="aside aside-2">Aside 2</aside>
 #   <footer class="footer">Footer</footer>
 # </div>
-    ## ###### FINISH TABLE MADNESS
+## ###### FINISH TABLE MADNESS
 
 # =============================================================
 # Tab handlers
@@ -283,11 +284,11 @@ def update_output(val1):
     return df.to_dict('records'), _cols
 
 
-#@app.callback(
-    #dash.dependencies.Output('system-notifier', 'children'),
-    #[dash.dependencies.Input('demo-dropdown', 'value')])
-#def update_output2(value):
-    #return 'Selected system "{}" '.format(value)
+# @app.callback(
+# dash.dependencies.Output('system-notifier', 'children'),
+# [dash.dependencies.Input('demo-dropdown', 'value')])
+# def update_output2(value):
+# return 'Selected system "{}" '.format(value)
 
 
 @app.callback(
@@ -313,9 +314,9 @@ def update_outputr3(value):
 
 
 @app.callback(
-    [ Output('faction-drilldown', 'children'),
-      Output('system-drilldown', 'children'),
-      Output('datatable-interactivity-container', "children")],
+    [Output('faction-drilldown', 'children'),
+     Output('system-drilldown', 'children'),
+     Output('datatable-interactivity-container', "children")],
     [Input('datatable-interactivity', "derived_virtual_data"),
      Input('datatable-interactivity', "derived_virtual_selected_rows"),
      Input('datatable-interactivity', 'active_cell'),
@@ -342,7 +343,6 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
     factionInfo: str = "Nothing selected"
     systemInfo: str = "Nothing selected"
 
-
     if active_cell:
         row = active_cell['row']
         # shitty documentation:
@@ -357,29 +357,28 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
         # #sysId = rows[active_cell['row']]['sysId']
         # #facId = rows[active_cell['row']]['facId']
 
-        logical_row =  row + page_cur*page_size
+        logical_row = row + page_cur * page_size
         sysId = rows[logical_row]['sysId']
         facId = rows[logical_row]['facId']
         print(str(sysId) + "/" + str(facId))
-        theFac: FactionInstance = sysIdFacIdToFactionInstance.get( (sysId,facId))
+        theFac: FactionInstance = sysIdFacIdToFactionInstance.get((sysId, facId))
         if theFac is not None:
             print("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
             factionInfo = theFac.get_name()
             systemInfo = theFac.getSystemName()
 
-
-            gg : pd.DataFrame = df[df['factionName'].str.match(factionInfo)]
+            gg: pd.DataFrame = df[df['factionName'].str.match(factionInfo)]
             seer: Oracle = Oracle(gg)
             factionInfo = crap.getString("faction-template")
             output = seer.template(factionInfo)
             factionInfo = theFac.template(output)
 
             ts = crap.getString("system-template")
-            theSys  = theFac.getSystem()
+            theSys = theFac.getSystem()
             systemInfo = theSys.template(ts)
-            #systemInfo = theSys.appendStationsTableToString(systemInfo)
-            #systemInfo = systemInfo + "\n\n"
-            #systemInfo = systemInfo + theSys.getMinorFactionsAsMarkdown()
+            # systemInfo = theSys.appendStationsTableToString(systemInfo)
+            # systemInfo = systemInfo + "\n\n"
+            # systemInfo = systemInfo + theSys.getMinorFactionsAsMarkdown()
 
     factionWidget = dcc.Markdown(factionInfo)
     systemWidget = dcc.Markdown(systemInfo)
@@ -419,8 +418,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
         # need to do this check.
         for column in ["difficulty", "influence", "population"] if column in dff]
 
-    return factionWidget, systemWidget, [theGraphs[0], theGraphs[1], theGraphs[2] ]
-
+    return factionWidget, systemWidget, [theGraphs[0], theGraphs[1], theGraphs[2]]
 
 
 #
@@ -428,21 +426,23 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
 #
 @app.callback(
     Output('datatable-interactivity', 'sort_by'),
-    [Input('clear-sort', 'n_clicks')] )
+    [Input('clear-sort', 'n_clicks')])
 def clear_sort(n_clicks):
-    #return [ {} ]
-    print( str(n_clicks))
+    # return [ {} ]
+    print(str(n_clicks))
     return [{'column_id': '', 'direction': 'asc'}]
-    #return [{'column_id': 'difficulty', 'direction': 'asc'}]
+    # return [{'column_id': 'difficulty', 'direction': 'asc'}]
+
 
 #
 # Clear sort button
 #
 @app.callback(
     Output('datatable-interactivity', 'filter_query'),
-    [Input('clear-filter', 'n_clicks')] )
+    [Input('clear-filter', 'n_clicks')])
 def clear_sort(n_clicks):
     return ""
+
 
 @app.callback(
     Output('sort-notifier', 'children'),
@@ -452,7 +452,7 @@ def update_table(sort_by: List):
         return "None"
 
     foo = sort_by[0]
-    if foo['column_id'] =='':
+    if foo['column_id'] == '':
         sort_by.remove(foo)
     if len(sort_by) == 0:
         return "None"

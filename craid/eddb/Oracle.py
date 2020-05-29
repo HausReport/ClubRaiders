@@ -9,53 +9,54 @@ class Oracle:
 
     def __init__(self, df: pd.DataFrame):
         super().__init__()
-        self.myDict: PassThroughDict[str,str] = PassThroughDict()
+        self.myDict: PassThroughDict[str, str] = PassThroughDict()
         self.myDict['test'] = "test string"
 
         if df is None:
             return
 
-        #self.frame: pd.DataFrame = df
-        frame : pd.DataFrame = df
+        # self.frame: pd.DataFrame = df
+        frame: pd.DataFrame = df
         #
         #
         #
-        self.myDict['systems_active']          = "{:,}".format(  int(frame['systemName'].count()))
-        self.myDict['systems_active_pop']      = "{:,}".format(frame['population'].sum(axis=0))
-        self.myDict['systems_control']         = "{:,}".format(frame['control'].sum())
-        self.myDict['systems_control_perc']    = "{:,}".format(1.0 * frame['control'].sum() / int(frame['systemName'].count()))
+        self.myDict['systems_active'] = "{:,}".format(int(frame['systemName'].count()))
+        self.myDict['systems_active_pop'] = "{:,}".format(frame['population'].sum(axis=0))
+        self.myDict['systems_control'] = "{:,}".format(frame['control'].sum())
+        self.myDict['systems_control_perc'] = "{:,}".format(
+            1.0 * frame['control'].sum() / int(frame['systemName'].count()))
 
         #
         # Westernmost presence
         #
         idx = frame['x'].idxmin()  # westerly
-        self.myDict['west_fac_name']   = frame.at[idx, 'factionName']
-        self.myDict['west_sys_name']   = frame.at[idx, 'systemName']
-        self.myDict['west_sys_x']      = "{:,}".format(abs(int(frame.at[idx, 'x'])))
+        self.myDict['west_fac_name'] = frame.at[idx, 'factionName']
+        self.myDict['west_sys_name'] = frame.at[idx, 'systemName']
+        self.myDict['west_sys_x'] = "{:,}".format(abs(int(frame.at[idx, 'x'])))
 
         #
         # Easternmost presence
         #
         idx = frame['x'].idxmax()  # westerly
-        self.myDict['east_fac_name']   = frame.at[idx, 'factionName']
-        self.myDict['east_sys_name']   = frame.at[idx, 'systemName']
-        self.myDict['east_sys_x']      = "{:,}".format(abs(int(frame.at[idx, 'x'])))
+        self.myDict['east_fac_name'] = frame.at[idx, 'factionName']
+        self.myDict['east_sys_name'] = frame.at[idx, 'systemName']
+        self.myDict['east_sys_x'] = "{:,}".format(abs(int(frame.at[idx, 'x'])))
 
         #
         # Northernmost presence (z because E:D)
         #
         idx = frame['z'].idxmax()  # s'ly
-        self.myDict['north_fac_name']  = frame.at[idx, 'factionName']
-        self.myDict['north_sys_name']  = frame.at[idx, 'systemName']
-        self.myDict['north_sys_z']     = "{:,}".format(abs(int(frame.at[idx, 'z'])))
+        self.myDict['north_fac_name'] = frame.at[idx, 'factionName']
+        self.myDict['north_sys_name'] = frame.at[idx, 'systemName']
+        self.myDict['north_sys_z'] = "{:,}".format(abs(int(frame.at[idx, 'z'])))
 
         #
         # Southernmost presence
         #
         idx = frame['z'].idxmin()  # n'ly
-        self.myDict['south_fac_name']  = frame.at[idx, 'factionName']
-        self.myDict['south_sys_name']  = frame.at[idx, 'systemName']
-        self.myDict['south_sys_z']     = "{:,}".format(abs(int(frame.at[idx, 'z'])))
+        self.myDict['south_fac_name'] = frame.at[idx, 'factionName']
+        self.myDict['south_sys_name'] = frame.at[idx, 'systemName']
+        self.myDict['south_sys_z'] = "{:,}".format(abs(int(frame.at[idx, 'z'])))
 
         #
         # Zenithnmost presence (y because E:D)
@@ -63,15 +64,15 @@ class Oracle:
         idx = frame['y'].idxmax()  # u'ly
         self.myDict['zenith_fac_name'] = frame.at[idx, 'factionName']
         self.myDict['zenith_sys_name'] = frame.at[idx, 'systemName']
-        self.myDict['zenith_sys_y']    = "{:,}".format(abs(int(frame.at[idx, 'y'])))
+        self.myDict['zenith_sys_y'] = "{:,}".format(abs(int(frame.at[idx, 'y'])))
 
         #
         # Nadirmost presence
         #
         idx = frame['z'].idxmin()  # d'ly
-        self.myDict['nadir_fac_name']  = frame.at[idx, 'factionName']
-        self.myDict['nadir_sys_name']  = frame.at[idx, 'systemName']
-        self.myDict['nadir_sys_y']     = "{:,}".format(abs(int(frame.at[idx, 'y'])))
+        self.myDict['nadir_fac_name'] = frame.at[idx, 'factionName']
+        self.myDict['nadir_sys_name'] = frame.at[idx, 'systemName']
+        self.myDict['nadir_sys_y'] = "{:,}".format(abs(int(frame.at[idx, 'y'])))
 
         #
         # Population stats
@@ -137,7 +138,7 @@ class Oracle:
 
 
 if __name__ == '__main__':
-    #myDict = dict({'girl': 'buffy', 'town': 'sunnydale'})
+    # myDict = dict({'girl': 'buffy', 'town': 'sunnydale'})
     msg = "[$test]: $girl lives in $town"
     seer: Oracle = Oracle(None)
     output = seer.template(msg)

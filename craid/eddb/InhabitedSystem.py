@@ -1,5 +1,4 @@
 import math
-import pprint
 import string
 import urllib.parse
 from datetime import datetime, timedelta
@@ -55,7 +54,7 @@ class InhabitedSystem(Aware):
             if fac is not None:
                 ret[faction_id] = fac
 
-        #pprint.pprint( ret )
+        # pprint.pprint( ret )
         print(" mfd size = " + str(len(list(mfp))))
         print(" ret size = " + str(len(list(ret.keys()))))
         return ret
@@ -142,7 +141,7 @@ class InhabitedSystem(Aware):
         return self.jsonLine['updated_at']
 
     def needsPermit(self) -> bool:
-        prm :bool = self.jsonLine.get('needs_permit')
+        prm: bool = self.jsonLine.get('needs_permit')
         return prm
 
     def getUpdatedDateTime(self) -> datetime:
@@ -216,10 +215,8 @@ class InhabitedSystem(Aware):
 
         myDict['needs_permit'] = boolToYesOrNo(self.needsPermit())
 
-
-
         template = string.Template(msg)
-        output  = template.substitute(myDict)
+        output = template.substitute(myDict)
         return output
 
     def addStation(self, sta: Station):
@@ -240,7 +237,7 @@ class InhabitedSystem(Aware):
     def getStationsTableString(self) -> str:
 
         ret: str = "\n\n"
-        ret += "|Name | ls | Orb | LPad | Club | Yard | BM | CF | \n"
+        ret += "|Name | ls | Orb | LPad | Club | Yard | BM | Controlling | \n"
         ret += "| --- | --- |--- | --- | --- | --- | --- | --- |\n"
         for sta in self.stations:
             ret += "| "
@@ -265,37 +262,3 @@ class InhabitedSystem(Aware):
         theret = ret + "\n\n\n"
         # print(theret)
         return theret
-
-    # def appendStationsTableToStringOld(self, targ: str) -> str:
-    #     ret: str = ""
-    #
-    #     ret = "\n\n\n<table>\n"
-    #     for sta in self.stations:
-    #         ret += "\t<tr>\n"
-    #         ret += "\t\t<td>"
-    #         ret += sta.get_name()
-    #         ret += "</td>\n"
-    #         ret += "\t\t<td>"
-    #         ret += str(sta.get_id())
-    #         ret += "</td>\n"
-    #         ret += "\t\t<td>"
-    #         ret += str(sta.getDistanceToStar())
-    #         ret += "</td>\n"
-    #         ret += "\t\t<td>"
-    #         ret += str(sta.hasLargePads())
-    #         ret += "</td>\n"
-    #         ret += "\t\t<td>"
-    #         ret += str(sta.isClub())
-    #         ret += "</td>\n"
-    #         ret += "\t\t<td>"
-    #         ret += str(sta.hasShipyard())
-    #         ret += "</td>\n"
-    #         ret += "\t\t<td>"
-    #         ret += str(sta.hasBlackMarket())
-    #         ret += "</td>\n"
-    #         ret += "\t</tr>\n"
-    #
-    #     ret += "</table>\n"
-    #     theret = targ + ret  + "\n\n\n"
-    #     print(theret)
-    #     return theret

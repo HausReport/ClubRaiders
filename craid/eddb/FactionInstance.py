@@ -34,7 +34,7 @@ class FactionInstance(Faction):
 
     def getSystemNameById(self, _id):
         return super().getSystemNameiById()
-    
+
     def getUpdated(self):
         return self.mySystem.getUpdated()
 
@@ -54,22 +54,22 @@ class FactionInstance(Faction):
         d10 = self.getPopulation()
         ret = (d10 / 15000.0) * (e10 ** 2.0) / 1000.0
 
-        if(ret<0.0): ret = 0.0
-        if(ret>max): ret = max
-        return round(ret,1)  #TODO: trimmed to 3 decimals since no format support
+        if (ret < 0.0): ret = 0.0
+        if (ret > max): ret = max
+        return round(ret, 1)  # TODO: trimmed to 3 decimals since no format support
 
     def getDifficultyString(self) -> str:
         val = self.getDifficulty()
         # "Forcing a retreat from this system would "
-        if val<.5   : return "be extremely easy for one commander"
-        if val<1   : return "be very easy for one commander"
-        if val<10   : return "be easy for one commander"
-        if val<25   : return "be easy"
-        if val<50   : return "take some work for one commander"
-        if val<100   : return "be possible for one commander"
-        if val<1000   : return "require group effort"
-        if val<10000 : return "require a gargantuan effort"
-        if val<100000 : return "be well-nigh impossible"
+        if val < .5: return "be extremely easy for one commander"
+        if val < 1: return "be very easy for one commander"
+        if val < 10: return "be easy for one commander"
+        if val < 25: return "be easy"
+        if val < 50: return "take some work for one commander"
+        if val < 100: return "be possible for one commander"
+        if val < 1000: return "require group effort"
+        if val < 10000: return "require a gargantuan effort"
+        if val < 100000: return "be well-nigh impossible"
         return "seem an impossibility"
 
     def canRetreat(self) -> bool:
@@ -100,7 +100,7 @@ class FactionInstance(Faction):
     #
     # At the moment, it's determined on data load.
     #
-    #def isVulnerable(self):
+    # def isVulnerable(self):
     #    return self.vulnerable is not 0
 
     def getVulnerableString(self):
@@ -108,7 +108,6 @@ class FactionInstance(Faction):
         retval: str = self.vulnerable.getShortString()
         assert retval is not None, 'null vulnerable 2'
         return retval
-
 
         # if (self.vulnerable == 0): return ""
         # war = "Civil War"
@@ -185,7 +184,7 @@ class FactionInstance(Faction):
 
     ## FIXME: can't convert homesystem id to string because i don't have the dict
     def template(self, msg: str) -> str:
-        myDict : PassThroughDict[str,str] = PassThroughDict()
+        myDict: PassThroughDict[str, str] = PassThroughDict()
 
         myDict['home_system'] = self.get_homesystem_name()
         myDict['allegiance'] = str(self.get_allegiance())

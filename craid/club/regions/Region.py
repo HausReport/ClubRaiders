@@ -1,3 +1,8 @@
+#   Copyright (c) 2020 Club Raiders Project
+#   https://github.com/HausReport/ClubRaiders
+#
+#   SPDX-License-Identifier: BSD-3-Clause
+
 class Region:
 
     def __init__(self, name, labelx, labely, x0, y0, x1, y1, shape, color):

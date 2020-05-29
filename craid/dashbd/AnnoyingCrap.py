@@ -13,9 +13,11 @@ def getMarkdown(which: str) -> dcc.Markdown:
     text = resource_bytes('craid.dashbd.text', which + ".md").decode('utf-8')
     return dcc.Markdown(text)
 
+
 def getString(which: str) -> dcc.Markdown:
     text = resource_bytes('craid.dashbd.text', which + ".md").decode('utf-8')
     return text
+
 
 def getFirstDropdown(_systemNameToXYZ):
     opts = []
@@ -44,8 +46,10 @@ def getTheColumns():
         # {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
         # {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
         {"name": 'Home', "id": 'isHomeSystem', "deletable": False, "hideable": True, "selectable": False},
-        {"name": 'Population', "id": 'population', "deletable": False, "hideable": True, "selectable": False, "type": "numeric"},
-        {"name": 'Inf.', "id": 'influence', "deletable": False, "hideable": True, "selectable": False, "type": "numeric"},
+        {"name": 'Population', "id": 'population', "deletable": False, "hideable": True, "selectable": False,
+         "type": "numeric"},
+        {"name": 'Inf.', "id": 'influence', "deletable": False, "hideable": True, "selectable": False,
+         "type": "numeric"},
         {"name": 'Difficulty', "id": 'difficulty', "deletable": False, "selectable": False, "type": "numeric"},
         {"name": 'Scouted', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
         {"name": 'Control', "id": 'control', "deletable": False, "hideable": True, "selectable": False},

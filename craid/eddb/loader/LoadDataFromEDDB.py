@@ -1,11 +1,14 @@
+#   Copyright (c) 2020 Club Raiders Project
+#   https://github.com/HausReport/ClubRaiders
+#
+#   SPDX-License-Identifier: BSD-3-Clause
+
 import datetime
 import gzip
 import logging
 import os
 import tempfile
 import time
-import traceback
-from pathlib import Path
 
 import requests
 # logic for caching at:
@@ -62,25 +65,24 @@ class LoadDataFromEDDB:
         #
         # If data dir exists, use that one
         #
-        #cur = Path("../data")
-        #fName: str = os.path.join(cur.parent, "data", shortName)
-        #fName: str = os.path.join(cur, shortName ) + ".gz"
-        #logging.info("1- Checking for: " + fName)
-        #traceback.print_stack()
+        # cur = Path("../data")
+        # fName: str = os.path.join(cur.parent, "data", shortName)
+        # fName: str = os.path.join(cur, shortName ) + ".gz"
+        # logging.info("1- Checking for: " + fName)
+        # traceback.print_stack()
 
         #
         # If not, check the temp dir
         #
         tmpDir = tempfile.gettempdir()
-        #if not os.path.exists(fName):
-        fName = os.path.join(tmpDir, shortName)  + ".gz"
-        #logging.info("1- Checking for: " + fName)
+        # if not os.path.exists(fName):
+        fName = os.path.join(tmpDir, shortName) + ".gz"
+        # logging.info("1- Checking for: " + fName)
 
         fileIsOutOfDate: bool = False
 
-       # TODO: Need some extra logic here.  Like, if the day of the file is less than today, don't even check headers
-       # fileIsOutOfDate = LoadDataFromEDDB.fileIsOutOfDate(fName, shortName)
-
+        # TODO: Need some extra logic here.  Like, if the day of the file is less than today, don't even check headers
+        # fileIsOutOfDate = LoadDataFromEDDB.fileIsOutOfDate(fName, shortName)
 
         #
         # If neither exist, download the file to the temp dir
@@ -88,8 +90,7 @@ class LoadDataFromEDDB:
         if fileIsOutOfDate or not os.path.exists(fName):
             logging.info("1- downloading to: " + fName)
             fName = LoadDataFromEDDB.download_file(shortName, tmpDir)
-            #fName +=".gz"  added in download_file
-
+            # fName +=".gz"  added in download_file
 
         if not os.path.exists(fName):
             logging.error("No data file: " + fName)
@@ -97,15 +98,13 @@ class LoadDataFromEDDB:
             return None
         else:
             logging.info("Found data file: %s", fName)
-            #with open(fName, 'r') as handle:
+            # with open(fName, 'r') as handle:
             return fName
-
-
 
     @staticmethod
     def fileIsOutOfDate(fName: str, _shortName: str):
         http = urllib3.PoolManager()
-        url = "https://eddb.io/archive/v6/" + _shortName #factions.jsonl"
+        url = "https://eddb.io/archive/v6/" + _shortName  # factions.jsonl"
 
         u = http.request('HEAD', url)
         meta = u.info()
@@ -122,7 +121,6 @@ class LoadDataFromEDDB:
         else:
             print("CPU file is NOT older than server file.")
             return False
-
 
 
 if __name__ == '__main__':

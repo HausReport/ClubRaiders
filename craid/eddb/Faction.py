@@ -1,19 +1,18 @@
-#from InhabitedSystem import InhabitedSystem
+# from InhabitedSystem import InhabitedSystem
 from Aware import Aware
-from craid.eddb.NamedItem import NamedItem
 
 
 class Faction(Aware):
-    #systemsDict: None #Dict[int, InhabitedSystem] = None  typing this causes a circular import problem
+    # systemsDict: None #Dict[int, InhabitedSystem] = None  typing this causes a circular import problem
 
     # getters/setters for id & name in superclass
     def __init__(self, jsonString):
-        super().__init__(jsonString) #[NamedItem.NAME], jsonString[NamedItem.ID])
+        super().__init__(jsonString)  # [NamedItem.NAME], jsonString[NamedItem.ID])
 
-    #def visitHomeSystem(self, sysDict: Dict[int, InhabitedSystem] ):
-        #foo = sysDict.get( self.get_homesystem_id())
-        #if foo is not None:
-            #self.homeSystemName = foo
+    # def visitHomeSystem(self, sysDict: Dict[int, InhabitedSystem] ):
+    # foo = sysDict.get( self.get_homesystem_id())
+    # if foo is not None:
+    # self.homeSystemName = foo
 
     def get_allegiance(self):
         return self.jsonLine['allegiance']

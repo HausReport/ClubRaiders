@@ -1,5 +1,4 @@
 from Aware import Aware
-from craid.eddb.NamedItem import NamedItem
 
 
 # Currently known Types
@@ -29,9 +28,9 @@ class Station(Aware):
 
     # getters/setters for id & name in superclass
     def __init__(self, jsonString: str):
-        super().__init__(jsonString) #[NamedItem.NAME], jsonString[NamedItem.ID])
-        #self.jsonLine: Dict[str, str] = jsonString
-        #self.jsonLine = jsonString
+        super().__init__(jsonString)  # [NamedItem.NAME], jsonString[NamedItem.ID])
+        # self.jsonLine: Dict[str, str] = jsonString
+        # self.jsonLine = jsonString
         self.club: bool = False
 
     def getDistanceToStar(self) -> int:
@@ -50,9 +49,8 @@ class Station(Aware):
         return xxx
 
     def hasBlackMarket(self) -> bool:
-        xxx: bool= self.jsonLine.get('has_black_market')
+        xxx: bool = self.jsonLine.get('has_black_market')
         return xxx
-
 
     def hasShipyard(self) -> bool:
         xxx: bool = self.jsonLine.get('has_shipyard')
@@ -98,16 +96,16 @@ class Station(Aware):
     # def getc_allegiance(self):
     #     return self.jsonLine['allegiance']
     def setClub(self, param: bool):
-        print( "setting club to :" + str(param))
+        print("setting club to :" + str(param))
         self.club = param
 
     def isClub(self) -> bool:
         return self.club
 
-## FIXME: miners_tool urls are pretty obfuscated, too
-# FIXME: this is pretty obfuscated, don't see how it works yet
-#    def getEddbSellToUrl(self):
-#        https: // eddb.io / trade / single / sellSystemId = & sellStationId =
+    ## FIXME: miners_tool urls are pretty obfuscated, too
+    # FIXME: this is pretty obfuscated, don't see how it works yet
+    #    def getEddbSellToUrl(self):
+    #        https: // eddb.io / trade / single / sellSystemId = & sellStationId =
     def getEddbUrl(self):
         return '[' + self.get_name() + "](https://eddb.io/station/" + str(self.get_id()) + ")"
 

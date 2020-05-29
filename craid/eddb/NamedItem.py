@@ -3,8 +3,8 @@ class NamedItem:
     ID = 'id'
 
     def __init__(self, name='', eddbId=0):
-        self._name : str = name
-        self._id : int = eddbId
+        self._name: str = name
+        self._id: int = eddbId
 
     def get_id(self) -> int:
         return self._id
