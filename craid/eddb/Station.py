@@ -1,3 +1,8 @@
+#   Copyright (c) 2020 Club Raiders Project
+#   https://github.com/HausReport/ClubRaiders
+#
+#   SPDX-License-Identifier: BSD-3-Clause
+
 from Aware import Aware
 
 
@@ -88,6 +93,11 @@ class Station(Aware):
 
     def getControllingFactionName(self) -> str:
         return Aware.getFactionNameById(self.getControllingFactionId())
+
+    def getControllingFactionName2(self) -> str:
+        from Faction import Faction
+        fac: Faction = Aware.getFactionById(self.getControllingFactionId())
+        return fac.get_name2()
 
     # def getc_allegiance(self):
     #     return self.jsonLine['allegiance']

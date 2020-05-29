@@ -1,3 +1,8 @@
+#   Copyright (c) 2020 Club Raiders Project
+#   https://github.com/HausReport/ClubRaiders
+#
+#   SPDX-License-Identifier: BSD-3-Clause
+
 # from InhabitedSystem import InhabitedSystem
 from Aware import Aware
 
@@ -7,12 +12,8 @@ class Faction(Aware):
 
     # getters/setters for id & name in superclass
     def __init__(self, jsonString):
-        super().__init__(jsonString)  # [NamedItem.NAME], jsonString[NamedItem.ID])
-
-    # def visitHomeSystem(self, sysDict: Dict[int, InhabitedSystem] ):
-    # foo = sysDict.get( self.get_homesystem_id())
-    # if foo is not None:
-    # self.homeSystemName = foo
+        super().__init__(jsonString)
+        self.club = False
 
     def get_allegiance(self):
         return self.jsonLine['allegiance']
@@ -48,16 +49,26 @@ class Faction(Aware):
         return self.jsonLine['is_player_faction'] is True
 
     def get_name2(self):
-        p_ind = ""
+        ret = self._name
         if self.is_player():
-            p_ind = "*"
-        return p_ind + self._name
+            ret = "*" + ret + "*"  ## first one use programmatically, 2nd is trick for markdowwn
+        if self.isClub():
+            ret = "~~" + ret + "~~"  ## first one use programmatically, 2nd is trick for markdowwn
+
+        return ret
 
     def factionStringShort(self):
         name = self.get_name2()
         allegiance = self.get_allegiance()[0:3].upper()
         return f'[{allegiance}] - {name}'
 
-    # FIXME: inara faction ids seem different from eddb's
-    def getInaraFactionUrl(self):
-        return "https://inara.cz/galaxy-minorfaction/" + str(self.get_id())
+    # # FIXME: inara faction ids are different from eddb's arnie may fix
+    # def getInaraFactionUrl(self):
+    #     return "https://inara.cz/galaxy-minorfaction/" + str(self.get_id())
+
+    def setClub(self, param: bool) -> None:
+        print("setting club to :" + str(param))
+        self.club = param
+
+    def isClub(self) -> bool:
+        return self.club

@@ -1,3 +1,8 @@
+#   Copyright (c) 2020 Club Raiders Project
+#   https://github.com/HausReport/ClubRaiders
+#
+#   SPDX-License-Identifier: BSD-3-Clause
+
 import string
 
 import pandas as pd
@@ -15,10 +20,9 @@ class Oracle:
         if df is None:
             return
 
-        # self.frame: pd.DataFrame = df
         frame: pd.DataFrame = df
         #
-        #
+        # General statistics
         #
         self.myDict['systems_active'] = "{:,}".format(int(frame['systemName'].count()))
         self.myDict['systems_active_pop'] = "{:,}".format(frame['population'].sum(axis=0))

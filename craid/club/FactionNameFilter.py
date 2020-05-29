@@ -6,6 +6,7 @@ def proClubFaction(CurFaction):
     #
     if "Alliance Assembly" in curName: return False
     if "Zaonce Jet" in curName: return False
+    if "Black Aegis" in curName: return False
 
     #
     # Identify positives

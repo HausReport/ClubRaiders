@@ -16,7 +16,6 @@
 | EDDB System Info | $eddb_link |
 | Bounty Hunting | $bounty_hunting        |
 
-
 # Stations
 
 $station_list

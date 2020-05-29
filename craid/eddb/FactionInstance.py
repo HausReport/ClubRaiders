@@ -1,3 +1,10 @@
+#   Copyright (c) 2020 Club Raiders Project
+#   https://github.com/HausReport/ClubRaiders
+#
+#   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
+
 import datetime
 import string
 
@@ -15,7 +22,6 @@ class FactionInstance(Faction):
         self.mySystem: InhabitedSystem = inhabSys
         self.influence: float = inf
         self.vulnerable: Vulnerability = vuln
-        # print("Hi")
 
     def getSystem(self):
         return self.mySystem
@@ -160,37 +166,36 @@ class FactionInstance(Faction):
         #    facname + "," + sysname + "," + x + "," + y + "," + z + "," + allg +
         #    "," + sinf + "," + war + "," + ds)  # + "," + allg)
 
-    def asArray(self):
-        facname = self.get_name2()
-        war = self.getVulnerableString()
-        sysname = self.getSystemName()
-        x = '{:04.2f}'.format(self.getX())
-        y = '{:04.2f}'.format(self.getY)
-        z = '{:04.2f}'.format(self.getZ)
-        sinf = '{:04.2f}'.format(self.getInfluence)
-        allg = self.get_allegiance()
-        ds = self.getUpdatedString()
-        return [facname, sysname, x, y, z, allg, sinf, war, ds]
+    # def asArray(self):
+    #     facname = self.get_name2()
+    #     war = self.getVulnerableString()
+    #     sysname = self.getSystemName()
+    #     x = '{:04.2f}'.format(self.getX())
+    #     y = '{:04.2f}'.format(self.getY)
+    #     z = '{:04.2f}'.format(self.getZ)
+    #     sinf = '{:04.2f}'.format(self.getInfluence)
+    #     allg = self.get_allegiance()
+    #     ds = self.getUpdatedString()
+    #     return [facname, sysname, x, y, z, allg, sinf, war, ds]
 
-    def isHomeSystem(self):
+    def isHomeSystem(self) -> bool:
         factionHomeSystemId: int = self.get_homesystem_id()
         systemId = self.getSystemID()
         return systemId == factionHomeSystemId
 
-    def controlsSystem(self):
+    def controlsSystem(self) -> bool:
         cid = self.mySystem.getControllingFactionId()
         mid: int = int(self.get_id())
         return cid == mid
 
-    ## FIXME: can't convert homesystem id to string because i don't have the dict
     def template(self, msg: str) -> str:
         myDict: PassThroughDict[str, str] = PassThroughDict()
 
         myDict['home_system'] = self.get_homesystem_name()
         myDict['allegiance'] = str(self.get_allegiance())
         myDict['government'] = str(self.get_government())
-        myDict['inara_link'] = self.getInaraFactionUrl()
-        myDict['faction_name'] = self.get_name()
+        #myDict['inara_link'] = self.getInaraFactionUrl()
+        myDict['faction_name'] = self.get_name2()
 
         template = string.Template(msg)
         output = template.substitute(myDict)

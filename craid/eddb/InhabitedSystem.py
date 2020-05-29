@@ -1,3 +1,8 @@
+#   Copyright (c) 2020 Club Raiders Project
+#   https://github.com/HausReport/ClubRaiders
+#
+#   SPDX-License-Identifier: BSD-3-Clause
+
 import math
 import string
 import urllib.parse
@@ -25,6 +30,11 @@ class InhabitedSystem(Aware):
         cf: int = self.getControllingFactionId()
         return super().getFactionNameById(cf)
 
+    def getControllingFactionName2(self):
+        cf: int = self.getControllingFactionId()
+        f: Faction = super().getFactionById(cf)
+        return f.get_name2()
+
     def getMinorFactionPresences(self):
         return self.jsonLine[MINOR_FACTION_PRESENCES]
 
@@ -35,8 +45,8 @@ class InhabitedSystem(Aware):
         f: Faction
         for f in foo.values():
             pre: str = f.get_name2()  # adds * for pf
-            if pre.startswith("*"):
-                pre = pre + "*"  # italicize it
+            #if pre.startswith("*"):
+             #   pre = pre + "*"  # italicize it
 
             # TODO: signify club factions somehow..  interesting idea
             # was to redefine strikethru (s in css) to display as orangered
@@ -183,8 +193,7 @@ class InhabitedSystem(Aware):
         myDict['system_name'] = self.get_name()
         myDict['allegiance'] = str(self.getAllegiance())
         myDict['government'] = str(self.getGovernment())
-        ## FIXME: need faction name
-        myDict['controlling_faction'] = self.getControllingFactionName()
+        myDict['controlling_faction'] = self.getControllingFactionName2()
         # "{:,}".format(self.getControllingFactionId())
         myDict['population'] = "{:,}".format(self.getPopulation())
         myDict['inara_link'] = "[link](" + self.getInaraSystemUrl() + ")"
@@ -255,7 +264,7 @@ class InhabitedSystem(Aware):
             ret += "  | "
             ret += boolToTorBlank(sta.hasBlackMarket())
             ret += "  | "
-            ret += sta.getControllingFactionName()
+            ret += sta.getControllingFactionName2()
             ret += "  | "
             ret += "\n"
 

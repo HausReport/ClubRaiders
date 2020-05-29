@@ -33,6 +33,7 @@ def load_factions() -> [Dict[int, Faction], Dict[int, Faction], Dict[int, Factio
             if curFaction.is_player():
                 playerFactionIdToInfo[lCurFactionId] = curFaction
             if FactionNameFilter.proClubFaction(curFaction):
+                curFaction.setClub(True)
                 clubFactionIdToInfo[lCurFactionId] = curFaction
 
     logging.info("Read %s lines of faction data", str(nLines))

@@ -36,6 +36,11 @@ a:active {
   color: lightgoldenrodyellow;
 }
 
+del {
+  color: red;
+  text-decoration: none;
+}
+
 input {
     background-color: black;
     color: orange;
