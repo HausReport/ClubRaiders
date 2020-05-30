@@ -1,2 +1,1 @@
-python craid/dashbd/Dashboard.py
-#python -m craid.dashbd.Dashboard
+  web: gunicorn app:server --timeout 300
