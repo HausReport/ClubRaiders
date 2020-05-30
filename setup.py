@@ -15,7 +15,7 @@ setup(
     install_requires=['numpy', 'dash', 'pandas', 'requests', 'setuptools'],
     include_package_data=True,
     # *strongly* suggested for sharing
-    version='0.66',
+    version='0.67',
     # The license can be anything you like
     license='BSD-3',
     description='Placeholder description',
