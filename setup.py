@@ -12,10 +12,11 @@ setup(
               'craid.dashbd', 'craid.dashbd.assets', 'craid.dashbd.queries', 'craid.dashbd.text',
               'craid.club', 'craid.club.regions'],
     # Needed for dependencies
-    install_requires=['numpy', 'dash', 'pandas', 'requests', 'setuptools'],
+    install_requires=['dash', 'dash-core-components', 'dash-html-components',
+                      'pandas', 'requests', 'setuptools', 'numpy', 'python-dateutil', 'ujson', 'urlib3'],
     include_package_data=True,
     # *strongly* suggested for sharing
-    version='0.67',
+    version='0.68',
     # The license can be anything you like
     license='BSD-3',
     description='Placeholder description',
