@@ -8,13 +8,14 @@ setup(
     author_email='Erlaed2@fdev.not',
     # Needed to actually package something
     # packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
-    packages=['craid', 'craid.eddb', 'craid.eddb.util', 'craid.club', 'craid.dashbd', 'craid.dashbd.assets',
-              'craid.dashbd.queries', 'craid.dashbd.text', 'craid.eddb.loader', 'craid.club.regions'],
+    packages=['craid', 'craid.eddb', 'craid.eddb.loader', 'craid.eddb.util', 'craid.club',
+              'craid.dashbd', 'craid.dashbd.assets', 'craid.dashbd.queries', 'craid.dashbd.text',
+              'craid.club.regions'],
     # Needed for dependencies
     install_requires=['numpy', 'dash', 'pandas', 'requests', 'setuptools'],
     include_package_data=True,
     # *strongly* suggested for sharing
-    version='0.65',
+    version='0.66',
     # The license can be anything you like
     license='BSD-3',
     description='Placeholder description',

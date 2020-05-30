@@ -5,14 +5,15 @@
       <sourceFolder url="file://$MODULE_DIR$/craid" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/craid/club" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/craid/club/regions" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/craid/css" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/craid/dashbd" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/craid/dashbd/queries" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/craid/dashbd/text" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/craid/data" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/craid/eddb" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/craid/eddb/loader" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/craid/eddb/util" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/craid/misc" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (MassacreFinder)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.6 (snakes)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">
