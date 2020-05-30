@@ -71,4 +71,4 @@ class System(Aware):
         return "https://eddb.io/system/" + str(self.get_id())
 
     def getRoadToRichesUrl(self):
-        return "http://edtools.ddns.net/expl.php?s=" + urllib.parse.quote(self.get_name())
+        return "http://edtools.ddns.net/expl.php?s=" #+ urllib.parse.quote(self.get_name())

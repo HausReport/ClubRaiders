@@ -18,7 +18,7 @@ from Station import Station
 from loader.LoadDataFromEDDB import LoadDataFromEDDB
 
 
-def loadStationsInClubSystems(all_systems_dict : Dict[int, InhabitedSystem] , clubFactionIdToInfo: Dict[int, Faction], clubSystemLookup : Set[int] = set()) -> None:
+def loadStationsInClubSystems(all_systems_dict : Dict[int, InhabitedSystem] , clubFactionIdToInfo: Dict[int, Faction], clubSystemLookup : Set[int] ) -> None:
     nLines: int = 0
     nAdded: int = 0
     fName = LoadDataFromEDDB.find_data_file('stations.jsonl')

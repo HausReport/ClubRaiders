@@ -370,7 +370,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
         if theFac is not None:
             print("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
             factionInfo = theFac.get_name()
-            systemInfo = theFac.getSystemName()
+            #systemInfo = theFac.getSystemName()
 
             gg: pd.DataFrame = df[df['factionName'].str.match(factionInfo)]
             seer: Oracle = Oracle(gg)

@@ -95,7 +95,7 @@ class LoadDataFromEDDB:
         if not os.path.exists(fName):
             logging.error("No data file: " + fName)
             assert False, "Couldn't get data file" + fName
-            return None
+            #return None
         else:
             logging.info("Found data file: %s", fName)
             # with open(fName, 'r') as handle:
@@ -123,5 +123,5 @@ class LoadDataFromEDDB:
             return False
 
 
-if __name__ == '__main__':
-    LoadDataFromEDDB.load_data()
+#if __name__ == '__main__':
+    #LoadDataFromEDDB.load_data()

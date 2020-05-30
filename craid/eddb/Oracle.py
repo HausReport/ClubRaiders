@@ -127,10 +127,10 @@ class Oracle:
         #
         #
 
-    def template(self, msg: str) -> str:
-        template = string.Template(msg)
-        output = template.substitute(self.myDict)
-        return output
+    def template(self, theMsg: str) -> str:
+        template = string.Template(theMsg)
+        ret = template.substitute(self.myDict)
+        return ret
 
 
 #         #boo: Dict[str, str] = {'buffy': 'travesty!'}
@@ -141,10 +141,10 @@ class Oracle:
 #         return temp.render(locals())
 
 
-if __name__ == '__main__':
-    # myDict = dict({'girl': 'buffy', 'town': 'sunnydale'})
-    msg = "[$test]: $girl lives in $town"
-    seer: Oracle = Oracle(None)
-    output = seer.template(msg)
-
-    print(output)
+# if __name__ == '__main__':
+#     # myDict = dict({'girl': 'buffy', 'town': 'sunnydale'})
+#     msg = "[$test]: $girl lives in $town"
+#     seer: Oracle = Oracle(None)
+#     output = seer.template(msg)
+#
+#     print(output)

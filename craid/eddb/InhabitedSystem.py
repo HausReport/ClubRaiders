@@ -4,21 +4,25 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 
 import string
-from typing import Dict, List, Any, Union
-
-from deprecated import deprecated
+from collections import deque
+from typing import List, Deque
 
 from PassThroughDict import PassThroughDict
 from Station import Station
 from System import System
-from TextDecoration import boolToTorBlank, boolToYesOrNo
-from craid.eddb.Constants import MINOR_FACTION_ID, POWER_STATE, MINOR_FACTION_PRESENCES
 from craid.eddb.Faction import Faction
+from craid.eddb.GameConstants import *
+from util.TextDecoration import boolToTorBlank, boolToYesOrNo
+
 
 #
-# INFO: Tapdancing right on the edge of a cyclic import catastrophe with FactionInstance
+# INFO: Tap-dancing right on the edge of a cyclic import catastrophe with FactionInstance
 #
 class InhabitedSystem(System):
+
+    FLAG_CLUB_ONLY :int = 0
+    FLAG_NON_CLUB_ONLY: int = 1
+    FLAG_EITHER: int = 2
 
     def __init__(self, jsonString: str):
         super().__init__(jsonString)
@@ -27,7 +31,7 @@ class InhabitedSystem(System):
         self.stations: List[Station] = []
         self.minorFactionPresences: List[object] = []
 
-    #================================================================================
+    # ================================================================================
     # General statistics
     #
     def getAllegiance(self) -> str:
@@ -50,7 +54,7 @@ class InhabitedSystem(System):
     def getPopulation(self) -> int:
         return int(self.jsonLine['population'])
 
-    #================================================================================
+    # ================================================================================
     # Factions Methods
     #
     def getControllingFactionId(self):
@@ -65,50 +69,36 @@ class InhabitedSystem(System):
         f: Faction = super().getFactionById(cf)
         return f.get_name2()
 
-
     def getMinorFactionsAsMarkdown(self):
         from FactionInstance import FactionInstance
-        foo: List[FactionInstance] = self.minorFactionPresences
 
         ret: str = "\n\n"
+        ret += "|Name | Inf. | States | \n"  # " LPad | Club | Yard | BM | Controlling | \n"
+        ret += "| --- | --- |--- | \n"  # "--- | --- | --- | --- | --- |\n"
         f: FactionInstance
-        for f in foo:
-            pre: str = f.get_name2()       # decorates name for md
-            ret = ret + "\n*  " + pre      # star for bullet
+        for f in self.minorFactionPresences:
+            ret += "| "
+            ret += f.get_name2()  # decorates name for md
+            ret += " | "
+            ret += "{:,}".format(f.getInfluence())
+            ret += " | "
+            ret += f.getVulnerableString()
+            ret += " | "
+            # ret += boolToTorBlank(sta.hasLargePads())
+            # ret += " | "
+            # ret += boolToTorBlank(sta.isClub())
+            # ret += " | "
+            # ret += boolToTorBlank(sta.hasShipyard())
+            # ret += "  | "
+            # ret += boolToTorBlank(sta.hasBlackMarket())
+            # ret += "  | "
+            # ret += sta.getControllingFactionName2()
+            # ret += "  | "
+            ret += "\n"
 
-        return ret + "\n\n"
-
-
-
-    # def getMinorFactionsAsDict(self):
-    #     ret: Dict[int, Faction] = {}
-    #     mfp: Dict = self.getMinorFactionPresencesDict()
-    #     for faction_ptr in mfp:
-    #         faction_id: int = int(faction_ptr['minor_faction_id'])
-    #         fac: Faction = super().getFactionById(faction_id)
-    #         if fac is not None:
-    #             ret[faction_id] = fac
-    #
-    #     # pprint.pprint( ret )
-    #     print(" mfd size = " + str(len(list(mfp))))
-    #     print(" ret size = " + str(len(list(ret.keys()))))
-    #     return ret
-
-    # def getFactions(self, all_factions_dict: Dict[int, Faction]):
-    #     ret = []
-    #     minor_faction_presences = self.jsonLine[MINOR_FACTION_PRESENCES]
-    #     # if minor_faction_presences is None
-    #     for faction_ptr in minor_faction_presences:
-    #         if faction_ptr is None:
-    #             continue
-    #         faction_id: int = int(faction_ptr[MINOR_FACTION_ID])
-    #         if faction_id is None:
-    #             continue
-    #         curFaction = all_factions_dict.get(faction_id)
-    #         if curFaction is None:
-    #             continue
-    #         ret.append(curFaction)
-    #     return ret
+        theret = ret + "\n\n\n"
+        # print(theret)
+        return theret
 
     def hasAnarchyFaction(self):
         from FactionInstance import FactionInstance
@@ -125,7 +115,7 @@ class InhabitedSystem(System):
     def _getMinorFactionPresencesDict(self):
         return self.jsonLine[MINOR_FACTION_PRESENCES]
 
-    #================================================================================
+    # ================================================================================
     # Stations Methods
     #
     def addStation(self, sta: Station):
@@ -172,7 +162,7 @@ class InhabitedSystem(System):
         # print(theret)
         return theret
 
-    #================================================================================
+    # ================================================================================
     # Templating
     #
     def template(self, msg: str) -> str:
@@ -197,8 +187,10 @@ class InhabitedSystem(System):
         myDict['octant'] = "{:,}".format(self.getOctant())
 
         from craid.eddb.SystemAnalyzer import SystemAnalyzer
-        bhVal = SystemAnalyzer.isProbablyAGoodBountyHuntingSystem(self)
-        #bhVal = self.isProbablyAGoodBHSystem()
+        sysA = SystemAnalyzer(self)
+        from SystemAnalyzer import isProbablyAGoodBountyHuntingSystem  #sidestep circ import
+        bhVal = isProbablyAGoodBountyHuntingSystem(self)
+        # bhVal = self.isProbablyAGoodBHSystem()
         bh = "Unknown"
         if bhVal: bh = "Probably"
         myDict['bounty_hunting'] = bh
@@ -214,8 +206,146 @@ class InhabitedSystem(System):
 
         myDict['needs_permit'] = boolToYesOrNo(self.needsPermit())
 
+        sa = SystemAnalyzer(self)
+        rep = sa.toString()
+        myDict['system_analysis'] = rep
+
         myTemplate = string.Template(msg)
         output: str = myTemplate.substitute(myDict)
         return output
+
+    #
+    # Return list of club faction names in the given state
+    #
+    def getClubInState(self, state: int):
+        ret: List[str] = []
+        from FactionInstance import FactionInstance
+        fi: FactionInstance
+        for fi in self.minorFactionPresences:
+            if fi.isClub():
+                if fi.hasSate(state):
+                    ret.append(fi.get_name2())
+
+        return ret
+
+    #
+    # Return list of club faction names in the given state
+    #
+    def getNonClubInState(self, state: int):
+        ret: List[str] = []
+        from FactionInstance import FactionInstance
+        fi: FactionInstance
+        for fi in self.minorFactionPresences:
+            if fi.isClub():
+                if fi.hasSate(state):
+                    ret.append(fi.get_name2())
+
+        return ret
+
+    def getBestStation(self, orbital: bool, largePads: bool, flag: int) -> Station:
+        sta: Station
+        #bestStation: Station
+        #bestStation: List[Station] = []   #long-ass workaround for standard java technique
+        bestStation: Deque[Station] = deque()  #long-ass workaround for standard java technique
+        ## FIXME: this method got out of control for stupid reasons
+
+        for sta in self.stations:
+            if orbital != sta.isOrbital():
+                continue
+            if largePads != sta.hasLargePads():
+                continue
+
+            if len(bestStation) == 0:
+                if flag == self.FLAG_CLUB_ONLY:
+                    if sta.isClub():
+                        bestStation.appendleft(sta)
+                        continue
+                if flag == self.FLAG_NON_CLUB_ONLY:
+                    if not sta.isClub():
+                        bestStation.appendleft(sta)
+                        continue
+                if flag == self.FLAG_EITHER:
+                    bestStation.appendleft(sta)
+                    continue
+
+            dist = 999999999999999
+            if len(bestStation)> 0:
+                dist = bestStation[0].getDistanceToStar()
+
+            if sta.getDistanceToStar() <= dist:
+                if flag == self.FLAG_CLUB_ONLY:
+                    if sta.isClub():
+                        bestStation.appendleft(sta)
+                        continue
+                if flag == self.FLAG_NON_CLUB_ONLY:
+                    if not sta.isClub():
+                        bestStation.appendleft(sta)
+                        continue
+                if flag == self.FLAG_EITHER:
+                    bestStation.appendleft(sta)
+                    continue
+        if( len(bestStation)<1):
+            return None
+        return bestStation.popleft()
+
+    #
+    # Orbital only
+    #
+    def getBestSmugglingStation(self):
+        bestStation: Station = self.getBestStation(True, True, self.FLAG_CLUB_ONLY)
+        if bestStation is not None:
+            return bestStation
+
+        bestStation: Station = self.getBestStation(True, False, self.FLAG_CLUB_ONLY)
+        return bestStation
+
+    #
+    #
+    #
+    def getBestCrimeStation(self):
+        bestStation: Station = self.getBestStation(True, True, self.FLAG_CLUB_ONLY)
+        if bestStation is not None:
+            return bestStation
+
+        bestStation: Station = self.getBestStation(True, False, self.FLAG_CLUB_ONLY)
+        return bestStation
+
+    #
+    #
+    #
+    def getBestMissionStation(self):
+        bestStation: Station = self.getBestStation(True, True, self.FLAG_EITHER)
+        if bestStation is not None:
+            return bestStation
+
+        bestStation: Station = self.getBestStation(False, True, self.FLAG_EITHER)
+        if bestStation is not None:
+            return bestStation
+
+        bestStation: Station = self.getBestStation(True, False, self.FLAG_EITHER)
+        if bestStation is not None:
+            return bestStation
+
+        bestStation: Station = self.getBestStation(False, False, self.FLAG_EITHER)
+        return bestStation
+
+    #
+    #
+    #
+    def getBestTradeStation(self):
+        bestStation: Station = self.getBestStation(True, True, self.FLAG_NON_CLUB_ONLY)
+        if bestStation is not None:
+            return bestStation
+
+        bestStation: Station = self.getBestStation(False, True, self.FLAG_NON_CLUB_ONLY)
+        if bestStation is not None:
+            return bestStation
+
+        bestStation: Station = self.getBestStation(True, False, self.FLAG_NON_CLUB_ONLY)
+        if bestStation is not None:
+            return bestStation
+
+        bestStation: Station = self.getBestStation(False, False, self.FLAG_NON_CLUB_ONLY)
+        return bestStation
 
 

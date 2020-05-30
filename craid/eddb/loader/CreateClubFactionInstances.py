@@ -7,7 +7,7 @@ from typing import Dict, List, Set, Tuple
 from Faction import Faction
 from FactionInstance import FactionInstance
 from InhabitedSystem import InhabitedSystem
-from States import Vulnerability
+from States import States
 
 
 #   SPDX-License-Identifier: BSD-3-Clause
@@ -33,14 +33,14 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem],
                 continue
 
             fac = all_factions_dict[faction_id]
-            factionName: str = fac.get_name2()
+            #factionName: str = fac.get_name2()
 
             #
             # Scan for interesting faction states
             #
             govt = currentSystem.getGovernment()
             inf = faction_ptr['influence']
-            vulnerabilities: Vulnerability = Vulnerability(govt, inf, faction_ptr['active_states'])
+            vulnerabilities: States = States(govt, inf, faction_ptr['active_states'])
 
             #
             # Create the faction instance and pop it in the appropriate bins

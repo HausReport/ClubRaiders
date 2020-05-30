@@ -9,17 +9,17 @@ import string
 from PassThroughDict import PassThroughDict
 from craid.eddb.Faction import Faction
 from craid.eddb.InhabitedSystem import InhabitedSystem
-from craid.eddb.States import Vulnerability
+from craid.eddb.States import States
 
 
 class FactionInstance(Faction):
 
     # getters/setters for id & name in superclass
-    def __init__(self, par, inhabSys: InhabitedSystem, inf: float, vuln: Vulnerability):
+    def __init__(self, par, inhabSys: InhabitedSystem, inf: float, vuln: States):
         super().__init__(par.jsonLine)
         self.mySystem: InhabitedSystem = inhabSys
         self.influence: float = inf
-        self.vulnerable: Vulnerability = vuln
+        self.states: States = vuln
 
     def getSystem(self):
         return self.mySystem
@@ -37,7 +37,7 @@ class FactionInstance(Faction):
         return self.mySystem.get_name()
 
     def getSystemNameById(self, _id):
-        return super().getSystemNameiById()
+        return super().getSystemNameById()
 
     #def getUpdated(self):
     #    return self.mySystem.getUpdated()
@@ -49,17 +49,19 @@ class FactionInstance(Faction):
     # excel formula = (D10/15000)*(E10^2)/ 1000
     # d=pop, e = inf
     def getDifficulty(self) -> float:
-        max = 999999.0
+        theMax = 999999.0
         if not self.canRetreat():
-            return max
+            return theMax
         e10 = self.getInfluence()
         if e10 == 0.0:
-            return max
+            return theMax
         d10 = self.getPopulation()
         ret = (d10 / 15000.0) * (e10 ** 2.0) / 1000.0
 
-        if (ret < 0.0): ret = 0.0
-        if (ret > max): ret = max
+        if ret < 0.0:
+            ret = 0.0
+        if ret > theMax:
+            ret = theMax
         return round(ret, 1)  # TODO: trimmed to 3 decimals since no format support
 
     def getDifficultyString(self) -> str:
@@ -108,41 +110,10 @@ class FactionInstance(Faction):
     #    return self.vulnerable is not 0
 
     def getVulnerableString(self):
-        assert self.vulnerable is not None, 'null vulnerable'
-        retval: str = self.vulnerable.getShortString()
+        assert self.states is not None, 'null vulnerable'
+        retval: str = self.states.getShortString()
         assert retval is not None, 'null vulnerable 2'
         return retval
-
-        # if (self.vulnerable == 0): return ""
-        # war = "Civil War"
-        # if (self.vulnerable == 104): war = "LowInf+Inf Fail"
-        # if (self.vulnerable == -15): war = "Low Influence"
-        # if (self.vulnerable == -16): war = "Anarchy"
-        # if (self.vulnerable == 73): war = "War"
-        # if (self.vulnerable == 65): war = "Election"
-        # if (self.vulnerable == 96): war = war + "/Retreat"
-        # return war
-        #
-        # # "16,Boom"
-        # # "32,Bust"
-        # # "37,Famine"
-        # # "48,Civil Unrest"
-        # # "64,Civil War"
-        # # "65,Election"
-        # # "66,Civil Liberty"
-        # # "67,Expansion"
-        # # "69,Lockdown"
-        # # "72,Outbreak"
-        # # "73,War"
-        # # "80,None"
-        # # "81,Pirate Attack"
-        # # "101,Investment"
-        # # "102,Blight"
-        # # "103,Drought"
-        # # "104,Infrastructure Failure"
-        # # "105,Natural Disaster"
-        # # "106,Public Holiday"
-        # # "107,Terrorist Attack"
 
     def getUpdatedString(self):
         date = self.mySystem.getUpdatedDateTime()
@@ -162,18 +133,6 @@ class FactionInstance(Faction):
         print(f"{facname},{sysname},{x},{y},{z},{allg},{sinf},{war},{ds}")
         #    facname + "," + sysname + "," + x + "," + y + "," + z + "," + allg +
         #    "," + sinf + "," + war + "," + ds)  # + "," + allg)
-
-    # def asArray(self):
-    #     facname = self.get_name2()
-    #     war = self.getVulnerableString()
-    #     sysname = self.getSystemName()
-    #     x = '{:04.2f}'.format(self.getX())
-    #     y = '{:04.2f}'.format(self.getY)
-    #     z = '{:04.2f}'.format(self.getZ)
-    #     sinf = '{:04.2f}'.format(self.getInfluence)
-    #     allg = self.get_allegiance()
-    #     ds = self.getUpdatedString()
-    #     return [facname, sysname, x, y, z, allg, sinf, war, ds]
 
     def isHomeSystem(self) -> bool:
         factionHomeSystemId: int = self.get_homesystem_id()
@@ -197,3 +156,6 @@ class FactionInstance(Faction):
         template = string.Template(msg)
         output = template.substitute(myDict)
         return output
+
+    def hasSate(self, state: int):
+        return self.states.hasState(state)

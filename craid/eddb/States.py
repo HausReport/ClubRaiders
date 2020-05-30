@@ -5,10 +5,10 @@
 
 from typing import List
 
-import craid.eddb.Constants as Constants
+import craid.eddb.GameConstants as Constants
 
 
-class Vulnerability:
+class States:
 
     def __init__(self, govt: str, influence: float, state_dict):
         self.govt = govt
@@ -25,7 +25,6 @@ class Vulnerability:
             if xid is Constants.STATE_INFRASTRUCTURE_FAILURE: self.state_list.append(xid)
             if xid is Constants.STATE_EXPANSION: self.state_list.append(xid)
 
-
             #
             # For mining/trade
             #
@@ -38,20 +37,24 @@ class Vulnerability:
             # if xid is Constants.STATE_RETREAT: self.state_list.append(xid)
             # if xid is Constants.STATE_RETREAT: self.state_list.append(xid)
             # if xid is Constants.STATE_RETREAT: self.state_list.append(xid)
-            #if xid is Constants.STATE_EXPANSION: self.state_list.append(xid)
+            # if xid is Constants.STATE_EXPANSION: self.state_list.append(xid)
 
     # a little experimental, but should be close
     def getMineralSalesString(self):
         if Constants.STATE_BOOM in self.state_list or Constants.STATE_INVESTMENT in self.state_list:
             ct: int = 0
-            if Constants.STATE_CIVIL_LIBERTY in self.state_list: ct +=1
-            if Constants.STATE_EXPANSION in self.state_list: ct +=1
-            if Constants.STATE_PUBLIC_HOLIDAY in self.state_list: ct +=1
-            if(ct<2): return ""
-            if Constants.STATE_PIRATE_ATTACK in self.state_list: ct +=1
-            return "MinSales" + ("+"*ct)
+            if Constants.STATE_CIVIL_LIBERTY in self.state_list: ct += 1
+            if Constants.STATE_EXPANSION in self.state_list: ct += 1
+            if Constants.STATE_PUBLIC_HOLIDAY in self.state_list: ct += 1
+            if ct < 2:
+                return ""
+            if Constants.STATE_PIRATE_ATTACK in self.state_list: ct += 1
+            return "MinSales" + ("+" * ct)
 
         return ""
+
+    def hasState(self, which: int) -> bool:
+        return which in self.state_list
 
     def getShortString(self):
         war: List[str] = []

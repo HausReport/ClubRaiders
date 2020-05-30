@@ -24,4 +24,7 @@ $station_list
 
 $faction_list
 
+# System Analysis
+
+$system_analysis
 
