@@ -12,7 +12,7 @@ from craid.eddb.Station import Station
 from craid.eddb.System import System
 from craid.eddb.Faction import Faction
 from craid.eddb.GameConstants import *
-from util.TextDecoration import boolToTorBlank, boolToYesOrNo
+from craid.eddb.util.TextDecoration import boolToTorBlank, boolToYesOrNo
 
 
 #
