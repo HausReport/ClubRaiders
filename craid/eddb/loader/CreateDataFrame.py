@@ -4,6 +4,7 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 
 import datetime
+import gc
 from typing import List
 
 import pandas as pd
@@ -66,6 +67,7 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         'difficulty'  : difficulty
     }
 
+    gc.collect()
     #
     # Main dataframe of all club factions
     #

@@ -15,7 +15,6 @@ import requests
 # https://stackoverflow.com/questions/29314287/python-requests-download-only-if-newer
 import urllib3
 
-
 class LoadDataFromEDDB:
 
     def __init__(self):

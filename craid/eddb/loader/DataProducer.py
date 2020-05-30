@@ -12,6 +12,7 @@ from craid.eddb.loader.CreateStationsInClubSystems import loadStationsInClubSyst
 from craid.eddb.loader.CreateSystemNameToPositionMap import loadSystemNameToPositionMap
 from craid.eddb.loader.CreateSystems import load_systems
 
+import gc
 
 #
 # Expensive function - run once, use result many times
@@ -26,6 +27,7 @@ def getDataArrays() -> Dict[str, object]:
     all_factions_dict, playerFactionIdToInfo, clubFactionIdToInfo = load_factions()
     all_systems_dict = load_systems()
 
+    gc.collect()
     #
     # Give global faction info to systems and
     # give global system info to factions
@@ -45,12 +47,14 @@ def getDataArrays() -> Dict[str, object]:
     allClubSystemInstances, clubSystemLookup, sysIdFacIdToFactionInstance \
             = getFactionInstances(all_systems_dict, clubFactionIdToInfo, all_factions_dict)
 
+    gc.collect()
     #
     # Only now, can we populate lists of stations in **club** systems
     # No return value - stations are stored in their respective system objects
     #
     loadStationsInClubSystems(all_systems_dict, clubFactionIdToInfo, clubSystemLookup )
 
+    gc.collect()
     #
     # And, finally return the big honking dict of things
     #
