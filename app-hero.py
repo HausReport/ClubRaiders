@@ -2,14 +2,14 @@
 import os
 from random import randint
 
-import plotly.plotly as py
-from plotly.graph_objs import *
+# import plotly.plotly as py
+# from plotly.graph_objs import *
 
 import flask
 import dash
-from dash.dependencies import Input, Output, State, Event
-import dash_core_components as dcc
-import dash_html_components as html
+# from dash.dependencies import Input, Output, State, Event
+# import dash_core_components as dcc
+# import dash_html_components as html
 
 
 # Setup the app

@@ -37,7 +37,7 @@ class FactionInstance(Faction):
         return self.mySystem.get_name()
 
     def getSystemNameById(self, _id):
-        return super().getSystemNameById()
+        return super().getSystemNameById(_id)
 
     #def getUpdated(self):
     #    return self.mySystem.getUpdated()

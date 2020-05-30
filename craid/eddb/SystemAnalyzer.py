@@ -6,7 +6,7 @@ from typing import List
 
 import craid.eddb.GameConstants
 import GameConstants
-from Station import Station
+from craid.eddb.Station import Station
 from craid.eddb.InhabitedSystem import InhabitedSystem
 from craid.eddb.util.MessageList import MessageList
 

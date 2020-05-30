@@ -19,8 +19,7 @@ from util.TextDecoration import boolToTorBlank, boolToYesOrNo
 # INFO: Tap-dancing right on the edge of a cyclic import catastrophe with FactionInstance
 #
 class InhabitedSystem(System):
-
-    FLAG_CLUB_ONLY :int = 0
+    FLAG_CLUB_ONLY: int = 0
     FLAG_NON_CLUB_ONLY: int = 1
     FLAG_EITHER: int = 2
 
@@ -187,8 +186,8 @@ class InhabitedSystem(System):
         myDict['octant'] = "{:,}".format(self.getOctant())
 
         from craid.eddb.SystemAnalyzer import SystemAnalyzer
-        sysA = SystemAnalyzer(self)
-        from SystemAnalyzer import isProbablyAGoodBountyHuntingSystem  #sidestep circ import
+        # sysA = SystemAnalyzer(self)
+        from SystemAnalyzer import isProbablyAGoodBountyHuntingSystem  # sidestep circ import
         bhVal = isProbablyAGoodBountyHuntingSystem(self)
         # bhVal = self.isProbablyAGoodBHSystem()
         bh = "Unknown"
@@ -244,9 +243,9 @@ class InhabitedSystem(System):
 
     def getBestStation(self, orbital: bool, largePads: bool, flag: int) -> Station:
         sta: Station
-        #bestStation: Station
-        #bestStation: List[Station] = []   #long-ass workaround for standard java technique
-        bestStation: Deque[Station] = deque()  #long-ass workaround for standard java technique
+        # bestStation: Station
+        # bestStation: List[Station] = []   #long-ass workaround for standard java technique
+        bestStation: Deque[Station] = deque()  # long-ass workaround for standard java technique
         ## FIXME: this method got out of control for stupid reasons
 
         for sta in self.stations:
@@ -269,7 +268,7 @@ class InhabitedSystem(System):
                     continue
 
             dist = 999999999999999
-            if len(bestStation)> 0:
+            if len(bestStation) > 0:
                 dist = bestStation[0].getDistanceToStar()
 
             if sta.getDistanceToStar() <= dist:
@@ -284,7 +283,7 @@ class InhabitedSystem(System):
                 if flag == self.FLAG_EITHER:
                     bestStation.appendleft(sta)
                     continue
-        if( len(bestStation)<1):
+        if len(bestStation) < 1:
             return None
         return bestStation.popleft()
 
@@ -347,5 +346,3 @@ class InhabitedSystem(System):
 
         bestStation: Station = self.getBestStation(False, False, self.FLAG_NON_CLUB_ONLY)
         return bestStation
-
-
