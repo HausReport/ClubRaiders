@@ -11,9 +11,10 @@ from typing import Dict
 
 import json_lines
 
-import FactionNameFilter
-from Faction import Faction
-from loader.LoadDataFromEDDB import LoadDataFromEDDB
+import craid
+from craid.eddb.FactionNameFilter import FactionNameFilter
+from craid.eddb.Faction import Faction
+from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 
 
 def load_factions() -> [Dict[int, Faction], Dict[int, Faction], Dict[int, Faction]]:

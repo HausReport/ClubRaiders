@@ -3,7 +3,6 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 import math
-import urllib
 from datetime import datetime, timedelta
 
 from Aware import Aware

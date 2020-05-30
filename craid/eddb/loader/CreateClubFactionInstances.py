@@ -4,10 +4,10 @@
 import logging
 from typing import Dict, List, Set, Tuple
 
-from Faction import Faction
-from FactionInstance import FactionInstance
-from InhabitedSystem import InhabitedSystem
-from States import States
+from craid.eddb.Faction import Faction
+from craid.eddb.FactionInstance import FactionInstance
+from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.States import States
 
 
 #   SPDX-License-Identifier: BSD-3-Clause

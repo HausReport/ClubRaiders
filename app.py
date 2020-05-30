@@ -19,14 +19,14 @@ from dash.dependencies import Input, Output
 
 import craid.dashbd
 import craid.dashbd.AnnoyingCrap as crap
-import loader.CreateDataFrame
-import loader.DataProducer as dp
+import craid.eddb.loader.CreateDataFrame
+import craid.eddb.loader.DataProducer as dp
 #
 # Set up logging
 #
 # logging.basicConfig(filename='example.log',level=logging.DEBUG)
-from FactionInstance import FactionInstance
-from Oracle import Oracle
+from craid.eddb.FactionInstance import FactionInstance
+from craid.eddb.Oracle import Oracle
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
@@ -60,7 +60,7 @@ sysIdFacIdToFactionInstance = currentData['sysIdFacIdToFactionInstance']
 
 systemNameToXYZ: Dict[str, Tuple[float, float, float]] = currentData['systemNameToXYZ']
 playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
-df: pd.DataFrame = loader.CreateDataFrame.getDataFrame(clubSystemInstances)
+df: pd.DataFrame = craid.eddb.loader.CreateDataFrame.getDataFrame(clubSystemInstances)
 
 #
 # Massage data
