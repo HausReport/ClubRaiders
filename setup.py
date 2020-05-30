@@ -12,7 +12,7 @@ setup(
               'craid.dashbd', 'craid.dashbd.assets', 'craid.dashbd.queries', 'craid.dashbd.text',
               'craid.club', 'craid.club.regions'],
     # Needed for dependencies
-    install_requires=['dash', 'dash-core-components', 'dash-html-components',
+    install_requires=['dash', 'dash-core-components', 'dash-html-components', 'flask',
                       'pandas', 'requests', 'setuptools', 'numpy', 'python-dateutil', 'ujson', 'urlib3'],
     include_package_data=True,
     # *strongly* suggested for sharing

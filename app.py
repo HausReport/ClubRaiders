@@ -2,7 +2,8 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
-
+import os
+from random import randint
 import logging
 import math
 from typing import Dict, Tuple, List
@@ -11,6 +12,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
+import flask
 import numpy as np
 import pandas as pd
 from dash.dependencies import Input, Output
@@ -28,6 +30,14 @@ from Oracle import Oracle
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
+
+#
+# Heroku requirements
+#
+server = flask.Flask(__name__)
+server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
+DEPLOY = True
+
 
 # FIXME: it'd be nice to let users link directly to certain factions, systems, etc...
 # getting the url isn't trivial, see
@@ -65,17 +75,21 @@ colors = {
     'background': 'black',
     'text'      : 'orange'
 }
-# external_stylesheets = ['https://raw.githubusercontent.com/HausReport/ClubRaiders/master/craid/css/Raiders.css']
-# ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-# filter_query = "{country} contains ol && {lifeExp} < 10"
 
 #
 # Start the app framework
 #
-app = dash.Dash(__name__)  # ,requests_pathname_prefix='')
-print(__name__)
-# , external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
-# app.config['suppress_callback_exceptions'] = True
+if DEPLOY:
+    server = flask.Flask(__name__)
+    server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
+    app = dash.Dash(__name__, server=server)
+else:
+    app = dash.Dash(__name__)  # ,requests_pathname_prefix='')
+    print(__name__)
+
+#
+# Following required for tabs
+#
 app.config.suppress_callback_exceptions = True
 
 #
@@ -102,27 +116,21 @@ datatable: dash_table.DataTable = dash_table.DataTable(
     page_action="native",
     page_current=0,
     page_size=30,
-    style_header={
-        'backgroundColor': 'black',
-        'color'          : 'gold'},
-    # style_header_conditional={
-    # 'backgroundColor': 'green',
-    # 'color': 'gold'},
-    # style_filter_conditional={
-    # 'backgroundColor': 'black',
-    # 'color': 'gold'},
-    style_cell={
-        'backgroundColor': 'black',
-        'color'          : 'orange'
-    }
+    # style_header={
+    #     'backgroundColor': 'black',
+    #     'color'          : 'gold'},
+    # style_cell={
+    #     'backgroundColor': 'black',
+    #     'color'          : 'orange'
+    # }
 )
 
+datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
 #
 # Holding place for filter query logic
 #
 # tput("datatable-interactivity", "filtering_settings"),
 # tab.available_properties['filter_query'] = "{control} contains false && {influence} < 25"
-datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
 # datatable.filter_query = "{isHomeSystem} contains false && {vulnerable} contains War"
 # datatable.hidden_columns = {'x','y','z'}
 # for x1 in tab.available_properties:
@@ -222,24 +230,14 @@ app.layout = html.Div([
                      datatable,
                  ]),
                  html.Aside(className="aside aside-2", children=[
-                     html.Article("Hi There!", id='faction-drilldown', style={'width': '100%'}),
-                     html.Article("Hi There!", id='system-drilldown', style={'width': '100%'}),
+                     html.Article("Nothing selected.", id='faction-drilldown', style={'width': '100%'}),
+                     html.Article("Nothing selected.", id='system-drilldown', style={'width': '100%'}),
                  ]),
                  html.Footer(className='footer', children=[
                      html.Div(id='datatable-interactivity-container')
                  ])
              ])
 ])
-
-
-# <div class="wrapper">
-#   <header class="header">Header</header>
-#   <article class="main">
-#     <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-#   </article>
-#   <aside class="aside aside-2">Aside 2</aside>
-#   <footer class="footer">Footer</footer>
-# </div>
 ## ###### FINISH TABLE MADNESS
 
 # =============================================================
@@ -260,7 +258,6 @@ def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
     if pos is None: pos = (0, 0, 0)
     return pos
 
-
 # =============================================================
 # Callback handlers below
 # =============================================================
@@ -279,31 +276,17 @@ def update_output(val1):
         y1: float = df.at[ind, 'y']
         z1: float = df.at[ind, 'z']
         dis: float = math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2)
-        df.at[ind, 'distance'] = int(
-            round(dis))  # TODO: demoted this from float to int because no formatting in datatable
+        # NOTE: demoted this from float to int because no formatting in datatable
+        df.at[ind, 'distance'] = int( round(dis))
 
-    # print(df[ 'distance' ].dtypes)
-    # print(datatable.sort_by)
     _cols = theColumns
-    # [
-    #     {"name": i, "id": i} for i in df.columns
-    # ]
     return df.to_dict('records'), _cols
-
-
-# @app.callback(
-# dash.dependencies.Output('system-notifier', 'children'),
-# [dash.dependencies.Input('demo-dropdown', 'value')])
-# def update_output2(value):
-# return 'Selected system "{}" '.format(value)
-
 
 @app.callback(
     dash.dependencies.Output('demo-dropdown', 'value'),
     [dash.dependencies.Input('demo-dropdown2', 'value')])
 def update_outputr3(value):
     return value
-
 
 # @app.callback(
 #     dash.dependencies.Output('dd-output-container', 'children'),
@@ -318,7 +301,6 @@ def update_outputr3(value):
 #
 #     active_row_id = active_cell['row_id'] if active_cell else None
 #     return "You selected row " + active_row_id
-
 
 @app.callback(
     [Output('faction-drilldown', 'children'),
@@ -352,18 +334,6 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
 
     if active_cell:
         row = active_cell['row']
-        # shitty documentation:
-        # print("You selected row " + str(active_cell))
-        # print("active cell row: " + str(active_cell['row']))
-        # print("rows: "  + str(rows[row]))
-        # print("dvsr len: "  + str( len(derived_virtual_selected_rows)))
-        # print("page # {%d} with {%d} rows per page ",page_cur,page_size)
-        # print("logical row:" + str( logical_row))
-        # #print("I think the actual row is " + str(derived_virtual_selected_rows[0]))
-        # # row = rows[active_cell['row']]
-        # #sysId = rows[active_cell['row']]['sysId']
-        # #facId = rows[active_cell['row']]['facId']
-
         logical_row = row + page_cur * page_size
         sysId = rows[logical_row]['sysId']
         facId = rows[logical_row]['facId']
@@ -372,8 +342,6 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
         if theFac is not None:
             print("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
             factionInfo = theFac.get_name()
-            #systemInfo = theFac.getSystemName()
-
             gg: pd.DataFrame = df[df['factionName'].str.match(factionInfo)]
             seer: Oracle = Oracle(gg)
             factionInfo = crap.getString("faction-template")
@@ -383,17 +351,10 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
             ts = crap.getString("system-template")
             theSys = theFac.getSystem()
             systemInfo = theSys.template(ts)
-            # systemInfo = theSys.appendStationsTableToString(systemInfo)
-            # systemInfo = systemInfo + "\n\n"
-            # systemInfo = systemInfo + theSys.getMinorFactionsAsMarkdown()
 
     factionWidget = dcc.Markdown(factionInfo)
     systemWidget = dcc.Markdown(systemInfo)
 
-    # active_row_id = active_cell['row_id'] if active_cell else None
-    # if( active_row_id != None):
-    # print("You selected row " + active_row_id)
-    # print("You selected row " + dff["systemName"][0])
     theGraphs = [
         dcc.Graph(
             id=column,
@@ -440,8 +401,6 @@ def clear_sort(n_clicks):
     # return [ {} ]
     print(str(n_clicks))
     return [{'column_id': '', 'direction': 'asc'}]
-    # return [{'column_id': 'difficulty', 'direction': 'asc'}]
-
 
 #
 # Clear sort button
@@ -451,7 +410,6 @@ def clear_sort(n_clicks):
     [Input('clear-filter', 'n_clicks')])
 def clear_sort(n_clicks):
     return ""
-
 
 @app.callback(
     Output('sort-notifier', 'children'),
@@ -483,46 +441,10 @@ def update_table(query):
 # app.scripts.config.serve_locally = False
 # dcc._js_dist[0]['external_url'] = 'https://cdn.plot.ly/plotly-basic-latest.min.js'
 #
-# app.layout = html.Div([
-#     html.H1('Stock Tickers'),
-#     dcc.Dropdown(
-#         id='my-dropdown',
-#         options=[
-#             {'label': 'Tesla', 'value': 'TSLA'},
-#             {'label': 'Apple', 'value': 'AAPL'},
-#             {'label': 'Coke', 'value': 'COKE'}
-#         ],
-#         value='TSLA'
-#     ),
-#     dcc.Graph(id='my-graph')
-# ], className="container")
-#
-# @app.callback(Output('my-graph', 'figure'),
-#               [Input('my-dropdown', 'value')])
-# def update_graph(selected_dropdown_value):
-#     #dff = df[df['Stock'] == selected_dropdown_value]
-#     return {
-#         'data': [{
-#             'x': dff.Date,
-#             'y': dff.Close,
-#             'line': {
-#                 'width': 3,
-#                 'shape': 'spline'
-#             }
-#         }],
-#         'layout': {
-#             'margin': {
-#                 'l': 30,
-#                 'r': 20,
-#                 'b': 30,
-#                 't': 20
-#             }
-#         }
-#     }
-#
-#
-#
-# # #########3
+
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    if DEPLOY:
+        app.server.run(debug=True, threaded=True)
+    else:
+        app.run_server(debug=True)
