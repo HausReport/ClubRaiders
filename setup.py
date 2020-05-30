@@ -16,7 +16,7 @@ setup(
                       'pandas', 'requests', 'setuptools', 'numpy', 'python-dateutil', 'ujson', 'urlib3'],
     include_package_data=True,
     # *strongly* suggested for sharing
-    version='0.69',
+    version='0.70',
     # The license can be anything you like
     license='BSD-3',
     description='Placeholder description',

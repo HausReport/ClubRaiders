@@ -5,7 +5,7 @@
 import math
 from datetime import datetime, timedelta
 
-from Aware import Aware
+from craid.eddb.Aware import Aware
 
 
 class System(Aware):

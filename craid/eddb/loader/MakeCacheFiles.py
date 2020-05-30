@@ -8,7 +8,7 @@ from typing import Dict
 
 import ujson
 
-from loader.DataProducer import getDataArrays
+from craid.eddb.loader.DataProducer import getDataArrays
 
 
 def dump(shortName: str, what):

@@ -4,7 +4,7 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 from typing import List
 
-from util.ScoredMessage import ScoredMessage
+from craid.eddb.util.ScoredMessage import ScoredMessage
 
 
 class MessageList(object):

@@ -7,9 +7,9 @@ import string
 from collections import deque
 from typing import List, Deque
 
-from PassThroughDict import PassThroughDict
-from Station import Station
-from System import System
+from craid.eddb.PassThroughDict import PassThroughDict
+from craid.eddb.Station import Station
+from craid.eddb.System import System
 from craid.eddb.Faction import Faction
 from craid.eddb.GameConstants import *
 from util.TextDecoration import boolToTorBlank, boolToYesOrNo
@@ -241,7 +241,7 @@ class InhabitedSystem(System):
 
         return ret
 
-    def getBestStation(self, orbital: bool, largePads: bool, flag: int) -> Station:
+    def getBestStation(self, orbital: bool, largePads: bool, flag: int, reqBlackMarket=False ) -> Station:
         sta: Station
         # bestStation: Station
         # bestStation: List[Station] = []   #long-ass workaround for standard java technique
@@ -249,10 +249,19 @@ class InhabitedSystem(System):
         ## FIXME: this method got out of control for stupid reasons
 
         for sta in self.stations:
+            #
+            # These conditions match exactly
+            #
             if orbital != sta.isOrbital():
                 continue
             if largePads != sta.hasLargePads():
                 continue
+
+            #
+            # For these, if (condition) and if not (state) then skip
+            #
+            if reqBlackMarket and not (sta.hasBlackMarket()):
+                continue;
 
             if len(bestStation) == 0:
                 if flag == self.FLAG_CLUB_ONLY:
@@ -291,11 +300,11 @@ class InhabitedSystem(System):
     # Orbital only
     #
     def getBestSmugglingStation(self):
-        bestStation: Station = self.getBestStation(True, True, self.FLAG_CLUB_ONLY)
+        bestStation: Station = self.getBestStation(True, True, self.FLAG_CLUB_ONLY, reqBlackMarket=True)
         if bestStation is not None:
             return bestStation
 
-        bestStation: Station = self.getBestStation(True, False, self.FLAG_CLUB_ONLY)
+        bestStation: Station = self.getBestStation(True, False, self.FLAG_CLUB_ONLY, reqBlackMarket=True)
         return bestStation
 
     #

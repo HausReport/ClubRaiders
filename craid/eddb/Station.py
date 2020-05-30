@@ -3,7 +3,7 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 
-from Aware import Aware
+from craid.eddb.Aware import Aware
 
 
 # Currently known Types

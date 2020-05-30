@@ -49,8 +49,13 @@ class SystemAnalyzer(object):
             return
 
         staName = sta.get_name()
+        staDist = sta.getDistanceToStar()
+
         ## TODO: Boom, Investment
         msg = f'Missions at station {staName}.'
+
+        if (staDist>25000):
+            msg += "  Note the distance to the station."
         self.messages.add(10,msg)
 
     def smuggling(self):
@@ -68,7 +73,7 @@ class SystemAnalyzer(object):
             return
 
         staName = sta.get_name()
-        msg = f'Piracy, smuggling, and murder at the nav beacon and station {staName}.'
+        msg = f'Piracy and murder at the nav beacon and station {staName}.'
         self.messages.add(50, msg)
 
     def toString(self) -> str:

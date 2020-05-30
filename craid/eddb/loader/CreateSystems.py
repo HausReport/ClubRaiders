@@ -11,8 +11,8 @@ from typing import Dict
 
 import json_lines
 
-from InhabitedSystem import InhabitedSystem
-from loader.LoadDataFromEDDB import LoadDataFromEDDB
+from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 
 
 #

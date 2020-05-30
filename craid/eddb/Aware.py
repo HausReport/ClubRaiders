@@ -5,7 +5,7 @@
 
 from typing import Dict
 
-from NamedItem import NamedItem
+from craid.eddb.NamedItem import NamedItem
 
 
 class Aware(NamedItem):

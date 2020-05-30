@@ -4,7 +4,7 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 
 # from InhabitedSystem import InhabitedSystem
-from Aware import Aware
+from craid.eddb.Aware import Aware
 
 
 class Faction(Aware):

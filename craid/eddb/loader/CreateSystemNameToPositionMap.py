@@ -12,7 +12,7 @@
 
 from typing import Dict, Tuple
 
-from InhabitedSystem import InhabitedSystem
+from craid.eddb.InhabitedSystem import InhabitedSystem
 
 
 def loadSystemNameToPositionMap(all_systems_dict: Dict[int, InhabitedSystem]):

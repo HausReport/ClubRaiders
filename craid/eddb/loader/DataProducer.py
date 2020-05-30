@@ -5,12 +5,12 @@
 
 from typing import Dict
 
-from Aware import Aware
-from loader.CreateClubFactionInstances import getFactionInstances
-from loader.CreateFactions import load_factions
-from loader.CreateStationsInClubSystems import loadStationsInClubSystems
-from loader.CreateSystemNameToPositionMap import loadSystemNameToPositionMap
-from loader.CreateSystems import load_systems
+from craid.eddb.Aware import Aware
+from craid.eddb.loader.CreateClubFactionInstances import getFactionInstances
+from craid.eddb.loader.CreateFactions import load_factions
+from craid.eddb.loader.CreateStationsInClubSystems import loadStationsInClubSystems
+from craid.eddb.loader.CreateSystemNameToPositionMap import loadSystemNameToPositionMap
+from craid.eddb.loader.CreateSystems import load_systems
 
 
 #

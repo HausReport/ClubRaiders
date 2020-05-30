@@ -7,7 +7,7 @@ import string
 
 import pandas as pd
 
-from PassThroughDict import PassThroughDict
+from craid.eddb.PassThroughDict import PassThroughDict
 
 
 class Oracle:

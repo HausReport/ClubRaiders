@@ -2,8 +2,10 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 
-from Faction import Faction
+from craid.eddb.Faction import Faction
 
 
 class FactionNameFilter(object):

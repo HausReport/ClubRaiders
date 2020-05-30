@@ -12,10 +12,10 @@ from typing import Set
 
 import json_lines
 
-from Faction import Faction
-from InhabitedSystem import InhabitedSystem
-from Station import Station
-from loader.LoadDataFromEDDB import LoadDataFromEDDB
+from craid.eddb.Faction import Faction
+from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.Station import Station
+from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 
 
 def loadStationsInClubSystems(all_systems_dict : Dict[int, InhabitedSystem] , clubFactionIdToInfo: Dict[int, Faction], clubSystemLookup : Set[int] ) -> None:
