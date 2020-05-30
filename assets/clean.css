@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500&display=swap');
+
+body {
+ font-family: "Fira Sans", "Roboto", "Tahoma", "Calibri", sans-serif;
+ font-size: 16px; line-height: 18px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+}
+div {
+}
+
+table, th, td, tr {
+}
+
+a:link {
+}
+
+a:visited {
+}
+
+a:hover {
+}
+
+a:active {
+}
+
+del {
+  color: red;
+  text-decoration: none;
+}
+
+.wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  text-align: left;
+}
+
+.strict-horizontal {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: no-wrap;
+  text-align: left;
+}
+
+.myButton {
+    display: flex;
+    background:url(clear-32.png) no-repeat;
+    cursor:pointer;
+    width: 32px;
+    height: 32px;
+    border: none;
+    flex-grow: 1;
+}
+
+.myLabel {
+    display: flex;
+    flex-grow: 1;
+}
+
+.myDropdown {
+    display: flex;
+    width: 300px;
+    flex-grow: 4;
+}
+
+.filter-notifier {
+    display: flex;
+    flex-grow: 1;
+}
+
+
+.sort-notifier {
+    display: flex;
+    flex-grow: 1;
+}
+
+.h1, .h2, .h3 {
+    text-align: left;
+}
+
+.wrapper > * {
+  padding: 10px;
+  flex: 1 100%;
+}
+
+.header {
+}
+
+.footer {
+}
+
+.main {
+  text-align: left;
+}
+
+.aside-1 {
+  display: flex;
+  flex-flow: col wrap;
+  text-align: left;
+}
+
+.aside-2 {
+}
+
+@media all and (min-width: 600px) {
+  .aside { flex: 1 0 0; }
+}
+
+@media all and (min-width: 800px) {
+  .main    { flex: 3 0px; }
+  .aside-1 { order: 1; }
+  .main    { order: 2; }
+  .aside-2 { order: 3; }
+  .footer  { order: 4; }
+}
+
+.custom-tabs-container {
+    width: 100%;
+}
+
+.custom-tabs {
+    border-top-left-radius: 3px;
+    padding: 0px 24px;
+    border-bottom: 1px solid orange;
+}
+
+.mytab {
+    background-color: black;
+}
+
+.mytab-selected {
+    background-color:CornFlowerBlue ;
+}
+
+.tab {
+}
+
+.mytab {
+}
+

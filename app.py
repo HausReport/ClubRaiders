@@ -169,7 +169,9 @@ app.layout = html.Div([
     dcc.Tabs(id='tabs-example', value='tab-1',
              parent_className='custom-tabs',
              className='custom-tabs-container',
-             style={'primary': 'red', 'primaryColor': 'red', 'selected': 'red'},
+             style={'primary': 'red',
+                    'primaryColor': 'red',
+                    'selected': 'red'},
              children=[
                  dcc.Tab(label='Overview',
                          value='tab-1',
@@ -197,7 +199,7 @@ app.layout = html.Div([
                          selected_className='mytab-selected',
                          ),
              ]),
-    html.Div(id='tabs-example-content', style={'backgroundColor': 'green'}),
+    html.Div(id='tabs-example-content'),
     ## ###### START TABLE MADNESS
     ## look into flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
     html.Div(className="wrapper",
