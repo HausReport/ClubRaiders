@@ -2,10 +2,10 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
-import os
-from random import randint
 import logging
 import math
+import os
+from random import randint
 from typing import Dict, Tuple, List
 
 import dash

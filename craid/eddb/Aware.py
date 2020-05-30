@@ -20,17 +20,17 @@ class Aware(NamedItem):
 
     @staticmethod
     def setSystemsDict(foo: Dict):  # [int, craid.eddb.InhabitedSystem]):
-        from InhabitedSystem import InhabitedSystem
+        from craid.eddb.InhabitedSystem import InhabitedSystem
         Aware.systemsDict: Dict[int, InhabitedSystem] = foo
 
     @staticmethod
     def setFactionsDict(foo: Dict):
-        from Faction import Faction
+        from craid.eddb.Faction import Faction
         Aware.factionsDict: Dict[int, Faction] = foo
 
     @staticmethod
     def getSystemNameById(sysId: int):
-        from InhabitedSystem import InhabitedSystem
+        from craid.eddb.InhabitedSystem import InhabitedSystem
         sys: InhabitedSystem = Aware.systemsDict.get(sysId)
         if sys is None:
             return "Unknown-" + str(sysId)
@@ -39,7 +39,7 @@ class Aware(NamedItem):
 
     @staticmethod
     def getFactionNameById(facId: int):
-        from Faction import Faction
+        from craid.eddb.Faction import Faction
         # sd Dict[int, Faction] = Aware.factionsDict
         fac: Faction = Aware.factionsDict.get(facId)
         if fac is None:
@@ -49,7 +49,7 @@ class Aware(NamedItem):
 
     @staticmethod
     def getFactionById(facId: int):
-        from Faction import Faction
+        from craid.eddb.Faction import Faction
         # sd Dict[int, Faction] = Aware.factionsDict
         fac: Faction = Aware.factionsDict.get(facId)
         return fac

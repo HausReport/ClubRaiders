@@ -11,8 +11,8 @@ from typing import Dict
 
 import json_lines
 
-from craid.eddb.FactionNameFilter import FactionNameFilter
 from craid.eddb.Faction import Faction
+from craid.eddb.FactionNameFilter import FactionNameFilter
 from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 
 

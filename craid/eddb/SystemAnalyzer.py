@@ -4,10 +4,10 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 from typing import List
 
-import craid.eddb.GameConstants
-import GameConstants
-from craid.eddb.Station import Station
+import craid.eddb.GameConstants as gconst
+
 from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.Station import Station
 from craid.eddb.util.MessageList import MessageList
 
 
@@ -34,11 +34,11 @@ class SystemAnalyzer(object):
         self.piracyMurder()
 
     def warZones(self):
-        wars: List[str] = self.theSystem.getClubInState(GameConstants.STATE_WAR)
+        wars: List[str] = self.theSystem.getClubInState(gconst.STATE_WAR)
         for warFac in wars:
             msg = f'Fight in war zones against {warFac}.\n'
             self.messages.add(100.0, msg)
-        wars: List[str] = self.theSystem.getClubInState(GameConstants.STATE_CIVIL_WAR)
+        wars: List[str] = self.theSystem.getClubInState(gconst.STATE_CIVIL_WAR)
         for warFac in wars:
             msg = f'Fight in civil war zones against {warFac}.\n'
             self.messages.add(100.0, msg)

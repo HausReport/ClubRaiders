@@ -6,9 +6,9 @@
 import datetime
 import string
 
-from craid.eddb.PassThroughDict import PassThroughDict
 from craid.eddb.Faction import Faction
 from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.PassThroughDict import PassThroughDict
 from craid.eddb.States import States
 
 

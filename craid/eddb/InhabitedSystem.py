@@ -7,11 +7,11 @@ import string
 from collections import deque
 from typing import List, Deque
 
+from craid.eddb.Faction import Faction
+from craid.eddb.GameConstants import *
 from craid.eddb.PassThroughDict import PassThroughDict
 from craid.eddb.Station import Station
 from craid.eddb.System import System
-from craid.eddb.Faction import Faction
-from craid.eddb.GameConstants import *
 from craid.eddb.util.TextDecoration import boolToTorBlank, boolToYesOrNo
 
 
@@ -69,7 +69,7 @@ class InhabitedSystem(System):
         return f.get_name2()
 
     def getMinorFactionsAsMarkdown(self):
-        from FactionInstance import FactionInstance
+        from craid.eddb.FactionInstance import FactionInstance
 
         ret: str = "\n\n"
         ret += "|Name | Inf. | States | \n"  # " LPad | Club | Yard | BM | Controlling | \n"
@@ -100,7 +100,7 @@ class InhabitedSystem(System):
         return theret
 
     def hasAnarchyFaction(self):
-        from FactionInstance import FactionInstance
+        from craid.eddb.FactionInstance import FactionInstance
         fi: FactionInstance
         for fi in self.minorFactionPresences:
             if fi.is_anarchy():
@@ -187,7 +187,7 @@ class InhabitedSystem(System):
 
         from craid.eddb.SystemAnalyzer import SystemAnalyzer
         # sysA = SystemAnalyzer(self)
-        from SystemAnalyzer import isProbablyAGoodBountyHuntingSystem  # sidestep circ import
+        from craid.eddb.SystemAnalyzer import isProbablyAGoodBountyHuntingSystem  # sidestep circ import
         bhVal = isProbablyAGoodBountyHuntingSystem(self)
         # bhVal = self.isProbablyAGoodBHSystem()
         bh = "Unknown"
@@ -218,7 +218,7 @@ class InhabitedSystem(System):
     #
     def getClubInState(self, state: int):
         ret: List[str] = []
-        from FactionInstance import FactionInstance
+        from craid.eddb.FactionInstance import FactionInstance
         fi: FactionInstance
         for fi in self.minorFactionPresences:
             if fi.isClub():
@@ -232,7 +232,7 @@ class InhabitedSystem(System):
     #
     def getNonClubInState(self, state: int):
         ret: List[str] = []
-        from FactionInstance import FactionInstance
+        from craid.eddb.FactionInstance import FactionInstance
         fi: FactionInstance
         for fi in self.minorFactionPresences:
             if fi.isClub():

@@ -95,7 +95,7 @@ class Station(Aware):
         return Aware.getFactionNameById(self.getControllingFactionId())
 
     def getControllingFactionName2(self) -> str:
-        from Faction import Faction
+        from craid.eddb.Faction import Faction
         fac: Faction = Aware.getFactionById(self.getControllingFactionId())
         return fac.get_name2()
 
