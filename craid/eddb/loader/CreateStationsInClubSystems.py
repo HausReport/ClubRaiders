@@ -12,14 +12,14 @@ from typing import Set
 
 import json_lines
 
-from craid.eddb.Faction import Faction
 from craid.eddb.InhabitedSystem import InhabitedSystem
 from craid.eddb.Station import Station
 from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 
 
-def loadStationsInClubSystems(all_systems_dict: Dict[int, InhabitedSystem], clubFactionIdToInfo: Dict[int, Faction],
-                              clubSystemLookup: Set[int]) -> None:
+def loadStationsInClubSystems(all_systems_dict: Dict[int, InhabitedSystem],
+                              club_faction_keys: Set[int],
+                              club_system_keys: Set[int]) -> None:
     nLines: int = 0
     nAdded: int = 0
     fName = LoadDataFromEDDB.find_data_file('stations.jsonl')
@@ -36,7 +36,7 @@ def loadStationsInClubSystems(all_systems_dict: Dict[int, InhabitedSystem], club
                 # Only load stations in systems with club presence
                 #
                 lCurSystemId = int(staLine['system_id'])
-                if lCurSystemId in clubSystemLookup:
+                if lCurSystemId in club_system_keys:
                     #
                     # Only load stations in systems with valid ids
                     #
@@ -54,7 +54,7 @@ def loadStationsInClubSystems(all_systems_dict: Dict[int, InhabitedSystem], club
                         #
                         # If the club controls the station, set that here
                         #
-                        if controlFacId in clubFactionIdToInfo:  # clubSystemLookup:
+                        if controlFacId in club_faction_keys:  # clubSystemLookup:
                             sta.setClub(True)
 
                         #

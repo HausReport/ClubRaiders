@@ -7,7 +7,7 @@
 # Load factions
 #
 import logging
-from typing import Dict
+from typing import Dict, Set
 #from memory_profiler import profile
 
 import json_lines
@@ -20,8 +20,10 @@ from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 #@profile
 def load_factions() -> [Dict[int, Faction], Dict[int, Faction], Dict[int, Faction]]:
     all_factions_dict: Dict[int, Faction] = {}  # private
-    playerFactionIdToInfo: Dict[int, Faction] = {}  # private
-    clubFactionIdToInfo: Dict[int, Faction] = {}  # private
+    #playerFactionIdToInfo: Dict[int, Faction] = {}  # private
+    player_faction_keys: Set[int] = set()
+    club_keys: Set[int] = set()
+    #clubFactionIdToInfo: Dict[int, Faction] = {}  # private
 
     nLines: int = 0
     fName = LoadDataFromEDDB.find_data_file('factions.jsonl')
@@ -36,9 +38,10 @@ def load_factions() -> [Dict[int, Faction], Dict[int, Faction], Dict[int, Factio
             all_factions_dict[lCurFactionId] = curFaction
 
             if curFaction.is_player():
-                playerFactionIdToInfo[lCurFactionId] = curFaction
+                player_faction_keys.add(lCurFactionId)
             if curFaction.isClub():
-                clubFactionIdToInfo[lCurFactionId] = curFaction
+               club_keys.add(lCurFactionId)
+               # clubFactionIdToInfo[lCurFactionId] = curFaction
 
     logging.info("Read %s lines of faction data", str(nLines))
-    return all_factions_dict, playerFactionIdToInfo, clubFactionIdToInfo
+    return all_factions_dict, player_faction_keys, club_keys

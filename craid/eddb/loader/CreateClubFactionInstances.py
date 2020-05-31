@@ -13,17 +13,22 @@ from craid.eddb.States import States
 #   SPDX-License-Identifier: BSD-3-Clause
 
 #
-# Make nifty list of club faction presences
+# Make nifty list of club faction presences.
+# Note: This does have to go through _all_ populated systems
 #
-def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem],
-                        clubFactionIdToInfo: Dict[int, Faction], all_factions_dict: Dict[int, Faction] ):
-    currentSystem: InhabitedSystem
+def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_system_keys: Set[int],
+                        all_factions_dict: Dict[int, Faction], club_faction_keys: Set[int]  ):
 
     allClubSystemInstances: List[FactionInstance] = []  # make this one avaiable
-    clubSystemLookup: Set[int] = set()
     sysIdFacIdToFactionInstance: Dict[Tuple[int, int], FactionInstance] = {}
 
+    currentSystem: InhabitedSystem
     for currentSystem in all_systems_dict.values():
+
+        sys_id = currentSystem.get_id()     # this is the big time-saver
+        if sys_id not in club_system_keys:
+            continue
+
         mfp = currentSystem._getMinorFactionPresencesDict()
         for faction_ptr in mfp:
             if faction_ptr is None:
@@ -58,7 +63,7 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem],
             #
             # Special handling for club factions
             #
-            if faction_id in clubFactionIdToInfo:
+            if faction_id in club_faction_keys:
                 #
                 # Keep player factions out of club factions.
                 # Cheap trick to see if it's a player faction that
@@ -70,11 +75,7 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem],
 
                 allClubSystemInstances.append(factionInstance)
 
-                #
-                # We use this set later to quickly match systems that have
-                # a club presence
-                clubSystemLookup.add(system_id)  # it's a set
 
     logging.info("Populated club faction presences")
-    logging.debug("Club system lookup set has {%d} items", len(clubSystemLookup))
-    return allClubSystemInstances, clubSystemLookup, sysIdFacIdToFactionInstance
+    logging.debug("Club system lookup set has {%d} items", len(club_system_keys))
+    return allClubSystemInstances, sysIdFacIdToFactionInstance

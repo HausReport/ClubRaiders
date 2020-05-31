@@ -35,28 +35,11 @@ class LoadDataFromEDDB:
         fName = os.path.join(targetDirectory, shortName + ".gz")
         logging.info("2 - downloading [%s] to [%s] data file.", url, fName)
         r = requests.get(url, allow_redirects=True, headers=headers)
-        gzip.open(fName, 'wb').write(r.content)
-        return fName
+        f = gzip.open(fName, 'wb')
+        f.write(r.content)
+        f.close()
 
-    # @staticmethod
-    # def load_data():
-    #     if not os.path.exists('../data'):
-    #         os.makedirs('data')
-    #     if True is True:
-    #         #
-    #         # Gets the most recent data dumps from eddb.io
-    #         #
-    #         url = 'https://eddb.io/archive/v6/systems_populated.jsonl'
-    #         r = requests.get(url, allow_redirects=True)
-    #         open('../data/systems_populated.jsonl', 'wb').write(r.content)
-    #
-    #         # url = 'https://eddb.io/archive/v6/stations.jsonl'
-    #         # r = requests.get(url, allow_redirects=True)
-    #         # open('data/stations.jsonl', 'wb').write(r.content)
-    #
-    #         url = 'https://eddb.io/archive/v6/factions.jsonl'
-    #         r = requests.get(url, allow_redirects=True)
-    #         open('../data/factions.jsonl', 'wb').write(r.content)
+        return fName
 
     @staticmethod
     def find_data_file(_shortName: str):

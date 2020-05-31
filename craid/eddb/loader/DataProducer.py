@@ -20,6 +20,8 @@ import gc
 # Expensive function - run once, use result many times
 #
 from craid.eddb.loader.CreateDataFrame import getDataFrame
+from eddb.Faction import Faction
+from eddb.loader.CreateClubSystemKeys import getClubSystemKeys
 
 
 def getDataArrays() -> Dict[str, object]:
@@ -29,7 +31,7 @@ def getDataArrays() -> Dict[str, object]:
     #
     # Load the basic factions and systems structures
     #
-    all_factions_dict, playerFactionIdToInfo, clubFactionIdToInfo = load_factions()
+    all_factions_dict, player_faction_keys, club_faction_keys = load_factions()
     pm.printmem('0.5')
     all_systems_dict = load_systems()
 
@@ -43,10 +45,29 @@ def getDataArrays() -> Dict[str, object]:
     systemNameToXYZ = loadSystemNameToPositionMap(all_systems_dict)
 
     #
+    # Populate dict of player faction name -> system name
+    # Used by dropdowns in dashboard
+    #
+    k: int
+    for k in player_faction_keys:
+        fac: Faction = all_factions_dict[k]
+        fac_name: str = fac.get_name()
+        sys_id: int = all_factions_dict[k].homesystem_id
+        sys = all_systems_dict.get(sys_id)
+        if sys is not None:
+            sys_name: str = sys.get_name()
+            playerFactionNameToSystemName[fac_name] = sys_name
+
+    #
+    # Identify systems with club faction presence
+    #
+    club_system_keys = getClubSystemKeys(all_systems_dict, club_faction_keys)
+
+    #
     # Make (2?) nifty list(s) of club faction presences
     #
-    allClubSystemInstances, clubSystemLookup, sysIdFacIdToFactionInstance \
-            = getFactionInstances(all_systems_dict, clubFactionIdToInfo, all_factions_dict)
+    allClubSystemInstances, sysIdFacIdToFactionInstance \
+            = getFactionInstances(all_systems_dict, club_system_keys, all_factions_dict, club_faction_keys )
 
 
     gc.collect()
@@ -57,7 +78,7 @@ def getDataArrays() -> Dict[str, object]:
     #
     # key: int
     # for key in list(all_systems_dict.keys()):
-    #     if key in clubSystemLookup:
+    #     if key in club_system_keys:
     #         continue
     #     else:
     #         all_systems_dict.pop(key)
@@ -65,7 +86,7 @@ def getDataArrays() -> Dict[str, object]:
     # logging.info("Pruned systems dict down to " + str(len(all_systems_dict)))
     # key: int
     # for key in list(all_factions_dict.keys()):
-    #     if key in clubSystemLookup:
+    #     if key in club_system_keys:
     #         continue
     #     else:
     #         all_systems_dict.pop(key)
@@ -81,7 +102,7 @@ def getDataArrays() -> Dict[str, object]:
     # Only now, can we populate lists of stations in **club** systems
     # No return value - stations are stored in their respective system objects
     #
-    loadStationsInClubSystems(all_systems_dict, clubFactionIdToInfo, clubSystemLookup )
+    loadStationsInClubSystems(all_systems_dict, club_faction_keys, club_system_keys )
 
     gc.collect()
     pm.printmem('3')
@@ -90,9 +111,15 @@ def getDataArrays() -> Dict[str, object]:
     #
 
     df: pd.DataFrame = getDataFrame(allClubSystemInstances)
+
+    #
+    # Clean up some resources
+    #
     allClubSystemInstances.clear()
     allClubSystemInstances = None
-
+    club_faction_keys.clear()
+    club_faction_keys = None
+    gc.collect()
 
     # 'playerFactionIdToInfo': playerFactionIdToInfo,
     #
@@ -100,7 +127,7 @@ def getDataArrays() -> Dict[str, object]:
     #          could be combined.  only really need the latter
     #
     #  FIXME:playerFactionNameToSystemName  could be moved to dashboard
-    return {'clubFactionIdToInfo'          : clubFactionIdToInfo,
+    return {#'clubFactionIdToInfo'          : clubFactionIdToInfo,
             'dataFrame'                     : df,
             #'all_systems_dict'             : all_systems_dict,
             #'allClubSystemInstances'       : allClubSystemInstances,
