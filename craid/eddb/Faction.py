@@ -7,7 +7,7 @@
 from typing import Dict
 
 from craid.eddb.Aware import Aware
-from eddb.NamedItem import NamedItem
+from craid.eddb.NamedItem import NamedItem
 
 
 class Faction(Aware):

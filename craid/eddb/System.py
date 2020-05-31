@@ -10,7 +10,7 @@ from craid.eddb.Aware import Aware
 
 class System(Aware):
 
-    def __init__(self, jsonLine: str):
+    def __init__(self, jsonLine):
         super().__init__(jsonLine['name'], jsonLine['id'])
         self.x: float = float(jsonLine['x'])
         self.y: float = float(jsonLine['y'])

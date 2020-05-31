@@ -34,7 +34,7 @@ from eddb.NamedItem import NamedItem
 class Station(Aware):
 
     # getters/setters for id & name in superclass
-    def __init__(self, jsonLine: str):
+    def __init__(self, jsonLine):
         super().__init__(jsonLine[NamedItem.NAME], jsonLine[NamedItem.ID])
         # self.jsonLine: Dict[str, str] = jsonString
         self.club: bool = False
