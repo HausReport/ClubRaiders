@@ -20,8 +20,8 @@ import gc
 # Expensive function - run once, use result many times
 #
 from craid.eddb.loader.CreateDataFrame import getDataFrame
-from eddb.Faction import Faction
-from eddb.loader.CreateClubSystemKeys import getClubSystemKeys
+from craid.eddb.Faction import Faction
+from craid.eddb.loader.CreateClubSystemKeys import getClubSystemKeys
 
 
 def getDataArrays() -> Dict[str, object]:
