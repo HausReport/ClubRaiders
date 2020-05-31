@@ -19,7 +19,7 @@ import gc
 #
 # Expensive function - run once, use result many times
 #
-from eddb.loader.CreateDataFrame import getDataFrame
+from craid.eddb.loader.CreateDataFrame import getDataFrame
 
 
 def getDataArrays() -> Dict[str, object]:
