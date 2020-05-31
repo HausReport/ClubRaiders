@@ -8,7 +8,7 @@
 #
 import logging
 from typing import Dict
-from memory_profiler import profile
+#from memory_profiler import profile
 import json_lines
 
 from craid.eddb.InhabitedSystem import InhabitedSystem
@@ -18,7 +18,7 @@ from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 #
 # Load all inhabited systems
 #
-@profile
+#@profile
 def load_systems() -> Dict[int, InhabitedSystem]:
     all_systems_dict: Dict[int, InhabitedSystem] = {}  # private
     nLines = 0
