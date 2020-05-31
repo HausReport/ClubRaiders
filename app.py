@@ -450,6 +450,6 @@ def update_table(query):
 
 if __name__ == '__main__':
     if DEPLOY:
-        app.server.run(debug=True, threaded=True)
+        app.server.run(debug=False, threaded=True)
     else:
         app.run_server(debug=True)
