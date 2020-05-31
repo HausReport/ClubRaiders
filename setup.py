@@ -13,7 +13,8 @@ setup(
               'craid.club', 'craid.club.regions'],
     # Needed for dependencies
     install_requires=['dash', 'dash-core-components', 'dash-html-components', 'dash-table', 'flask',
-                      'pandas', 'requests', 'setuptools', 'numpy', 'python-dateutil', 'ujson', 'json-lines', 'urlib3'],
+                      'pandas', 'requests', 'setuptools', 'numpy', 'python-dateutil', 'ujson', 'json-lines', 'urlib3',
+                      'psutil'],
     include_package_data=True,
     # *strongly* suggested for sharing
     version='0.72',
