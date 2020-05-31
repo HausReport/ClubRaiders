@@ -28,7 +28,7 @@ from craid.eddb.Aware import Aware
 
 # No Good for us
 # "type_id": 23, "type": "Non-Dockable Orbital",
-from eddb.NamedItem import NamedItem
+from craid.eddb.NamedItem import NamedItem
 
 
 class Station(Aware):
