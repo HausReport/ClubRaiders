@@ -9,14 +9,16 @@ from craid.eddb.NamedItem import NamedItem
 
 
 class Aware(NamedItem):
-    systemsDict: Dict[
-        int, object] = None  # =  None #Dict[int, InhabitedSystem] = None  typing this causes a circular import problem
-    factionsDict: Dict[int, object] = None  # =  None # Dict[int, Faction] = None
+    systemsDict: Dict[ int, object] = None  # Sidestepping circular imports
+    factionsDict: Dict[int, object] = None  # Sidestepping circular imports
+
+    # # getters/setters for id & name in superclass
+    # def __init__(self, jsonString):
+    #     super().__init__(jsonString[NamedItem.NAME], jsonString[NamedItem.ID])
 
     # getters/setters for id & name in superclass
-    def __init__(self, jsonString):
-        super().__init__(jsonString[NamedItem.NAME], jsonString[NamedItem.ID])
-        self.jsonLine = jsonString
+    def __init__(self, name: str, _id: int):
+        super().__init__(name, _id)
 
     @staticmethod
     def setSystemsDict(foo: Dict):  # [int, craid.eddb.InhabitedSystem]):

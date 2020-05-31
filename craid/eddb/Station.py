@@ -28,68 +28,66 @@ from craid.eddb.Aware import Aware
 
 # No Good for us
 # "type_id": 23, "type": "Non-Dockable Orbital",
+from eddb.NamedItem import NamedItem
+
 
 class Station(Aware):
 
     # getters/setters for id & name in superclass
-    def __init__(self, jsonString: str):
-        super().__init__(jsonString)  # [NamedItem.NAME], jsonString[NamedItem.ID])
+    def __init__(self, jsonLine: str):
+        super().__init__(jsonLine[NamedItem.NAME], jsonLine[NamedItem.ID])
         # self.jsonLine: Dict[str, str] = jsonString
-        # self.jsonLine = jsonString
         self.club: bool = False
+        self.distance_to_star: int = jsonLine.get('distance_to_star')
+        self.has_large_pads : bool = False
+        hm: str = jsonLine.get('max_landing_pad_size')
+        if hm is not None:
+            if hm == "L":
+                self.has_large_pads = True
+        self.has_market: bool = jsonLine.get("has_market")
+        self.has_black_market: bool = jsonLine.get("has_black_market")
+        self.has_shipyard: bool = jsonLine.get("has_shipyard")
+        self.has_docking: bool = jsonLine.get("has_docking")
+        self.is_planetary: bool =jsonLine.get("is_planetary")
+        self.stationType: str = jsonLine.get("type")
+        self.controlling_minor_faction_id: int = jsonLine.get("controlling_minor_faction_id")
 
     def getDistanceToStar(self) -> int:
-        xxx = self.jsonLine.get('distance_to_star')
-        if xxx is None: return -999999
-        return int(xxx)
+        return self.distance_to_star
 
     def hasLargePads(self) -> bool:
-        # if not self.hasDocking() : return False
-        xxx = self.jsonLine.get('max_landing_pad_size')
-        if xxx is None: return False
-        return xxx == "L"
+        return self.has_large_pads
 
     def hasMarket(self) -> bool:
-        xxx: bool = self.jsonLine.get("has_market")
-        return xxx
+        return self.has_market
 
     def hasBlackMarket(self) -> bool:
-        xxx: bool = self.jsonLine.get('has_black_market')
-        return xxx
+        return self.has_black_market
 
     def hasShipyard(self) -> bool:
-        xxx: bool = self.jsonLine.get('has_shipyard')
-        return xxx
+        return self.has_shipyard
 
     def hasDocking(self) -> bool:
-        xxx: bool = self.jsonLine.get('has_docking')
-        return xxx
+        return self.has_docking
 
     def isOrbital(self) -> bool:
-        return not self.isPlanetary()
+        return not self.is_planetary
 
     def isPlanetary(self) -> bool:
-        xxx: bool = self.jsonLine.get('is_planetary')
-        return xxx
-        # return self.jsonLine['body'] is not None
+        return self.is_planetary
 
     def okCandidate(self) -> bool:
         if not self.hasDocking():
             return False
-        if self.jsonLine['controlling_minor_faction'] is None:
+        if self.controlling_minor_faction_id is None:
             return False
         return True
 
     def getTypeString(self) -> str:
-        return self.jsonLine['type']
-
-    # def getTypeString(self) -> str:
-    # return self.jsonLine['type']
+        return self.stationType
 
     def getControllingFactionId(self) -> int:
-        zzz: int = int(self.jsonLine['controlling_minor_faction_id'])
-        ##print("cf id: " + str(zzz))
-        return zzz
+        return self.controlling_minor_faction_id
 
     def getControllingFactionName(self) -> str:
         return Aware.getFactionNameById(self.getControllingFactionId())

@@ -8,6 +8,7 @@
 #
 import logging
 from typing import Dict
+from memory_profiler import profile
 
 import json_lines
 
@@ -16,6 +17,7 @@ from craid.eddb.FactionNameFilter import FactionNameFilter
 from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 
 
+@profile
 def load_factions() -> [Dict[int, Faction], Dict[int, Faction], Dict[int, Faction]]:
     all_factions_dict: Dict[int, Faction] = {}  # private
     playerFactionIdToInfo: Dict[int, Faction] = {}  # private

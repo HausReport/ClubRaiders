@@ -25,6 +25,7 @@ class InhabitedSystem(System):
 
     def __init__(self, jsonString: str):
         super().__init__(jsonString)
+        self.jsonLine = jsonString
         self.hasAnarchy: bool = False
         self.powerState: str = jsonString[POWER_STATE]
         self.stations: List[Station] = []
@@ -222,7 +223,7 @@ class InhabitedSystem(System):
         fi: FactionInstance
         for fi in self.minorFactionPresences:
             if fi.isClub():
-                if fi.hasSate(state):
+                if fi.hasState(state):
                     ret.append(fi.get_name2())
 
         return ret
@@ -236,7 +237,7 @@ class InhabitedSystem(System):
         fi: FactionInstance
         for fi in self.minorFactionPresences:
             if fi.isClub():
-                if fi.hasSate(state):
+                if fi.hasState(state):
                     ret.append(fi.get_name2())
 
         return ret

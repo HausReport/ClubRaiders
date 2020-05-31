@@ -15,11 +15,11 @@ from craid.eddb.States import States
 class FactionInstance(Faction):
 
     # getters/setters for id & name in superclass
-    def __init__(self, par, inhabSys: InhabitedSystem, inf: float, vuln: States):
-        super().__init__(par.jsonLine)
-        self.mySystem: InhabitedSystem = inhabSys
+    def __init__(self, par: Faction, _mySystem: InhabitedSystem, inf: float, _states: States):
+        super().__init__(par, True)
+        self.mySystem: InhabitedSystem = _mySystem
         self.influence: float = inf
-        self.states: States = vuln
+        self.states: States = _states
 
     def getSystem(self):
         return self.mySystem
@@ -157,5 +157,5 @@ class FactionInstance(Faction):
         output = template.substitute(myDict)
         return output
 
-    def hasSate(self, state: int):
+    def hasState(self, state: int):
         return self.states.hasState(state)

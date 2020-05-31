@@ -18,11 +18,13 @@ from craid.eddb.Station import Station
 from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 
 
-def loadStationsInClubSystems(all_systems_dict : Dict[int, InhabitedSystem] , clubFactionIdToInfo: Dict[int, Faction], clubSystemLookup : Set[int] ) -> None:
+def loadStationsInClubSystems(all_systems_dict: Dict[int, InhabitedSystem], clubFactionIdToInfo: Dict[int, Faction],
+                              clubSystemLookup: Set[int]) -> None:
     nLines: int = 0
     nAdded: int = 0
     fName = LoadDataFromEDDB.find_data_file('stations.jsonl')
     with json_lines.open(fName, broken=True) as handle:
+        staLine: Dict
         for staLine in handle:
             nLines += 1
             #
@@ -40,6 +42,10 @@ def loadStationsInClubSystems(all_systems_dict : Dict[int, InhabitedSystem] , cl
                     #
                     curSys: InhabitedSystem = all_systems_dict[lCurSystemId]
                     if curSys is not None:
+
+                        #Note: playing with reducing mem requirements
+                        staLine.pop("selling_ships")
+                        staLine.pop("selling_modules")
                         #
                         # Create the station object
                         #

@@ -27,6 +27,7 @@ import craid.eddb.loader.DataProducer as dp
 # logging.basicConfig(filename='example.log',level=logging.DEBUG)
 from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.Oracle import Oracle
+from eddb.Printmem import printmem
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
@@ -55,13 +56,15 @@ DEPLOY = True
 # currentData:  Dict[str,object]
 # if currentData is None:
 currentData = dp.getDataArrays()
-clubSystemInstances = currentData['allClubSystemInstances']
+#clubSystemInstances = currentData['allClubSystemInstances']
 sysIdFacIdToFactionInstance = currentData['sysIdFacIdToFactionInstance']
 
 systemNameToXYZ: Dict[str, Tuple[float, float, float]] = currentData['systemNameToXYZ']
 playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
-df: pd.DataFrame = craid.eddb.loader.CreateDataFrame.getDataFrame(clubSystemInstances)
 
+
+df: pd.DataFrame = currentData['dataFrame']
+printmem("4")
 #
 # Massage data
 #
@@ -238,6 +241,8 @@ app.layout = html.Div([
                  ])
              ])
 ])
+
+printmem("End")
 ## ###### FINISH TABLE MADNESS
 
 # =============================================================

@@ -4,25 +4,53 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 
 # from InhabitedSystem import InhabitedSystem
+from typing import Dict
+
 from craid.eddb.Aware import Aware
+from eddb.NamedItem import NamedItem
 
 
 class Faction(Aware):
 
     # getters/setters for id & name in superclass
-    def __init__(self, jsonString):
-        super().__init__(jsonString)
-        self.club = False
+    def __init__(self, obj, fromFaction: bool=False):
 
+        self.club = False
+        if not fromFaction:
+            jsonString : Dict = obj
+            name = jsonString[NamedItem.NAME]
+            id = jsonString[NamedItem.ID]
+            super().__init__(name, id)
+            self.allegiance = jsonString['allegiance']
+            self.government = jsonString['government']
+            self.homesystem_id = jsonString['home_system_id']
+            self.player = jsonString['is_player_faction']
+        else:
+            tfac: Faction = obj
+            super().__init__(tfac.get_name(), tfac.get_id())
+            self.allegiance = tfac.allegiance
+            self.government = tfac.government
+            self.homesystem_id = tfac.homesystem_id
+            self.player = tfac.player
+
+    #
+    # Picked off the jsonLine
+    #
     def get_allegiance(self):
-        return self.jsonLine['allegiance']
+        return self.allegiance
 
     def get_government(self):
-        return self.jsonLine['government']
+        return self.government
 
     def get_homesystem_id(self):
-        return self.jsonLine['home_system_id']
+        return self.homesystem_id
 
+    def is_player(self):
+        return self.player
+
+    #
+    # Don't use the jsonLine
+    #
     def get_homesystem_name(self):
         return Aware.getSystemNameById(self.get_homesystem_id())
 
@@ -44,9 +72,6 @@ class Faction(Aware):
     def is_independent(self):
         return self.get_allegiance() == 'Independent'
 
-    def is_player(self):
-        return self.jsonLine['is_player_faction'] is True
-
     def get_name2(self):
         ret = self._name
         if self.is_player():
@@ -66,7 +91,7 @@ class Faction(Aware):
     #     return "https://inara.cz/galaxy-minorfaction/" + str(self.get_id())
 
     def setClub(self, param: bool) -> None:
-        #print("setting club to :" + str(param))
+        # print("setting club to :" + str(param))
         self.club = param
 
     def isClub(self) -> bool:

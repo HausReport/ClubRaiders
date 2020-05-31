@@ -10,17 +10,22 @@ from craid.eddb.Aware import Aware
 
 class System(Aware):
 
-    def __init__(self, jsonString: str):
-        super().__init__(jsonString)
+    def __init__(self, jsonLine: str):
+        super().__init__(jsonLine['name'], jsonLine['id'])
+        self.x: float = float(jsonLine['x'])
+        self.y: float = float(jsonLine['y'])
+        self.z: float = float(jsonLine['z'])
+        self.needs_permit: bool = jsonLine.get('needs_permit')
+        self.updated_at: datetime = datetime.utcfromtimestamp(jsonLine['updated_at'])
 
     def getX(self) -> float:
-        return float(self.jsonLine['x'])
+        return self.x
 
     def getY(self) -> float:
-        return float(self.jsonLine['y'])
+        return self.y
 
     def getZ(self) -> float:
-        return float(self.jsonLine['z'])
+        return self.z
 
     #
     # Octant of galaxy measured from Etionses
@@ -36,11 +41,10 @@ class System(Aware):
         return tmp
 
     def needsPermit(self) -> bool:
-        prm: bool = self.jsonLine.get('needs_permit')
-        return prm
+        return self.needs_permit
 
     def getUpdatedDateTime(self) -> datetime:
-        return datetime.utcfromtimestamp(self.jsonLine['updated_at'])
+        return self.updated_at
 
     def getUpdatedString(self) -> str:
         upd = self.getUpdatedDateTime()
