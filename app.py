@@ -27,7 +27,7 @@ import craid.eddb.loader.DataProducer as dp
 # logging.basicConfig(filename='example.log',level=logging.DEBUG)
 from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.Oracle import Oracle
-from eddb.Printmem import printmem
+from craid.eddb.Printmem import printmem
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
