@@ -220,12 +220,12 @@ app.layout = html.Div([
                          html.Div(className="strict-horizontal", children=([
                              html.Label("Current filter:", style={'flex-grow': '0', 'vertical-align': 'middle'}),
                              html.Label(id='filter-notifier', className="filter-notifier"),
-                             html.Button("Clear filter", id="clear-filter", className="myButton"),
+                             html.Button(id="clear-filter", className="myButton"),
                          ])),
                          html.Div(className="strict-horizontal", style={'vertical-align': 'middle'}, children=([
                              html.Label("Current sort:", style={'flex-grow': '0', 'vertical-align': 'middle'}),
                              html.Label(id='sort-notifier', className="sort-notifier"),
-                             html.Button("Clear sort", id="clear-sort", className="myButton"),
+                             html.Button(id="clear-sort", className="myButton"),
                          ])),
                      ]),
                  ]),
