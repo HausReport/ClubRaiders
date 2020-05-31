@@ -15,7 +15,7 @@ import requests
 # https://stackoverflow.com/questions/29314287/python-requests-download-only-if-newer
 import urllib3
 
-class XLoadDataFromEDDB:
+class LoadDataFromGithub:
 
     def __init__(self):
         pass
@@ -31,11 +31,17 @@ class XLoadDataFromEDDB:
         }
 
         assert os.path.exists(targetDirectory), "data dir doesn't exist: [" + targetDirectory + "]"
-        url = 'https://eddb.io/archive/v6/' + shortName
+
+
+        #url = "https://github.com/HausReport/ClubRaiders/blob/master/data/"+shortName+".gz?raw=true"
+        url = "https://raw.github.com/HausReport/ClubRaiders/master/data/"+shortName+".gz"
+
+        #      +shortName+".gz?raw=true"
+
         fName = os.path.join(targetDirectory, shortName + ".gz")
         logging.info("2 - downloading [%s] to [%s] data file.", url, fName)
         r = requests.get(url, allow_redirects=True, headers=headers)
-        f = gzip.open(fName, 'wb')
+        f = open(fName, 'wb')
         f.write(r.content)
         f.close()
 
@@ -71,7 +77,7 @@ class XLoadDataFromEDDB:
         #
         if fileIsOutOfDate or not os.path.exists(fName):
             logging.info("1- downloading to: " + fName)
-            fName = XLoadDataFromEDDB.download_file(shortName, tmpDir)
+            fName = LoadDataFromGithub.download_file(shortName, tmpDir)
             # fName +=".gz"  added in download_file
 
         if not os.path.exists(fName):
@@ -85,24 +91,26 @@ class XLoadDataFromEDDB:
 
     @staticmethod
     def fileIsOutOfDate(fName: str, _shortName: str):
-        http = urllib3.PoolManager()
-        url = "https://eddb.io/archive/v6/" + _shortName  # factions.jsonl"
-
-        u = http.request('HEAD', url)
-        meta = u.info()
-        print(meta)
-        print("Server Last Modified: " + str(meta.getheaders("Last-Modified")))
-
-        meta_modifiedtime = time.mktime(datetime.datetime.strptime(
-            ''.join(meta.getheaders("Last-Modified")), "%a, %d %b %Y %X GMT").timetuple())
-
-        file = fName
-        if os.path.getmtime(file) < meta_modifiedtime:  # change > to <
-            print("CPU file is older than server file.")
-            return True
-        else:
-            print("CPU file is NOT older than server file.")
-            return False
+        return False
+        # TODO: THINK THIS THROUGH
+        # http = urllib3.PoolManager()
+        # url = "https://eddb.io/archive/v6/" + _shortName  # factions.jsonl"
+        #
+        # u = http.request('HEAD', url)
+        # meta = u.info()
+        # print(meta)
+        # print("Server Last Modified: " + str(meta.getheaders("Last-Modified")))
+        #
+        # meta_modifiedtime = time.mktime(datetime.datetime.strptime(
+        #     ''.join(meta.getheaders("Last-Modified")), "%a, %d %b %Y %X GMT").timetuple())
+        #
+        # file = fName
+        # if os.path.getmtime(file) < meta_modifiedtime:  # change > to <
+        #     print("CPU file is older than server file.")
+        #     return True
+        # else:
+        #     print("CPU file is NOT older than server file.")
+        #     return False
 
 
 #if __name__ == '__main__':

@@ -21,6 +21,7 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_syste
 
     allClubSystemInstances: List[FactionInstance] = []  # make this one avaiable
     sysIdFacIdToFactionInstance: Dict[Tuple[int, int], FactionInstance] = {}
+    factions_of_interest_keys: Set[int] = set()
 
     nFacInst = 0
     currentSystem: InhabitedSystem
@@ -53,6 +54,8 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_syste
             #
             nFacInst += 1
             factionInstance = FactionInstance(fac, currentSystem, inf, vulnerabilities)
+            factions_of_interest_keys.add(faction_id)
+
             # seems redundant, but
             if fac.isClub():
                 factionInstance.setClub(True)
@@ -79,4 +82,4 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_syste
 
 
     logging.info("Populated faction instances: {%d} items.", nFacInst)
-    return allClubSystemInstances, sysIdFacIdToFactionInstance
+    return allClubSystemInstances, sysIdFacIdToFactionInstance, factions_of_interest_keys

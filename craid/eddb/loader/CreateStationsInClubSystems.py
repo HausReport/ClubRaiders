@@ -14,15 +14,17 @@ import json_lines
 
 from craid.eddb.InhabitedSystem import InhabitedSystem
 from craid.eddb.Station import Station
-from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
+from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
 
 
 def loadStationsInClubSystems(all_systems_dict: Dict[int, InhabitedSystem],
                               club_faction_keys: Set[int],
-                              club_system_keys: Set[int]) -> None:
+                              club_system_keys: Set[int]) -> Set[int]:
+
+    station_keys = set()
     nLines: int = 0
     nAdded: int = 0
-    fName = LoadDataFromEDDB.find_data_file('stations.jsonl')
+    fName = LoadDataFromGithub.find_data_file('smol-stations.jsonl')
     with json_lines.open(fName, broken=True) as handle:
         staLine: Dict
         for staLine in handle:
@@ -50,6 +52,8 @@ def loadStationsInClubSystems(all_systems_dict: Dict[int, InhabitedSystem],
                         # Create the station object
                         #
                         sta: Station = Station(staLine)
+                        sid: int = sta.get_id()
+                        station_keys.add(sid)
                         nAdded += 1
                         #
                         # If the club controls the station, set that here
@@ -63,4 +67,4 @@ def loadStationsInClubSystems(all_systems_dict: Dict[int, InhabitedSystem],
                         curSys.addStation(sta)
 
     logging.info("Read %d lines of station data, adding %d\n", nLines, nAdded)
-    return None
+    return station_keys

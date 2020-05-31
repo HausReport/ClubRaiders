@@ -3,11 +3,11 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 import logging
-from typing import Dict
+from typing import Dict, Set
 import pandas as pd
 
 from craid.eddb.Aware import Aware
-from craid.eddb.loader.CreateClubFactionInstances import getFactionInstances
+from craid.eddb.loader.CreateFactionInstances import getFactionInstances
 from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateStationsInClubSystems import loadStationsInClubSystems
 from craid.eddb.loader.CreateSystemNameToPositionMap import loadSystemNameToPositionMap
@@ -22,6 +22,7 @@ import gc
 from craid.eddb.loader.CreateDataFrame import getDataFrame
 from craid.eddb.Faction import Faction
 from craid.eddb.loader.CreateClubSystemKeys import getClubSystemKeys
+from craid.eddb.loader.MakeKeyFiles import dumpKeys, loadKeys
 
 
 def getDataArrays() -> Dict[str, object]:
@@ -61,12 +62,16 @@ def getDataArrays() -> Dict[str, object]:
     #
     # Identify systems with club faction presence
     #
-    club_system_keys = getClubSystemKeys(all_systems_dict, club_faction_keys)
+    clubSystemKeysExists = True
+    club_system_keys = loadKeys('club-system-keys')
+    if club_system_keys is None:
+        club_system_keys = getClubSystemKeys(all_systems_dict, club_faction_keys)
+        clubSystemKeysExists = False
 
     #
     # Make (2?) nifty list(s) of club faction presences
     #
-    allClubSystemInstances, sysIdFacIdToFactionInstance \
+    allClubSystemInstances, sysIdFacIdToFactionInstance, factions_of_interest_keys \
             = getFactionInstances(all_systems_dict, club_system_keys, all_factions_dict, club_faction_keys )
 
 
@@ -102,7 +107,8 @@ def getDataArrays() -> Dict[str, object]:
     # Only now, can we populate lists of stations in **club** systems
     # No return value - stations are stored in their respective system objects
     #
-    loadStationsInClubSystems(all_systems_dict, club_faction_keys, club_system_keys )
+    club_station_keys: Set[int] = \
+        loadStationsInClubSystems(all_systems_dict, club_faction_keys, club_system_keys )
 
     gc.collect()
     pm.printmem('3')
@@ -115,6 +121,16 @@ def getDataArrays() -> Dict[str, object]:
     #
     # Clean up some resources
     #
+
+    if not clubSystemKeysExists:
+        dumpKeys("club-system-keys",club_system_keys)
+
+    # FIXME - think about this
+    #if not factions_of_interest_keys:
+        #dumpKeys("factions-of-interest-keys",factions_of_interest_keys)
+    #if not clubSystemKeysExists:
+    #dumpKeys("club-station-keys",club_station_keys)
+
     allClubSystemInstances.clear()
     allClubSystemInstances = None
     club_faction_keys.clear()
@@ -123,14 +139,9 @@ def getDataArrays() -> Dict[str, object]:
 
     # 'playerFactionIdToInfo': playerFactionIdToInfo,
     #
-    #  FIXME: the roles of allClubSystemInstances and sysIdFacIdToFactionInstance
-    #          could be combined.  only really need the latter
     #
     #  FIXME:playerFactionNameToSystemName  could be moved to dashboard
-    return {#'clubFactionIdToInfo'          : clubFactionIdToInfo,
-            'dataFrame'                     : df,
-            #'all_systems_dict'             : all_systems_dict,
-            #'allClubSystemInstances'       : allClubSystemInstances,
+    return { 'dataFrame'                     : df,
             'systemNameToXYZ'              : systemNameToXYZ,
             'sysIdFacIdToFactionInstance'  : sysIdFacIdToFactionInstance,
             'playerFactionNameToSystemName': playerFactionNameToSystemName,  # used in dashboard for 2nd dropdown

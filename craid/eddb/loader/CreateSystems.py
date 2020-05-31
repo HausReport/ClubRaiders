@@ -12,7 +12,7 @@ from typing import Dict
 import json_lines
 
 from craid.eddb.InhabitedSystem import InhabitedSystem
-from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
+from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
 
 
 #
@@ -22,7 +22,7 @@ from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 def load_systems() -> Dict[int, InhabitedSystem]:
     all_systems_dict: Dict[int, InhabitedSystem] = {}  # private
     nLines = 0
-    fName = LoadDataFromEDDB.find_data_file('systems_populated.jsonl')
+    fName = LoadDataFromGithub.find_data_file('smol-systems_populated.jsonl')
     with json_lines.open(fName, broken=True) as handle:
         for sysLine in handle:
             nLines += 1
