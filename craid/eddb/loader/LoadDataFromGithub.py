@@ -15,15 +15,20 @@ import requests
 # https://stackoverflow.com/questions/29314287/python-requests-download-only-if-newer
 import urllib3
 
-class LoadDataFromGithub:
+from craid.eddb.loader.DataLoader import DataLoader
+
+
+class LoadDataFromGithub(DataLoader):
 
     def __init__(self):
-        pass
+        super().__init__()
+
+    def getPrefix(self) -> str:
+        return "smol-"
 
     # Hint: To enable compression, add the
     # Accept-Encoding: gzip, deflate, sdch entry to your request header.
-    @staticmethod
-    def download_file(shortName: str, targetDirectory: str) -> str:
+    def download_file(self, shortName: str, targetDirectory: str) -> str:
 
         headers = {
             "User-Agent"     : "ClubRaiders Application",
@@ -47,9 +52,8 @@ class LoadDataFromGithub:
 
         return fName
 
-    @staticmethod
-    def find_data_file(_shortName: str):
-        shortName = _shortName
+    def find_data_file(self, _shortName: str, forceDownload= False):
+        shortName = self.getPrefix() + _shortName
         #
         # If data dir exists, use that one
         #
@@ -68,16 +72,17 @@ class LoadDataFromGithub:
         # logging.info("1- Checking for: " + fName)
 
         fileIsOutOfDate: bool = False
-
-        # TODO: Need some extra logic here.  Like, if the day of the file is less than today, don't even check headers
-        # fileIsOutOfDate = LoadDataFromEDDB.fileIsOutOfDate(fName, shortName)
+        if not forceDownload:
+            pass
+            # TODO: Need some extra logic here.  Like, if the day of the file is less than today, don't even check headers
+            # fileIsOutOfDate = LoadDataFromEDDB.fileIsOutOfDate(fName, shortName)
 
         #
         # If neither exist, download the file to the temp dir
         #
         if fileIsOutOfDate or not os.path.exists(fName):
             logging.info("1- downloading to: " + fName)
-            fName = LoadDataFromGithub.download_file(shortName, tmpDir)
+            fName = self.download_file(shortName, tmpDir)
             # fName +=".gz"  added in download_file
 
         if not os.path.exists(fName):
@@ -89,8 +94,7 @@ class LoadDataFromGithub:
             # with open(fName, 'r') as handle:
             return fName
 
-    @staticmethod
-    def fileIsOutOfDate(fName: str, _shortName: str):
+    def fileIsOutOfDate(self, fName: str, _shortName: str):
         return False
         # TODO: THINK THIS THROUGH
         # http = urllib3.PoolManager()

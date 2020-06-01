@@ -15,16 +15,18 @@ import json_lines
 from craid.eddb.InhabitedSystem import InhabitedSystem
 from craid.eddb.Station import Station
 from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
+from craid.eddb.loader.DataLoader import DataLoader
 
 
-def loadStationsInClubSystems(all_systems_dict: Dict[int, InhabitedSystem],
+def loadStationsInClubSystems(loader: DataLoader,
+                              all_systems_dict: Dict[int, InhabitedSystem],
                               club_faction_keys: Set[int],
                               club_system_keys: Set[int]) -> Set[int]:
 
     station_keys = set()
     nLines: int = 0
     nAdded: int = 0
-    fName = LoadDataFromGithub.find_data_file('smol-stations.jsonl')
+    fName = loader.find_data_file('stations.jsonl')
     with json_lines.open(fName, broken=True) as handle:
         staLine: Dict
         for staLine in handle:

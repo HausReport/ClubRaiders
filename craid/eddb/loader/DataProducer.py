@@ -23,18 +23,26 @@ from craid.eddb.loader.CreateDataFrame import getDataFrame
 from craid.eddb.Faction import Faction
 from craid.eddb.loader.CreateClubSystemKeys import getClubSystemKeys
 from craid.eddb.loader.MakeKeyFiles import dumpKeys, loadKeys
+from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
+from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
 
 
-def getDataArrays() -> Dict[str, object]:
+def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
+
+    if useEddb:
+        myLoader = LoadDataFromEDDB()
+    else:
+        myLoader = LoadDataFromGithub()
+
     playerFactionNameToSystemName: Dict[str, str] = {}
 
     pm.printmem('0')
     #
     # Load the basic factions and systems structures
     #
-    all_factions_dict, player_faction_keys, club_faction_keys = load_factions()
+    all_factions_dict, player_faction_keys, club_faction_keys = load_factions(myLoader)
     pm.printmem('0.5')
-    all_systems_dict = load_systems()
+    all_systems_dict = load_systems(myLoader)
 
     gc.collect()
     pm.printmem('1')
@@ -108,7 +116,7 @@ def getDataArrays() -> Dict[str, object]:
     # No return value - stations are stored in their respective system objects
     #
     club_station_keys: Set[int] = \
-        loadStationsInClubSystems(all_systems_dict, club_faction_keys, club_system_keys )
+        loadStationsInClubSystems(myLoader, all_systems_dict, club_faction_keys, club_system_keys )
 
     gc.collect()
     pm.printmem('3')
@@ -122,14 +130,14 @@ def getDataArrays() -> Dict[str, object]:
     # Clean up some resources
     #
 
-    if not clubSystemKeysExists:
+    if writeKeyFiles:
         dumpKeys("club-system-keys",club_system_keys)
+        dumpKeys("factions-of-interest-keys",factions_of_interest_keys)
+        dumpKeys("club-station-keys",club_station_keys)
 
     # FIXME - think about this
     #if not factions_of_interest_keys:
-        #dumpKeys("factions-of-interest-keys",factions_of_interest_keys)
     #if not clubSystemKeysExists:
-    #dumpKeys("club-station-keys",club_station_keys)
 
     allClubSystemInstances.clear()
     allClubSystemInstances = None

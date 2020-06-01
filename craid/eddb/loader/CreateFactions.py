@@ -14,19 +14,16 @@ import json_lines
 
 from craid.eddb.Faction import Faction
 from craid.eddb.FactionNameFilter import FactionNameFilter
-from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
+from craid.eddb.loader.DataLoader import DataLoader
 
 
-#@profile
-def load_factions() -> [Dict[int, Faction], Dict[int, Faction], Dict[int, Faction]]:
+def load_factions(loader: DataLoader) -> [Dict[int, Faction], Dict[int, Faction], Dict[int, Faction]]:
     all_factions_dict: Dict[int, Faction] = {}  # private
-    #playerFactionIdToInfo: Dict[int, Faction] = {}  # private
     player_faction_keys: Set[int] = set()
     club_keys: Set[int] = set()
-    #clubFactionIdToInfo: Dict[int, Faction] = {}  # private
 
     nLines: int = 0
-    fName = LoadDataFromGithub.find_data_file('smol-factions.jsonl')
+    fName = loader.find_data_file('factions.jsonl')
     with json_lines.open(fName, broken=True) as handle:
         for facLine in handle:
             nLines += 1

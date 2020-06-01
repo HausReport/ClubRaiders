@@ -12,11 +12,15 @@ import ujson
 
 from craid.eddb.loader.MakeKeyFiles import loadKeys
 from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
+from craid.eddb.loader import DataProducer
+from craid.eddb.loader.DataLoader import DataLoader
 
 
 def munchFile(keys: Set[int], inName: str):
     tmp: List[Dict] = []
-    inFile = LoadDataFromGithub.find_data_file(inName)
+
+    myLoader: DataLoader = LoadDataFromGithub()
+    inFile = myLoader.find_data_file(inName)
     with json_lines.open(inFile, broken=True) as handle:
         for facLine in handle:
             if facLine['id'] in keys:
@@ -34,6 +38,11 @@ def munchFile(keys: Set[int], inName: str):
 
 
 if __name__ == '__main__':
+    # download large files from eddb
+    DataProducer.getDataArrays(writeKeyFiles=True, useEddb=True)
+    # delete smol
+
+    #load key files & munch
     club_faction_keys = loadKeys("factions-of-interest-keys")
     munchFile( club_faction_keys, 'factions.jsonl')
     club_system_keys    = loadKeys('club-system-keys')

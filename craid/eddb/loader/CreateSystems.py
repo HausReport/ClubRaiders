@@ -19,10 +19,13 @@ from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
 # Load all inhabited systems
 #
 #@profile
-def load_systems() -> Dict[int, InhabitedSystem]:
+from craid.eddb.loader.DataLoader import DataLoader
+
+
+def load_systems(loader: DataLoader) -> Dict[int, InhabitedSystem]:
     all_systems_dict: Dict[int, InhabitedSystem] = {}  # private
     nLines = 0
-    fName = LoadDataFromGithub.find_data_file('smol-systems_populated.jsonl')
+    fName = loader.find_data_file('systems_populated.jsonl')
     with json_lines.open(fName, broken=True) as handle:
         for sysLine in handle:
             nLines += 1
