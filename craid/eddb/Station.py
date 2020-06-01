@@ -4,6 +4,7 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 
 from craid.eddb.Aware import Aware
+import craid.eddb.GameConstants as gconst
 
 
 # Currently known Types
@@ -45,12 +46,16 @@ class Station(Aware):
             if hm == "L":
                 self.has_large_pads = True
         self.has_market: bool = jsonLine.get("has_market")
-        self.has_black_market: bool = jsonLine.get("has_black_market")
+        self.has_blackmarket: bool = jsonLine.get("has_blackmarket")
         self.has_shipyard: bool = jsonLine.get("has_shipyard")
         self.has_docking: bool = jsonLine.get("has_docking")
         self.is_planetary: bool =jsonLine.get("is_planetary")
+        self.system_id: int =jsonLine.get("system_id")
         self.stationType: str = jsonLine.get("type")
         self.controlling_minor_faction_id: int = jsonLine.get("controlling_minor_faction_id")
+
+    def getSystemId(self) -> int:
+        return self.system_id
 
     def getDistanceToStar(self) -> int:
         return self.distance_to_star
@@ -62,7 +67,7 @@ class Station(Aware):
         return self.has_market
 
     def hasBlackMarket(self) -> bool:
-        return self.has_black_market
+        return self.has_blackmarket
 
     def hasShipyard(self) -> bool:
         return self.has_shipyard
@@ -86,6 +91,25 @@ class Station(Aware):
     def getTypeString(self) -> str:
         return self.stationType
 
+    def getSystem(self):
+        from craid.eddb.InhabitedSystem import InhabitedSystem
+        tid: int = self.getSystemId()
+        tsys: InhabitedSystem = Aware.getSystemById(tid)
+        return tsys
+
+    def getControllingFactionInstance(self):
+        from craid.eddb.FactionInstance import FactionInstance
+        from craid.eddb.InhabitedSystem import InhabitedSystem
+
+        tSys = self.getSystem()
+        fid: int = self.getControllingFactionId()
+        fac: FactionInstance = tSys.getFactionInstanceById(fid)
+        return fac
+
+    def hasState(self, state: int):
+        fac = self.getControllingFactionInstance()
+        return fac.hasState(state)
+
     def getControllingFactionId(self) -> int:
         return self.controlling_minor_faction_id
 
@@ -103,6 +127,19 @@ class Station(Aware):
 
     def isClub(self) -> bool:
         return self.club
+
+    # a little experimental, but should be close
+    def getMineralSalesScore(self) -> int:
+        ct: int = 0
+        if self.hasState(gconst.STATE_BOOM) or self.hasState(gconst.STATE_INVESTMENT):
+            if self.hasState(gconst.STATE_CIVIL_LIBERTY): ct += 1
+            if self.hasState(gconst.STATE_EXPANSION): ct += 1
+            if self.hasState(gconst.STATE_PUBLIC_HOLIDAY): ct += 1
+            if ct < 2:
+                return 0
+            if self.hasState(gconst.STATE_PIRATE_ATTACK): ct += 1
+
+        return ct
 
     ## FIXME: miners_tool urls are pretty obfuscated, too
     # FIXME: this is pretty obfuscated, don't see how it works yet

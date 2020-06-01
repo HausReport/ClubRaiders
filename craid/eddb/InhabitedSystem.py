@@ -23,6 +23,7 @@ class InhabitedSystem(System):
     FLAG_NON_CLUB_ONLY: int = 1
     FLAG_EITHER: int = 2
 
+    # FIXME: expand constructor and remove jsonLine references as possible
     def __init__(self, jsonString: str):
         super().__init__(jsonString)
         self.jsonLine = jsonString
@@ -57,6 +58,18 @@ class InhabitedSystem(System):
     # ================================================================================
     # Factions Methods
     #
+
+    def getControllingFactionInstance(self):
+        theId = self.getControllingFactionId()
+        return self.getFactionInstanceById(theId)
+
+    def getFactionInstanceById(self, theId: int):
+        from craid.eddb.FactionInstance import FactionInstance
+        fac: FactionInstance
+        for fac in self.minorFactionPresences:
+            if fac.get_id() == theId:
+                return fac
+
     def getControllingFactionId(self):
         return int(self.jsonLine['controlling_minor_faction_id'])
 
@@ -165,7 +178,10 @@ class InhabitedSystem(System):
     # ================================================================================
     # Templating
     #
-    def template(self, msg: str) -> str:
+    def template(self, msg: str, fix: object) -> str:
+        from craid.eddb.FactionInstance import FactionInstance
+        fi: FactionInstance = fix
+
         myDict: PassThroughDict[str, str] = PassThroughDict()
 
         myDict['system_name'] = self.get_name()
@@ -206,7 +222,7 @@ class InhabitedSystem(System):
 
         myDict['needs_permit'] = boolToYesOrNo(self.needsPermit())
 
-        sa = SystemAnalyzer(self)
+        sa = SystemAnalyzer(self, fix)
         rep = sa.toString()
         myDict['system_analysis'] = rep
 

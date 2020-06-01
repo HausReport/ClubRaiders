@@ -81,8 +81,8 @@ class FactionInstance(Faction):
     def canRetreat(self) -> bool:
         if self.isHomeSystem(): return False
 
-        # TODO: handle special cases here
-
+        # FIXME: can't call getDifficulty here
+        #if self.getDifficulty() == 999999: return False
         return True
 
     def getUpdatedDateTime(self) -> datetime:

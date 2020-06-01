@@ -40,6 +40,12 @@ class Aware(NamedItem):
         return sys.get_name()
 
     @staticmethod
+    def getSystemById(sysId: int):
+        from craid.eddb.InhabitedSystem import InhabitedSystem
+        sys: InhabitedSystem = Aware.systemsDict.get(sysId)
+        return sys
+
+    @staticmethod
     def getFactionNameById(facId: int):
         from craid.eddb.Faction import Faction
         # sd Dict[int, Faction] = Aware.factionsDict

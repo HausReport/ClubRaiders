@@ -16,6 +16,10 @@
 | EDDB System Info | $eddb_link |
 | Bounty Hunting | $bounty_hunting        |
 
+# Suggested Tactics
+
+$system_analysis
+
 # Stations
 
 $station_list
@@ -24,7 +28,5 @@ $station_list
 
 $faction_list
 
-# System Analysis
 
-$system_analysis
 
