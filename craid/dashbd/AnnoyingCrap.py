@@ -65,13 +65,12 @@ def getTheColumns():
 
 def render_content(tab):
     if tab == 'tab-1':
-        return html.Div([
-            # FIXME: change this to a horizontal flex container
-            getMarkdown("overview")
-        ])
-        # return html.Div([
-        #    html.H3('Tab content 1')
-        # ])
+        return html.Div(className="strict-horizontal", children=[
+            html.Div(id="activities"),
+            html.Div(id="activity"
+            ),
+            html.Div(id="statistics"),
+        ]),
     elif tab == 'tab-2':
         return html.Div([
             getMarkdown("cz")
