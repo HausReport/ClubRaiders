@@ -6,7 +6,9 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
+    text-align: left;
 }
+
 div {
 }
 
@@ -43,6 +45,13 @@ del {
   text-align: left;
 }
 
+.strict-vertical {
+  display: flex;
+  flex-flow: column;
+  flex-wrap: no-wrap;
+  text-align: left;
+}
+
 .myButton {
     display: flex;
     background:url(clear-32.png) no-repeat;
@@ -51,6 +60,8 @@ del {
     height: 32px;
     border: none;
     flex-grow: 1;
+    padding-right: 50px;
+    padding-left: 10px;
 }
 
 .myLabel {
@@ -62,21 +73,22 @@ del {
     display: flex;
     width: 300px;
     flex-grow: 4;
+    text-align: left;
+    align: left;
 }
 
 .filter-notifier {
     display: flex;
     flex-grow: 1;
+    padding-left: 10px;
+    padding-right: 15px;
 }
-
 
 .sort-notifier {
     display: flex;
     flex-grow: 1;
-}
-
-.h1, .h2, .h3 {
-    text-align: left;
+    padding-left: 10px;
+    padding-right: 15px;
 }
 
 .wrapper > * {
@@ -94,9 +106,48 @@ del {
   text-align: left;
 }
 
+.activities {
+  display: flex;
+  flex-flow: column;
+  text-align: left;
+  width: 250px;
+  min-width: 250px;
+}
+
+.colItem {
+  display: flex;
+  flex-flow: column;
+  flex-wrap: no-wrap;
+  text-align: left;
+  min-width: 250px;
+  width: 250px;
+  background-color: yellow;
+}
+
+.simpleColItem {
+  display: flex;
+  flex-flow: column;
+  background-color: green;
+}
+
+.activity {
+  display: flex;
+  text-align: left;
+  min-width: 200px;
+}
+
+.statistics {
+  display: flex;
+  flex-flow: column;
+  text-align: left;
+  width: 250px;
+  min-width: 250px;
+}
+
+
 .aside-1 {
   display: flex;
-  flex-flow: col wrap;
+  flex-flow: column wrap;
   text-align: left;
 }
 

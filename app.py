@@ -15,29 +15,19 @@ import dash_table
 import flask
 import numpy as np
 import pandas as pd
+import ujson
 from dash.dependencies import Input, Output
 
-import craid.dashbd
-import craid.dashbd.AnnoyingCrap as crap
-import craid.eddb.loader.CreateDataFrame
 import craid.eddb.loader.DataProducer as dp
+from craid.dashbd.AnnoyingCrap import AnnoyingCrap
 #
 # Set up logging
 #
 # logging.basicConfig(filename='example.log',level=logging.DEBUG)
-from craid.eddb.FactionInstance import FactionInstance
-from craid.eddb.Oracle import Oracle
 from craid.eddb.Printmem import printmem
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
-
-#
-# Heroku requirements
-#
-server = flask.Flask(__name__)
-server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
-DEPLOY = True
 
 
 # FIXME: it'd be nice to let users link directly to certain factions, systems, etc...
@@ -56,12 +46,14 @@ DEPLOY = True
 # currentData:  Dict[str,object]
 # if currentData is None:
 currentData = dp.getDataArrays()
-#clubSystemInstances = currentData['allClubSystemInstances']
+# clubSystemInstances = currentData['allClubSystemInstances']
 sysIdFacIdToFactionInstance = currentData['sysIdFacIdToFactionInstance']
 
 systemNameToXYZ: Dict[str, Tuple[float, float, float]] = currentData['systemNameToXYZ']
 playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
 
+annoyingCrap: AnnoyingCrap = AnnoyingCrap(systemNameToXYZ)
+welcomeMarkdown = AnnoyingCrap.getMarkdown('welcome')
 
 df: pd.DataFrame = currentData['dataFrame']
 printmem("4")
@@ -71,23 +63,21 @@ printmem("4")
 nrows = df.shape[0]
 df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
 
-#
-# Flotsam
-#
-colors = {
-    'background': 'black',
-    'text'      : 'orange'
-}
-
-#
 # Start the app framework
+# In non-DEPLOY mode, the " app.config.suppress_callback_exceptions = True" doesn't seem
+# to take hold and there's an annoying bug.
 #
+DEPLOY = True   # KEEP THIS TRUE, SRSLY
 if DEPLOY:
+    #
+    # Heroku requirements
+    #
     server = flask.Flask(__name__)
     server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
     app = dash.Dash(__name__, server=server)
 else:
-    app = dash.Dash(__name__)  # ,requests_pathname_prefix='')
+    app = dash.Dash(__name__)
+    app.scripts.config.serve_locally = True
     print(__name__)
 
 #
@@ -98,9 +88,12 @@ app.config.suppress_callback_exceptions = True
 #
 # Initialize some UI elements
 #
-opts = crap.getFirstDropdown(systemNameToXYZ)
-fopts = crap.getSecondDropdown(playerFactionNameToHomeSystemName)
-theColumns = crap.getTheColumns()
+
+# opts = crap.getFirstDropdown(systemNameToXYZ)
+# fopts = crap.getSecondDropdown(playerFactionNameToHomeSystemName)
+# gopts = crap.getThirdDropdown()
+
+theColumns = AnnoyingCrap.getTheColumns()
 
 datatable: dash_table.DataTable = dash_table.DataTable(
     id='datatable-interactivity',
@@ -119,13 +112,6 @@ datatable: dash_table.DataTable = dash_table.DataTable(
     page_action="native",
     page_current=0,
     page_size=30,
-    # style_header={
-    #     'backgroundColor': 'black',
-    #     'color'          : 'gold'},
-    # style_cell={
-    #     'backgroundColor': 'black',
-    #     'color'          : 'orange'
-    # }
 )
 
 datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
@@ -141,48 +127,15 @@ datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
 
 
 #
-# Layout the header
-#
-hdr_layout = html.Div([
-    # html.Div(
-    #     className="app-header",
-    #     children=[
-    #         html.Div('Plotly Dash', className="app-header--title")
-    #     ]
-    # ),
-    html.Label("Choose a System:", className="myLabel"),
-    dcc.Dropdown(
-        id='demo-dropdown',
-        options=opts,
-        value='Alioth',
-        placeholder='Select star system',
-        className="myDropdown",
-        # autoFocus=True,
-    ),
-    html.Label("or a Squadron:", className="myLabel"),
-    dcc.Dropdown(
-        id='demo-dropdown2',
-        options=fopts,
-        value='',  # Anti Xeno Initiative',
-        placeholder='Select player faction',
-        className="myDropdown",
-    ),
-], className="strict-horizontal")
-
-# TODO: get a hook to tab1 and print its properties to find color settings
-# tab1: dcc.Tab = something
-
-#
 # Layout the main application
 #
 app.layout = html.Div([
-    hdr_layout,
     dcc.Tabs(id='tabs-example', value='tab-1',
              parent_className='custom-tabs',
              className='custom-tabs-container',
-             style={'primary': 'red',
+             style={'primary'     : 'red',
                     'primaryColor': 'red',
-                    'selected': 'red'},
+                    'selected'    : 'red'},
              children=[
                  dcc.Tab(label='Overview',
                          value='tab-1',
@@ -233,8 +186,8 @@ app.layout = html.Div([
                      datatable,
                  ]),
                  html.Aside(className="aside aside-2", children=[
-                     html.Article("Nothing selected.", id='faction-drilldown', style={'width': '100%'}),
-                     html.Article("Nothing selected.", id='system-drilldown', style={'width': '100%'}),
+                     html.Article(welcomeMarkdown, id='faction-drilldown', style={'width': '100%'}),
+                     html.Article("", id='system-drilldown', style={'width': '100%'}),
                  ]),
                  html.Footer(className='footer', children=[
                      html.Div(id='datatable-interactivity-container')
@@ -243,6 +196,8 @@ app.layout = html.Div([
 ])
 
 printmem("End")
+
+
 ## ###### FINISH TABLE MADNESS
 
 # =============================================================
@@ -251,9 +206,44 @@ printmem("End")
 @app.callback(Output('tabs-example-content', 'children'),
               [Input('tabs-example', 'value')])
 def render_content(tab):
-    return craid.dashbd.AnnoyingCrap.render_content(tab)
+    if tab == 'tab-1':
+        return html.Div(className="strict-horizontal", children=[
+            html.Div(className="statistics",
+                     children=[
+                         html.Label("I want to:", className="simpleColItem"),
+                         dcc.Dropdown(
+                             id='activityDropdown',
+                             options=AnnoyingCrap.getThirdDropdown(),
+                             value='',  # Anti Xeno Initiative',
+                             placeholder='Select activity',
+                             className="simpleColItem",
+                         ),
+                         html.Label("in the vicinity of", className="simpleColItem"),
+                         dcc.Dropdown(
+                             id='locationDropdown',
+                             options=AnnoyingCrap.getFirstDropdown(systemNameToXYZ),
+                             value='Sol',
+                             placeholder='Select star system',
+                             className="simpleColItem",
+                             # autoFocus=True,
+                         ),
+                     ]),
+            html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity", className="activity"),
+            html.Article(AnnoyingCrap.getMarkdown('hi2'), id="statistics", className="statistics"),
+        ]),
+    elif tab == 'tab-2':
+        return html.Div([
+            AnnoyingCrap.getMarkdown("cz")
+        ])
+    elif tab == 'tab-3':
+        return html.Div([
+            AnnoyingCrap.getMarkdown("bh")
+        ])
 
 
+#
+# Convert syste
+#
 def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
     #
     # value should be a valid system name
@@ -263,189 +253,125 @@ def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
     if pos is None: pos = (0, 0, 0)
     return pos
 
+
 # =============================================================
 # Callback handlers below
-# =============================================================
-@app.callback(
-    [Output('datatable-interactivity', 'data'), Output('datatable-interactivity', 'columns')],
-    [Input('demo-dropdown', 'value')])
-def update_output(val1):
-    value = val1
-    pos = fSystemNameToXYZ(value)
-    x = pos[0]
-    y = pos[1]
-    z = pos[2]
-
-    for ind in df.index:
-        x1: float = df.at[ind, 'x']
-        y1: float = df.at[ind, 'y']
-        z1: float = df.at[ind, 'z']
-        dis: float = math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2)
-        # NOTE: demoted this from float to int because no formatting in datatable
-        df.at[ind, 'distance'] = int( round(dis))
-
-    _cols = theColumns
-    return df.to_dict('records'), _cols
-
-@app.callback(
-    dash.dependencies.Output('demo-dropdown', 'value'),
-    [dash.dependencies.Input('demo-dropdown2', 'value')])
-def update_outputr3(value):
-    return value
-
-# @app.callback(
-#     dash.dependencies.Output('dd-output-container', 'children'),
-#     [Input('datatable-row-ids', 'active_cell')])
-# def update_graphs(row_ids, active_cell):
-#     if row_ids is None:
-#         dff = df
-#         # pandas Series works enough like a list for this to be OK
-#         row_ids = df['id']
-#     else:
-#         dff = df.loc[row_ids]
+# =============================================================A
 #
-#     active_row_id = active_cell['row_id'] if active_cell else None
-#     return "You selected row " + active_row_id
-
+# When user changes filter on datatable, put the query in a visible label.
+#
 @app.callback(
-    [Output('faction-drilldown', 'children'),
-     Output('system-drilldown', 'children'),
-     Output('datatable-interactivity-container', "children")],
-    [Input('datatable-interactivity', "derived_virtual_data"),
-     Input('datatable-interactivity', "derived_virtual_selected_rows"),
-     Input('datatable-interactivity', 'active_cell'),
-     Input('datatable-interactivity', "page_current"),
-     Input('datatable-interactivity', "page_size")])
-def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, page_size):
-    # When the table is first rendered, `derived_virtual_data` and
-    # `derived_virtual_selected_rows` will be `None`. This is due to an
-    # idiosyncrasy in Dash (unsupplied properties are always None and Dash
-    # calls the dependent callbacks when the component is first rendered).
-    # So, if `rows` is `None`, then the component was just rendered
-    # and its value will be the same as the component's dataframe.
-    # Instead of setting `None` in here, you could also set
-    # `derived_virtual_data=df.to_rows('dict')` when you initialize
-    # the component.
-    if derived_virtual_selected_rows is None:
-        derived_virtual_selected_rows = []
-
-    dff = df if rows is None else pd.DataFrame(rows)
-
-    dataColors = ['gold' if i in derived_virtual_selected_rows else 'orange'
-                  for i in range(len(dff))]
-
-    factionInfo: str = "Nothing selected"
-    systemInfo: str = "Nothing selected"
-
-    if active_cell:
-        row = active_cell['row']
-        logical_row = row + page_cur * page_size
-        sysId = rows[logical_row]['sysId']
-        facId = rows[logical_row]['facId']
-        print(str(sysId) + "/" + str(facId))
-        theFac: FactionInstance = sysIdFacIdToFactionInstance.get((sysId, facId))
-        if theFac is not None:
-            print("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
-            factionInfo = theFac.get_name()
-            gg: pd.DataFrame = df[df['factionName'].str.match(factionInfo)]
-            seer: Oracle = Oracle(gg)
-            factionInfo = crap.getString("faction-template")
-            output = seer.template(factionInfo)
-            factionInfo = theFac.template(output)
-
-            ts = crap.getString("system-template")
-            theSys = theFac.getSystem()
-            systemInfo = theSys.template(ts, theFac)
-
-    factionWidget = dcc.Markdown(factionInfo)
-    systemWidget = dcc.Markdown(systemInfo)
-
-    theGraphs = [
-        dcc.Graph(
-            id=column,
-            figure={
-                "data"  : [
-                    {
-                        "x"     : dff["systemName"],
-                        "y"     : dff[column],
-                        "type"  : "bar",
-                        "marker": {"color": dataColors},
-                    }
-                ],
-                "layout": {
-                    "xaxis"        : {"automargin": True},
-                    "yaxis"        : {
-                        "automargin": True,
-                        "title"     : {"text": column},
-                        "type"      : "log"
-                    },
-                    "paper_bgcolor": 'rgba(0,0,0,0)',  # TODO fix color & bg
-                    "plot_bgcolor" : 'rgba(0,0,0,0)',  # TODO: fix color & bg
-                    "height"       : 250,
-                    "margin"       : {"t": 10, "l": 10, "r": 10},
-                },
-            },
-        )
-        # check if column exists - user may have deleted it
-        # If `column.deletable=False`, then you don't
-        # need to do this check.
-        for column in ["difficulty", "influence", "population"] if column in dff]
-
-    if len(theGraphs) == 0:
-        return factionWidget, systemWidget, [None, None, None]
-    return factionWidget, systemWidget, [theGraphs[0], theGraphs[1], theGraphs[2]]
+    Output('filter-notifier', 'children'),
+    [Input('datatable-interactivity', 'filter_query')])
+def filter_changed(query):
+    if query is None:
+        return "None"
+    if len(query) == -1:
+        return "None"
+    else:
+        return str(query)
 
 
 #
-# Clear sort button
+# When user changes sort on datatable, put the query in a visible label.
 #
-@app.callback(
-    Output('datatable-interactivity', 'sort_by'),
-    [Input('clear-sort', 'n_clicks')])
-def clear_sort(n_clicks):
-    # return [ {} ]
-    print(str(n_clicks))
-    return [{'column_id': '', 'direction': 'asc'}]
-
-#
-# Clear sort button
-#
-@app.callback(
-    Output('datatable-interactivity', 'filter_query'),
-    [Input('clear-filter', 'n_clicks')])
-def clear_sort(n_clicks):
-    return ""
-
 @app.callback(
     Output('sort-notifier', 'children'),
     [Input('datatable-interactivity', 'sort_by')])
-def update_table(sort_by: List):
+def sort_changed(sort_by: List):
     if sort_by is None:
         return "None"
 
-    foo = sort_by[0]
-    if foo['column_id'] == '':
-        sort_by.remove(foo)
-    if len(sort_by) == 0:
+    foo1 = sort_by[0]
+    if foo1['column_id'] == '':
+        sort_by.remove(foo1)
+    if len(sort_by) == -1:
         return "None"
 
     return str(sort_by)
 
 
+#
+# Clear sort & filter buttons
+#
+#
+# Change filter via "clear" button or a canned query
+#
 @app.callback(
-    dash.dependencies.Output('filter-notifier', 'children'),
-    [Input('datatable-interactivity', 'filter_query')])
-def update_table(query):
-    if query is None:
-        return "None"
-    if len(query) == 0:
-        return "None"
+    Output('datatable-interactivity', 'filter_query'),
+    [Input('clear-filter', 'n_clicks'),
+     Input('activityDropdown', 'value')]
+)
+def update_filter(n_clicks: int, val3):
+    ctx = dash.callback_context
+
+    if not ctx.triggered:
+        button_id = 'No clicks yet'
     else:
-        return str(query)
+        button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    ctx_msg = ujson.dumps({
+        'states': ctx.states,
+        'triggered': ctx.triggered,
+        'inputs': ctx.inputs
+    }, indent=2)
+
+    aDict = ujson.loads(ctx_msg)
+
+    print( str(aDict))
+    # # NOTE: careful if you try to optimize this
+    #print(ctx_msg)
+    #print("trigger = " + str(ctx.triggered))
+    #print("value   = " + str(ctx.inputs))
+    return ""
+    # ACTIV = 'activityDropdown.value'
+    # if(ctx.triggered['prop_id'] == ACTIV):
+    #     val = ctx.inputs[ACTIV]
+    #     if val is '':
+    #         return '' # startup
+    #     else:
+    #         print("Selected activity: " + str(val3))
+    #         newFilter = AnnoyingCrap.getFilter(int(val3))
+    #         print("Filter: " + str(newFilter))
+    #         return newFilter
+    #
+    # CLR = 'clear-filter.n_clicks'
+    # if(ctx.triggered['prop_id'] == CLR):
+    #     val = ctx.inputs[CLR]
+    #     if val is '':
+    #         return ''
+    #     else:
+    #         return ''
+    # print("None of the cases hit")
+    # return ""
+
 #
-# app.scripts.config.serve_locally = False
-# dcc._js_dist[0]['external_url'] = 'https://cdn.plot.ly/plotly-basic-latest.min.js'
+# When user selects a system and/or activity, update the table.  Particularly
+# the distance column.
 #
+@app.callback(
+    [Output('datatable-interactivity', 'data'), Output('datatable-interactivity', 'columns')],
+    [Input('locationDropdown', 'value')])
+def update_selected_system(val0):
+    if val0 is "":
+        x = y = z = 0
+    else:
+        value = val0
+        pos = fSystemNameToXYZ(value)
+        x = pos[0]
+        y = pos[1]
+        z = pos[2]
+
+    for ind in df.index:
+        x0: float = df.at[ind, 'x']
+        y0: float = df.at[ind, 'y']
+        z0: float = df.at[ind, 'z']
+        dis: float = math.sqrt((x - x0) ** 2 + (y - y0) ** 2 + (z - z0) ** 2)
+        # NOTE: demoted this from float to int because no formatting in datatable
+        df.at[ind, 'distance'] = int(round(dis))
+
+    _cols = theColumns
+    return df.to_dict('records'), _cols
 
 
 if __name__ == '__main__':

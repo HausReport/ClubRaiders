@@ -3,19 +3,20 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 
-from craid.eddb.Aware import Aware
 import craid.eddb.GameConstants as gconst
+from craid.eddb.Aware import Aware
+# No Good for us
+# "type_id": 23, "type": "Non-Dockable Orbital",
+from craid.eddb.NamedItem import NamedItem
 
 
 # Currently known Types
-
 # Usually good for us
 # "type_id": 3, "type": "Coriolis Starport",
 # "type_id": 8, "type": "Orbis Starport",
 # "type_id": 7, "type": "Ocellus Starport",
 # "type_id": 19, "type": "Megaship",
 # "type_id": 20, "type": "Asteroid Base",
-
 # I think these are medium orbital + planetary
 # "type_id": 13, "type": "Planetary Outpost",
 # "type_id": 4, "type": "Industrial Outpost",
@@ -26,10 +27,6 @@ import craid.eddb.GameConstants as gconst
 # "type_id": 2, "type": "Commercial Outpost",
 # "type_id": 9, "type": "Scientific Outpost",
 # "type_id": 5, "type": "Military Outpost",
-
-# No Good for us
-# "type_id": 23, "type": "Non-Dockable Orbital",
-from craid.eddb.NamedItem import NamedItem
 
 
 class Station(Aware):
@@ -99,7 +96,6 @@ class Station(Aware):
 
     def getControllingFactionInstance(self):
         from craid.eddb.FactionInstance import FactionInstance
-        from craid.eddb.InhabitedSystem import InhabitedSystem
 
         tSys = self.getSystem()
         fid: int = self.getControllingFactionId()

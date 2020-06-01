@@ -19,8 +19,8 @@ class Faction(Aware):
         if not fromFaction:
             jsonString : Dict = obj
             name = jsonString[NamedItem.NAME]
-            id = jsonString[NamedItem.ID]
-            super().__init__(name, id)
+            _id = jsonString[NamedItem.ID]
+            super().__init__(name, _id)
             self.allegiance = jsonString['allegiance']
             self.government = jsonString['government']
             self.homesystem_id = jsonString['home_system_id']

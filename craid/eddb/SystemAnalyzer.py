@@ -5,11 +5,10 @@
 from typing import List
 
 import craid.eddb.GameConstants as gconst
-
+from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.InhabitedSystem import InhabitedSystem
 from craid.eddb.Station import Station
 from craid.eddb.util.MessageList import MessageList
-from craid.eddb.FactionInstance import FactionInstance
 
 
 def isProbablyAGoodBountyHuntingSystem(theSys: InhabitedSystem):
@@ -36,15 +35,23 @@ class SystemAnalyzer(object):
 
         if not homeSys and diff == 999999:
             msg = f'It is impossible to force the faction out of this system for reasons that are not understood.\n'
-            self.messages.add(100.0, msg)
+            self.messages.add(110.0, msg)
             return
         elif homeSys:
             msg = f"This is the faction's home system, so it cannot be forced out.  Effort may be better spent elsewhere.\n"
-            self.messages.add(100.0, msg)
+            self.messages.add(110.0, msg)
         else:
             adj: str = theFaction.getDifficultyString()
             msg = f"I estimate that forcing a retreat from this system would {adj}."
-            self.messages.add(100.0, msg)
+            self.messages.add(110.0, msg)
+
+        daysSinceScouted: int = theSystem.getDaysSinceScouted()
+        if daysSinceScouted > 3:
+            msg = f"The system was last scouted {daysSinceScouted} days ago.  The situation may have changed."
+            if daysSinceScouted > 10:
+                msg = "~~" + msg + "~~~"
+
+            self.messages.add(105.0, msg)
 
         if theFaction.hasState(gconst.STATE_ELECTION):
             msg = "The faction is in a state of election, losing the election will have significant effects on its influence."
@@ -83,7 +90,7 @@ class SystemAnalyzer(object):
         ## TODO: Boom, Investment
         msg = f'Run missions for competing factions at station {staName}.'
 
-        if (staDist>25000):
+        if staDist>25000:
             msg += "  Note the distance to the station."
         self.messages.add(10,msg)
 
@@ -140,7 +147,7 @@ class SystemAnalyzer(object):
 
         msg += msg3
 
-        if (staDist > 25000):
+        if staDist > 25000:
             msg += "  Note the distance to the station."
         self.messages.add(10, msg)
 

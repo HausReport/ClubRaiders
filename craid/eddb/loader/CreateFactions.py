@@ -8,13 +8,15 @@
 #
 import logging
 from typing import Dict, Set
-#from memory_profiler import profile
 
 import json_lines
 
 from craid.eddb.Faction import Faction
 from craid.eddb.FactionNameFilter import FactionNameFilter
 from craid.eddb.loader.DataLoader import DataLoader
+
+
+# from memory_profiler import profile
 
 
 def load_factions(loader: DataLoader) -> [Dict[int, Faction], Dict[int, Faction], Dict[int, Faction]]:

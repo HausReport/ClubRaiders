@@ -47,10 +47,7 @@ class System(Aware):
         return self.updated_at
 
     def getUpdatedString(self) -> str:
-        upd = self.getUpdatedDateTime()
-        now = datetime.utcnow()  # timezone.utc)
-        time_elapsed: timedelta = now - upd
-        days = time_elapsed.days
+        days: int = self.getDaysSinceScouted()
 
         if days <= 1:
             return "Scouted within the last day."
@@ -63,6 +60,14 @@ class System(Aware):
             return "*Scouted " + str(weeks) + " weeks ago.*"
 
         return "**Really, really needs to be scouted.**"
+
+
+    def getDaysSinceScouted(self) -> int:
+        upd = self.getUpdatedDateTime()
+        now = datetime.utcnow()  # timezone.utc)
+        time_elapsed: timedelta = now - upd
+        days = time_elapsed.days
+        return days
 
     def getInaraNearestShipyardUrl(self):
         return "https://inara.cz/galaxy-nearest/14/" + str(self.get_id())

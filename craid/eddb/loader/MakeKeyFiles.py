@@ -3,11 +3,10 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 import os
-import tempfile
-from typing import Dict, Set
-
-import ujson
 import pickle
+import tempfile
+from typing import Set
+
 
 def dumpKeys(shortName: str, what: Set[int]):
     shortName = "keys-" + shortName + ".pkl"

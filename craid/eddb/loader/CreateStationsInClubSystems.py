@@ -14,7 +14,6 @@ import json_lines
 
 from craid.eddb.InhabitedSystem import InhabitedSystem
 from craid.eddb.Station import Station
-from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
 from craid.eddb.loader.DataLoader import DataLoader
 
 

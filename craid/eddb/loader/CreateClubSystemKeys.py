@@ -3,9 +3,10 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 import logging
-from typing import Dict, List, Set, Tuple
+from typing import Dict, Set
 
 from craid.eddb.InhabitedSystem import InhabitedSystem
+
 
 #
 # Make nifty list of club faction presences.

@@ -8,17 +8,15 @@
 #
 import logging
 from typing import Dict
-#from memory_profiler import profile
+
+# from memory_profiler import profile
 import json_lines
 
 from craid.eddb.InhabitedSystem import InhabitedSystem
-from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
-
-
 #
 # Load all inhabited systems
 #
-#@profile
+# @profile
 from craid.eddb.loader.DataLoader import DataLoader
 
 

@@ -2,29 +2,27 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
-import logging
+import gc
 from typing import Dict, Set
+
 import pandas as pd
 
+import craid.eddb.Printmem as pm
 from craid.eddb.Aware import Aware
+from craid.eddb.Faction import Faction
+from craid.eddb.loader.CreateClubSystemKeys import getClubSystemKeys
+#
+# Expensive function - run once, use result many times
+#
+from craid.eddb.loader.CreateDataFrame import getDataFrame
 from craid.eddb.loader.CreateFactionInstances import getFactionInstances
 from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateStationsInClubSystems import loadStationsInClubSystems
 from craid.eddb.loader.CreateSystemNameToPositionMap import loadSystemNameToPositionMap
 from craid.eddb.loader.CreateSystems import load_systems
-import craid.eddb.Printmem as pm
-
-import gc
-
-#
-# Expensive function - run once, use result many times
-#
-from craid.eddb.loader.CreateDataFrame import getDataFrame
-from craid.eddb.Faction import Faction
-from craid.eddb.loader.CreateClubSystemKeys import getClubSystemKeys
-from craid.eddb.loader.MakeKeyFiles import dumpKeys, loadKeys
 from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
+from craid.eddb.loader.MakeKeyFiles import dumpKeys, loadKeys
 
 
 def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:

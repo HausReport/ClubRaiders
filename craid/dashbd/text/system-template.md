@@ -3,8 +3,6 @@
 
 *( $x, $y, $z) in Octant $octant*
 
-*$scouting_msg*
-
 |       |  |
 | :---------- | :---------- |
 | Allegiance  | $allegiance       |

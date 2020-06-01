@@ -278,7 +278,7 @@ class InhabitedSystem(System):
             # For these, if (condition) and if not (state) then skip
             #
             if reqBlackMarket and not (sta.hasBlackMarket()):
-                continue;
+                continue
 
             if len(bestStation) == 0:
                 if flag == self.FLAG_CLUB_ONLY:

@@ -8,8 +8,8 @@
 | Government  | $government       |
 | # Systems   | $systems_active       |
 | Controlled Systems | $systems_control |
-| Total Pop.  | $population_sum       |
-| Total Inf.  | $influence_sum        |
+| Total Population  | $population_sum       |
+| Total Influence  | $influence_sum        |
 
 
 
