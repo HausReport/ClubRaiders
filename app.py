@@ -31,7 +31,6 @@ from craid.eddb.Printmem import printmem
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
 
-
 # FIXME: it'd be nice to let users link directly to certain factions, systems, etc...
 # getting the url isn't trivial, see
 # https://dash.plotly.com/dash-core-components/location
@@ -65,11 +64,15 @@ printmem("4")
 nrows = df.shape[0]
 df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
 
+seer: Oracle = Oracle(df)
+oracleString= AnnoyingCrap.getString("oracle-template")
+oracleMd = dcc.Markdown(seer.template(oracleString))
+
 # Start the app framework
 # In non-DEPLOY mode, the " app.config.suppress_callback_exceptions = True" doesn't seem
 # to take hold and there's an annoying bug.
 #
-DEPLOY = True   # KEEP THIS TRUE, SRSLY
+DEPLOY = True  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
     #
     # Heroku requirements
@@ -143,30 +146,30 @@ app.layout = html.Div([
                          value='tab-1',
                          className='mytab',
                          selected_className='mytab-selected', children=[
-                            html.Div(className="strict-horizontal", children=[
-                                html.Div(className="statistics",
-                                        children=[
-                                            html.Label("I want to:", className="simpleColItem"),
-                                            dcc.Dropdown(
-                                                id='activityDropdown',
-                                                options=AnnoyingCrap.getThirdDropdown(),
-                                                value='',  # Anti Xeno Initiative',
-                                                placeholder='Select activity',
-                                                className="simpleColItem",
-                                            ),
-                                            html.Label("in the vicinity of", className="simpleColItem"),
-                                            dcc.Dropdown(
-                                                id='locationDropdown',
-                                                options=AnnoyingCrap.getFirstDropdown(systemNameToXYZ),
-                                                value='Sol',
-                                                placeholder='Select star system',
-                                                className="simpleColItem",
-                                                # autoFocus=True,
-                                            ),
-                                        ]),
-                               html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity", className="activity"),
-                               html.Article(AnnoyingCrap.getMarkdown('hi2'), id="statistics", className="statistics"),
-                           ]),
+                         html.Div(className="strict-horizontal", children=[
+                             html.Div(className="statistics",
+                                      children=[
+                                          html.Label("I want to:", className="simpleColItem"),
+                                          dcc.Dropdown(
+                                              id='activityDropdown',
+                                              options=AnnoyingCrap.getThirdDropdown(),
+                                              value='',  # Anti Xeno Initiative',
+                                              placeholder='Select activity',
+                                              className="simpleColItem",
+                                          ),
+                                          html.Label("in the vicinity of", className="simpleColItem"),
+                                          dcc.Dropdown(
+                                              id='locationDropdown',
+                                              options=AnnoyingCrap.getFirstDropdown(systemNameToXYZ),
+                                              value='Sol',
+                                              placeholder='Select star system',
+                                              className="simpleColItem",
+                                              # autoFocus=True,
+                                          ),
+                                      ]),
+                             html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity", className="activity"),
+                             html.Article(oracleMd, id="statistics", className="statistics"),
+                         ]),
                          ## ###### START TABLE MADNESS
                          ## look into flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
                          html.Div(className="wrapper",
@@ -201,7 +204,7 @@ app.layout = html.Div([
                                       ])
                                   ])
                          ## ###### FINISH TABLE MADNESS
-                         ]),
+                     ]),
                  dcc.Tab(label='About The Club',
                          value='tab-2',
                          className='mytab',
@@ -219,7 +222,6 @@ app.layout = html.Div([
 printmem("End")
 
 
-
 # =============================================================
 # Tab handlers
 # =============================================================
@@ -227,7 +229,7 @@ printmem("End")
               [Input('tabs-example', 'value')])
 def render_content(tab):
     if tab == 'tab-1':
-        return tab-1
+        return tab - 1
     elif tab == 'tab-2':
         print('tab-2 clicked')
         return html.Div(children=[
@@ -297,38 +299,38 @@ def was_clicked(ctx, button_id):
         return None
 
     ctx_msg = ujson.dumps({
-        'states': ctx.states,
+        'states'   : ctx.states,
         'triggered': ctx.triggered,
-        'inputs': ctx.inputs
+        'inputs'   : ctx.inputs
     }, indent=2)
 
     aDict = ujson.loads(ctx_msg)
 
-    print( "dict:" + str(aDict))
-    triggered = aDict['triggered']   #['prop_id']
-    print ("triggered = " + str(triggered))
+    print("dict:" + str(aDict))
+    triggered = aDict['triggered']  # ['prop_id']
+    print("triggered = " + str(triggered))
 
     elt0 = triggered[0]
-    print ("elt0 = " + str(elt0))
+    print("elt0 = " + str(elt0))
 
     prop_id = elt0['prop_id']
-    print ("prop_id = " + str(prop_id))
+    print("prop_id = " + str(prop_id))
 
-    inputs = aDict['inputs']   #['prop_id']
-    print ("inputs = " + str(inputs))
+    inputs = aDict['inputs']  # ['prop_id']
+    print("inputs = " + str(inputs))
     activity = inputs['activityDropdown.value']
 
-
-    if( prop_id != button_id):
+    if (prop_id != button_id):
         return None, activity
 
     value = elt0['value']
-    print ("value = " + str(value))
+    print("value = " + str(value))
 
-    if value==0:
+    if value == 0:
         return None, activity
 
     return value, activity
+
 
 #
 # Clear sort & filter buttons
@@ -339,26 +341,25 @@ def was_clicked(ctx, button_id):
 #
 @app.callback(
     [Output('datatable-interactivity', 'filter_query'),
-    Output('activity', 'children')],
+     Output('activity', 'children')],
     [Input('clear-filter', 'n_clicks'),
      Input('activityDropdown', 'value')]
 )
 def update_filter(n_clicks: int, val3):
-
     # id of text component to change is "activity"
 
     ## NOTE:https://dash.plotly.com/advanced-callbacks
     ## NOTE: Here there be dragons.  Careful about changes.
     ctx = dash.callback_context
     value, act = was_clicked(ctx, 'clear-filter.n_clicks')
-    if( act is None)  or (act is ''):
+    if (act is None) or (act is ''):
         act = 0
-    if( value != None):
+    if (value != None):
         msg = AnnoyingCrap.getMessage(int(value))
         return "", msg
 
     value, act = was_clicked(ctx, 'activityDropdown.value')
-    if( value == None) or value == '':
+    if (value == None) or value == '':
         value = 0
 
     print("Selected activity: " + str(value))
@@ -370,22 +371,23 @@ def update_filter(n_clicks: int, val3):
     print("None of the cases hit")
     return "", act
 
+
 #
 # Change sort via "clear" button or a canned query
 #
 @app.callback(
     Output('datatable-interactivity', 'sort_by'),
     [Input('clear-sort', 'n_clicks'), Input('activityDropdown', 'value')])
-def update_sort(n_clicks, val3 ):
+def update_sort(n_clicks, val3):
     noSort = [{'column_id': '', 'direction': 'asc'}]
 
     ctx = dash.callback_context
     value, act = was_clicked(ctx, 'clear-sort.n_clicks')
-    if( value != None):
+    if (value != None):
         return noSort
 
     value, act = was_clicked(ctx, 'activityDropdown.value')
-    if( value != None) and value != '':
+    if (value != None) and value != '':
         print("Sort: selected activity: " + str(value))
         newSort = AnnoyingCrap.getSort(int(value))
         print("Sort: " + str(newSort))
@@ -393,6 +395,7 @@ def update_sort(n_clicks, val3 ):
 
     print("None of the cases hit")
     return noSort
+
 
 #
 # When user selects a system and/or activity, update the table.  Particularly
@@ -421,6 +424,7 @@ def update_selected_system(val0):
 
     _cols = theColumns
     return df.to_dict('records'), _cols
+
 
 #
 #  Does a variety of things when user clicks on a cell in the table

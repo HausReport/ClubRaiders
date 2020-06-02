@@ -20,6 +20,13 @@ class Oracle:
         if df is None:
             return
 
+        base_date="02/06/2020 09:00"
+        base_active_systems = 186
+        base_population = 95479284266
+        base_control_systems = 40
+        base_avg_influence = 21.29
+        base_total_influence = 3960.53
+
         frame: pd.DataFrame = df
         #
         # General statistics
