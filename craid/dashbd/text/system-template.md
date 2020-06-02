@@ -7,7 +7,8 @@
 | :---------- | :---------- |
 | Allegiance  | $allegiance       |
 | Government  | $government       |
-| Power       | $power - $power_state
+| Economy     | $economy |
+| Power       | $power - $power_state |
 | Controlling Faction | $controlling_faction |
 | Needs permit | $needs_permit |
 | Population  | $population       |

@@ -126,6 +126,12 @@ class Station(Aware):
 
     # a little experimental, but should be close
     def getMineralSalesScore(self) -> int:
+        from craid.eddb.InhabitedSystem import  InhabitedSystem
+        tSys: InhabitedSystem = self.getSystem()
+        econ: str = tSys.getEconomy()
+        if not econ.startswith("Indust") and not econ.startswith("Refin"):
+            return 0
+
         ct: int = 0
         if self.hasState(gconst.STATE_BOOM) or self.hasState(gconst.STATE_INVESTMENT):
             if self.hasState(gconst.STATE_CIVIL_LIBERTY): ct += 1

@@ -47,6 +47,9 @@ class InhabitedSystem(System):
     def getPower(self):
         return self.jsonLine['power']
 
+    def getEconomy(self):
+        return self.jsonLine['primary_economy']
+
     def getPowerLabel(self):
         power = self.getPower()
         powerState = self.getPowerState()
@@ -221,6 +224,8 @@ class InhabitedSystem(System):
         myDict['faction_list'] = self.getMinorFactionsAsMarkdown()
 
         myDict['needs_permit'] = boolToYesOrNo(self.needsPermit())
+
+        myDict['economy'] = self.getEconomy()
 
         sa = SystemAnalyzer(self, fix)
         rep = sa.toString()
