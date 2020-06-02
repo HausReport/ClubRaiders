@@ -20,23 +20,18 @@ class AnnoyingCrap(object):
               "{vulnerable} contains War && {isHomeSystem} contains false",
               [{'column_id': 'distance', 'direction': 'asc'}],
               "cz"),
-
          5: ("trade",
-             "{isHomeSystem} contains false",
-             [{'column_id': 'salesScore', 'direction': 'desc'}],
+             "{isHomeSystem} contains false && {salesScore} > 50",
+             [{'column_id': 'salesScore', 'direction': 'desc'}, {'column_id': 'distance', 'direction': 'asc'}],
              "trade"),
          6: ("mine",
-             "{isHomeSystem} contains false",
+             "{isHomeSystem} contains false && {mineralSalesScore} > 1",
              [{'column_id': 'mineralSalesScore', 'direction': 'desc'}],
              "mine"),
          7: ("explore",
              "{isHomeSystem} contains false",
              [{'column_id': 'explorationScore', 'direction': 'desc'}],
              "explore"),
-    # cannedActions[5] = ("trade", None, None)
-    # cannedActions[6] = ("sell mined minerals", None, None)
-    # cannedActions[7] = ("explore", None, None)
-
          9 : ("run missions", "{isHomeSystem} contains false",
               [{'column_id': 'distance', 'direction': 'asc'}],
               "missions"),
@@ -150,4 +145,7 @@ class AnnoyingCrap(object):
             {"name": 'Control', "id": 'control', "deletable": False, "hideable": True, "selectable": False},
             {"name": 'Vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
             {"name": 'Dist.', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
+            {"name": 'Dist.', "id": 'salesScore', "deletable": False, "selectable": False, "type": "numeric"},
+            {"name": 'Dist.', "id": 'mineralSalesScore', "deletable": False, "selectable": False, "type": "numeric"},
+            {"name": 'Dist.', "id": 'explorationScore', "deletable": False, "selectable": False, "type": "numeric"},
         ]

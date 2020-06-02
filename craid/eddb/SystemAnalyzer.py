@@ -65,6 +65,7 @@ class SystemAnalyzer(object):
             self.piracyMurder()
         else:
             self.missions()
+            self.mining()
             self.smuggling()
             self.piracyMurder()
             self.tradeExploration()
@@ -111,6 +112,22 @@ class SystemAnalyzer(object):
         staName = sta.get_name()
         msg = f'Piracy and murder at the nav beacon and station {staName}.'
         self.messages.add(50, msg)
+
+    def mining(self):
+        sco: int = self.theSystem.mineralSalesScore()
+        if sco < 2:
+            return
+        elif sco==2:
+            adj = "good"
+        elif sco == 3:
+            adj = "very good"
+        elif sco == 4:
+            adj = "extremely good"
+        else:
+            adj = "phenomenal"
+
+        msg = f'Conditions are right for mineral prices to be {adj} in the system at non-club controlled stations.'
+        self.messages.add(70, msg)
 
     def tradeExploration(self):
         sta: Station = self.theSystem.getBestTradeStation()
