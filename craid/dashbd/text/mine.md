@@ -5,4 +5,7 @@ Remember that selling 5 types of material is worth more influence than selling
 1 type, even if that one type is much more profitable.  Also, mining multiple minerals
 can be much faster than just one.
 
+The mineral price prediction algorithm is still in testing.  Be sure to check prices and
+demand before investing a lot of time mining.
+
 More info at [Best Current Thinking on BGS](https://forums.frontier.co.uk/threads/transactions-bgs-guide-best-current-thinking.424397/)
