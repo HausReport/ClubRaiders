@@ -10,6 +10,7 @@ from pkg_resources import resource_string as resource_bytes
 
 
 class AnnoyingCrap(object):
+    # NOTE: Don't use index 0
     cannedActions: Dict[int, Tuple[str, str, str, str]] = \
         {1 : ("find Club Activity near me",
               "{isHomeSystem} contains false",
@@ -27,28 +28,28 @@ class AnnoyingCrap(object):
               [{'column_id': 'distance', 'direction': 'asc'}],
               "election"),
          11: ("find an easy faction for a single commander to attack",
-              "{isHomeSystem} contains false",
+              "{isHomeSystem} contains false && {difficulty} < 5",
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "single"),
          12: ("find an challenging faction for a single commander to attack",
-              "{isHomeSystem} contains false",
+              "{isHomeSystem} contains false && {difficulty} > 5 && {difficulty} < 100",
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "single"),
          13: ("find a faction to attack with a small group",
-              "{isHomeSystem} contains false",
+              "{isHomeSystem} contains false && {difficulty} > 50 && {difficulty} < 150",
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "group")}
 
     #
     # TODO: work list
     #
-    # cannedActions[1] = ("hunt for bounties", None, None)
-    # cannedActions[3] = ("smuggle illegal goods", None, None)
+    # cannedActions[3] = ("hunt for bounties", None, None)
+    # cannedActions[4] = ("smuggle illegal goods", None, None)
     # cannedActions[5] = ("trade", None, None)
     # cannedActions[6] = ("sell mined minerals", None, None)
     # cannedActions[7] = ("explore", None, None)
     # cannedActions[13] = ("see the welcome message again", None, None)
-    # cannedActions[4] = ("go on a murder/piracy rampage", None, None)
+    # cannedActions[8] = ("go on a murder/piracy rampage", None, None)
 
     #
     # Implemented
@@ -88,15 +89,18 @@ class AnnoyingCrap(object):
 
     @staticmethod
     def getFilter(val3: int):
+        if val3==0: val3 = 1
         tup = AnnoyingCrap.cannedActions[val3]
         return tup[1]
 
     @staticmethod
     def getSort(val3: int):
+        if val3==0: val3 = 1
         return AnnoyingCrap.cannedActions[val3][2]
 
     @staticmethod
     def getMessage(val3: int):
+        if val3==0: val3 = 1
         shortFile: str = AnnoyingCrap.cannedActions[val3][3]
         return AnnoyingCrap.getMarkdown(shortFile)
 

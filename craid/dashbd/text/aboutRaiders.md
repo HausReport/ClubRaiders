@@ -24,3 +24,9 @@
     * They are explicitly filtered out of consideration.  We had one case where a player minor faction
     wasn't identified as such on http://eddb.io.  In that case, someone should fix the faction on Eddb and
     changes will be reflected here in a day or so.
+1. How is difficulty calculated?
+    * difficulty = (population / 15000.0) * (influence^2) / 1000.0
+    * for factions that cannot be forced to retreat, difficulty is 999999
+    * the formula was chosen so that a value of 1 would be about right for a
+        single commander and 100 would be about right for a small group or
+        a valiant single effort.

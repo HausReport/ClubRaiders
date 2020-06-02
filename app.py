@@ -24,6 +24,8 @@ from craid.dashbd.AnnoyingCrap import AnnoyingCrap
 # Set up logging
 #
 # logging.basicConfig(filename='example.log',level=logging.DEBUG)
+from craid.eddb.FactionInstance import FactionInstance
+from craid.eddb.Oracle import Oracle
 from craid.eddb.Printmem import printmem
 
 logging.getLogger().addHandler(logging.StreamHandler())
@@ -140,8 +142,66 @@ app.layout = html.Div([
                  dcc.Tab(label='Activities',
                          value='tab-1',
                          className='mytab',
-                         selected_className='mytab-selected',
-                         ),
+                         selected_className='mytab-selected', children=[
+                            html.Div(className="strict-horizontal", children=[
+                                html.Div(className="statistics",
+                                        children=[
+                                            html.Label("I want to:", className="simpleColItem"),
+                                            dcc.Dropdown(
+                                                id='activityDropdown',
+                                                options=AnnoyingCrap.getThirdDropdown(),
+                                                value='',  # Anti Xeno Initiative',
+                                                placeholder='Select activity',
+                                                className="simpleColItem",
+                                            ),
+                                            html.Label("in the vicinity of", className="simpleColItem"),
+                                            dcc.Dropdown(
+                                                id='locationDropdown',
+                                                options=AnnoyingCrap.getFirstDropdown(systemNameToXYZ),
+                                                value='Sol',
+                                                placeholder='Select star system',
+                                                className="simpleColItem",
+                                                # autoFocus=True,
+                                            ),
+                                        ]),
+                               html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity", className="activity"),
+                               html.Article(AnnoyingCrap.getMarkdown('hi2'), id="statistics", className="statistics"),
+                           ]),
+                         ## ###### START TABLE MADNESS
+                         ## look into flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+                         html.Div(className="wrapper",
+                                  children=[
+                                      html.Header(className='header', children=[
+                                          html.Div(className="strict-horizontal", children=[
+                                              html.Div(className="strict-horizontal", children=([
+                                                  html.Label("Current filter:",
+                                                             style={'flex-grow': '0', 'vertical-align': 'middle'}),
+                                                  html.Label(id='filter-notifier', className="filter-notifier"),
+                                                  html.Button(id="clear-filter", className="myButton"),
+                                              ])),
+                                              html.Div(className="strict-horizontal",
+                                                       style={'vertical-align': 'middle'}, children=([
+                                                      html.Label("Current sort:",
+                                                                 style={'flex-grow': '0', 'vertical-align': 'middle'}),
+                                                      html.Label(id='sort-notifier', className="sort-notifier"),
+                                                      html.Button(id="clear-sort", className="myButton"),
+                                                  ])),
+                                          ]),
+                                      ]),
+                                      html.Article(className='main', children=[
+                                          datatable,
+                                      ]),
+                                      html.Aside(className="aside aside-2", children=[
+                                          html.Article(welcomeMarkdown, id='faction-drilldown',
+                                                       style={'width': '100%'}),
+                                          html.Article("", id='system-drilldown', style={'width': '100%'}),
+                                      ]),
+                                      html.Footer(className='footer', children=[
+                                          html.Div(id='datatable-interactivity-container')
+                                      ])
+                                  ])
+                         ## ###### FINISH TABLE MADNESS
+                         ]),
                  dcc.Tab(label='About The Club',
                          value='tab-2',
                          className='mytab',
@@ -154,41 +214,11 @@ app.layout = html.Div([
                          ),
              ]),
     html.Div(id='tabs-example-content'),
-    ## ###### START TABLE MADNESS
-    ## look into flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
-    html.Div(className="wrapper",
-             children=[
-                 html.Header(className='header', children=[
-                     html.Div(className="strict-horizontal", children=[
-                         html.Div(className="strict-horizontal", children=([
-                             html.Label("Current filter:", style={'flex-grow': '0', 'vertical-align': 'middle'}),
-                             html.Label(id='filter-notifier', className="filter-notifier"),
-                             html.Button(id="clear-filter", className="myButton"),
-                         ])),
-                         html.Div(className="strict-horizontal", style={'vertical-align': 'middle'}, children=([
-                             html.Label("Current sort:", style={'flex-grow': '0', 'vertical-align': 'middle'}),
-                             html.Label(id='sort-notifier', className="sort-notifier"),
-                             html.Button(id="clear-sort", className="myButton"),
-                         ])),
-                     ]),
-                 ]),
-                 html.Article(className='main', children=[
-                     datatable,
-                 ]),
-                 html.Aside(className="aside aside-2", children=[
-                     html.Article(welcomeMarkdown, id='faction-drilldown', style={'width': '100%'}),
-                     html.Article("", id='system-drilldown', style={'width': '100%'}),
-                 ]),
-                 html.Footer(className='footer', children=[
-                     html.Div(id='datatable-interactivity-container')
-                 ])
-             ])
 ])
 
 printmem("End")
 
 
-## ###### FINISH TABLE MADNESS
 
 # =============================================================
 # Tab handlers
@@ -197,36 +227,17 @@ printmem("End")
               [Input('tabs-example', 'value')])
 def render_content(tab):
     if tab == 'tab-1':
-        return html.Div(className="strict-horizontal", children=[
-            html.Div(className="statistics",
-                     children=[
-                         html.Label("I want to:", className="simpleColItem"),
-                         dcc.Dropdown(
-                             id='activityDropdown',
-                             options=AnnoyingCrap.getThirdDropdown(),
-                             value='',  # Anti Xeno Initiative',
-                             placeholder='Select activity',
-                             className="simpleColItem",
-                         ),
-                         html.Label("in the vicinity of", className="simpleColItem"),
-                         dcc.Dropdown(
-                             id='locationDropdown',
-                             options=AnnoyingCrap.getFirstDropdown(systemNameToXYZ),
-                             value='Sol',
-                             placeholder='Select star system',
-                             className="simpleColItem",
-                             # autoFocus=True,
-                         ),
-                     ]),
-            html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity", className="activity"),
-            html.Article(AnnoyingCrap.getMarkdown('hi2'), id="statistics", className="statistics"),
-        ]),
+        return tab-1
     elif tab == 'tab-2':
-        return html.Div([
-            AnnoyingCrap.getMarkdown("aboutClub")
+        print('tab-2 clicked')
+        return html.Div(children=[
+            html.Article([
+                AnnoyingCrap.getMarkdown("aboutClub")
+            ])
         ])
     elif tab == 'tab-3':
-        return html.Div([
+        print('tab-3 clicked')
+        return html.Article([
             AnnoyingCrap.getMarkdown("aboutRaiders")
         ])
 
@@ -369,13 +380,13 @@ def update_sort(n_clicks, val3 ):
     noSort = [{'column_id': '', 'direction': 'asc'}]
 
     ctx = dash.callback_context
-    value = was_clicked(ctx, 'clear-sort.n_clicks')
+    value, act = was_clicked(ctx, 'clear-sort.n_clicks')
     if( value != None):
         return noSort
 
-    value = was_clicked(ctx, 'activityDropdown.value')
+    value, act = was_clicked(ctx, 'activityDropdown.value')
     if( value != None) and value != '':
-        print("Selected activity: " + str(value))
+        print("Sort: selected activity: " + str(value))
         newSort = AnnoyingCrap.getSort(int(value))
         print("Sort: " + str(newSort))
         return newSort
@@ -410,6 +421,102 @@ def update_selected_system(val0):
 
     _cols = theColumns
     return df.to_dict('records'), _cols
+
+#
+#  Does a variety of things when user clicks on a cell in the table
+#
+@app.callback(
+    [Output('faction-drilldown', 'children'),
+     Output('system-drilldown', 'children'),
+     Output('datatable-interactivity-container', "children")],
+    [Input('datatable-interactivity', "derived_virtual_data"),
+     Input('datatable-interactivity', "derived_virtual_selected_rows"),
+     Input('datatable-interactivity', 'active_cell'),
+     Input('datatable-interactivity', "page_current"),
+     Input('datatable-interactivity', "page_size")])
+def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, page_size):
+    # When the table is first rendered, `derived_virtual_data` and
+    # `derived_virtual_selected_rows` will be `None`. This is due to an
+    # idiosyncrasy in Dash (unsupplied properties are always None and Dash
+    # calls the dependent callbacks when the component is first rendered).
+    # So, if `rows` is `None`, then the component was just rendered
+    # and its value will be the same as the component's dataframe.
+    # Instead of setting `None` in here, you could also set
+    # `derived_virtual_data=df.to_rows('dict')` when you initialize
+    # the component.
+    if derived_virtual_selected_rows is None:
+        derived_virtual_selected_rows = []
+
+    dff = df if rows is None else pd.DataFrame(rows)
+
+    dataColors = ['gold' if i in derived_virtual_selected_rows else 'orange'
+                  for i in range(len(dff))]
+
+    factionInfo: str = ""
+    systemInfo: str = ""
+
+    if active_cell:
+        row = active_cell['row']
+        logical_row = row + page_cur * page_size
+        sysId = rows[logical_row]['sysId']
+        facId = rows[logical_row]['facId']
+        print(str(sysId) + "/" + str(facId))
+        theFac: FactionInstance = sysIdFacIdToFactionInstance.get((sysId, facId))
+        if theFac is not None:
+            print("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
+            factionInfo = theFac.get_name()
+            gg: pd.DataFrame = df[df['factionName'].str.match(factionInfo)]
+            seer: Oracle = Oracle(gg)
+            factionInfo = AnnoyingCrap.getString("faction-template")
+            output = seer.template(factionInfo)
+            factionInfo = theFac.template(output)
+
+            ts = AnnoyingCrap.getString("system-template")
+            theSys = theFac.getSystem()
+            systemInfo = theSys.template(ts, theFac)
+
+    strlen: int = len(factionInfo)
+    if strlen == -1:
+        factionInfo = welcomeMarkdown
+
+    factionWidget = dcc.Markdown(factionInfo)
+    systemWidget = dcc.Markdown(systemInfo)
+
+    theGraphs = [
+        dcc.Graph(
+            id=column,
+            figure={
+                "data"  : [
+                    {
+                        "x"     : dff["systemName"],
+                        "y"     : dff[column],
+                        "type"  : "bar",
+                        "marker": {"color": dataColors},
+                    }
+                ],
+                "layout": {
+                    "xaxis"        : {"automargin": True},
+                    "yaxis"        : {
+                        "automargin": True,
+                        "title"     : {"text": column},
+                        "type"      : "log"
+                    },
+                    "paper_bgcolor": 'rgba(-1,0,0,0)',  # TODO fix color & bg
+                    "plot_bgcolor" : 'rgba(-1,0,0,0)',  # TODO: fix color & bg
+                    "height"       : 249,
+                    "margin"       : {"t": 9, "l": 10, "r": 10},
+                },
+            },
+        )
+        # check if column exists - user may have deleted it
+        # If `column.deletable=False`, then you don't
+        # need to do this check.
+        # for column in ["difficulty", "influence", "population"] if column in dff]
+        for column in ["difficulty"] if column in dff]
+
+    if len(theGraphs) == 0:
+        return factionWidget, systemWidget, [None]
+    return factionWidget, systemWidget, [theGraphs[0]]
 
 
 if __name__ == '__main__':
