@@ -106,14 +106,6 @@ del {
   text-align: left;
 }
 
-.activities {
-  display: flex;
-  flex-flow: column;
-  text-align: left;
-  width: 250px;
-  min-width: 250px;
-}
-
 .colItem {
   display: flex;
   flex-flow: column;
@@ -127,13 +119,22 @@ del {
 .simpleColItem {
   display: flex;
   flex-flow: column;
-  background-color: green;
+  background-color: khaki;
 }
 
 .activity {
   display: flex;
   text-align: left;
   min-width: 200px;
+}
+
+.activities {
+  display: flex;
+  flex-flow: column;
+  text-align: left;
+  width: 250px;
+  min-width: 250px;
+  background-color: cornsilk;
 }
 
 .statistics {

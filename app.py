@@ -147,7 +147,7 @@ app.layout = html.Div([
                          className='mytab',
                          selected_className='mytab-selected', children=[
                          html.Div(className="strict-horizontal", children=[
-                             html.Div(className="statistics",
+                             html.Div(className="activities",
                                       children=[
                                           html.Label("I want to:", className="simpleColItem"),
                                           dcc.Dropdown(
@@ -217,6 +217,11 @@ app.layout = html.Div([
                          ),
              ]),
     html.Div(id='tabs-example-content'),
+    html.Div(children=[
+        html.A( href="http://www.geovisites.com/en/directory/games_card-games.php?compte=r2uy4dj7srjn", children=[
+            html.Img( src="https://geoloc10.geovisite.ovh/private/geocounter.php?compte=r2uy4dj7srjn&base=geoloc10"),
+        ])
+    ])
 ])
 
 printmem("End")
@@ -229,7 +234,7 @@ printmem("End")
               [Input('tabs-example', 'value')])
 def render_content(tab):
     if tab == 'tab-1':
-        return tab - 1
+        return "tab-1"
     elif tab == 'tab-2':
         print('tab-2 clicked')
         return html.Div(children=[
@@ -296,7 +301,7 @@ def sort_changed(sort_by: List):
 
 def was_clicked(ctx, button_id):
     if not ctx.triggered:
-        return None
+        return None, None
 
     ctx_msg = ujson.dumps({
         'states'   : ctx.states,
