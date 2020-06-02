@@ -20,6 +20,23 @@ class AnnoyingCrap(object):
               "{vulnerable} contains War && {isHomeSystem} contains false",
               [{'column_id': 'distance', 'direction': 'asc'}],
               "cz"),
+
+         5: ("trade",
+             "{isHomeSystem} contains false",
+             [{'column_id': 'salesScore', 'direction': 'desc'}],
+             "trade"),
+         6: ("mine",
+             "{isHomeSystem} contains false",
+             [{'column_id': 'mineralSalesScore', 'direction': 'desc'}],
+             "mine"),
+         7: ("explore",
+             "{isHomeSystem} contains false",
+             [{'column_id': 'explorationScore', 'direction': 'desc'}],
+             "explore"),
+    # cannedActions[5] = ("trade", None, None)
+    # cannedActions[6] = ("sell mined minerals", None, None)
+    # cannedActions[7] = ("explore", None, None)
+
          9 : ("run missions", "{isHomeSystem} contains false",
               [{'column_id': 'distance', 'direction': 'asc'}],
               "missions"),
@@ -45,9 +62,7 @@ class AnnoyingCrap(object):
     #
     # cannedActions[3] = ("hunt for bounties", None, None)
     # cannedActions[4] = ("smuggle illegal goods", None, None)
-    # cannedActions[5] = ("trade", None, None)
-    # cannedActions[6] = ("sell mined minerals", None, None)
-    # cannedActions[7] = ("explore", None, None)
+
     # cannedActions[13] = ("see the welcome message again", None, None)
     # cannedActions[8] = ("go on a murder/piracy rampage", None, None)
 

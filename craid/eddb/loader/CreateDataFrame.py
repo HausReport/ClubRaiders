@@ -28,6 +28,9 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
     sysId: List[int] = []
     facId: List[int] = []
     difficulty: List[float] = []
+    salesScore: List[float] = []
+    explorationScore: List[float] = []
+    mineralSalesScore: List[float] = []
 
     # NOTE: hi there
     factionInstance: FactionInstance
@@ -48,6 +51,9 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         sysId.append(factionInstance.getSystemID())
         facId.append(factionInstance.getFactionID())
         difficulty.append(factionInstance.getDifficulty())
+        salesScore.append(factionInstance.salesScore())
+        explorationScore.append(factionInstance.explorationScore())
+        mineralSalesScore.append(factionInstance.mineralSalesScore())
 
     data = {
         'systemName'  : systemName,
@@ -64,7 +70,10 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         'vulnerable'  : vulnerableString,
         'sysId'       : sysId,
         'facId'       : facId,
-        'difficulty'  : difficulty
+        'difficulty'  : difficulty,
+        'salesScore'  : salesScore,
+        'explorationScore':  explorationScore,
+         'mineralSalesScore' :mineralSalesScore
     }
 
     gc.collect()

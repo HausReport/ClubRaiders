@@ -2,6 +2,7 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+import logging
 
 import craid.eddb.GameConstants as gconst
 from craid.eddb.Aware import Aware
@@ -104,6 +105,10 @@ class Station(Aware):
 
     def hasState(self, state: int):
         fac = self.getControllingFactionInstance()
+        name = self.get_name()
+        if fac is None:
+            logging.info("station controlling faction nexist" + name)
+            return False
         return fac.hasState(state)
 
     def getControllingFactionId(self) -> int:

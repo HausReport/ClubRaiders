@@ -263,7 +263,7 @@ class InhabitedSystem(System):
 
         return ret
 
-    def getBestStation(self, orbital: bool, largePads: bool, flag: int, reqBlackMarket=False ) -> Station:
+    def getBestStation(self, orbital: bool, largePads: bool, flag: int, reqBlackMarket=False) -> Station:
         sta: Station
         # bestStation: Station
         # bestStation: List[Station] = []   #long-ass workaround for standard java technique
@@ -377,3 +377,49 @@ class InhabitedSystem(System):
 
         bestStation: Station = self.getBestStation(False, False, self.FLAG_NON_CLUB_ONLY)
         return bestStation
+
+    def salesScore(self) -> int:
+        sta: Station = self.getBestTradeStation()
+        if sta is None:
+            return 0
+
+        sco: int = 10
+
+        if sta.isOrbital():
+            sco = sco * 2
+
+        if sta.hasLargePads():
+            sco = sco * 2
+
+        if sta.hasState(STATE_BOOM):
+            sco = sco * 2
+
+        if sta.hasState(STATE_INVESTMENT):
+            sco = sco * 2
+
+        return sco
+
+    def explorationScore(self):
+        sco: int = self.salesScore()
+        sta = self.getBestTradeStation()
+
+        if(sta is None):
+            return 0
+
+        if sta.hasState(STATE_EXPANSION):
+            sco = sco * 2
+
+        return sco
+
+    def mineralSalesScore(self):
+        sta : Station
+        bestScore = 0
+        for sta in self.stations:
+            if sta.isClub():
+                continue
+            sco = sta.getMineralSalesScore()
+            if (sco>bestScore):
+                bestScore = sco
+
+        return bestScore
+

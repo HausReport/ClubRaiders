@@ -159,3 +159,13 @@ class FactionInstance(Faction):
 
     def hasState(self, state: int):
         return self.states.hasState(state)
+
+    def explorationScore(self):
+        return self.mySystem.explorationScore()
+
+    def salesScore(self):
+        return self.mySystem.salesScore()
+
+    def mineralSalesScore(self):
+        return self.mySystem.mineralSalesScore()
+
