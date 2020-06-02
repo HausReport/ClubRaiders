@@ -19,8 +19,10 @@
     * This sort of issue can be expressed on the channels in #2 above.  There's plenty of room for tweaking and improvements.
 1. How do you identify club-related minor factions?
     * They were identified by [The Children of Raxxla](https://inara.cz/squadron/4980/) in [The Holdstock Report](https://docs.google.com/document/d/1MPw1EzRmor2TvRw97QvB8lNTcBT2XffrMuMwEOAXaW8/edit?usp=sharing).
+
 ![Diagram of Club-Related Minor Factions](https://github.com/HausReport/ClubRaiders/raw/master/info/club-diagram-640.png)
 [Larger version available here.](https://github.com/HausReport/ClubRaiders/raw/master/info/My%20Club%20Diagram.png)
+
 1. How about player minor factions?
     * They are explicitly filtered out of consideration.  We had one case where a player minor faction
     wasn't identified as such on http://eddb.io.  In that case, someone should fix the faction on Eddb and
