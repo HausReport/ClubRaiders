@@ -137,28 +137,18 @@ app.layout = html.Div([
                     'primaryColor': 'red',
                     'selected'    : 'red'},
              children=[
-                 dcc.Tab(label='Overview',
+                 dcc.Tab(label='Activities',
                          value='tab-1',
                          className='mytab',
                          selected_className='mytab-selected',
                          ),
-                 dcc.Tab(label='Combat Zones',
+                 dcc.Tab(label='About The Club',
                          value='tab-2',
                          className='mytab',
                          selected_className='mytab-selected',
                          ),
-                 dcc.Tab(label='Bounty Hunting',
+                 dcc.Tab(label='About Club Raiders',
                          value='tab-3',
-                         className='mytab',
-                         selected_className='mytab-selected',
-                         ),
-                 dcc.Tab(label='Trade/Exploration/Missions',
-                         value='tab-4',
-                         className='mytab',
-                         selected_className='mytab-selected',
-                         ),
-                 dcc.Tab(label='Scouting',
-                         value='tab-5',
                          className='mytab',
                          selected_className='mytab-selected',
                          ),
@@ -233,11 +223,11 @@ def render_content(tab):
         ]),
     elif tab == 'tab-2':
         return html.Div([
-            AnnoyingCrap.getMarkdown("cz")
+            AnnoyingCrap.getMarkdown("aboutClub")
         ])
     elif tab == 'tab-3':
         return html.Div([
-            AnnoyingCrap.getMarkdown("bh")
+            AnnoyingCrap.getMarkdown("aboutRaiders")
         ])
 
 
@@ -279,7 +269,7 @@ def filter_changed(query):
     Output('sort-notifier', 'children'),
     [Input('datatable-interactivity', 'sort_by')])
 def sort_changed(sort_by: List):
-    if sort_by is None:
+    if sort_by is None or len(sort_by) == 0:
         return "None"
 
     foo1 = sort_by[0]
@@ -291,24 +281,9 @@ def sort_changed(sort_by: List):
     return str(sort_by)
 
 
-#
-# Clear sort & filter buttons
-#
-#
-# Change filter via "clear" button or a canned query
-#
-@app.callback(
-    Output('datatable-interactivity', 'filter_query'),
-    [Input('clear-filter', 'n_clicks'),
-     Input('activityDropdown', 'value')]
-)
-def update_filter(n_clicks: int, val3):
-    ctx = dash.callback_context
-
+def was_clicked(ctx, button_id):
     if not ctx.triggered:
-        button_id = 'No clicks yet'
-    else:
-        button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+        return None
 
     ctx_msg = ujson.dumps({
         'states': ctx.states,
@@ -318,32 +293,95 @@ def update_filter(n_clicks: int, val3):
 
     aDict = ujson.loads(ctx_msg)
 
-    print( str(aDict))
-    # # NOTE: careful if you try to optimize this
-    #print(ctx_msg)
-    #print("trigger = " + str(ctx.triggered))
-    #print("value   = " + str(ctx.inputs))
-    return ""
-    # ACTIV = 'activityDropdown.value'
-    # if(ctx.triggered['prop_id'] == ACTIV):
-    #     val = ctx.inputs[ACTIV]
-    #     if val is '':
-    #         return '' # startup
-    #     else:
-    #         print("Selected activity: " + str(val3))
-    #         newFilter = AnnoyingCrap.getFilter(int(val3))
-    #         print("Filter: " + str(newFilter))
-    #         return newFilter
-    #
-    # CLR = 'clear-filter.n_clicks'
-    # if(ctx.triggered['prop_id'] == CLR):
-    #     val = ctx.inputs[CLR]
-    #     if val is '':
-    #         return ''
-    #     else:
-    #         return ''
-    # print("None of the cases hit")
-    # return ""
+    print( "dict:" + str(aDict))
+    triggered = aDict['triggered']   #['prop_id']
+    print ("triggered = " + str(triggered))
+
+    elt0 = triggered[0]
+    print ("elt0 = " + str(elt0))
+
+    prop_id = elt0['prop_id']
+    print ("prop_id = " + str(prop_id))
+
+    inputs = aDict['inputs']   #['prop_id']
+    print ("inputs = " + str(inputs))
+    activity = inputs['activityDropdown.value']
+
+
+    if( prop_id != button_id):
+        return None, activity
+
+    value = elt0['value']
+    print ("value = " + str(value))
+
+    if value==0:
+        return None, activity
+
+    return value, activity
+
+#
+# Clear sort & filter buttons
+#
+
+#
+# Change filter via "clear" button or a canned query
+#
+@app.callback(
+    [Output('datatable-interactivity', 'filter_query'),
+    Output('activity', 'children')],
+    [Input('clear-filter', 'n_clicks'),
+     Input('activityDropdown', 'value')]
+)
+def update_filter(n_clicks: int, val3):
+
+    # id of text component to change is "activity"
+
+    ## NOTE:https://dash.plotly.com/advanced-callbacks
+    ## NOTE: Here there be dragons.  Careful about changes.
+    ctx = dash.callback_context
+    value, act = was_clicked(ctx, 'clear-filter.n_clicks')
+    if( act is None)  or (act is ''):
+        act = 0
+    if( value != None):
+        msg = AnnoyingCrap.getMessage(int(value))
+        return "", msg
+
+    value, act = was_clicked(ctx, 'activityDropdown.value')
+    if( value == None) or value == '':
+        value = 0
+
+    print("Selected activity: " + str(value))
+    newFilter = AnnoyingCrap.getFilter(int(value))
+    print("Filter: " + str(newFilter))
+    msg = AnnoyingCrap.getMessage(int(value))
+    return newFilter, msg
+
+    print("None of the cases hit")
+    return "", act
+
+#
+# Change sort via "clear" button or a canned query
+#
+@app.callback(
+    Output('datatable-interactivity', 'sort_by'),
+    [Input('clear-sort', 'n_clicks'), Input('activityDropdown', 'value')])
+def update_sort(n_clicks, val3 ):
+    noSort = [{'column_id': '', 'direction': 'asc'}]
+
+    ctx = dash.callback_context
+    value = was_clicked(ctx, 'clear-sort.n_clicks')
+    if( value != None):
+        return noSort
+
+    value = was_clicked(ctx, 'activityDropdown.value')
+    if( value != None) and value != '':
+        print("Selected activity: " + str(value))
+        newSort = AnnoyingCrap.getSort(int(value))
+        print("Sort: " + str(newSort))
+        return newSort
+
+    print("None of the cases hit")
+    return noSort
 
 #
 # When user selects a system and/or activity, update the table.  Particularly

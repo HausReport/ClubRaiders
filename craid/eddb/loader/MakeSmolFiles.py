@@ -38,6 +38,10 @@ def munchFile(keys: Set[int], xinName: str):
 
 
 if __name__ == '__main__':
+
+    # TODO: Delete large files from temp directory
+
+
     # download large files from eddb
     DataProducer.getDataArrays(writeKeyFiles=True, useEddb=True)
     # delete smol

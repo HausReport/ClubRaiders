@@ -10,38 +10,45 @@ from pkg_resources import resource_string as resource_bytes
 
 
 class AnnoyingCrap(object):
-    cannedActions: Dict[int, Tuple[str, str, str]] = \
-        {0    : ( "find Club Activity near me",
-                 "{isHomeSystem} contains false",
-                [{'column_id': 'distance', 'direction': 'asc'}]),
-            2 : ( "fight The Club in war zones",
-                "{vulnerable} contains War && {isHomeSystem} contains false",
-                [{'column_id': 'distance', 'direction': 'asc'}]),
-            8 : ( "run missions", "{isHomeSystem} contains false",
-                [{'column_id': 'distance', 'direction': 'asc'}]),
-            9 : ( "beat The Club in an election",
-                "{vulnerable} contains Elect && {isHomeSystem} contains false",
-                [{'column_id': 'distance', 'direction': 'asc'}]),
-            10: ( "find an easy faction for a single commander to attack",
-                "{isHomeSystem} contains false",
-                [{'column_id': 'difficulty', 'direction': 'asc'}]),
-            11: ( "find an challenging faction for a single commander to attack",
-                "{isHomeSystem} contains false",
-                [{'column_id': 'difficulty', 'direction': 'asc'}]),
-            12: ( "find a faction to attack with a small group",
-                "{isHomeSystem} contains false",
-                [{'column_id': 'difficulty', 'direction': 'asc'}])}
+    cannedActions: Dict[int, Tuple[str, str, str, str]] = \
+        {1 : ("find Club Activity near me",
+              "{isHomeSystem} contains false",
+              [{'column_id': 'distance', 'direction': 'asc'}],
+              "overview"),
+         2 : ("fight The Club in war zones",
+              "{vulnerable} contains War && {isHomeSystem} contains false",
+              [{'column_id': 'distance', 'direction': 'asc'}],
+              "cz"),
+         9 : ("run missions", "{isHomeSystem} contains false",
+              [{'column_id': 'distance', 'direction': 'asc'}],
+              "missions"),
+         10: ("beat The Club in an election",
+              "{vulnerable} contains Elect && {isHomeSystem} contains false",
+              [{'column_id': 'distance', 'direction': 'asc'}],
+              "election"),
+         11: ("find an easy faction for a single commander to attack",
+              "{isHomeSystem} contains false",
+              [{'column_id': 'difficulty', 'direction': 'asc'}],
+              "single"),
+         12: ("find an challenging faction for a single commander to attack",
+              "{isHomeSystem} contains false",
+              [{'column_id': 'difficulty', 'direction': 'asc'}],
+              "single"),
+         13: ("find a faction to attack with a small group",
+              "{isHomeSystem} contains false",
+              [{'column_id': 'difficulty', 'direction': 'asc'}],
+              "group")}
 
     #
     # TODO: work list
     #
-    #cannedActions[1] = ("hunt for bounties", None, None)
-    #cannedActions[3] = ("smuggle illegal goods", None, None)
-    #cannedActions[5] = ("trade", None, None)
-    #cannedActions[6] = ("sell mined minerals", None, None)
-    #cannedActions[7] = ("explore", None, None)
-    #cannedActions[13] = ("see the welcome message again", None, None)
-    #cannedActions[4] = ("go on a murder/piracy rampage", None, None)
+    # cannedActions[1] = ("hunt for bounties", None, None)
+    # cannedActions[3] = ("smuggle illegal goods", None, None)
+    # cannedActions[5] = ("trade", None, None)
+    # cannedActions[6] = ("sell mined minerals", None, None)
+    # cannedActions[7] = ("explore", None, None)
+    # cannedActions[13] = ("see the welcome message again", None, None)
+    # cannedActions[4] = ("go on a murder/piracy rampage", None, None)
 
     #
     # Implemented
@@ -63,11 +70,11 @@ class AnnoyingCrap(object):
 
     @staticmethod
     def getFirstDropdown(_systemNameToXYZ):
-       opts = []
-       keys: List[str] = sorted(_systemNameToXYZ.keys())
-       for it in keys:
-           opts.append({'label': it, 'value': it})
-       return opts
+        opts = []
+        keys: List[str] = sorted(_systemNameToXYZ.keys())
+        for it in keys:
+            opts.append({'label': it, 'value': it})
+        return opts
 
     @staticmethod
     def getSecondDropdown(playerFactionNameToHomeSystemName):
@@ -89,6 +96,11 @@ class AnnoyingCrap(object):
         return AnnoyingCrap.cannedActions[val3][2]
 
     @staticmethod
+    def getMessage(val3: int):
+        shortFile: str = AnnoyingCrap.cannedActions[val3][3]
+        return AnnoyingCrap.getMarkdown(shortFile)
+
+    @staticmethod
     def getThirdDropdown():
 
         gopts = []
@@ -100,8 +112,7 @@ class AnnoyingCrap(object):
 
         return gopts
 
-
-## "hidden": True,  is not a thing, unfortunately
+    ## "hidden": True,  is not a thing, unfortunately
     @staticmethod
     def getTheColumns():
         return [
@@ -121,8 +132,3 @@ class AnnoyingCrap(object):
             {"name": 'Vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
             {"name": 'Dist.', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
         ]
-
-
-
-
-
