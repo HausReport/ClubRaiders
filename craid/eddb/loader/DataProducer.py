@@ -27,10 +27,10 @@ from craid.eddb.loader.MakeKeyFiles import dumpKeys, loadKeys
 
 def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
 
-    if useEddb:
-        myLoader = LoadDataFromEDDB()
-    else:
-        myLoader = LoadDataFromGithub()
+    #if useEddb:
+    #    myLoader = LoadDataFromEDDB()
+    #else:
+    myLoader = LoadDataFromGithub()
 
     playerFactionNameToSystemName: Dict[str, str] = {}
 
