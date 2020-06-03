@@ -14,7 +14,7 @@
 | Population  | $population       |
 | EDBGS System Info | $edbgs_link |
 | EDDB System Info | $eddb_link |
-| Bounty Hunting | $bounty_hunting        |
+| Bounty Hunting | $bounty_hunting_features        |
 
 # Suggested Tactics
 

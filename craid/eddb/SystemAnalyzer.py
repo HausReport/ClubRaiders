@@ -11,18 +11,6 @@ from craid.eddb.Station import Station
 from craid.eddb.util.MessageList import MessageList
 
 
-def isProbablyAGoodBountyHuntingSystem(theSys: InhabitedSystem):
-    if not theSys.hasAnarchyFaction():
-        return False
-    econ = theSys.jsonLine['primary_economy']
-    if not econ:
-        return False
-    if (not econ.startswith('Extract')) and (
-            not econ.startswith('Refine')):
-        return False
-    return True
-
-
 class SystemAnalyzer(object):
 
     def __init__(self, theSystem: InhabitedSystem, theFaction: FactionInstance):
@@ -49,7 +37,7 @@ class SystemAnalyzer(object):
         if daysSinceScouted > 3:
             msg = f"The system was last scouted {daysSinceScouted} days ago.  The situation may have changed."
             if daysSinceScouted > 10:
-                msg = "~~" + msg + "~~~"
+                msg = "~~" + msg + "~~"
 
             self.messages.add(105.0, msg)
 

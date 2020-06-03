@@ -169,6 +169,15 @@ class FactionInstance(Faction):
     def mineralSalesScore(self):
         return self.mySystem.mineralSalesScore()
 
+    def bountyHuntingScore(self) -> float:
+        return self.mySystem.bountyHuntingScore()
+
+    def smugglingScore(self) -> float:
+        return self.mySystem.smugglingScore()
+
+    def piracyMurderScore(self) -> float:
+        return self.mySystem.piracyMurderScore()
+
     def getSystemEdbgsLink(self):
         return self.mySystem.getEdbgsLink(self, self.get_name2())
 

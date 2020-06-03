@@ -8,6 +8,7 @@ from collections import deque
 from typing import List, Deque
 
 from craid.edbgs.EdBgsSystemIds import EdBgsSystemIds
+from craid.eddb.BountyHuntingInfo import BountyHuntingInfo
 from craid.eddb.Faction import Faction
 from craid.eddb.GameConstants import *
 from craid.eddb.PassThroughDict import PassThroughDict
@@ -210,13 +211,9 @@ class InhabitedSystem(System):
         myDict['octant'] = "{:,}".format(self.getOctant())
 
         from craid.eddb.SystemAnalyzer import SystemAnalyzer
-        # sysA = SystemAnalyzer(self)
-        from craid.eddb.SystemAnalyzer import isProbablyAGoodBountyHuntingSystem  # sidestep circ import
-        bhVal = isProbablyAGoodBountyHuntingSystem(self)
-        # bhVal = self.isProbablyAGoodBHSystem()
-        bh = "Unknown"
-        if bhVal: bh = "Probably"
-        myDict['bounty_hunting'] = bh
+        # sysA = SystemAnalyzer/bou(self)
+        bhFeatures = self.bountyHuntingFeatures()
+        myDict['bounty_hunting_features'] = bhFeatures
 
         myDict['power'] = self.getPower()
         myDict['power_state'] = self.getPowerState()
@@ -305,6 +302,10 @@ class InhabitedSystem(System):
             dist = 999999999999999
             if len(bestStation) > 0:
                 dist = bestStation[0].getDistanceToStar()
+
+            stadist = sta.getDistanceToStar()
+            if stadist is None or dist is None:
+                continue
 
             if sta.getDistanceToStar() <= dist:
                 if flag == self.FLAG_CLUB_ONLY:
@@ -429,3 +430,43 @@ class InhabitedSystem(System):
 
     def getEdbgsLink(self, msg: str) -> str:
          return EdBgsSystemIds.getMarkdownLink(self.get_id(), msg)
+
+    def smugglingScore(self) -> float:
+        sta: Station = self.getBestSmugglingStation()
+        if sta is None:
+            return 0
+        return 50.0
+
+    def piracyMurderScore(self) -> float:
+        sta: Station = self.getBestCrimeStation()
+        if sta is None:
+            return 0.0
+        score: float = 50.0
+        return score
+
+    def bountyHuntingFeatures(self) -> str:
+        hasRings = BountyHuntingInfo.hasRings(self.get_id())
+        if hasRings: return "Rings"
+
+    def bountyHuntingScore(self) -> float:
+        hasRings = BountyHuntingInfo.hasRings(self.get_id())
+        if not hasRings:
+            return 0
+
+        sta: Station = self.getBestTradeStation()
+        if sta is None:
+            return 0
+
+        score: float = 50.0
+
+        if self.hasAnarchyFaction():
+            score = score * 1.1
+
+        econ = self.jsonLine['primary_economy']
+        if not econ:
+            pass
+        elif econ.startswith('Extract') or econ.startswith('Refine'):
+            score = score * 1.1
+
+        # NOTE: would be nice to use pirateattack state
+        return score

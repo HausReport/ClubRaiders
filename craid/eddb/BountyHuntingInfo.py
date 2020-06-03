@@ -7,131 +7,151 @@
 # sysid, name, rings, res, bodies link
 from typing import Dict
 
-bhArr = \
-    [[394, 'Abroin', True, 'unknown', 'https://eddb.io/system/bodies/394'],
-     [621, 'Akandi', True, 'unknown', 'https://eddb.io/system/bodies/621'],
-     [798, 'Amalangkan', True, 'unknown', 'https://eddb.io/system/bodies/798'],
-     [1500, 'Aurus', True, 'unknown', 'https://eddb.io/system/bodies/1500'],
-     [1542, 'Avik', False, 'unknown', 'https://eddb.io/system/bodies/1542'],
-     [2750, 'Caelottixa', True, 'Haz Res', 'https://eddb.io/system/bodies/2750'],
-     [2933, 'Carunda', False, 'unknown', 'https://eddb.io/system/bodies/2933'],
-     [3144, 'Certo', False, 'unknown', 'https://eddb.io/system/bodies/3144'],
-     [3332, 'Chicoana', False, 'unknown', 'https://eddb.io/system/bodies/3332'],
-     [3454, 'Chuelchs', False, 'unknown', 'https://eddb.io/system/bodies/3454'],
-     [3576, 'Cofan', True, 'unknown', 'https://eddb.io/system/bodies/3576'],
-     [3856, 'Corn Pin', False, 'unknown', 'https://eddb.io/system/bodies/3856'],
-     [3975, 'Daik', True, 'unknown', 'https://eddb.io/system/bodies/3975'],
-     [4087, 'Delkar', True, 'unknown', 'https://eddb.io/system/bodies/4087'],
-     [4170, 'Dhathaarib', True, 'unknown', 'https://eddb.io/system/bodies/4170'],
-     [4421, 'Dyavata', False, 'unknown', 'https://eddb.io/system/bodies/4421'],
-     [4671, 'Eta Scorpii', False, 'unknown', 'https://eddb.io/system/bodies/4671'],
-     [5853, 'Helgaedi', False, 'unknown', 'https://eddb.io/system/bodies/5853'],
-     [7734, 'HIP 47156', True, 'unknown', 'https://eddb.io/system/bodies/7734'],
-     [8232, 'HIP 67109', False, 'unknown', 'https://eddb.io/system/bodies/8232'],
-     [8534, 'HIP 78267', False, 'unknown', 'https://eddb.io/system/bodies/8534'],
-     [9130, 'Holler', False, 'unknown', 'https://eddb.io/system/bodies/9130'],
-     [9147, 'Honoto', True, 'unknown', 'https://eddb.io/system/bodies/9147'],
-     [9261, 'HR 3714', True, 'unknown', 'https://eddb.io/system/bodies/9261'],
-     [9556, 'Hun Chonses', False, 'unknown', 'https://eddb.io/system/bodies/9556'],
-     [9859, 'Ipilyak', False, 'unknown', 'https://eddb.io/system/bodies/9859'],
-     [10511, 'Karitis', False, 'unknown', 'https://eddb.io/system/bodies/10511'],
-     [10803, 'Kikapu', False, 'unknown', 'https://eddb.io/system/bodies/10803'],
-     [10830, 'Kipsigines', False, 'unknown', 'https://eddb.io/system/bodies/10830'],
-     [10931, 'Kokokomi', 'unknown', 'unknown', 'https://eddb.io/system/bodies/10931'],
-     [10977, 'Komovoy', True, 'unknown', 'https://eddb.io/system/bodies/10977'],
-     [11559, 'Lapannodaya', False, 'unknown', 'https://eddb.io/system/bodies/11559'],
-     [11614, 'LAWD 26', True, 'unknown', 'https://eddb.io/system/bodies/11614'],
-     [11884, 'LHS 1951', False, 'unknown', 'https://eddb.io/system/bodies/11884'],
-     [11897, 'LHS 2065', True, 'unknown', 'https://eddb.io/system/bodies/11897'],
-     [11944, 'LHS 2477', False, 'unknown', 'https://eddb.io/system/bodies/11944'],
-     [11974, 'LHS 2887', True, 'unknown', 'https://eddb.io/system/bodies/11974'],
-     [12063, 'LHS 380', True, 'unknown', 'https://eddb.io/system/bodies/12063'],
-     [12539, 'LPM 607', True, 'unknown', 'https://eddb.io/system/bodies/12539'],
-     [12745, 'LTT 4835', True, 'unknown', 'https://eddb.io/system/bodies/12745'],
-     [12801, 'LTT 7370', True, 'unknown', 'https://eddb.io/system/bodies/12801'],
-     [12908, 'Lu Yupik', False, 'unknown', 'https://eddb.io/system/bodies/12908'],
-     [12934, 'Luhman 16', False, 'unknown', 'https://eddb.io/system/bodies/12934'],
-     [12977, 'Luyten 674-15', False, 'unknown', 'https://eddb.io/system/bodies/12977'],
-     [12978, "Luyten's Star", True, 'unknown', 'https://eddb.io/system/bodies/12978'],
-     [13046, 'Madrus', True, 'unknown', 'https://eddb.io/system/bodies/13046'],
-     [13223, 'Mang', False, 'unknown', 'https://eddb.io/system/bodies/13223'],
-     [13656, 'Mildeptu', False, 'unknown', 'https://eddb.io/system/bodies/13656'],
-     [13664, 'Miller', True, 'unknown', 'https://eddb.io/system/bodies/13664'],
-     [13697, 'Minu', True, 'unknown', 'https://eddb.io/system/bodies/13697'],
-     [13803, 'Mongan', False, 'unknown', 'https://eddb.io/system/bodies/13803'],
-     [13823, 'Mooramba', False, 'unknown', 'https://eddb.io/system/bodies/13823'],
-     [14032, 'Nagasairu', False, 'unknown', 'https://eddb.io/system/bodies/14032'],
-     [14076, 'Namarii', True, 'unknown', 'https://eddb.io/system/bodies/14076'],
-     [14358, 'Ngalia', True, 'unknown', 'https://eddb.io/system/bodies/14358'],
-     [14932, 'Oguninksmii', False, 'unknown', 'https://eddb.io/system/bodies/14932'],
-     [15003, 'Ondumbo', False, 'unknown', 'https://eddb.io/system/bodies/15003'],
-     [15274, 'Panopi', True, 'unknown', 'https://eddb.io/system/bodies/15274'],
-     [15443, 'Pemoeri', True, 'unknown', 'https://eddb.io/system/bodies/15443'],
-     [15756, 'Procyon', False, 'unknown', 'https://eddb.io/system/bodies/15756'],
-     [15976, 'Rana', False, 'unknown', 'https://eddb.io/system/bodies/15976'],
-     [16192, 'Ross 446', True, 'unknown', 'https://eddb.io/system/bodies/16192'],
-     [16214, 'Ross 591', False, 'unknown', 'https://eddb.io/system/bodies/16214'],
-     [16289, 'RR Caeli', True, 'unknown', 'https://eddb.io/system/bodies/16289'],
-     [16708, 'Serrot', False, 'unknown', 'https://eddb.io/system/bodies/16708'],
-     [16789, 'Shatkwaka', False, 'unknown', 'https://eddb.io/system/bodies/16789'],
-     [17073, 'Solati', True, 'unknown', 'https://eddb.io/system/bodies/17073'],
-     [17248, 'Surmati', False, 'unknown', 'https://eddb.io/system/bodies/17248'],
-     [17325, 'Tabaldak', True, 'unknown', 'https://eddb.io/system/bodies/17325'],
-     [17933, 'Trica', False, 'unknown', 'https://eddb.io/system/bodies/17933'],
-     [18681, 'Vucub Huan', False, 'unknown', 'https://eddb.io/system/bodies/18681'],
-     [19005, 'Wille', True, 'unknown', 'https://eddb.io/system/bodies/19005'],
-     [19988, 'Asterope', False, 'unknown', 'https://eddb.io/system/bodies/19988'],
-     [19991, 'Atlas', False, 'unknown', 'https://eddb.io/system/bodies/19991'],
-     [20053, 'Celaeno', True, 'unknown', 'https://eddb.io/system/bodies/20053'],
-     [20550, 'Electra', False, 'unknown', 'https://eddb.io/system/bodies/20550'],
-     [20652, 'HIP 17497', True, 'unknown', 'https://eddb.io/system/bodies/20652'],
-     [20656, 'HIP 17692', True, 'unknown', 'https://eddb.io/system/bodies/20656'],
-     [20712, 'HR 1172', True, 'unknown', 'https://eddb.io/system/bodies/20712'],
-     [21120, 'Merope', True, 'unknown', 'https://eddb.io/system/bodies/21120'],
-     [21201, 'Pleione', True, 'unknown', 'https://eddb.io/system/bodies/21201'],
-     [21389, 'Taygeta', True, 'unknown', 'https://eddb.io/system/bodies/21389'],
-     [22431, 'Pleiades Sector DL-Y d65', True, 'unknown', 'https://eddb.io/system/bodies/22431'],
-     [22436, 'Pleiades Sector HR-W d1-57', False, 'unknown', 'https://eddb.io/system/bodies/22436'],
-     [22438, 'Pleiades Sector HR-W d1-74', False, 'unknown', 'https://eddb.io/system/bodies/22438'],
-     [22442, 'Pleiades Sector KC-V c2-11', False, 'unknown', 'https://eddb.io/system/bodies/22442'],
-     [23495, 'Robigo', True, 'unknown', 'https://eddb.io/system/bodies/23495'],
-     [24005, 'HR 1183', False, 'unknown', 'https://eddb.io/system/bodies/24005'],
-     [24460, 'Almagest', False, 'unknown', 'https://eddb.io/system/bodies/24460'],
-     [24461, 'Takurua', False, 'unknown', 'https://eddb.io/system/bodies/24461'],
-     [24462, 'HIP 8396', True, 'unknown', 'https://eddb.io/system/bodies/24462'],
-     [24463, 'Ceos', True, 'unknown', 'https://eddb.io/system/bodies/24463'],
-     [27167, 'HIP 17225', True, 'unknown', 'https://eddb.io/system/bodies/27167'],
-     [28014, 'HIP 17044', True, 'unknown', 'https://eddb.io/system/bodies/28014'],
-     [31053, 'HIP 17892', True, 'unknown', 'https://eddb.io/system/bodies/31053'],
-     [32581, 'Pleiades Sector IH-V c2-7', True, 'unknown', 'https://eddb.io/system/bodies/32581'],
-     [35347, 'HIP 16753', True, 'unknown', 'https://eddb.io/system/bodies/35347'],
-     [35963, 'Pleiades Sector GW-W c1-13', True, 'unknown', 'https://eddb.io/system/bodies/35963'],
-     [40994, 'HIP 18077', True, 'unknown', 'https://eddb.io/system/bodies/40994'],
-     [44214, 'Pleiades Sector HR-W d1-42', False, 'unknown', 'https://eddb.io/system/bodies/44214'],
-     [50090, 'Pleiades Sector PD-S b4-0', True, 'unknown', 'https://eddb.io/system/bodies/50090'],
-     [50120, 'Pleiades Sector IH-V c2-16', False, 'unknown', 'https://eddb.io/system/bodies/50120'],
-     [53883, 'Col 285 Sector WO-E b13-0', False, 'unknown', 'https://eddb.io/system/bodies/53883'],
-     [54280, 'Col 285 Sector BQ-N c7-21', False, 'unknown', 'https://eddb.io/system/bodies/54280'],
-     [54282, 'Col 285 Sector YZ-C b14-1', False, 'unknown', 'https://eddb.io/system/bodies/54282'],
-     [59230, 'HIP 17412', True, 'unknown', 'https://eddb.io/system/bodies/59230'],
-     [68047, 'HIP 72726', False, 'unknown', 'https://eddb.io/system/bodies/68047'],
-     [73124, 'Arietis Sector ON-T b3-4', True, 'unknown', 'https://eddb.io/system/bodies/73124'],
-     [73732, 'California Sector HR-W d1-28', True, 'unknown', 'https://eddb.io/system/bodies/73732'],
-     [81474, 'Synuefe YM-H d11-84', False, 'unknown', 'https://eddb.io/system/bodies/81474'],
-     [85934, 'HIP 17655', False, 'unknown', 'https://eddb.io/system/bodies/85934'],
-     [125691, 'Pleiades Sector JC-V d2-62', False, 'unknown', 'https://eddb.io/system/bodies/125691'],
-     [163300, 'HIP 51352', True, 'unknown', 'https://eddb.io/system/bodies/163300'],
-     [207784, 'Pleiades Sector KC-V c2-4', True, 'unknown', 'https://eddb.io/system/bodies/207784'],
-     [298089, 'California Sector JH-V c2-12', True, 'unknown', 'https://eddb.io/system/bodies/298089'],
-     [339309, 'Col 285 Sector EB-B b15-4', True, 'unknown', 'https://eddb.io/system/bodies/339309'],
-     [367160, 'Synuefai EB-R c7-5', True, 'unknown', 'https://eddb.io/system/bodies/367160'],
-     [412630, 'Col 285 Sector UE-G c11-19', True, 'unknown', 'https://eddb.io/system/bodies/412630'],
-     [494419, 'Wolf 202', True, 'unknown', 'https://eddb.io/system/bodies/494419'],
-     [947280, '33 Cygni', False, 'unknown', 'https://eddb.io/system/bodies/947280'],
-     [2843876, 'Col 285 Sector BQ-N c7-13', False, 'unknown', 'https://eddb.io/system/bodies/2843876'],
-     [9979032, 'Mel 22 Sector GM-V c2-8', False, 'unknown', 'https://eddb.io/system/bodies/9979032'],
-     [23118044, 'Delphi', True, 'unknown', 'https://eddb.io/system/bodies/23118044']]
+#10931: unknown,  # Kokokomi
+import craid
 
-bhDict: Dict[int, bool] = {}
-for item in bhArr:
-    bhDict[item[0]] = item[2]
+
+class BountyHuntingInfo(object):
+    bhDict = {394     : True,  # Abroin
+              621     : True,  # Akandi
+              798     : True,  # Amalangkan
+              1500    : True,  # Aurus
+              1542    : False,  # Avik
+              2750    : True,  # Caelottixa
+              2933    : False,  # Carunda
+              3144    : False,  # Certo
+              3332    : False,  # Chicoana
+              3454    : False,  # Chuelchs
+              3576    : True,  # Cofan
+              3856    : False,  # Corn Pin
+              3975    : True,  # Daik
+              4087    : True,  # Delkar
+              4170    : True,  # Dhathaarib
+              4421    : False,  # Dyavata
+              4671    : False,  # Eta Scorpii
+              5853    : False,  # Helgaedi
+              7734    : True,  # HIP 47156
+              8232    : False,  # HIP 67109
+              8534    : False,  # HIP 78267
+              9130    : False,  # Holler
+              9147    : True,  # Honoto
+              9261    : True,  # HR 3714
+              9556    : False,  # Hun Chonses
+              9859    : False,  # Ipilyak
+              10511   : False,  # Karitis
+              10803   : False,  # Kikapu
+              10830   : False,  # Kipsigines
+              10977   : True,  # Komovoy
+              11559   : False,  # Lapannodaya
+              11614   : True,  # LAWD 26
+              11884   : False,  # LHS 1951
+              11897   : True,  # LHS 2065
+              11944   : False,  # LHS 2477
+              11974   : True,  # LHS 2887
+              12063   : True,  # LHS 380
+              12539   : True,  # LPM 607
+              12745   : True,  # LTT 4835
+              12801   : True,  # LTT 7370
+              12908   : False,  # Lu Yupik
+              12934   : False,  # Luhman 16
+              12977   : False,  # Luyten 674-15
+              12978   : True,  # Luyten's Star
+              13046   : True,  # Madrus
+              13223   : False,  # Mang
+              13656   : False,  # Mildeptu
+              13664   : True,  # Miller
+              13697   : True,  # Minu
+              13803   : False,  # Mongan
+              13823   : False,  # Mooramba
+              14032   : False,  # Nagasairu
+              14076   : True,  # Namarii
+              14358   : True,  # Ngalia
+              14932   : False,  # Oguninksmii
+              15003   : False,  # Ondumbo
+              15274   : True,  # Panopi
+              15443   : True,  # Pemoeri
+              15756   : False,  # Procyon
+              15976   : False,  # Rana
+              16192   : True,  # Ross 446
+              16214   : False,  # Ross 591
+              16289   : True,  # RR Caeli
+              16708   : False,  # Serrot
+              16789   : False,  # Shatkwaka
+              17073   : True,  # Solati
+              17248   : False,  # Surmati
+              17325   : True,  # Tabaldak
+              17933   : False,  # Trica
+              18681   : False,  # Vucub Huan
+              19005   : True,  # Wille
+              19988   : False,  # Asterope
+              19991   : False,  # Atlas
+              20053   : True,  # Celaeno
+              20550   : False,  # Electra
+              20652   : True,  # HIP 17497
+              20656   : True,  # HIP 17692
+              20712   : True,  # HR 1172
+              21120   : True,  # Merope
+              21201   : True,  # Pleione
+              21389   : True,  # Taygeta
+              22431   : True,  # Pleiades Sector DL-Y d65
+              22436   : False,  # Pleiades Sector HR-W d1-57
+              22438   : False,  # Pleiades Sector HR-W d1-74
+              22442   : False,  # Pleiades Sector KC-V c2-11
+              23495   : True,  # Robigo
+              24005   : False,  # HR 1183
+              24460   : False,  # Almagest
+              24461   : False,  # Takurua
+              24462   : True,  # HIP 8396
+              24463   : True,  # Ceos
+              27167   : True,  # HIP 17225
+              28014   : True,  # HIP 17044
+              31053   : True,  # HIP 17892
+              32581   : True,  # Pleiades Sector IH-V c2-7
+              35347   : True,  # HIP 16753
+              35963   : True,  # Pleiades Sector GW-W c1-13
+              40994   : True,  # HIP 18077
+              44214   : False,  # Pleiades Sector HR-W d1-42
+              50090   : True,  # Pleiades Sector PD-S b4-0
+              50120   : False,  # Pleiades Sector IH-V c2-16
+              53883   : False,  # Col 285 Sector WO-E b13-0
+              54280   : False,  # Col 285 Sector BQ-N c7-21
+              54282   : False,  # Col 285 Sector YZ-C b14-1
+              59230   : True,  # HIP 17412
+              68047   : False,  # HIP 72726
+              73124   : True,  # Arietis Sector ON-T b3-4
+              73732   : True,  # California Sector HR-W d1-28
+              81474   : False,  # Synuefe YM-H d11-84
+              85934   : False,  # HIP 17655
+              125691  : False,  # Pleiades Sector JC-V d2-62
+              163300  : True,  # HIP 51352
+              207784  : True,  # Pleiades Sector KC-V c2-4
+              298089  : True,  # California Sector JH-V c2-12
+              339309  : True,  # Col 285 Sector EB-B b15-4
+              367160  : True,  # Synuefai EB-R c7-5
+              412630  : True,  # Col 285 Sector UE-G c11-19
+              494419  : True,  # Wolf 202
+              947280  : False,  # 33 Cygni
+              2843876 : False,  # Col 285 Sector BQ-N c7-13
+              9979032 : False,  # Mel 22 Sector GM-V c2-8
+              23118044: True,  # Delphi
+              }
+
+    @staticmethod
+    def hasRings(sid: int):
+        line = BountyHuntingInfo.bhDict.get(sid)
+        if line is None:
+            return False
+        return line
+
+
+
+# if __name__ == '__main__':
+#     bhDict: Dict[int, bool] = {}
+#
+#     for item in BountyHuntingInfo.bhArr:
+#         sid = item[0]
+#         ring: bool = item[2]
+#         sname: bool = item[1]
+#         print(f"{sid}: {ring},\t\t\t#{sname}")
+#
+#     # pprint(bhDict)

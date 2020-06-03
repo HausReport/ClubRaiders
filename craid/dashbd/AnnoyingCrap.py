@@ -20,6 +20,14 @@ class AnnoyingCrap(object):
               "{vulnerable} contains War && {isHomeSystem} contains false",
               [{'column_id': 'distance', 'direction': 'asc'}],
               "cz"),
+         3: ("hunt for bounties",
+             "{isHomeSystem} contains false && {bountyHuntingScore} >= 50",
+              [{'column_id': 'bountyHuntingScore', 'direction': 'desc'}, {'column_id': 'distance', 'direction': 'asc'}],
+             "bh"),
+         4: ("smuggle",
+             "{isHomeSystem} contains false && {smugglingScore} >= 50",
+             [{'column_id': 'smugglingScore', 'direction': 'desc'}, {'column_id': 'distance', 'direction': 'asc'}],
+             "smuggle"),
          5: ("trade",
              "{isHomeSystem} contains false && {salesScore} > 50",
              [{'column_id': 'salesScore', 'direction': 'desc'}, {'column_id': 'distance', 'direction': 'asc'}],
@@ -32,6 +40,10 @@ class AnnoyingCrap(object):
              "{isHomeSystem} contains false",
              [{'column_id': 'explorationScore', 'direction': 'desc'}],
              "explore"),
+         8 : ("go on a piracy/murder rampage",
+              "{isHomeSystem} contains false && {piracyMurderScore} >= 50",
+              [{'column_id': 'piracyMurderScore', 'direction': 'desc'}, {'column_id': 'distance', 'direction': 'asc'}],
+              "piracyMurder"),
          9 : ("run missions", "{isHomeSystem} contains false",
               [{'column_id': 'distance', 'direction': 'asc'}],
               "missions"),
@@ -39,11 +51,11 @@ class AnnoyingCrap(object):
               "{vulnerable} contains Elect && {isHomeSystem} contains false",
               [{'column_id': 'distance', 'direction': 'asc'}],
               "election"),
-         11: ("see easy systems for 1 CMDR",
+         11: ("see easy club systems to solo",
               "{isHomeSystem} contains false && {difficulty} < 5",
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "single"),
-         12: ("see harder systems for 1 CMDR",
+         12: ("see hard club systems to solo",
               "{isHomeSystem} contains false && {difficulty} > 5 && {difficulty} < 100",
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "single"),
@@ -63,10 +75,7 @@ class AnnoyingCrap(object):
     #
     # TODO: work list
     #
-    # cannedActions[3] = ("hunt for bounties", None, None)
-    # cannedActions[4] = ("smuggle illegal goods", None, None)
     # cannedActions[13] = ("see the welcome message again", None, None)
-    # cannedActions[8] = ("go on a murder/piracy rampage", None, None)
 
     #
     # Implemented
@@ -155,4 +164,5 @@ class AnnoyingCrap(object):
             # {"name": 'Trade', "id": 'salesScore', "deletable": False, "selectable": False, "hideable": True, "hidden": True, "type": "numeric"},
             # {"name": 'Mine', "id": 'mineralSalesScore', "deletable": False, "selectable": False, "hideable": True, "hidden": True, "type": "numeric"},
             # {"name": 'Explore', "id": 'explorationScore', "hideable": True, "hidden": True, "type": "numeric"},
+            {"name": 'PM', "id": 'piracyMurderScore', "hideable": True, "hidden": True, "type": "numeric"},
         ]

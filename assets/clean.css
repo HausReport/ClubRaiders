@@ -126,6 +126,7 @@ del {
   display: flex;
   text-align: left;
   min-width: 200px;
+  padding: 15px;
 }
 
 .activities {

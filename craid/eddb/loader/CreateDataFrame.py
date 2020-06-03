@@ -31,6 +31,9 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
     salesScore: List[float] = []
     explorationScore: List[float] = []
     mineralSalesScore: List[float] = []
+    bountyHuntingScore: List[float] = []
+    smugglingScore: List[float] = []
+    piracyMurderScore: List[float] = []
 
     # NOTE: hi there
     factionInstance: FactionInstance
@@ -54,6 +57,9 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         salesScore.append(factionInstance.salesScore())
         explorationScore.append(factionInstance.explorationScore())
         mineralSalesScore.append(factionInstance.mineralSalesScore())
+        bountyHuntingScore.append(factionInstance.bountyHuntingScore())
+        smugglingScore.append(factionInstance.smugglingScore())
+        piracyMurderScore.append(factionInstance.piracyMurderScore())
 
     data = {
         'systemName'  : systemName,
@@ -73,7 +79,10 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         'difficulty'  : difficulty,
         'salesScore'  : salesScore,
         'explorationScore':  explorationScore,
-         'mineralSalesScore' :mineralSalesScore
+        'mineralSalesScore' :mineralSalesScore,
+        'bountyHuntingScore' :bountyHuntingScore,
+        'smugglingScore' :smugglingScore,
+        'piracyMurderScore' :piracyMurderScore
     }
 
     gc.collect()
