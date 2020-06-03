@@ -6,6 +6,7 @@
 # from InhabitedSystem import InhabitedSystem
 from typing import Dict
 
+from craid.edbgs.EdBgsFactionIds import EdBgsFactionIds
 from craid.eddb.Aware import Aware
 from craid.eddb.NamedItem import NamedItem
 
@@ -26,12 +27,12 @@ class Faction(Aware):
             self.homesystem_id = jsonString['home_system_id']
             self.player = jsonString['is_player_faction']
         else:
-            tfac: Faction = obj
-            super().__init__(tfac.get_name(), tfac.get_id())
-            self.allegiance = tfac.allegiance
-            self.government = tfac.government
-            self.homesystem_id = tfac.homesystem_id
-            self.player = tfac.player
+            tFaction: Faction = obj
+            super().__init__(tFaction.get_name(), tFaction.get_id())
+            self.allegiance = tFaction.allegiance
+            self.government = tFaction.government
+            self.homesystem_id = tFaction.homesystem_id
+            self.player = tFaction.player
 
     #
     # Picked off the jsonLine
@@ -96,3 +97,6 @@ class Faction(Aware):
 
     def isClub(self) -> bool:
         return self.club
+
+    def getEdbgsLink(self, msg: str) -> str:
+        return EdBgsFactionIds.getMarkdownLink(self.get_id(), self.get_name2())

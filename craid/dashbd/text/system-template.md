@@ -12,6 +12,7 @@
 | Controlling Faction | $controlling_faction |
 | Needs permit | $needs_permit |
 | Population  | $population       |
+| EDBGS System Info | $edbgs_link |
 | EDDB System Info | $eddb_link |
 | Bounty Hunting | $bounty_hunting        |
 

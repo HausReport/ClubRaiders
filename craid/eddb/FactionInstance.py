@@ -39,7 +39,7 @@ class FactionInstance(Faction):
     def getSystemNameById(self, _id):
         return super().getSystemNameById(_id)
 
-    #def getUpdated(self):
+    # def getUpdated(self):
     #    return self.mySystem.getUpdated()
 
     # <1, A single player can easily retreat
@@ -82,7 +82,7 @@ class FactionInstance(Faction):
         if self.isHomeSystem(): return False
 
         # FIXME: can't call getDifficulty here
-        #if self.getDifficulty() == 999999: return False
+        # if self.getDifficulty() == 999999: return False
         return True
 
     def getUpdatedDateTime(self) -> datetime:
@@ -150,7 +150,7 @@ class FactionInstance(Faction):
         myDict['home_system'] = self.get_homesystem_name()
         myDict['allegiance'] = str(self.get_allegiance())
         myDict['government'] = str(self.get_government())
-        #myDict['inara_link'] = self.getInaraFactionUrl()
+        # myDict['inara_link'] = self.getInaraFactionUrl()
         myDict['faction_name'] = self.get_name2()
 
         template = string.Template(msg)
@@ -169,3 +169,8 @@ class FactionInstance(Faction):
     def mineralSalesScore(self):
         return self.mySystem.mineralSalesScore()
 
+    def getSystemEdbgsLink(self):
+        return self.mySystem.getEdbgsLink(self, self.get_name2())
+
+    # def getEdbgsLink(self):
+    #     return super.getEdbgsLink(self, self.get_name2())

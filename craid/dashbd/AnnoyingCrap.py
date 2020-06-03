@@ -39,16 +39,24 @@ class AnnoyingCrap(object):
               "{vulnerable} contains Elect && {isHomeSystem} contains false",
               [{'column_id': 'distance', 'direction': 'asc'}],
               "election"),
-         11: ("find an easy faction for a single commander to attack",
+         11: ("see easy systems for 1 CMDR",
               "{isHomeSystem} contains false && {difficulty} < 5",
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "single"),
-         12: ("find an challenging faction for a single commander to attack",
+         12: ("see harder systems for 1 CMDR",
               "{isHomeSystem} contains false && {difficulty} > 5 && {difficulty} < 100",
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "single"),
-         13: ("find a faction to attack with a small group",
+         13: ("see systems for small groups",
               "{isHomeSystem} contains false && {difficulty} > 50 && {difficulty} < 150",
+              [{'column_id': 'difficulty', 'direction': 'asc'}],
+              "group"),
+         14: ("see systems for large groups",
+              "{isHomeSystem} contains false && {difficulty} > 150 && {difficulty} < 750",
+              [{'column_id': 'difficulty', 'direction': 'asc'}],
+              "group"),
+         15: ("see systems for squadron alliances",
+              "{isHomeSystem} contains false && {difficulty} > 750 && {difficulty} < 950000",
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "group")}
 
@@ -57,7 +65,6 @@ class AnnoyingCrap(object):
     #
     # cannedActions[3] = ("hunt for bounties", None, None)
     # cannedActions[4] = ("smuggle illegal goods", None, None)
-
     # cannedActions[13] = ("see the welcome message again", None, None)
     # cannedActions[8] = ("go on a murder/piracy rampage", None, None)
 
@@ -145,7 +152,7 @@ class AnnoyingCrap(object):
             {"name": 'Control', "id": 'control', "deletable": False, "hideable": True, "selectable": False},
             {"name": 'Vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
             {"name": 'Dist.', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
-            {"name": 'Dist.', "id": 'salesScore', "deletable": False, "selectable": False, "type": "numeric"},
-            {"name": 'Dist.', "id": 'mineralSalesScore', "deletable": False, "selectable": False, "type": "numeric"},
-            {"name": 'Dist.', "id": 'explorationScore', "deletable": False, "selectable": False, "type": "numeric"},
+            {"name": 'Trade', "id": 'salesScore', "deletable": False, "selectable": False, "hideable": True, "hidden": True, "type": "numeric"},
+            {"name": 'Mine', "id": 'mineralSalesScore', "deletable": False, "selectable": False, "hideable": True, "hidden": True, "type": "numeric"},
+            {"name": 'Explore', "id": 'explorationScore', "hideable": True, "hidden": True, "type": "numeric"},
         ]

@@ -72,8 +72,6 @@ if __name__ == '__main__':
     club_station_keys   = loadKeys("club-station-keys")
     munchFile( club_station_keys,'stations.jsonl' )
 
-# NOTE: if any don't load, abort
-
-inName = 'factions.jsonl'
+#inName = 'factions.jsonl'
 
 

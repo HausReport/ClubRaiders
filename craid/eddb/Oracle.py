@@ -17,6 +17,8 @@ class Oracle:
         self.myDict: PassThroughDict[str, str] = PassThroughDict()
         self.myDict['test'] = "test string"
 
+        # &uarr; &darr;
+
         if df is None:
             return
 

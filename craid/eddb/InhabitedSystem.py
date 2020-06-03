@@ -7,6 +7,7 @@ import string
 from collections import deque
 from typing import List, Deque
 
+from craid.edbgs.EdBgsSystemIds import EdBgsSystemIds
 from craid.eddb.Faction import Faction
 from craid.eddb.GameConstants import *
 from craid.eddb.PassThroughDict import PassThroughDict
@@ -94,7 +95,7 @@ class InhabitedSystem(System):
         f: FactionInstance
         for f in self.minorFactionPresences:
             ret += "| "
-            ret += f.get_name2()  # decorates name for md
+            ret += f.getEdbgsLink("link") #_name2()  # decorates name for md
             ret += " | "
             ret += "{:,}".format(f.getInfluence())
             ret += " | "
@@ -195,6 +196,9 @@ class InhabitedSystem(System):
         myDict['population'] = "{:,}".format(self.getPopulation())
         myDict['inara_link'] = "[link](" + self.getInaraSystemUrl() + ")"
         myDict['eddb_link'] = "[link](" + self.getEddbSystemUrl() + ")"
+        myDict['edbgs_link'] = self.getEdbgsLink("link")
+        myDict['edbgs_sys'] =  self.getEdbgsLink("link")
+        myDict['edbgs_fac_link'] = fi.getEdbgsLink("link")
 
         myDict['nearest_shipyard'] = self.getInaraNearestShipyardUrl()
         myDict['r2r_link'] = self.getRoadToRichesUrl()
@@ -423,3 +427,5 @@ class InhabitedSystem(System):
 
         return bestScore
 
+    def getEdbgsLink(self, msg: str) -> str:
+         return EdBgsSystemIds.getMarkdownLink(self.get_id(), msg)
