@@ -152,7 +152,7 @@ class AnnoyingCrap(object):
             {"name": 'Control', "id": 'control', "deletable": False, "hideable": True, "selectable": False},
             {"name": 'Vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
             {"name": 'Dist.', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
-            {"name": 'Trade', "id": 'salesScore', "deletable": False, "selectable": False, "hideable": True, "hidden": True, "type": "numeric"},
-            {"name": 'Mine', "id": 'mineralSalesScore', "deletable": False, "selectable": False, "hideable": True, "hidden": True, "type": "numeric"},
-            {"name": 'Explore', "id": 'explorationScore', "hideable": True, "hidden": True, "type": "numeric"},
+            # {"name": 'Trade', "id": 'salesScore', "deletable": False, "selectable": False, "hideable": True, "hidden": True, "type": "numeric"},
+            # {"name": 'Mine', "id": 'mineralSalesScore', "deletable": False, "selectable": False, "hideable": True, "hidden": True, "type": "numeric"},
+            # {"name": 'Explore', "id": 'explorationScore', "hideable": True, "hidden": True, "type": "numeric"},
         ]

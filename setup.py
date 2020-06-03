@@ -17,7 +17,7 @@ setup(
                       'psutil'],
     include_package_data=True,
     # *strongly* suggested for sharing
-    version='0.75',
+    version='0.76',
     # The license can be anything you like
     license='BSD-3',
     description='Placeholder description',
