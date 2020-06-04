@@ -1,6 +1,6 @@
-The scouting data tells us which systems are in *war* or *civil war* states, and thus should have combat zones.  
+The scouting data tells us which factions are in *war* or *civil war* states, and thus should have combat zones.  
 
-War and civil war states last from 4 to 7 days.  The first side to win 4 days wins the war.  Fighting against a club faction in a war is an effective way to reduce
+Wars and civil wars last from 4 to 7 days.  The first side to win 4 days wins the war.  Fighting against a club faction in a war is an effective way to reduce
 their influence.  Turn in your combat bonds at a local station (not an interstellar factor).  Winning a low-intensity zone
 is worth inf++, a medium zone is inf+++, and a high zone is inf+++++.  We think that optional objectives award additional
 points.

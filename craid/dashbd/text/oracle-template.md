@@ -1,5 +1,5 @@
 
-##### The Scoreboard
+# The Scoreboard
 
 
 | | |

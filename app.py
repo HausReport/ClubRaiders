@@ -114,6 +114,8 @@ datatable: dash_table.DataTable = dash_table.DataTable(
     row_deletable=False,
     selected_columns=[],
     selected_rows=[],
+    # hidden cols seems to cause problems with searches
+    #hidden_columns=['salesScore','explorationScore','mineralSalesScore','bountyHuntingScore','smugglingScore','piracyMurderScore'],
     page_action="native",
     page_current=0,
     page_size=30,
@@ -382,7 +384,8 @@ def update_filter(n_clicks: int, val3):
     Output('datatable-interactivity', 'sort_by'),
     [Input('clear-sort', 'n_clicks'), Input('activityDropdown', 'value')])
 def update_sort(n_clicks, val3):
-    noSort = [{'column_id': 'distance', 'direction': 'asc'}]
+    defaultSort = [{'column_id': 'distance', 'direction': 'asc'}]
+    noSort = []
 
     ctx = dash.callback_context
     value, act = was_clicked(ctx, 'clear-sort.n_clicks')
@@ -401,7 +404,7 @@ def update_sort(n_clicks, val3):
         return newSort
 
     logging.warning("None of the sort cases hit")
-    return noSort
+    return defaultSort
 
 
 #

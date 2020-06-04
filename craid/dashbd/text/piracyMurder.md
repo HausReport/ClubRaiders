@@ -1,7 +1,10 @@
-Trade and turning in exploration data help a *station's controlling faction*.
+The current understanding is that every act of piracy and murder of a clean ship has
+a substantial negative effect on the system's controlling faction and the victim's
+faction.
 
-Current thinking is that trading a mix of cargoes affects influence more than a single cargo.  For example selling 750 doodads
-at once might equate to an inf+ mission, whereas selling a load of 150 apples, 150 banannas, 150 canteloupes, 150 dates, and 150 eggplants might equate to completing an
-inf+++++ mission.  The influence goes to the controlling faction of the station where the goods are sold at a profit.
+Committing these crimes usually gives you a bounty.  Murder additionally gives you
+notoriety.  In Anarchy systems, under some circumstances, you can avoid the bounty and
+the notoriety.
+
 
 More info at [Best Current Thinking on BGS](https://forums.frontier.co.uk/threads/transactions-bgs-guide-best-current-thinking.424397/)

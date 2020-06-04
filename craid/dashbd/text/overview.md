@@ -1,6 +1,15 @@
-Following a datacenter anomoly at Pavlou Keep on Maia B-1d, a number of materials were found identifying
-factions working to expand the influence of the shadowy organization known as ***The Club.***  A group of historians, diplomats, combat pilots, and data scientists have been working for weeks to digest the information
-and make it accessible to individual commanders and squadrons who want to join the fight against The Club. The primary goal of this ***Club Raiders*** project is to "identify, engage, and eradicate" factions that support The Club.
+Welcome to *Club Raiders,*  home of the background war against *The Club* in *Elite: Dangerous.*
 
-Almost always, if a faction is operating outside its home system and its influence is kept below 2.5%,  it will retreat from the system, decreasing The Club's 
-galactic influence.  In a very few cases, factions are apparently immune to the retreat mechanism.
+Club minor factions are present in 186 systems.  By reducing their influence, we can force them out of 140 of these.
+There are theories about what happens after that.  We don't know, but we think it might be cool.
+
+The tools on this page can point you towards rewarding anti-Club activities.  The activity chooser in the top right is probably
+a good place to start: indicate where you are and what you want to do, then explore the systems below.  Click
+on an item in the table for more information.
+
+To learn more about The Club, click the "About The Club" tab above.  To learn more about this site and the code
+behind it, click "About Club Raiders."
+
+Fly Dangerously Commander,
+o7
+
