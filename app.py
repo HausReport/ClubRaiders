@@ -159,7 +159,7 @@ tab_1 = \
                 html.Article(oracleMd, id="statistics", className="simpleColItem"),
                 html.Article(welcomeMarkdown, id='faction-drilldown', className="simpleColItem"),
                 html.Article(id='system-drilldown', className="simpleColItem"),
-                html.Hr(style="width: 345px;")
+                #html.Hr(style="width: 345px;")
                 # End of left column
             ]),  # td closed
             html.Td([
@@ -472,7 +472,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
     if active_cell:
         row = active_cell['row']
         logical_row = row + page_cur * page_size
-        sysId = rows[logical_row]['sysId']
+        sysId = rows[logical_row]['sysId']  # FIXME: this can give an out of range error?
         facId = rows[logical_row]['facId']
         print(str(sysId) + "/" + str(facId))
         theFac: FactionInstance = sysIdFacIdToFactionInstance.get((sysId, facId))

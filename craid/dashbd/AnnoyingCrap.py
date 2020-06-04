@@ -149,26 +149,27 @@ class AnnoyingCrap(object):
     ## "hidden": True,  is not a thing, unfortunately
     @staticmethod
     def getTheColumns():
+        allowHiddenColums = False  # INFO: pending a dash bug fix, see https://github.com/plotly/dash-table/issues/789
         return [
             {"name": 'System', "id": 'systemName', "deletable": False, "selectable": False},
             {"name": 'Faction', "id": 'factionName', "deletable": False, "selectable": False},
             # {"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
             # {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
             # {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-            {"name": 'Home', "id": 'isHomeSystem', "deletable": False, "hideable": True, "selectable": False},
-            {"name": 'Population', "id": 'population', "deletable": False, "hideable": True, "selectable": False,
+            {"name": 'Home', "id": 'isHomeSystem', "deletable": False, "hideable": allowHiddenColums, "selectable": False},
+            {"name": 'Population', "id": 'population', "deletable": False, "hideable": allowHiddenColums, "selectable": False,
              "type": "numeric"},
-            {"name": 'Inf.', "id": 'influence', "deletable": False, "hideable": True, "selectable": False,
+            {"name": 'Inf.', "id": 'influence', "deletable": False, "hideable": allowHiddenColums, "selectable": False,
              "type": "numeric"},
             {"name": 'Difficulty', "id": 'difficulty', "deletable": False, "selectable": False, "type": "numeric"},
             {"name": 'Scouted', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
-            {"name": 'Control', "id": 'control', "deletable": False, "hideable": True, "selectable": False},
+            {"name": 'Control', "id": 'control', "deletable": False, "hideable": allowHiddenColums, "selectable": False},
             {"name": 'Vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
-            {"name": 'Dist.', "id": 'distance', "tooltip":'Distance from you', "deletable": False, "selectable": False, "type": "numeric"},
-            {"name": 'TradeScore', "id": 'salesScore', "deletable": False, "selectable": False, "hideable": True, "hidden": True, "type": "numeric"},
-            {"name": 'ExploreScore', "id": 'explorationScore', "hideable": True, "hidden": True, "type": "numeric"},
-            {"name": 'MineralSalesScore', "id": 'mineralSalesScore', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-            {"name": 'BountyHuntScore', "id": 'bountyHuntingScore', "hideable": True, "hidden": True, "type": "numeric"},
-            {"name": 'SmugglingScore', "id": 'smugglingScore', "hideable": True, "hidden": True, "type": "numeric"},
-            {"name": 'PiracyMurderScore', "id": 'piracyMurderScore', "hideable": True, "hidden": True, "type": "numeric"},
+            {"name": 'Dist.', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
+            {"name": 'TradeScore', "id": 'salesScore', "deletable": False, "selectable": False, "hideable": allowHiddenColums, "type": "numeric"},
+            {"name": 'ExploreScore', "id": 'explorationScore', "hideable": allowHiddenColums, "type": "numeric"},
+            {"name": 'MineralSalesScore', "id": 'mineralSalesScore', "deletable": False, "selectable": False, "hideable": allowHiddenColums, "type": "numeric"},
+            {"name": 'BountyHuntScore', "id": 'bountyHuntingScore', "hideable": allowHiddenColums, "type": "numeric"},
+            {"name": 'SmugglingScore', "id": 'smugglingScore', "hideable": allowHiddenColums, "type": "numeric"},
+            {"name": 'PiracyMurderScore', "id": 'piracyMurderScore', "hideable": allowHiddenColums, "type": "numeric"},
         ]
