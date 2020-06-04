@@ -65,7 +65,7 @@ nrows = df.shape[0]
 df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
 
 seer: Oracle = Oracle(df)
-oracleString= AnnoyingCrap.getString("oracle-template")
+oracleString = AnnoyingCrap.getString("oracle-template")
 oracleMd = dcc.Markdown(seer.template(oracleString))
 
 # Start the app framework
@@ -130,6 +130,55 @@ datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
 # for x1 in tab.available_properties:
 # print( str(x1) )
 
+#
+# Content of tab_1
+#
+tab_1 = \
+    html.Table(className="clean", children=[
+        html.Tr(className="clean", children=[
+            html.Td(className="clean2", children=[
+                html.Label("I want to:", className="simpleColItem"),
+                dcc.Dropdown(
+                    id='activityDropdown',
+                    options=AnnoyingCrap.getThirdDropdown(),
+                    value='',  # Anti Xeno Initiative',
+                    placeholder='Select activity',
+                    className="simpleColItem",
+                ),
+                html.Label("in the vicinity of", className="simpleColItem"),
+                dcc.Dropdown(
+                    id='locationDropdown',
+                    options=AnnoyingCrap.getFirstDropdown(systemNameToXYZ),
+                    value='Sol',
+                    placeholder='Select star system',
+                    className="simpleColItem",
+                    # autoFocus=True,
+                ),
+                html.Article(oracleMd, id="statistics", className="simpleColItem"),
+                html.Article(welcomeMarkdown, id='faction-drilldown', className="simpleColItem"),
+                html.Article(id='system-drilldown', className="simpleColItem"),
+                html.Hr(style="width: 345px;")
+                # End of left column
+            ]),  # td closed
+            html.Td([
+                html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity"),
+                html.Div(className="horiz", children=[
+                    html.Label("Current filter:", className=''),
+                    html.Label(id='filter-notifier', className="filter-notifier"),
+                    html.Button(id="clear-filter", className="myButton"),
+                ]),
+                html.Div(className="horiz", children=[
+                    html.Label("Current sort:", className=""),
+                    html.Label(id='sort-notifier', className="sort-notifier"),
+                    html.Button(id="clear-sort", className="myButton"),
+                ]),
+                datatable,
+                html.Footer(className='footer', children=[
+                    html.Div(id='datatable-interactivity-container')
+                ])
+            ]),  # td closed
+        ]),  # tr closed
+    ]),  # table closed
 
 #
 # Layout the main application
@@ -146,65 +195,8 @@ app.layout = html.Div([
                          value='tab-1',
                          className='mytab',
                          selected_className='mytab-selected', children=[
-                         html.Div(className="strict-horizontal", children=[
-                             html.Div(className="activities",
-                                      children=[
-                                          html.Label("I want to:", className="simpleColItem"),
-                                          dcc.Dropdown(
-                                              id='activityDropdown',
-                                              options=AnnoyingCrap.getThirdDropdown(),
-                                              value='',  # Anti Xeno Initiative',
-                                              placeholder='Select activity',
-                                              className="simpleColItem",
-                                          ),
-                                          html.Label("in the vicinity of", className="simpleColItem"),
-                                          dcc.Dropdown(
-                                              id='locationDropdown',
-                                              options=AnnoyingCrap.getFirstDropdown(systemNameToXYZ),
-                                              value='Sol',
-                                              placeholder='Select star system',
-                                              className="simpleColItem",
-                                              # autoFocus=True,
-                                          ),
-                                      ]),
-                             html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity", className="activity"),
-                             html.Article(oracleMd, id="statistics", className="statistics"),
-                         ]),
-                         ## ###### START TABLE MADNESS
-                         ## look into flex: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
-                         html.Div(className="wrapper",
-                                  children=[
-                                      html.Header(className='header', children=[
-                                          html.Div(className="strict-horizontal", children=[
-                                              html.Div(className="strict-horizontal", children=([
-                                                  html.Label("Current filter:",
-                                                             style={'flex-grow': '0', 'vertical-align': 'middle'}),
-                                                  html.Label(id='filter-notifier', className="filter-notifier"),
-                                                  html.Button(id="clear-filter", className="myButton"),
-                                              ])),
-                                              html.Div(className="strict-horizontal",
-                                                       style={'vertical-align': 'middle'}, children=([
-                                                      html.Label("Current sort:",
-                                                                 style={'flex-grow': '0', 'vertical-align': 'middle'}),
-                                                      html.Label(id='sort-notifier', className="sort-notifier"),
-                                                      html.Button(id="clear-sort", className="myButton"),
-                                                  ])),
-                                          ]),
-                                      ]),
-                                      html.Article(className='main', children=[
-                                          datatable,
-                                      ]),
-                                      html.Aside(className="aside aside-2", children=[
-                                          html.Article(welcomeMarkdown, id='faction-drilldown',
-                                                       style={'width': '100%'}),
-                                          html.Article("", id='system-drilldown', style={'width': '100%'}),
-                                      ]),
-                                      html.Footer(className='footer', children=[
-                                          html.Div(id='datatable-interactivity-container')
-                                      ])
-                                  ])
-                         ## ###### FINISH TABLE MADNESS
-                     ]),
+
+                     ]),  # tab-1 closed
                  dcc.Tab(label='About The Club',
                          value='tab-2',
                          className='mytab',
@@ -218,10 +210,10 @@ app.layout = html.Div([
              ]),
     html.Div(id='tabs-example-content'),
     html.Div(children=[
-        html.A( href="http://www.geovisites.com/en/directory/games_card-games.php?compte=r2uy4dj7srjn", children=[
-            html.Img( src="https://geoloc10.geovisite.ovh/private/geocounter.php?compte=r2uy4dj7srjn&base=geoloc10"),
+        html.A(href="http://www.geovisites.com/en/directory/games_card-games.php?compte=r2uy4dj7srjn", children=[
+            html.Img(src="https://geoloc10.geovisite.ovh/private/geocounter.php?compte=r2uy4dj7srjn&base=geoloc10"),
         ])
-    ])
+    ]),
 ])
 
 printmem("End")
@@ -234,7 +226,7 @@ printmem("End")
               [Input('tabs-example', 'value')])
 def render_content(tab):
     if tab == 'tab-1':
-        return "tab-1"
+        return tab_1
     elif tab == 'tab-2':
         print('tab-2 clicked')
         return html.Div(children=[
@@ -311,25 +303,25 @@ def was_clicked(ctx, button_id):
 
     aDict = ujson.loads(ctx_msg)
 
-    print("dict:" + str(aDict))
+    #print("dict:" + str(aDict))
     triggered = aDict['triggered']  # ['prop_id']
-    print("triggered = " + str(triggered))
+    #print("triggered = " + str(triggered))
 
     elt0 = triggered[0]
-    print("elt0 = " + str(elt0))
+    #print("elt0 = " + str(elt0))
 
     prop_id = elt0['prop_id']
-    print("prop_id = " + str(prop_id))
+    #print("prop_id = " + str(prop_id))
 
     inputs = aDict['inputs']  # ['prop_id']
-    print("inputs = " + str(inputs))
+    #print("inputs = " + str(inputs))
     activity = inputs['activityDropdown.value']
 
     if (prop_id != button_id):
         return None, activity
 
     value = elt0['value']
-    print("value = " + str(value))
+    #print("value = " + str(value))
 
     if value == 0:
         return None, activity
@@ -358,13 +350,19 @@ def update_filter(n_clicks: int, val3):
     ctx = dash.callback_context
     value, act = was_clicked(ctx, 'clear-filter.n_clicks')
     if (act is None) or (act is ''):
+        logging.debug("No act state (1), going with default 0")
         act = 0
-    if (value != None):
+
+    # clear filter button was clicked
+    if value != None:
         msg = AnnoyingCrap.getMessage(int(value))
+        logging.debug("Cleared filter, Act state: " + str(value))
         return "", msg
 
     value, act = was_clicked(ctx, 'activityDropdown.value')
-    if (value == None) or value == '':
+    # activity was selected
+    if value is None or value == '':
+        logging.debug("No act state (2), going with default 0")
         value = 0
 
     print("Selected activity: " + str(value))
@@ -373,7 +371,7 @@ def update_filter(n_clicks: int, val3):
     msg = AnnoyingCrap.getMessage(int(value))
     return newFilter, msg
 
-    print("None of the cases hit")
+    logging.warning("None of the filter cases hit")
     return "", act
 
 
@@ -384,21 +382,25 @@ def update_filter(n_clicks: int, val3):
     Output('datatable-interactivity', 'sort_by'),
     [Input('clear-sort', 'n_clicks'), Input('activityDropdown', 'value')])
 def update_sort(n_clicks, val3):
-    noSort = [{'column_id': '', 'direction': 'asc'}]
+    noSort = [{'column_id': 'distance', 'direction': 'asc'}]
 
     ctx = dash.callback_context
     value, act = was_clicked(ctx, 'clear-sort.n_clicks')
+
+    # clear sort button was clicked
     if (value != None):
+        logging.debug("Clear sort button was clicked.")
         return noSort
 
     value, act = was_clicked(ctx, 'activityDropdown.value')
-    if (value != None) and value != '':
+    # activity was clicked
+    if value is not None and value != '':
         print("Sort: selected activity: " + str(value))
         newSort = AnnoyingCrap.getSort(int(value))
         print("Sort: " + str(newSort))
         return newSort
 
-    print("None of the cases hit")
+    logging.warning("None of the sort cases hit")
     return noSort
 
 

@@ -5,190 +5,27 @@ body {
  font-size: 16px; line-height: 18px;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    text-align: left;
-}
-
-div {
-}
-
-table, th, td, tr {
-}
-
-a:link {
-}
-
-a:visited {
-}
-
-a:hover {
-}
-
-a:active {
-}
-
 del {
   color: red;
   text-decoration: none;
 }
 
-.wrapper {
-  display: flex;
-  flex-flow: row wrap;
-  text-align: left;
-}
-
-.strict-horizontal {
-  display: flex;
-  flex-flow: row;
-  flex-wrap: no-wrap;
-  text-align: left;
-}
-
-.strict-vertical {
-  display: flex;
-  flex-flow: column;
-  flex-wrap: no-wrap;
-  text-align: left;
-}
-
 .myButton {
-    display: flex;
     background:url(clear-32.png) no-repeat;
     cursor:pointer;
     width: 32px;
     height: 32px;
     border: none;
-    flex-grow: 1;
     padding-right: 50px;
     padding-left: 10px;
+    vertical-align: middle;
 }
 
-.myLabel {
-    display: flex;
-    flex-grow: 1;
+.clean {
+    vertical-align: top;
 }
 
-.myDropdown {
-    display: flex;
-    width: 300px;
-    flex-grow: 4;
-    text-align: left;
-    align: left;
+.clean2 {
+    vertical-align: top;
+    min-width: 350px;
 }
-
-.filter-notifier {
-    display: flex;
-    flex-grow: 1;
-    padding-left: 10px;
-    padding-right: 15px;
-}
-
-.sort-notifier {
-    display: flex;
-    flex-grow: 1;
-    padding-left: 10px;
-    padding-right: 15px;
-}
-
-.wrapper > * {
-  padding: 10px;
-  flex: 1 100%;
-}
-
-.header {
-}
-
-.footer {
-}
-
-.main {
-  text-align: left;
-}
-
-.colItem {
-  display: flex;
-  flex-flow: column;
-  flex-wrap: no-wrap;
-  text-align: left;
-  min-width: 250px;
-  width: 250px;
-  background-color: yellow;
-}
-
-.simpleColItem {
-  display: flex;
-  flex-flow: column;
-  background-color: khaki;
-}
-
-.activity {
-  display: flex;
-  text-align: left;
-  min-width: 200px;
-  padding: 15px;
-}
-
-.activities {
-  display: flex;
-  flex-flow: column;
-  text-align: left;
-  width: 250px;
-  min-width: 250px;
-  background-color: cornsilk;
-}
-
-.statistics {
-  display: flex;
-  flex-flow: column;
-  text-align: left;
-  width: 250px;
-  min-width: 250px;
-}
-
-
-.aside-1 {
-  display: flex;
-  flex-flow: column wrap;
-  text-align: left;
-}
-
-.aside-2 {
-}
-
-@media all and (min-width: 600px) {
-  .aside { flex: 1 0 0; }
-}
-
-@media all and (min-width: 800px) {
-  .main    { flex: 3 0px; }
-  .aside-1 { order: 1; }
-  .main    { order: 2; }
-  .aside-2 { order: 3; }
-  .footer  { order: 4; }
-}
-
-.custom-tabs-container {
-    width: 100%;
-}
-
-.custom-tabs {
-    border-top-left-radius: 3px;
-    padding: 0px 24px;
-    border-bottom: 1px solid orange;
-}
-
-.mytab {
-    background-color: black;
-}
-
-.mytab-selected {
-    background-color:CornFlowerBlue ;
-}
-
-.tab {
-}
-
-.mytab {
-}
-

@@ -3,6 +3,7 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 import gzip
+import logging
 import os
 import tempfile
 from typing import Dict, List, Set
@@ -52,7 +53,7 @@ def deleteOldFiles():
         tmpDir = tempfile.gettempdir()
         outFile = os.path.join(tmpDir, fname)
         if os.path.exists(outFile):
-            print("removing: " + outFile)
+            logging.info("removing: " + outFile)
             os.remove(outFile)
 
 if __name__ == '__main__':

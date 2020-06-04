@@ -448,25 +448,10 @@ class InhabitedSystem(System):
         hasRings = BountyHuntingInfo.hasRings(self.get_id())
         if hasRings: return "Rings"
 
-    def bountyHuntingScore(self) -> float:
-        hasRings = BountyHuntingInfo.hasRings(self.get_id())
-        if not hasRings:
-            return 0
+    def hasRings(self) -> bool:
+        return BountyHuntingInfo.hasRings(self.get_id())
 
-        sta: Station = self.getBestTradeStation()
-        if sta is None:
-            return 0
+    def getPrimaryEconomy(self):
+        return self.jsonLine['primary_economy']
 
-        score: float = 50.0
 
-        if self.hasAnarchyFaction():
-            score = score * 1.1
-
-        econ = self.jsonLine['primary_economy']
-        if not econ:
-            pass
-        elif econ.startswith('Extract') or econ.startswith('Refine'):
-            score = score * 1.1
-
-        # NOTE: would be nice to use pirateattack state
-        return score

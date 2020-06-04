@@ -7,4 +7,4 @@ Another approach is to enter the data manually on EDDB.  This can make sense if 
 access influence information in the system map via the galaxy map.  Near the bottom of the EDDB page, look for the
 phrase "Read the FAQ and Fix it on ROSS!"
 
-You can sort the table below by "updated" to see systems that haven't been updated in a long time.
+The table below should be sorted by the "updated" column, to show you what systems haven't been updated in a long time.

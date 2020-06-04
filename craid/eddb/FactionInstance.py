@@ -6,11 +6,11 @@
 import datetime
 import string
 
+from craid.eddb import GameConstants as gconst
 from craid.eddb.Faction import Faction
 from craid.eddb.InhabitedSystem import InhabitedSystem
 from craid.eddb.PassThroughDict import PassThroughDict
 from craid.eddb.States import States
-
 
 class FactionInstance(Faction):
 
@@ -181,5 +181,31 @@ class FactionInstance(Faction):
     def getSystemEdbgsLink(self):
         return self.mySystem.getEdbgsLink(self, self.get_name2())
 
+    def bountyHuntingScore(self) -> float:
+        hasRings = self.mySystem.hasRings()
+        if not hasRings:
+            return 0.0
+
+        from craid.eddb.Station import Station
+        sta: Station = self.mySystem.getBestTradeStation()
+        if sta is None:
+            return 0.0
+
+        score: float = 50.0
+
+        if self.mySystem.hasAnarchyFaction():
+            score = score * 1.1
+
+        econ = self.mySystem.getPrimaryEconomy()
+        if not econ:
+            pass
+        elif econ.startswith('Extract') or econ.startswith('Refine'):
+            score = score * 1.1
+
+        if self.hasState(gconst.STATE_WAR) or self.hasState(gconst.STATE_CIVIL_WAR):
+            score = score * 2.0
+
+        # NOTE: would be nice to use pirateattack state
+        return round(score,0)
     # def getEdbgsLink(self):
     #     return super.getEdbgsLink(self, self.get_name2())
