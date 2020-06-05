@@ -3,10 +3,9 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 from pprint import pprint
-from typing import Dict, List, Tuple
+from typing import List
 
 from craid.eddb.Aware import Aware
-from craid.eddb.Faction import Faction
 from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.InhabitedSystem import InhabitedSystem
 from craid.eddb.loader.CreateFactionInstances import getFactionInstances

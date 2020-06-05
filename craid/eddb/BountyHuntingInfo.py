@@ -5,10 +5,8 @@
 
 
 # sysid, name, rings, res, bodies link
-from typing import Dict
 
 #10931: unknown,  # Kokokomi
-import craid
 
 
 class BountyHuntingInfo(object):

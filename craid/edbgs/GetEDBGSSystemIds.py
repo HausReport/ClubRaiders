@@ -5,15 +5,15 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 
+import pprint
 import time
 from typing import Dict
-import pprint
 
 import requests
 import ujson
 
-from craid.eddb.BountyHuntingInfo import BountyHuntingInfo
 import craid.edbgs.EdBgsSystemIds
+from craid.eddb.BountyHuntingInfo import BountyHuntingInfo
 
 newDict: Dict[int, str] = {}
 
