@@ -80,6 +80,10 @@ if DEPLOY:
     server = flask.Flask(__name__)
     server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
     app = dash.Dash(__name__, server=server)
+    app.scripts.config.serve_locally = False
+    app.scripts.append_script({
+        'external_url': 'https://raw.githubusercontent.com/HausReport/ClubRaiders/master/assets/gtag.js'
+    })
 else:
     app = dash.Dash(__name__)
     app.scripts.config.serve_locally = True
