@@ -8,6 +8,8 @@ from typing import List, Dict, Tuple
 import dash_core_components as dcc
 from pkg_resources import resource_string as resource_bytes
 
+from craid.eddb.SystemXYZ import SystemXYZ
+
 
 class AnnoyingCrap(object):
     # NOTE: Don't use index 0
@@ -85,9 +87,8 @@ class AnnoyingCrap(object):
     # Implemented
     #
 
-    def __init__(self, systemNameToXYZ):
+    def __init__(self):
         super().__init__()
-        self.systemNameToXYZ = systemNameToXYZ
 
     @staticmethod
     def getMarkdown(which: str) -> dcc.Markdown:
@@ -100,22 +101,24 @@ class AnnoyingCrap(object):
         return text
 
     @staticmethod
-    def getFirstDropdown(_systemNameToXYZ):
+    def getLocationDropdown():
+        #_systemNameToXYZ = SystemXYZ.myDict
+        print("dropdown len=" + str(len(SystemXYZ.myDict)))
         opts = []
-        keys: List[str] = sorted(_systemNameToXYZ.keys())
+        keys: List[str] = sorted(SystemXYZ.myDict)
         for it in keys:
             opts.append({'label': it, 'value': it})
         return opts
 
-    @staticmethod
-    def getSecondDropdown(playerFactionNameToHomeSystemName):
-        fopts = []
-        keys: List[str] = sorted(playerFactionNameToHomeSystemName.keys())
-        for it in keys:
-            val: str = playerFactionNameToHomeSystemName.get(it)
-            if val is not None:
-                fopts.append({'label': it, 'value': val})
-        return fopts
+    # @staticmethod
+    # def getSecondDropdown(playerFactionNameToHomeSystemName):
+    #     fopts = []
+    #     keys: List[str] = sorted(playerFactionNameToHomeSystemName.keys())
+    #     for it in keys:
+    #         val: str = playerFactionNameToHomeSystemName.get(it)
+    #         if val is not None:
+    #             fopts.append({'label': it, 'value': val})
+    #     return fopts
 
     @staticmethod
     def getFilter(val3: int):
@@ -136,7 +139,6 @@ class AnnoyingCrap(object):
 
     @staticmethod
     def getThirdDropdown():
-
         gopts = []
         keys = AnnoyingCrap.cannedActions.keys()
         key: int

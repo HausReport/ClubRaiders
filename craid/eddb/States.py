@@ -34,7 +34,10 @@ class States:
             if xid is gconst.STATE_PIRATE_ATTACK: self.state_list.append(xid)
             if xid is gconst.STATE_INVESTMENT: self.state_list.append(xid)
 
-            # if xid is Constants.STATE_RETREAT: self.state_list.append(xid)
+            if xid is gconst.STATE_LOCKDOWN: self.state_list.append(xid)
+            if xid is gconst.STATE_FAMINE: self.state_list.append(xid)
+            if xid is gconst.STATE_CIVIL_UNREST: self.state_list.append(xid)
+
             # if xid is Constants.STATE_RETREAT: self.state_list.append(xid)
             # if xid is Constants.STATE_RETREAT: self.state_list.append(xid)
             # if xid is Constants.STATE_EXPANSION: self.state_list.append(xid)

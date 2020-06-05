@@ -12,13 +12,13 @@ import pprint
 import requests
 import ujson
 
-from craid.eddb.BountyHuntingInfo import bhDict
+from craid.eddb.BountyHuntingInfo import BountyHuntingInfo
 import craid.edbgs.EdBgsSystemIds
 
 newDict: Dict[int, str] = {}
 
 
-for sysId in bhDict.keys():
+for sysId in BountyHuntingInfo.bhDict.keys():
 
     if sysId in craid.edbgs.EdBgsSystemIds.EdBgsSystemIds.myDict:
         continue

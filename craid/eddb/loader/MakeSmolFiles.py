@@ -63,7 +63,6 @@ if __name__ == '__main__':
 
     # download large files from eddb
     DataProducer.getDataArrays(writeKeyFiles=True, useEddb=True)
-    # delete smol
 
     #load key files & munch
     club_faction_keys = loadKeys("factions-of-interest-keys")

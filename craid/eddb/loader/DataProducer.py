@@ -49,7 +49,7 @@ def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
     # Populate dict of system name & x,y,zs
     # Used by dropdowns in dashboard
     #
-    systemNameToXYZ = loadSystemNameToPositionMap(all_systems_dict)
+    #systemNameToXYZ = loadSystemNameToPositionMap(all_systems_dict)
 
     #
     # Populate dict of player faction name -> system name
@@ -148,7 +148,7 @@ def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
     #
     #  FIXME:playerFactionNameToSystemName  could be moved to dashboard
     return { 'dataFrame'                     : df,
-            'systemNameToXYZ'              : systemNameToXYZ,
+            #'systemNameToXYZ'              : systemNameToXYZ,
             'sysIdFacIdToFactionInstance'  : sysIdFacIdToFactionInstance,
             'playerFactionNameToSystemName': playerFactionNameToSystemName,  # used in dashboard for 2nd dropdown
             }

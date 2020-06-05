@@ -12,6 +12,7 @@ from craid.eddb.InhabitedSystem import InhabitedSystem
 from craid.eddb.PassThroughDict import PassThroughDict
 from craid.eddb.States import States
 
+
 class FactionInstance(Faction):
 
     # getters/setters for id & name in superclass
@@ -169,8 +170,8 @@ class FactionInstance(Faction):
     def mineralSalesScore(self):
         return self.mySystem.mineralSalesScore()
 
-    def bountyHuntingScore(self) -> float:
-        return self.mySystem.bountyHuntingScore()
+    # def bountyHuntingScore(self) -> float:
+    #     return self.mySystem.bountyHuntingScore()
 
     def smugglingScore(self) -> float:
         return self.mySystem.smugglingScore()
@@ -181,7 +182,25 @@ class FactionInstance(Faction):
     def getSystemEdbgsLink(self):
         return self.mySystem.getEdbgsLink(self, self.get_name2())
 
+    # much taken from https://forums.frontier.co.uk/threads/dev-update-07-01-2016.221826/
     def bountyHuntingScore(self) -> float:
+        #
+        # NOTE: have to be careful here about distinguishing _whose_ state to consider.
+        #
+        # Doing bounty hunting is to _benefit_ a non-club faction in control of a system
+        # and a non-club faction in control of a station.  They may not be the same.
+        # If one of those factions is in lockdown, that part of the effect is lost.
+        #
+
+        if self.hasState(gconst.STATE_LOCKDOWN):
+            return 0.0
+
+        if self.hasState(gconst.STATE_ELECTION):
+            return 0.0
+
+        if self.hasState(gconst.STATE_OUTBREAK) or self.hasState(gconst.STATE_FAMINE):
+            return 0.0
+
         hasRings = self.mySystem.hasRings()
         if not hasRings:
             return 0.0
@@ -205,7 +224,12 @@ class FactionInstance(Faction):
         if self.hasState(gconst.STATE_WAR) or self.hasState(gconst.STATE_CIVIL_WAR):
             score = score * 2.0
 
+        if self.hasState(gconst.STATE_CIVIL_UNREST):
+            score = score * 2.0
+
         # NOTE: would be nice to use pirateattack state
-        return round(score,0)
-    # def getEdbgsLink(self):
-    #     return super.getEdbgsLink(self, self.get_name2())
+        return round(score, 0)
+
+
+# def getEdbgsLink(self):
+#     return super.getEdbgsLink(self, self.get_name2())

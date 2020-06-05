@@ -27,6 +27,7 @@ from craid.dashbd.AnnoyingCrap import AnnoyingCrap
 from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.Oracle import Oracle
 from craid.eddb.Printmem import printmem
+from craid.eddb.SystemXYZ import SystemXYZ
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
@@ -50,10 +51,10 @@ currentData = dp.getDataArrays()
 # clubSystemInstances = currentData['allClubSystemInstances']
 sysIdFacIdToFactionInstance = currentData['sysIdFacIdToFactionInstance']
 
-systemNameToXYZ: Dict[str, Tuple[float, float, float]] = currentData['systemNameToXYZ']
+systemNameToXYZ: Dict[str, Tuple[float, float, float]] = SystemXYZ.myDict #currentData['systemNameToXYZ']
 playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
 
-annoyingCrap: AnnoyingCrap = AnnoyingCrap(systemNameToXYZ)
+annoyingCrap: AnnoyingCrap = AnnoyingCrap() #systemNameToXYZ)
 welcomeMarkdown = AnnoyingCrap.getMarkdown('welcome')
 
 df: pd.DataFrame = currentData['dataFrame']
@@ -157,7 +158,7 @@ tab_1 = \
                 html.Label("in the vicinity of", className="simpleColItem"),
                 dcc.Dropdown(
                     id='locationDropdown',
-                    options=AnnoyingCrap.getFirstDropdown(systemNameToXYZ),
+                    options=AnnoyingCrap.getLocationDropdown(),
                     value='Sol',
                     placeholder='Select star system',
                     className="simpleColItem",
@@ -246,7 +247,7 @@ def render_content(tab):
 
 
 #
-# Convert syste
+# Convert system name to coordiantes
 #
 def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
     #
