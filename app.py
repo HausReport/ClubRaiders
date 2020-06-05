@@ -72,7 +72,7 @@ oracleMd = dcc.Markdown(seer.template(oracleString))
 # In non-DEPLOY mode, the " app.config.suppress_callback_exceptions = True" doesn't seem
 # to take hold and there's an annoying bug.
 #
-DEPLOY = False  # KEEP THIS TRUE, SRSLY
+DEPLOY = True  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
     #
     # Heroku requirements
