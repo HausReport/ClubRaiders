@@ -82,6 +82,9 @@ if DEPLOY:
     app = dash.Dash(__name__, server=server)
     app.scripts.config.serve_locally = False
     app.scripts.append_script({
+        'external_url': 'https://www.googletagmanager.com/gtag/js?id=UA-61576455-2'
+    })
+    app.scripts.append_script({
         'external_url': 'https://raw.githubusercontent.com/HausReport/ClubRaiders/master/assets/gtag.js'
     })
 else:
