@@ -72,7 +72,7 @@ oracleMd = dcc.Markdown(seer.template(oracleString))
 # In non-DEPLOY mode, the " app.config.suppress_callback_exceptions = True" doesn't seem
 # to take hold and there's an annoying bug.
 #
-DEPLOY = True  # KEEP THIS TRUE, SRSLY
+DEPLOY = False  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
     #
     # Heroku requirements
@@ -211,11 +211,6 @@ app.layout = html.Div([
                          ),
              ]),
     html.Div(id='tabs-example-content'),
-    html.Div(children=[
-        html.A(href="http://www.geovisites.com/en/directory/games_card-games.php?compte=r2uy4dj7srjn", children=[
-            html.Img(src="https://geoloc10.geovisite.ovh/private/geocounter.php?compte=r2uy4dj7srjn&base=geoloc10"),
-        ])
-    ]),
 ])
 
 printmem("End")
