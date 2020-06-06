@@ -2,13 +2,14 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
-import math
+
+import plotly.graph_objs as go
+from numpy import *
 
 from craid.club.regions.Region import Region
 
 
 class SphericalRegion(Region):
-
 
     def __init__(self, _name, num, x0, y0, z0, r, color):
         super().__init__(_name, num, color)
@@ -17,7 +18,25 @@ class SphericalRegion(Region):
         self.z0 = z0
         self.r = r
 
-    def contains(self, x,y,z):
-        dist = math.sqrt( (x-self.x0)**2 + (y-self.y0)**2 + (z-self.z0)**2)
+    def contains(self, x, y, z):
+        dist = math.sqrt((x - self.x0) ** 2 + (y - self.y0) ** 2 + (z - self.z0) ** 2)
         return dist <= self.r
 
+    def getSphere(self):
+        theta = linspace(0, 2 * pi, 100)
+        phi = linspace(0, pi, 100)
+        x = self.x0 + self.r * outer(cos(theta), sin(phi))
+        y = self.y0 + self.r * outer(sin(theta), sin(phi))
+        z = self.z0 + self.r * outer(ones(100), cos(phi))  # note this is 2d now
+
+        colorScale = [[0, self.color], [1, self.color]]
+        data = go.Surface(
+            x=x,
+            y=y,
+            z=z,
+            opacity=0.2,
+            showlegend=False,
+            hoverinfo='none',
+            colorscale=colorScale
+        )
+        return data

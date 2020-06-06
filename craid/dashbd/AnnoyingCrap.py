@@ -103,10 +103,10 @@ class AnnoyingCrap(object):
     @staticmethod
     def getLocationDropdown():
         #_systemNameToXYZ = SystemXYZ.myDict
-        print("dropdown len=" + str(len(SystemXYZ.myDict)))
+        #print("dropdown len=" + str(len(SystemXYZ.myDict)))
         opts = []
-        keys: List[str] = sorted(SystemXYZ.myDict)
-        for it in keys:
+        #keys: List[str] = sorted(SystemXYZ.myDict)
+        for it in SystemXYZ.myDict.keys():
             opts.append({'label': it, 'value': it})
         return opts
 

@@ -183,10 +183,10 @@ tab_1 = \
                     html.Button(id="clear-sort", className="myButton"),
                 ]),
                 datatable,
-                html.Div("...  \n...",className="20px"),
-                html.Footer(className='footer', children=[
-                    html.Div(id='datatable-interactivity-container')
-                ])
+                #html.Div("...  \n...",className="20px"),
+                #html.Footer(className='footer', children=[
+                    #html.Div(id='datatable-interactivity-container')
+                #])
             ]),  # td closed
         ]),  # tr closed
     ]),  # table closed
@@ -443,10 +443,10 @@ def update_selected_system(val0):
 #
 #  Does a variety of things when user clicks on a cell in the table
 #
+# , Output('datatable-interactivity-container', "children")],
 @app.callback(
     [Output('faction-drilldown', 'children'),
-     Output('system-drilldown', 'children'),
-     Output('datatable-interactivity-container', "children")],
+     Output('system-drilldown', 'children')],
     [Input('datatable-interactivity', "derived_virtual_data"),
      Input('datatable-interactivity', "derived_virtual_selected_rows"),
      Input('datatable-interactivity', 'active_cell'),
@@ -501,41 +501,42 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
         factionWidget = dcc.Markdown(factionInfo)
         systemWidget = dcc.Markdown(systemInfo)
 
-    theGraphs = [
-        dcc.Graph(
-            id=column,
-            figure={
-                "data"  : [
-                    {
-                        "x"     : dff["systemName"],
-                        "y"     : dff[column],
-                        "type"  : "bar",
-                        "marker": {"color": dataColors},
-                    }
-                ],
-                "layout": {
-                    "xaxis"        : {"automargin": True},
-                    "yaxis"        : {
-                        "automargin": True,
-                        "title"     : {"text": column},
-                        "type"      : "log"
-                    },
-                    "paper_bgcolor": 'rgba(-1,0,0,0)',  # TODO fix color & bg
-                    "plot_bgcolor" : 'rgba(-1,0,0,0)',  # TODO: fix color & bg
-                    "height"       : 249,
-                    "margin"       : {"t": 9, "l": 10, "r": 10},
-                },
-            },
-        )
-        # check if column exists - user may have deleted it
-        # If `column.deletable=False`, then you don't
-        # need to do this check.
-        # for column in ["difficulty", "influence", "population"] if column in dff]
-        for column in ["difficulty"] if column in dff]
-
-    if len(theGraphs) == 0:
-        return factionWidget, systemWidget, [None]
-    return factionWidget, systemWidget, [theGraphs[0]]
+    # theGraphs = [
+    #     dcc.Graph(
+    #         id=column,
+    #         figure={
+    #             "data"  : [
+    #                 {
+    #                     "x"     : dff["systemName"],
+    #                     "y"     : dff[column],
+    #                     "type"  : "bar",
+    #                     "marker": {"color": dataColors},
+    #                 }
+    #             ],
+    #             "layout": {
+    #                 "xaxis"        : {"automargin": True},
+    #                 "yaxis"        : {
+    #                     "automargin": True,
+    #                     "title"     : {"text": column},
+    #                     "type"      : "log"
+    #                 },
+    #                 "paper_bgcolor": 'rgba(-1,0,0,0)',  # TODO fix color & bg
+    #                 "plot_bgcolor" : 'rgba(-1,0,0,0)',  # TODO: fix color & bg
+    #                 "height"       : 249,
+    #                 "margin"       : {"t": 9, "l": 10, "r": 10},
+    #             },
+    #         },
+    #     )
+    #     # check if column exists - user may have deleted it
+    #     # If `column.deletable=False`, then you don't
+    #     # need to do this check.
+    #     # for column in ["difficulty", "influence", "population"] if column in dff]
+    #     for column in ["difficulty"] if column in dff]
+    #
+    # if len(theGraphs) == 0:
+    #     return factionWidget, systemWidget, [None]
+    #return factionWidget, systemWidget, [theGraphs[0]]
+    return factionWidget, systemWidget
 
 
 if __name__ == '__main__':
