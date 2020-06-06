@@ -7,6 +7,7 @@ import logging
 import os
 import tempfile
 from typing import Dict, List, Set
+from shutil import copyfile
 
 import json_lines
 import ujson
@@ -16,6 +17,9 @@ from craid.eddb.loader.DataLoader import DataLoader
 from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 from craid.eddb.loader.MakeKeyFiles import loadKeys
 
+#
+# Note: For the Git part, see: https://gitpython.readthedocs.io/en/stable/reference.html#module-git.cmd
+#
 
 def munchFile(keys: Set[int], xinName: str):
     tmp: List[Dict] = []
@@ -36,6 +40,10 @@ def munchFile(keys: Set[int], xinName: str):
         for foo in tmp:
             ujson.dump(foo, file)
             file.write('\n')
+
+
+    gitFile = os.path.join("..","..","..","data",outName)
+    copyfile(outFile, gitFile)
 
 def deleteOldFiles():
     keyFiles = [ 'keys-club-faction-keys.pkl', 'keys-club-station-keys.pkl', 'keys-club-system-keys.pkl', 'keys-factions_of_interest_keys.pkl', 'keys-factions-of-interest-keys.pkl']

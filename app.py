@@ -73,7 +73,7 @@ oracleMd = dcc.Markdown(seer.template(oracleString))
 # In non-DEPLOY mode, the " app.config.suppress_callback_exceptions = True" doesn't seem
 # to take hold and there's an annoying bug.
 #
-DEPLOY = True  # KEEP THIS TRUE, SRSLY
+DEPLOY = False  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
     #
     # Heroku requirements
@@ -183,6 +183,7 @@ tab_1 = \
                     html.Button(id="clear-sort", className="myButton"),
                 ]),
                 datatable,
+                html.Div("...  \n...",className="20px"),
                 html.Footer(className='footer', children=[
                     html.Div(id='datatable-interactivity-container')
                 ])
@@ -492,12 +493,13 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
             theSys = theFac.getSystem()
             systemInfo = theSys.template(ts, theFac)
 
-    strlen: int = len(factionInfo)
-    if strlen == -1:
-        factionInfo = welcomeMarkdown
-
-    factionWidget = dcc.Markdown(factionInfo)
-    systemWidget = dcc.Markdown(systemInfo)
+    facInfoLen: int = len(factionInfo)
+    if facInfoLen == 0:
+        factionWidget = welcomeMarkdown
+        systemWidget = welcomeMarkdown
+    else:
+        factionWidget = dcc.Markdown(factionInfo)
+        systemWidget = dcc.Markdown(systemInfo)
 
     theGraphs = [
         dcc.Graph(

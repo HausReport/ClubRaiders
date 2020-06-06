@@ -80,3 +80,15 @@ class System(Aware):
 
     def getRoadToRichesUrl(self):
         return "http://edtools.ddns.net/expl.php?s=" #+ urllib.parse.quote(self.get_name())
+
+    def getRegionColor(self):
+        from craid.club.regions.RegionFactory import RegionFactory
+        return RegionFactory.getRegionColor(self)
+
+    def getRegionName(self):
+        from craid.club.regions.RegionFactory import RegionFactory
+        return RegionFactory.getRegionName(self)
+
+    def getRegionNumber(self):
+        from craid.club.regions.RegionFactory import RegionFactory
+        return RegionFactory.getRegionColor(self)

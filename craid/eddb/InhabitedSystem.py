@@ -215,6 +215,9 @@ class InhabitedSystem(System):
         bhFeatures = self.bountyHuntingFeatures()
         myDict['bounty_hunting_features'] = bhFeatures
 
+        myDict['region_name'] = self.getRegionName()
+
+
         myDict['power'] = self.getPower()
         myDict['power_state'] = self.getPowerState()
 

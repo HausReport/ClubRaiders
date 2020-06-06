@@ -1,7 +1,7 @@
 
 # $system_name
 
-*( $x, $y, $z) in Octant $octant*
+*( $x, $y, $z) in $region_name*
 
 |       |  |
 | :---------- | :---------- |

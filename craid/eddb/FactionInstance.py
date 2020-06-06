@@ -230,6 +230,8 @@ class FactionInstance(Faction):
         # NOTE: would be nice to use pirateattack state
         return round(score, 0)
 
+    def getRegionNumber(self):
+        return self.mySystem.getRegionNumber()
 
 # def getEdbgsLink(self):
 #     return super.getEdbgsLink(self, self.get_name2())
