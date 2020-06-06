@@ -10,7 +10,7 @@ setup(
     # packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     packages=['assets', 'craid', 'craid.eddb', 'craid.eddb.loader', 'craid.eddb.util', 'craid.edbgs',
               'craid.dashbd', 'craid.dashbd.assets', 'craid.dashbd.queries', 'craid.dashbd.text',
-              'craid.club', 'craid.club.regions', 'craid.notebooks'],
+              'craid.club', 'craid.club.regions'],
     # Needed for dependencies
     install_requires=['dash', 'dash-core-components', 'dash-html-components', 'dash-table', 'dash-renderer',
                       'flask', 'pandas', 'requests', 'setuptools', 'numpy', 'python-dateutil', 'ujson', 'json-lines', 'urllib3',
