@@ -91,7 +91,7 @@ craid/eddb/util/MessageList.py
 craid/eddb/util/ScoredMessage.py
 craid/eddb/util/TextDecoration.py
 craid/eddb/util/__init__.py
+craid/notebooks/__init__.py
 info/My Club Diagram.png
 info/club-diagram-640.png
 info/wordcloud2.png
-notebooks/__init__.py
