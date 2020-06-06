@@ -22,6 +22,13 @@ class SphericalRegion(Region):
         dist = math.sqrt((x - self.x0) ** 2 + (y - self.y0) ** 2 + (z - self.z0) ** 2)
         return dist <= self.r
 
+    def distanceFrom(self, x, y, z):
+        dist = math.sqrt((x - self.x0) ** 2 + (y - self.y0) ** 2 + (z - self.z0) ** 2)
+        dist = dist - self.r
+        if dist<0:
+            dist=0
+        return dist
+
     def getSphere(self):
         theta = linspace(0, 2 * pi, 100)
         phi = linspace(0, pi, 100)

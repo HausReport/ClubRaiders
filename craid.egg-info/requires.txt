@@ -13,3 +13,4 @@ ujson
 json-lines
 urllib3
 psutil
+plotly

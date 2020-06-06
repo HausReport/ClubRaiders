@@ -12,6 +12,8 @@ craid.egg-info/top_level.txt
 craid/club/__init__.py
 craid/club/regions/Region.py
 craid/club/regions/RegionFactory.py
+craid/club/regions/SphericalRegion.py
+craid/club/regions/TheUnregion.py
 craid/club/regions/__init__.py
 craid/dashbd/AnnoyingCrap.py
 craid/dashbd/__init__.py
@@ -92,3 +94,4 @@ craid/eddb/util/__init__.py
 info/My Club Diagram.png
 info/club-diagram-640.png
 info/wordcloud2.png
+notebooks/__init__.py
