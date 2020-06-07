@@ -51,11 +51,12 @@ currentData = dp.getDataArrays()
 # clubSystemInstances = currentData['allClubSystemInstances']
 sysIdFacIdToFactionInstance = currentData['sysIdFacIdToFactionInstance']
 
-systemNameToXYZ: Dict[str, Tuple[float, float, float]] = SystemXYZ.myDict #currentData['systemNameToXYZ']
+systemNameToXYZ: Dict[str, Tuple[float, float, float]] = SystemXYZ.myDict  # currentData['systemNameToXYZ']
 playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
 
-annoyingCrap: AnnoyingCrap = AnnoyingCrap() #systemNameToXYZ)
+annoyingCrap: AnnoyingCrap = AnnoyingCrap()  # systemNameToXYZ)
 welcomeMarkdown = AnnoyingCrap.getMarkdown('welcome')
+newsMarkdown = AnnoyingCrap.getMarkdown('news')
 
 df: pd.DataFrame = currentData['dataFrame']
 printmem("4")
@@ -101,7 +102,14 @@ app.config.suppress_callback_exceptions = True
 #
 # Initialize some UI elements
 #
-
+systemDropdown = dcc.Dropdown(
+    id='locationDropdown',
+    options=AnnoyingCrap.getLocationDropdown(),
+    value='Sol',
+    placeholder='Select star system',
+    className="simpleColItem",
+    # autoFocus=True,
+)
 # opts = crap.getFirstDropdown(systemNameToXYZ)
 # fopts = crap.getSecondDropdown(playerFactionNameToHomeSystemName)
 # gopts = crap.getThirdDropdown()
@@ -123,7 +131,7 @@ datatable: dash_table.DataTable = dash_table.DataTable(
     selected_columns=[],
     selected_rows=[],
     # hidden cols seems to cause problems with searches
-    #hidden_columns=['salesScore','explorationScore','mineralSalesScore','bountyHuntingScore','smugglingScore','piracyMurderScore'],
+    # hidden_columns=['salesScore','explorationScore','mineralSalesScore','bountyHuntingScore','smugglingScore','piracyMurderScore'],
     page_action="native",
     page_current=0,
     page_size=30,
@@ -156,18 +164,12 @@ tab_1 = \
                     className="simpleColItem",
                 ),
                 html.Label("in the vicinity of", className="simpleColItem"),
-                dcc.Dropdown(
-                    id='locationDropdown',
-                    options=AnnoyingCrap.getLocationDropdown(),
-                    value='Sol',
-                    placeholder='Select star system',
-                    className="simpleColItem",
-                    # autoFocus=True,
-                ),
+                systemDropdown,
+
                 html.Article(oracleMd, id="statistics", className="simpleColItem"),
                 html.Article(welcomeMarkdown, id='faction-drilldown', className="simpleColItem"),
-                html.Article(id='system-drilldown', className="simpleColItem"),
-                #html.Hr(style="width: 345px;")
+                html.Article(newsMarkdown, id='system-drilldown', className="simpleColItem"),
+                # html.Hr(style="width: 345px;")
                 # End of left column
             ]),  # td closed
             html.Td([
@@ -183,10 +185,10 @@ tab_1 = \
                     html.Button(id="clear-sort", className="myButton"),
                 ]),
                 datatable,
-                #html.Div("...  \n...",className="20px"),
-                #html.Footer(className='footer', children=[
-                    #html.Div(id='datatable-interactivity-container')
-                #])
+                # html.Div("...  \n...",className="20px"),
+                # html.Footer(className='footer', children=[
+                # html.Div(id='datatable-interactivity-container')
+                # ])
             ]),  # td closed
         ]),  # tr closed
     ]),  # table closed
@@ -309,25 +311,25 @@ def was_clicked(ctx, button_id):
 
     aDict = ujson.loads(ctx_msg)
 
-    #print("dict:" + str(aDict))
+    # print("dict:" + str(aDict))
     triggered = aDict['triggered']  # ['prop_id']
-    #print("triggered = " + str(triggered))
+    # print("triggered = " + str(triggered))
 
     elt0 = triggered[0]
-    #print("elt0 = " + str(elt0))
+    # print("elt0 = " + str(elt0))
 
     prop_id = elt0['prop_id']
-    #print("prop_id = " + str(prop_id))
+    # print("prop_id = " + str(prop_id))
 
     inputs = aDict['inputs']  # ['prop_id']
-    #print("inputs = " + str(inputs))
+    # print("inputs = " + str(inputs))
     activity = inputs['activityDropdown.value']
 
     if (prop_id != button_id):
         return None, activity
 
     value = elt0['value']
-    #print("value = " + str(value))
+    # print("value = " + str(value))
 
     if value == 0:
         return None, activity
@@ -360,7 +362,7 @@ def update_filter(n_clicks: int, val3):
         act = 0
 
     # clear filter button was clicked
-    if value != None:
+    if value is not None:
         msg = AnnoyingCrap.getMessage(int(value))
         logging.debug("Cleared filter, Act state: " + str(value))
         return "", msg
@@ -496,7 +498,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
     facInfoLen: int = len(factionInfo)
     if facInfoLen == 0:
         factionWidget = welcomeMarkdown
-        systemWidget = welcomeMarkdown
+        systemWidget = newsMarkdown
     else:
         factionWidget = dcc.Markdown(factionInfo)
         systemWidget = dcc.Markdown(systemInfo)
@@ -535,7 +537,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
     #
     # if len(theGraphs) == 0:
     #     return factionWidget, systemWidget, [None]
-    #return factionWidget, systemWidget, [theGraphs[0]]
+    # return factionWidget, systemWidget, [theGraphs[0]]
     return factionWidget, systemWidget
 
 

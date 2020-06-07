@@ -2,7 +2,7 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
-
+import logging
 from typing import List, Dict, Tuple
 
 import dash_core_components as dcc
@@ -105,6 +105,7 @@ class AnnoyingCrap(object):
         #_systemNameToXYZ = SystemXYZ.myDict
         #print("dropdown len=" + str(len(SystemXYZ.myDict)))
         opts = []
+        logging.debug("Loading location dropdown")
         #keys: List[str] = sorted(SystemXYZ.myDict)
         for it in SystemXYZ.myDict.keys():
             opts.append({'label': it, 'value': it})

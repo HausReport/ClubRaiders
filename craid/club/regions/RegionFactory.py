@@ -9,13 +9,13 @@ from craid.club.regions.TheUnregion import TheUnregion
 # TODO: might be a better pallete https://learnui.design/tools/data-color-picker.html#divergent
 class RegionFactory(object):
     regionDict = {
-        1: SphericalRegion("Merope",    1,  -79, -340, -150, 100, 'rgb(255, 0, 0)'),
-        2: SphericalRegion("Rectangle", 2,  -54, -124,  -66,  75, 'rgb(255,255,0)'),
-        3: SphericalRegion("California",3, -320, -913, -217, 200, 'rgb(32,32,32)'),
-        4: SphericalRegion("Sirius",    4,   43,   78,   -3, 125, 'rgb(0, 255, 0)'),
-        5: SphericalRegion("Xi Shan",   5,  155,  -50,   84,  45, 'rgb(255,0,255)'),
-        6: SphericalRegion("Abroin",    6,  -94,  -40,  110,  30, 'rgb(0,255,255)'),
-        7: SphericalRegion("Hip 51652", 7,   27,  -81,  151,  35, 'rgb(0,0,255)'),
+        1: SphericalRegion("Merope",    1,  -79, -150, -340, 100, 'rgb(255, 0, 0)'),
+        2: SphericalRegion("Rectangle", 2,  -54,  -66, -124,  75, 'rgb(255,255,0)'),
+        3: SphericalRegion("California",3, -320, -217, -913, 200, 'rgb(32,32,32)'),
+        4: SphericalRegion("Sirius",    4,   43,   -3,   78, 125, 'rgb(0, 255, 0)'),
+        5: SphericalRegion("Xi Shan",   5,  155,   84,  -50,  45, 'rgb(255,0,255)'),
+        6: SphericalRegion("Abroin",    6,  -94,  110,  -40,  30, 'rgb(0,255,255)'),
+        7: SphericalRegion("Hip 51652", 7,   27,  151,  -81,  35, 'rgb(0,0,255)'),
     }
     unRegion = TheUnregion()
 
@@ -62,5 +62,22 @@ class RegionFactory(object):
         reg = RegionFactory.getRegion(sys.getX(), sys.getY(), sys.getZ())
         return reg.getTitle()
 
+    @staticmethod
+    def getNearestRegionMessage(sys: craid.eddb.System.System) -> str:
+        closestDist = 999999.0
+        closestRegion: SphericalRegion = None
 
+        for key in RegionFactory.regionDict.keys():
+            item = RegionFactory.regionDict.get(key)
+            d2 = item.distanceFrom(sys.getX(), sys.getY(), sys.getZ())
+            if d2 < closestDist:
+                closestRegion = item
+                closestDist = d2
+                if closestDist == 0.0:
+                    break
 
+        if closestDist == 0.0:
+            return f'in {closestRegion.getTitle()}'
+        else:
+            closestDistStr = "{:,.0f}".format(closestDist)
+            return f'{closestDistStr} ly from {closestRegion.getTitle()}'

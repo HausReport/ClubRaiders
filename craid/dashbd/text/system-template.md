@@ -1,7 +1,7 @@
 
 # $system_name
 
-*( $x, $y, $z) in $region_name*
+*( $x, $y, $z)  $region_msg*
 
 |       |  |
 | :---------- | :---------- |

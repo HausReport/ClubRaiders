@@ -204,9 +204,9 @@ class InhabitedSystem(System):
         myDict['nearest_shipyard'] = self.getInaraNearestShipyardUrl()
         myDict['r2r_link'] = self.getRoadToRichesUrl()
 
-        myDict['x'] = "{:,}".format(self.getX())
-        myDict['y'] = "{:,}".format(self.getY())
-        myDict['z'] = "{:,}".format(self.getZ())
+        myDict['x'] = "{:,.0f}".format(self.getX())
+        myDict['y'] = "{:,.0f}".format(self.getY())
+        myDict['z'] = "{:,.0f}".format(self.getZ())
 
         myDict['octant'] = "{:,}".format(self.getOctant())
 
@@ -215,7 +215,7 @@ class InhabitedSystem(System):
         bhFeatures = self.bountyHuntingFeatures()
         myDict['bounty_hunting_features'] = bhFeatures
 
-        myDict['region_name'] = self.getRegionName()
+        myDict['region_msg'] = self.getNearestRegionMessage()
 
 
         myDict['power'] = self.getPower()
@@ -456,5 +456,7 @@ class InhabitedSystem(System):
 
     def getPrimaryEconomy(self):
         return self.jsonLine['primary_economy']
+
+
 
 

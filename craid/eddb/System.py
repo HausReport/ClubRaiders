@@ -89,6 +89,10 @@ class System(Aware):
         from craid.club.regions.RegionFactory import RegionFactory
         return RegionFactory.getRegionName(self)
 
+    def getNearestRegionMessage(self):
+        from craid.club.regions.RegionFactory import RegionFactory
+        return RegionFactory.getNearestRegionMessage(self)
+
     def getRegionNumber(self):
         from craid.club.regions.RegionFactory import RegionFactory
         return RegionFactory.getRegionColor(self)

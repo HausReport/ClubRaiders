@@ -1,8 +1,5 @@
 
 
-## Welcome to Club Raiders
+## Welcome
 
-Make sure to try the activity chooser in the upper left.
-
-When you choose an item in the table, detailed information will be shown here.
-
+Welcome goes here. 
