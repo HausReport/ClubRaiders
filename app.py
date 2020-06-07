@@ -55,8 +55,7 @@ systemNameToXYZ: Dict[str, Tuple[float, float, float]] = SystemXYZ.myDict  # cur
 playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
 
 annoyingCrap: AnnoyingCrap = AnnoyingCrap()  # systemNameToXYZ)
-welcomeMarkdown = AnnoyingCrap.getMarkdown('welcome')
-newsMarkdown = AnnoyingCrap.getMarkdown('news')
+
 
 df: pd.DataFrame = currentData['dataFrame']
 printmem("4")
@@ -69,12 +68,17 @@ df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
 seer: Oracle = Oracle(df)
 oracleString = AnnoyingCrap.getString("oracle-template")
 oracleMd = dcc.Markdown(seer.template(oracleString))
+welcomeMarkdown = AnnoyingCrap.getMarkdown('welcome')
+
+newsString = AnnoyingCrap.getString("news")
+newsString = seer.template(newsString)
+newsMarkdown = dcc.Markdown(newsString)
 
 # Start the app framework
 # In non-DEPLOY mode, the " app.config.suppress_callback_exceptions = True" doesn't seem
 # to take hold and there's an annoying bug.
 #
-DEPLOY = False  # KEEP THIS TRUE, SRSLY
+DEPLOY = True  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
     #
     # Heroku requirements
@@ -240,7 +244,8 @@ def render_content(tab):
         return html.Div(children=[
             html.Article([
                 AnnoyingCrap.getMarkdown("aboutClub")
-            ])
+            ]),
+            seer.getFactionTable()
         ])
     elif tab == 'tab-3':
         print('tab-3 clicked')
@@ -486,9 +491,9 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
             print("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
             factionInfo = theFac.get_name()
             gg: pd.DataFrame = df[df['factionName'].str.match(factionInfo)]
-            seer: Oracle = Oracle(gg)
+            tmpSeer: Oracle = Oracle(gg)
             factionInfo = AnnoyingCrap.getString("faction-template")
-            output = seer.template(factionInfo)
+            output = tmpSeer.template(factionInfo)
             factionInfo = theFac.template(output)
 
             ts = AnnoyingCrap.getString("system-template")

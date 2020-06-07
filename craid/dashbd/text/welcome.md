@@ -2,4 +2,4 @@
 
 ## Welcome
 
-Welcome goes here. 
+Community links TBD to go here.

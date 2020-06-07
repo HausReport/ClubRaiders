@@ -16,13 +16,13 @@ class Oracle:
         super().__init__()
         self.myDict: PassThroughDict[str, str] = PassThroughDict()
         self.myDict['test'] = "test string"
-
+        self.df = df
         # &uarr; &darr;
 
         if df is None:
             return
 
-        base_date="02/06/2020 09:00"
+        base_date = "02/06/2020 09:00"
         base_active_systems = 186
         base_population = 95479284266
         base_control_systems = 40
@@ -30,6 +30,12 @@ class Oracle:
         base_total_influence = 3960.53
 
         frame: pd.DataFrame = df
+
+        #
+        #
+        #
+        self.myDict['number_of_factions'] = "{:,}".format(int(frame['systemName'].nunique()))
+
         #
         # General statistics
         #
@@ -127,6 +133,12 @@ class Oracle:
         #
         #
         #
+        self.myDict['n_wars'] = df[df["vulnerable"].str.contains("War")]["systemName"].nunique()
+        self.myDict['n_elections'] = df[df["vulnerable"].str.contains("lect")]["systemName"].nunique()
+        self.myDict['n_expansions'] = df[df["vulnerable"].str.contains("xpans")]["systemName"].nunique()
+        self.myDict['n_retreats'] = df[df["vulnerable"].str.contains("etre")]["systemName"].nunique()
+
+        self.myDict['n_very_easy'] =  df[df["difficulty"] <= 1.0]["systemName"].nunique()
 
         #
         #
@@ -135,25 +147,19 @@ class Oracle:
         #
         #
         #
+
+    def getFactionTable(self):
+        n_by_sys = self.df.groupby("factionName")["factionName", "systemName", "population", "influence"].agg(
+            {'factionName': 'first', 'systemName': 'count', 'population': 'sum', 'influence': 'sum'})
+        n_by_sys.columns = ['Faction Name', 'Systems', 'Population', 'Total Influence']
+        import dash_table
+        return dash_table.DataTable(
+            id='faction_table',
+            columns=[{"name": i, "id": i} for i in n_by_sys.columns],
+            data=n_by_sys.to_dict('records'),
+        )
 
     def template(self, theMsg: str) -> str:
         template = string.Template(theMsg)
         ret = template.substitute(self.myDict)
         return ret
-
-
-#         #boo: Dict[str, str] = {'buffy': 'travesty!'}
-#         #boo = dict({'buffy': 'trade', 'angel': 'los angeles'})
-#         temp = Template(str)
-#         temp.
-#         #return temp.render(lo )
-#         return temp.render(locals())
-
-
-# if __name__ == '__main__':
-#     # myDict = dict({'girl': 'buffy', 'town': 'sunnydale'})
-#     msg = "[$test]: $girl lives in $town"
-#     seer: Oracle = Oracle(None)
-#     output = seer.template(msg)
-#
-#     print(output)

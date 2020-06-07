@@ -22,14 +22,17 @@ Disrupt their operations.  Reduce their influence.  Stop their daily expansions 
 new systems, and ultimately beat them back to their home systems.
 
 *Club Raiders* was built to help single Commanders, small groups, large groups, and alliances of
-squadrons identify, engage, and eradicate Club factions operating near you.  Tell us
+squadrons identify, engage, and eradicate Club factions operating nearby.  Tell us
 where you are and what you want to do, we'll supply places it can actively work against
 Club interests.
 
 ### Where
 
 Club factions span the galaxy from Sirius Corporation in Sothis, 352 light years west of Sol
-to Gallant Investment Brokers in Exphiay, 283 light years to the east.
+to Gallant Investment Brokers in Exphiay, 283 light years to the east.  Most of their activity
+is localized to seven spherical regions around Merope, "The Rectangle", The California Nebula, 
+Sirius, Xi Shan, Abroin, and HIP 51652.
+
 
 ### When
 
@@ -51,3 +54,5 @@ future.
 Does it make sense to wrap fighting the Club into the day-to-day operations we spend
 so much time on?  Should you kick that pesky Club faction out of your squadron's home
 system or near neighbor?  The future is up to you, Commander.  Fly dangerous.
+
+### Per-Faction Details
