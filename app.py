@@ -78,14 +78,16 @@ newsMarkdown = dcc.Markdown(newsString)
 # In non-DEPLOY mode, the " app.config.suppress_callback_exceptions = True" doesn't seem
 # to take hold and there's an annoying bug.
 #
-DEPLOY = True  # KEEP THIS TRUE, SRSLY
+appName = __name__
+#appName = "ClubRaiders"
+DEPLOY = False  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
     #
     # Heroku requirements
     #
-    server = flask.Flask(__name__)
+    server = flask.Flask(appName)
     server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
-    app = dash.Dash(__name__, server=server)
+    app = dash.Dash(appName, server=server)
     app.scripts.config.serve_locally = False
     app.scripts.append_script({
         'external_url': 'https://www.googletagmanager.com/gtag/js?id=UA-61576455-2'
@@ -94,10 +96,11 @@ if DEPLOY:
         'external_url': 'https://raw.githubusercontent.com/HausReport/ClubRaiders/master/assets/gtag.js'
     })
 else:
-    app = dash.Dash(__name__)
+    app = dash.Dash(appName)
     app.scripts.config.serve_locally = True
-    print(__name__)
+    print(appName)
 
+app.title = "Club Raiders"
 #
 # Following required for tabs
 #
@@ -171,9 +174,12 @@ tab_1 = \
                 systemDropdown,
 
                 html.Article(oracleMd, id="statistics", className="simpleColItem"),
+                #html.Iframe(id="cabal-ops", src="http://discordapp.com/widget?id=439201271174660097&theme=dark", width="300", height="200"),
                 html.Article(welcomeMarkdown, id='faction-drilldown', className="simpleColItem"),
                 html.Article(newsMarkdown, id='system-drilldown', className="simpleColItem"),
                 # html.Hr(style="width: 345px;")
+                dcc.Markdown("## Elite BGS\n\nFor resources, questions and discussion about the Elite Background Simulation in general."),
+                html.Iframe(id="elite-bgs", src="http://discordapp.com/widget?id=483005833853009950&theme=dark", width="350", height="400"),
                 # End of left column
             ]),  # td closed
             html.Td([

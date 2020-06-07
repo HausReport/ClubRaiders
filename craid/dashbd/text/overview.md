@@ -1,6 +1,6 @@
 Welcome to *Club Raiders,*  home of the background war against *The Club* in *Elite: Dangerous.*
 
-Club minor factions are present in 186 systems.  By reducing their influence, we can force them out of 140 of these.
+Club minor factions are present in 172 systems.  By reducing their influence, we can force them out of 140 of these.
 There are theories about what happens after that.  We don't know, but we think it might be cool.
 
 The tools on this page can point you, your wing, your squadron, or your alliance of squadrons towards rewarding anti-Club activities.  The activity chooser in the top left is probably

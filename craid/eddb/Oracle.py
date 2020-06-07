@@ -5,10 +5,40 @@
 
 import string
 
+import humanize
 import pandas as pd
 
 from craid.eddb.PassThroughDict import PassThroughDict
 
+
+def formatLargeNumber(num: int) -> str:
+    return humanize.intword(num)
+
+def formatLargeDiff(num: int) -> str:
+    prefix: str
+    if num<0:
+        # &uarr;
+        prefix = "&darr; "
+        num = abs(num)
+    elif num == 0:
+        return "-"
+    else:
+        prefix = "&uarr; "
+
+    return prefix + humanize.intword(num)
+
+def formatFloatDiff(num: float) -> str:
+    prefix: str
+    if num<0.0:
+        # &uarr;
+        prefix = "&darr; "
+        num = abs(num)
+    elif num == 0.0:
+        return "-"
+    else:
+        prefix = "&uarr; "
+
+    return prefix + "{0:,.2f}".format(num)
 
 class Oracle:
 
@@ -17,31 +47,37 @@ class Oracle:
         self.myDict: PassThroughDict[str, str] = PassThroughDict()
         self.myDict['test'] = "test string"
         self.df = df
-        # &uarr; &darr;
+
 
         if df is None:
             return
 
-        base_date = "02/06/2020 09:00"
-        base_active_systems = 186
-        base_population = 95479284266
-        base_control_systems = 40
-        base_avg_influence = 21.29
-        base_total_influence = 3960.53
+
 
         frame: pd.DataFrame = df
 
         #
-        #
+        # This was a little nuanced - was double-counting population of sytems with two
+        # club faction instances
         #
         self.myDict['number_of_factions'] = "{:,}".format(int(frame['systemName'].nunique()))
+        n_by_sys = df.groupby("systemName")[["systemName", "population"]].agg( {'systemName': 'first', 'population': 'first'})
+        total_pop = n_by_sys["population"].sum()
+        total_systems = n_by_sys["systemName"].count()
 
         #
         # General statistics
         #
-        self.myDict['systems_active'] = "{:,}".format(int(frame['systemName'].count()))
-        self.myDict['systems_active_pop'] = "{:,}".format(frame['population'].sum(axis=0))
-        self.myDict['systems_control'] = "{:,}".format(frame['control'].sum())
+        cur_active_systems = int(total_systems)
+        cur_population = int(total_pop)
+        cur_control_systems = int(frame['control'].sum())
+        cur_avg_influence = float(frame['influence'].mean())
+        cur_total_influence = float(frame['influence'].sum(axis=0))
+
+
+        self.myDict['systems_active'] = "{:,}".format(cur_active_systems)
+        self.myDict['systems_active_pop'] = formatLargeNumber(cur_population)
+        self.myDict['systems_control'] = "{:,}".format(cur_control_systems)
         self.myDict['systems_control_perc'] = "{:,}".format(
             1.0 * frame['control'].sum() / int(frame['systemName'].count()))
 
@@ -96,22 +132,22 @@ class Oracle:
         #
         # Population stats
         #
-        self.myDict['population_min'] = "{:,}".format(frame['population'].min())
-        self.myDict['population_max'] = "{:,}".format(frame['population'].max())
-        self.myDict['population_avg'] = "{:,}".format(frame['population'].mean())
-        self.myDict['population_sum'] = "{:,}".format(frame['population'].sum(axis=0))
+        self.myDict['population_min'] = formatLargeNumber(frame['population'].min())
+        self.myDict['population_max'] = formatLargeNumber(frame['population'].max())
+        self.myDict['population_avg'] = formatLargeNumber(frame['population'].mean())
+        self.myDict['population_sum'] = formatLargeNumber(frame['population'].sum(axis=0))
 
         self.caxx = frame['population'].describe()
-        self.myDict['population_50p'] = "{:,}".format(self.caxx[5])
-        self.myDict['population_25p'] = "{:,}".format(self.caxx[4])
+        self.myDict['population_50p'] = formatLargeNumber(self.caxx[5])
+        self.myDict['population_25p'] = formatLargeNumber(self.caxx[4])
 
         #
         # Influence stats
         #
         self.myDict['influence_min'] = "{0:,.2f}".format(frame['influence'].min())
         self.myDict['influence_max'] = "{0:,.2f}".format(frame['influence'].max())
-        self.myDict['influence_avg'] = "{0:,.2f}".format(frame['influence'].mean())
-        self.myDict['influence_sum'] = "{0:,.2f}".format(frame['influence'].sum(axis=0))
+        self.myDict['influence_avg'] = "{0:,.2f}".format(cur_avg_influence)
+        self.myDict['influence_sum'] = "{0:,.2f}".format(cur_total_influence)
 
         self.caxx = frame['influence'].describe()
         self.myDict['influence_50p'] = "{0:,.2f}".format(self.caxx[5])
@@ -143,6 +179,24 @@ class Oracle:
         #
         #
         #
+        base_date = "02/06/2020 09:00"
+        base_active_systems = 171
+        base_population = 80566632766
+        base_control_systems = 40
+        base_avg_influence = 21.29
+        base_total_influence = 3960.53
+
+        diff_active_systems = cur_active_systems - base_active_systems
+        diff_population = cur_population - base_population
+        diff_control_systems = cur_control_systems - base_control_systems
+        diff_avg_influence = cur_avg_influence - base_avg_influence
+        diff_total_influence = cur_total_influence - base_total_influence
+
+        self.myDict['diff_active_systems'] = formatLargeDiff(diff_active_systems)
+        self.myDict['diff_population'] = formatLargeDiff(diff_population)
+        self.myDict['diff_control_systems'] = formatLargeDiff(diff_control_systems)
+        self.myDict['diff_avg_influence'] = formatFloatDiff(diff_avg_influence)
+        self.myDict['diff_total_influence'] = formatFloatDiff(diff_total_influence)
 
         #
         #
@@ -163,3 +217,4 @@ class Oracle:
         template = string.Template(theMsg)
         ret = template.substitute(self.myDict)
         return ret
+
