@@ -30,8 +30,8 @@ Club interests.
 
 Club factions span the galaxy from Sirius Corporation in Sothis, 352 light years west of Sol
 to Gallant Investment Brokers in Exphiay, 283 light years to the east.  Most of their activity
-is localized to seven spherical regions around Merope, "The Rectangle", The California Nebula, 
-Sirius, Xi Shan, Abroin, and HIP 51652.
+is localized to seven spherical regions around Merope, "The Rectangle" (formed by Ngalia, Ross 591,
+Socho, and 64 Ceti), The California Nebula, Sirius, Xi Shan, Abroin, and HIP 51652.
 
 
 ### When

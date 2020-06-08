@@ -95,4 +95,4 @@ class System(Aware):
 
     def getRegionNumber(self):
         from craid.club.regions.RegionFactory import RegionFactory
-        return RegionFactory.getRegionColor(self)
+        return RegionFactory.getRegionNumber(self)

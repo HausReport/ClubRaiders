@@ -180,7 +180,7 @@ class Oracle:
         #
         #
         base_date = "02/06/2020 09:00"
-        base_active_systems = 171
+        base_active_systems = 172
         base_population = 80566632766
         base_control_systems = 40
         base_avg_influence = 21.29
