@@ -179,9 +179,9 @@ tab_1 = \
                 html.Article(newsMarkdown, id='system-drilldown', className="simpleColItem"),
                 # html.Hr(style="width: 345px;")
                 dcc.Markdown("## Cabal Operatives\n\nCommanders fighting the BGS war against The Club."),
-                html.Iframe(id="cabal-ops", src="http://discordapp.com/widget?id=439201271174660097&theme=dark", width="350", height="400"),
+                html.Iframe(id="cabal-ops", src="https://discordapp.com/widget?id=439201271174660097&theme=dark", width="350", height="400"),
                 dcc.Markdown("## Elite BGS\n\nFor resources, questions and discussion about the Elite Background Simulation in general."),
-                html.Iframe(id="elite-bgs", src="http://discordapp.com/widget?id=483005833853009950&theme=dark", width="350", height="400"),
+                html.Iframe(id="elite-bgs", src="https://discordapp.com/widget?id=483005833853009950&theme=dark", width="350", height="400"),
                 # End of left column
             ]),  # td closed
             html.Td([
