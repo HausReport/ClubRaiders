@@ -68,7 +68,7 @@ df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
 seer: Oracle = Oracle(df)
 oracleString = AnnoyingCrap.getString("oracle-template")
 oracleMd = dcc.Markdown(seer.template(oracleString))
-welcomeMarkdown = AnnoyingCrap.getMarkdown('welcome')
+#welcomeMarkdown = AnnoyingCrap.getMarkdown('welcome')
 
 newsString = AnnoyingCrap.getString("news")
 newsString = seer.template(newsString)
@@ -174,10 +174,12 @@ tab_1 = \
                 systemDropdown,
 
                 html.Article(oracleMd, id="statistics", className="simpleColItem"),
-                #html.Iframe(id="cabal-ops", src="http://discordapp.com/widget?id=439201271174660097&theme=dark", width="300", height="200"),
-                html.Article(welcomeMarkdown, id='faction-drilldown', className="simpleColItem"),
+                html.Article("", id='faction-drilldown', className="simpleColItem"),
+                html.Article("", id='system-drilldown', className="simpleColItem"),
                 html.Article(newsMarkdown, id='system-drilldown', className="simpleColItem"),
                 # html.Hr(style="width: 345px;")
+                dcc.Markdown("## Cabal Operatives\n\nCommanders fighting the BGS war against The Club."),
+                html.Iframe(id="cabal-ops", src="http://discordapp.com/widget?id=439201271174660097&theme=dark", width="350", height="400"),
                 dcc.Markdown("## Elite BGS\n\nFor resources, questions and discussion about the Elite Background Simulation in general."),
                 html.Iframe(id="elite-bgs", src="http://discordapp.com/widget?id=483005833853009950&theme=dark", width="350", height="400"),
                 # End of left column
@@ -507,12 +509,12 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
             systemInfo = theSys.template(ts, theFac)
 
     facInfoLen: int = len(factionInfo)
-    if facInfoLen == 0:
-        factionWidget = welcomeMarkdown
-        systemWidget = newsMarkdown
-    else:
-        factionWidget = dcc.Markdown(factionInfo)
-        systemWidget = dcc.Markdown(systemInfo)
+    # if facInfoLen == 0:
+    #     factionWidget = welcomeMarkdown
+    #     systemWidget = newsMarkdown
+    # else:
+    factionWidget = dcc.Markdown(factionInfo)
+    systemWidget = dcc.Markdown(systemInfo)
 
     # theGraphs = [
     #     dcc.Graph(
