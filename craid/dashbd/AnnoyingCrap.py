@@ -6,6 +6,7 @@ import logging
 from typing import List, Dict, Tuple
 
 import dash_core_components as dcc
+from dash_table.Format import Format, Scheme, Symbol, Group
 from pkg_resources import resource_string as resource_bytes
 
 from craid.eddb.SystemXYZ import SystemXYZ
@@ -62,15 +63,15 @@ class AnnoyingCrap(object):
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "single"),
          13: ("see hard club systems to solo",
-              "{isHomeSystem} contains false && {difficulty} > 5 && {difficulty} < 100",
+              "{isHomeSystem} contains false && {difficulty} > 5 && {difficulty} < 50",
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "single"),
          14: ("see systems for small groups",
-              "{isHomeSystem} contains false && {difficulty} > 50 && {difficulty} < 150",
+              "{isHomeSystem} contains false && {difficulty} > 25 && {difficulty} < 150",
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "group"),
          15: ("see systems for large groups",
-              "{isHomeSystem} contains false && {difficulty} > 150 && {difficulty} < 750",
+              "{isHomeSystem} contains false && {difficulty} > 100 && {difficulty} < 750",
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "group"),
          16: ("see systems for squadron alliances",
@@ -161,10 +162,10 @@ class AnnoyingCrap(object):
             # {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
             {"name": 'Home', "id": 'isHomeSystem', "deletable": False, "hideable": allowHiddenColums, "selectable": False},
             {"name": 'Population', "id": 'population', "deletable": False, "hideable": allowHiddenColums, "selectable": False,
-             "type": "numeric"},
+             "type": "numeric", 'format': Format( precision=0, scheme=Scheme.fixed, group=Group.yes ) },
             {"name": 'Inf.', "id": 'influence', "deletable": False, "hideable": allowHiddenColums, "selectable": False,
-             "type": "numeric"},
-            {"name": 'Difficulty', "id": 'difficulty', "deletable": False, "selectable": False, "type": "numeric"},
+             "type": "numeric", 'format': Format( precision=2, scheme=Scheme.fixed, group=Group.yes ) },
+            {"name": 'Difficulty', "id": 'difficulty', "deletable": False, "selectable": False, "type": "numeric", 'format': Format( precision=1, scheme=Scheme.fixed, group=Group.yes ) },
             {"name": 'Scouted', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
             {"name": 'Control', "id": 'control', "deletable": False, "hideable": allowHiddenColums, "selectable": False},
             {"name": 'Vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},

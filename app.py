@@ -80,7 +80,7 @@ newsMarkdown = dcc.Markdown(newsString)
 #
 appName = __name__
 #appName = "ClubRaiders"
-DEPLOY = True  # KEEP THIS TRUE, SRSLY
+DEPLOY = False  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
     #
     # Heroku requirements
@@ -491,7 +491,12 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
     if active_cell:
         row = active_cell['row']
         logical_row = row + page_cur * page_size
-        sysId = rows[logical_row]['sysId']  # FIXME: this can give an out of range error?
+        #NOTE: if a row is selected, then a filter is applied and that rownumber
+        # is higher than the number of visible rows, this would cause an error.
+        # setting log_row to 0 sidesteps that case
+        if logical_row >= len(rows):
+            logical_row = 0
+        sysId = rows[logical_row]['sysId']
         facId = rows[logical_row]['facId']
         print(str(sysId) + "/" + str(facId))
         theFac: FactionInstance = sysIdFacIdToFactionInstance.get((sysId, facId))
