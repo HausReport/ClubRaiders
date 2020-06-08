@@ -32,17 +32,22 @@ class RegionFactory(object):
     # def getRegion(sys: craid.eddb.System.System) -> SphericalRegion:
     #     return RegionFactory.getRegion(sys.getX(), sys.getY(), sys.getZ())
 
+    # @staticmethod
+    # def getRegionNumber(x, y, z) -> int:
+    #     reg: SphericalRegion = RegionFactory.getRegion(x,y,z)
+    #     if reg is None:
+    #         return 0
+    #
+    #     return reg.getNumber()
+
     @staticmethod
-    def getRegionNumber(x, y, z) -> int:
-        reg: SphericalRegion = RegionFactory.getRegion(x,y,z)
+    def getRegionNumber(sys: craid.eddb.System.System) -> SphericalRegion:
+        reg: SphericalRegion = RegionFactory.getRegion(sys.getX(), sys.getY(), sys.getZ())
         if reg is None:
             return 0
 
         return reg.getNumber()
 
-    @staticmethod
-    def getRegionNumber(sys: craid.eddb.System.System) -> SphericalRegion:
-        return RegionFactory.getRegionNumber(sys.getX(), sys.getY(), sys.getZ())
 
     @staticmethod
     def getRegionColor(x, y, z) -> int:
