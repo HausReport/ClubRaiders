@@ -5,6 +5,7 @@
 
 import datetime
 import string
+from typing import List
 
 from craid.eddb import GameConstants as gconst
 from craid.eddb.Faction import Faction
@@ -161,11 +162,99 @@ class FactionInstance(Faction):
     def hasState(self, state: int):
         return self.states.hasState(state)
 
-    def explorationScore(self):
-        return self.mySystem.explorationScore()
 
-    def salesScore(self):
-        return self.mySystem.salesScore()
+    # shared code for trade/exploration
+    def _ss(self) -> [float, List[str]]:
+
+        sco:float = 10.0
+        bonuses: List[str] = []
+
+        #
+        # Stage 1: Is the _system_ good for smuggling
+        #
+        from craid.eddb.Station import Station
+        sta: Station = self.mySystem.getBestTradeStation()
+        if sta is None:
+            return 0, ["no suitable station"]
+
+        if sta.isOrbital():
+            bonuses.append("station is orbital")
+            sco = sco * 2
+
+        if sta.hasLargePads():
+            bonuses.append("station has large pads")
+            sco = sco * 2
+
+        #
+        # Stage 2: Can the opposing faction benefit from smuggling
+        #
+        if sta.hasState(gconst.STATE_WAR) or sta.hasState(gconst.STATE_WAR):
+            return 0.0, "station's controlling faction is at war"
+
+        if sta.hasState(gconst.STATE_ELECTION):
+            bonuses.append("station is in an election state")
+            sco = sco * 2
+
+        if sta.hasState(gconst.STATE_INVESTMENT):
+            bonuses.append("station is in investment state")
+            sco = sco * 2
+
+        if sta.hasState(gconst.STATE_EXPANSION):
+            bonuses.append("station is in expansion state")
+            sco = sco * 2
+
+        #
+        # Stage 3: Can the club faction be damaged by bounty hunting
+        #
+        if self.hasState(gconst.STATE_LOCKDOWN):
+            return 0.0, "the Club faction is in lockdown"
+
+        if self.hasState(gconst.STATE_WAR) or self.hasState(gconst.STATE_CIVIL_WAR):
+            return 0.0, "the club faction is at war"
+
+        if self.hasState(gconst.STATE_ELECTION):
+            sco = sco * 2.0
+            bonuses.append("the Club faction being in elections")
+
+        return sco, bonuses
+
+    def salesScore(self) -> [float, str]:
+        sco: float
+        bonuses: List[str]
+        sco, bonuses = self._ss()
+
+        if sco <=0.0:
+            my_string = ','.join(bonuses)
+            return sco, my_string
+
+        from craid.eddb.Station import Station
+        sta: Station = self.mySystem.getBestTradeStation()
+
+        if sta.hasState(gconst.STATE_FAMINE):
+            bonuses.append("food trade will help end the famine")
+            sco = sco * 2
+
+        if sta.hasState(gconst.STATE_OUTBREAK):
+            bonuses.append("medicine trade will help end the outbreak")
+            sco = sco * 2
+
+        my_string = ','.join(bonuses)
+        return sco, my_string
+
+    def explorationScore(self):
+        sco: float
+        bonuses: List[str]
+        sco, bonuses = self._ss()
+        #sco: float, bonuses: List[str] = self._ss()
+        #sco, bonuses = self._ss()
+        my_string = ','.join(bonuses)
+        return sco, my_string
+
+    # def explorationScore(self):
+    #     return self.mySystem.explorationScore()
+    #
+    # def salesScore(self):
+    #     return self.mySystem.salesScore()
 
     def mineralSalesScore(self):
         return self.mySystem.mineralSalesScore()
@@ -173,8 +262,59 @@ class FactionInstance(Faction):
     # def bountyHuntingScore(self) -> float:
     #     return self.mySystem.bountyHuntingScore()
 
-    def smugglingScore(self) -> float:
-        return self.mySystem.smugglingScore()
+    def smugglingScore(self) -> [float,str]:
+        score: float = 50.0
+        bonuses: List[str] = []
+
+        #
+        # Stage 1: Is the _system_ good for smuggling
+        #
+        from craid.eddb.Station import Station
+        sta: Station = self.mySystem.getBestSmugglingStation()
+        if sta is None:
+            return 0.0, "there is no suitable station"
+
+        #
+        # Stage 2: Can the opposing faction benefit from smuggling
+        #
+        # in this case, the opposer is either the system's controlling faction or the non-club faction with the highest influence
+
+        opposer = self.mySystem.getControllingFactionInstance()
+        if opposer.isClub():
+            opposer = self.mySystem.getHighestInfluenceNonClubFactionInstance()
+
+        if not opposer:
+            return 0.0, "there is no suitable opposition"
+
+        oppName = opposer.get_name2()
+        if opposer.hasState(gconst.STATE_WAR) or opposer.hasState(gconst.STATE_CIVIL_WAR):
+            return 0.0, f"the opposing faction {oppName} is at war"
+        if opposer.hasState(gconst.STATE_LOCKDOWN):
+            return 0.0, "the opposing faction is in lockdown"
+        if opposer.hasState(gconst.STATE_BOOM):
+            score = score * 2
+            bonuses.append(f"the opposing faction, {oppName}, being in a boom state")
+        if opposer.hasState(gconst.STATE_ELECTION):
+            score = score * 2.0
+            bonuses.append("the opposing faction being in elections")
+
+
+
+        #
+        # Stage 3: Can the club faction be damaged by bounty hunting
+        #
+        if self.hasState(gconst.STATE_LOCKDOWN):
+            return 0.0, "the Club faction is in lockdown"
+
+        if self.hasState(gconst.STATE_WAR) or self.hasState(gconst.STATE_CIVIL_WAR):
+            return 0.0, "the club faction is at war"
+
+        if self.hasState(gconst.STATE_ELECTION):
+            score = score * 2.0
+            bonuses.append("the Club faction being in elections")
+
+        my_string = ','.join(bonuses)
+        return round(score, 0), my_string
 
     def piracyMurderScore(self) -> float:
         return self.mySystem.piracyMurderScore()
@@ -183,52 +323,84 @@ class FactionInstance(Faction):
         return self.mySystem.getEdbgsLink(self, self.get_name2())
 
     # much taken from https://forums.frontier.co.uk/threads/dev-update-07-01-2016.221826/
-    def bountyHuntingScore(self) -> float:
-        #
-        # NOTE: have to be careful here about distinguishing _whose_ state to consider.
+    def bountyHuntingScore(self) -> [float,str] :
+        score: float = 50.0
+        bonuses: List[str] = []
+
         #
         # Doing bounty hunting is to _benefit_ a non-club faction in control of a system
         # and a non-club faction in control of a station.  They may not be the same.
         # If one of those factions is in lockdown, that part of the effect is lost.
         #
 
-        if self.hasState(gconst.STATE_LOCKDOWN):
-            return 0.0
-
-        if self.hasState(gconst.STATE_ELECTION):
-            return 0.0
-
-        if self.hasState(gconst.STATE_OUTBREAK) or self.hasState(gconst.STATE_FAMINE):
-            return 0.0
-
+        #
+        # Stage 1: Is the _system_ good for bounty hunting
+        #
         hasRings = self.mySystem.hasRings()
         if not hasRings:
-            return 0.0
+            return 0.0, "the system has no ringed bodies"
+
+        if self.mySystem.hasAnarchyFaction():
+            score = score * 1.1
+            bonuses.append("having a local pirate faction")
+
+        econ = self.mySystem.getPrimaryEconomy()
+        if econ.startswith('Extract') or econ.startswith('Refine'):
+            score = score * 1.1
+            bonuses.append("having a mining economy")
 
         from craid.eddb.Station import Station
         sta: Station = self.mySystem.getBestTradeStation()
         if sta is None:
-            return 0.0
+            return 0.0, "the system doesn't have a suitable station to turn in bounties"
 
-        score: float = 50.0
+        #
+        # Stage 2: Can the opposing faction benefit from bounty hunting
+        #
+        opposer = sta.getControllingFactionInstance()
+        if opposer.hasState(gconst.STATE_LOCKDOWN):
+            return 0.0, "the opposing faction is in lockdown"
 
-        if self.mySystem.hasAnarchyFaction():
-            score = score * 1.1
+        if opposer.hasState(gconst.STATE_ELECTION):
+            return 0.0, "the opposing faction is in an election"
 
-        econ = self.mySystem.getPrimaryEconomy()
-        if not econ:
-            pass
-        elif econ.startswith('Extract') or econ.startswith('Refine'):
-            score = score * 1.1
+        if opposer.hasState(gconst.STATE_OUTBREAK):
+            return 0.0, "the opposing faction is in an outbreak"
+
+        if opposer.hasState(gconst.STATE_FAMINE):
+            return 0.0, "the opposing faction is in a famine"
+
+        if opposer.hasState(gconst.STATE_WAR) or opposer.hasState(gconst.STATE_CIVIL_WAR):
+            score = score * 2.0
+            bonuses.append("the opposing faction being at war")
+
+        if opposer.hasState(gconst.STATE_CIVIL_UNREST):
+            score = score * 2.0
+            bonuses.append("the opposing faction being in civil unrest")
+
+        #
+        # Stage 3: Can the club faction be damaged by bounty hunting
+        #
+
+        if self.hasState(gconst.STATE_LOCKDOWN):
+            return 0.0, "the Club faction is in lockdown"
+
+        if self.hasState(gconst.STATE_ELECTION):
+            return 0.0, "the Club faction is in an election"
+
+        if self.hasState(gconst.STATE_OUTBREAK):
+            return 0.0, "the Club faction is in outbreak"
+
+        if self.hasState(gconst.STATE_FAMINE):
+            return 0.0, "the Club faction is in famine"
 
         if self.hasState(gconst.STATE_WAR) or self.hasState(gconst.STATE_CIVIL_WAR):
             score = score * 2.0
-
-        if self.hasState(gconst.STATE_CIVIL_UNREST):
-            score = score * 2.0
+            bonuses.append("the club faction being at war")
 
         # NOTE: would be nice to use pirateattack state
-        return round(score, 0)
+        my_string = ','.join(bonuses)
+        return round(score, 0), my_string
 
     def getRegionNumber(self):
         return self.mySystem.getRegionNumber()

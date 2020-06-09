@@ -386,39 +386,6 @@ class InhabitedSystem(System):
         bestStation: Station = self.getBestStation(False, False, self.FLAG_NON_CLUB_ONLY)
         return bestStation
 
-    def salesScore(self) -> int:
-        sta: Station = self.getBestTradeStation()
-        if sta is None:
-            return 0
-
-        sco: int = 10
-
-        if sta.isOrbital():
-            sco = sco * 2
-
-        if sta.hasLargePads():
-            sco = sco * 2
-
-        if sta.hasState(STATE_BOOM):
-            sco = sco * 2
-
-        if sta.hasState(STATE_INVESTMENT):
-            sco = sco * 2
-
-        return sco
-
-    def explorationScore(self):
-        sco: int = self.salesScore()
-        sta = self.getBestTradeStation()
-
-        if(sta is None):
-            return 0
-
-        if sta.hasState(STATE_EXPANSION):
-            sco = sco * 2
-
-        return sco
-
     def mineralSalesScore(self):
         sta : Station
         bestScore = 0
@@ -434,11 +401,11 @@ class InhabitedSystem(System):
     def getEdbgsLink(self, msg: str) -> str:
          return EdBgsSystemIds.getMarkdownLink(self.get_id(), msg)
 
-    def smugglingScore(self) -> float:
-        sta: Station = self.getBestSmugglingStation()
-        if sta is None:
-            return 0
-        return 50.0
+    # def smugglingScore(self) -> float:
+    #     sta: Station = self.getBestSmugglingStation()
+    #     if sta is None:
+    #         return 0
+    #     return 50.0
 
     def piracyMurderScore(self) -> float:
         sta: Station = self.getBestCrimeStation()
@@ -456,6 +423,21 @@ class InhabitedSystem(System):
 
     def getPrimaryEconomy(self):
         return self.jsonLine['primary_economy']
+
+    def getHighestInfluenceNonClubFactionInstance(self):
+        from craid.eddb.FactionInstance import FactionInstance
+        fac: FactionInstance
+        topInf = -1.0
+        topFac: FactionInstance = None
+        for fac in self.minorFactionPresences:
+            if fac.isClub():
+                continue
+            inf = fac.getInfluence()
+            if inf> topInf:
+                topInf = inf
+                topFac = fac
+
+        return topFac
 
 
 

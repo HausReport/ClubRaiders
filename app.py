@@ -80,7 +80,7 @@ newsMarkdown = dcc.Markdown(newsString)
 #
 appName = __name__
 #appName = "ClubRaiders"
-DEPLOY = True  # KEEP THIS TRUE, SRSLY
+DEPLOY = False  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
     #
     # Heroku requirements

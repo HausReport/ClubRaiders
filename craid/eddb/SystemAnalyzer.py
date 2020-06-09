@@ -54,9 +54,22 @@ class SystemAnalyzer(object):
         else:
             self.missions()
             self.mining()
-            self.smuggling()
             self.piracyMurder()
             self.tradeExploration()
+
+        self.smuggling()
+        self.bountyHunting()
+
+    def bountyHunting(self):
+        bhSco, msg = self.theFaction.bountyHuntingScore()
+        if bhSco<=0.0:
+            msg = f'Bounty hunting is not recommended because {msg}.'
+        elif bhSco<=50.0:
+            msg = f'Bounty hunting is effective.'
+        else:
+            msg = f'Bounty hunting is particularly effective for the following reasons: {msg}.'
+        self.messages.add(bhSco,msg)
+
 
     def warZones(self):
         wars: List[str] = self.theSystem.getClubInState(gconst.STATE_WAR)
@@ -76,7 +89,10 @@ class SystemAnalyzer(object):
         staName = sta.get_name()
         staDist = sta.getDistanceToStar()
 
-        ## TODO: Boom, Investment
+        ## TODO: Boom
+        ## TODO: Investment
+        ## TODO: Lockdown
+
         msg = f'Run missions for competing factions at station {staName}.'
 
         if staDist>25000:
@@ -84,13 +100,15 @@ class SystemAnalyzer(object):
         self.messages.add(10,msg)
 
     def smuggling(self):
-        sta: Station = self.theSystem.getBestSmugglingStation()
-        if sta is None:
-            return
+        smSco, msg = self.theFaction.smugglingScore()
+        if smSco<=0.0:
+            msg = f'Smuggling is not recommended because {msg}.'
+        elif smSco<=50.0:
+            msg = f'Smuggling is effective.'
+        else:
+            msg = f'Smuggling is particularly effective for the following reasons: {msg}.'
 
-        staName = sta.get_name()
-        msg = f'Smuggling to station {staName}.'
-        self.messages.add(50, msg)
+        self.messages.add(smSco, msg)
 
     def piracyMurder(self):
         sta: Station = self.theSystem.getBestCrimeStation()
@@ -147,7 +165,7 @@ class SystemAnalyzer(object):
             msg3 = "Selling mined minerals may be profitable."
         elif mineral == 4:
             msg3 = "Selling mined minerals may be very profitable."
-        elif mineral == 5:
+        elif mineral >= 5:
             msg3 = "Selling mined minerals may be extremely profitable."
 
         msg += msg3
