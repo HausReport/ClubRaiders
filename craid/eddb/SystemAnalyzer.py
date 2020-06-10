@@ -82,22 +82,16 @@ class SystemAnalyzer(object):
             self.messages.add(99.0, msg)
 
     def missions(self):
-        sta: Station = self.theSystem.getBestMissionStation()
-        if sta is None:
-            return
+        smSco, msg = self.theFaction.missionScore()
+        if smSco<=0.0:
+            msg = f'Running missions is not recommended because {msg}.'
+        elif smSco<=50.0:
+            msg = f'Running missions is effective.'
+        else:
+            msg = f'Running missions is particularly effective for the following reasons: {msg}.'
 
-        staName = sta.get_name()
-        staDist = sta.getDistanceToStar()
+        self.messages.add(smSco, msg)
 
-        ## TODO: Boom
-        ## TODO: Investment
-        ## TODO: Lockdown
-
-        msg = f'Run missions for competing factions at station {staName}.'
-
-        if staDist>25000:
-            msg += "  Note the distance to the station."
-        self.messages.add(10,msg)
 
     def smuggling(self):
         smSco, msg = self.theFaction.smugglingScore()

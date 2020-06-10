@@ -188,7 +188,7 @@ class FactionInstance(Faction):
         #
         # Stage 2: Can the opposing faction benefit from smuggling
         #
-        if sta.hasState(gconst.STATE_WAR) or sta.hasState(gconst.STATE_WAR):
+        if sta.hasState(gconst.STATE_WAR) or sta.hasState(gconst.STATE_CIVIL_WAR):
             return 0.0, "station's controlling faction is at war"
 
         if sta.hasState(gconst.STATE_ELECTION):
@@ -256,9 +256,6 @@ class FactionInstance(Faction):
     # def salesScore(self):
     #     return self.mySystem.salesScore()
 
-    def mineralSalesScore(self):
-        return self.mySystem.mineralSalesScore()
-
     # def bountyHuntingScore(self) -> float:
     #     return self.mySystem.bountyHuntingScore()
 
@@ -315,9 +312,6 @@ class FactionInstance(Faction):
 
         my_string = ','.join(bonuses)
         return round(score, 0), my_string
-
-    def piracyMurderScore(self) -> float:
-        return self.mySystem.piracyMurderScore()
 
     def getSystemEdbgsLink(self):
         return self.mySystem.getEdbgsLink(self, self.get_name2())
@@ -405,5 +399,97 @@ class FactionInstance(Faction):
     def getRegionNumber(self):
         return self.mySystem.getRegionNumber()
 
-# def getEdbgsLink(self):
-#     return super.getEdbgsLink(self, self.get_name2())
+    def missionScore(self) -> [float,str] :
+        sco: float = 50.0
+        bonuses: List[str] = []
+        after = ""
+
+        #
+        # Stage 1: Is the _system_ good for running mission
+        #
+        from craid.eddb.Station import Station
+        sta: Station = self.mySystem.getBestMissionStation()
+        if sta is None:
+            return 0, ["no suitable station"]
+
+        if sta.isOrbital():
+            bonuses.append("station is orbital")
+            sco = sco * 2
+
+        if sta.hasLargePads():
+            bonuses.append("station has large pads")
+            sco = sco * 2
+
+        staName = sta.get_name()
+        staDist = sta.getDistanceToStar()
+
+        #
+        # Stage 2: Can the opposing faction benefit from missions
+        #
+        opposer = sta.getControllingFactionInstance()
+
+        if opposer.hasState(gconst.STATE_WAR) or opposer.hasState(gconst.STATE_CIVIL_WAR):
+            return 0.0, "opposition faction is at war"
+
+        if opposer.hasState(gconst.STATE_WAR) or opposer.hasState(gconst.STATE_CIVIL_WAR):
+            return 0.0, "opposition faction is in lockdown"
+
+        if opposer.hasState(gconst.STATE_ELECTION):
+            bonuses.append("opposition is in an election state")
+            sco = sco * 2
+
+        if opposer.hasState(gconst.STATE_BOOM):
+            bonuses.append("opposition is in boom state")
+            sco = sco * 2
+
+        if opposer.hasState(gconst.STATE_INVESTMENT):
+            bonuses.append("opposition is in investment state")
+            sco = sco * 2
+
+        if opposer.hasState(gconst.STATE_EXPANSION):
+            bonuses.append("opposition is in expansion state")
+            sco = sco * 1.5
+
+        #
+        # Penalty for really far stations
+        #
+        if staDist > 100000:
+            sco = sco * .5
+        elif staDist > 75000:
+            sco = sco * .75
+        elif staDist > 50000:
+            sco = sco * .9
+        elif staDist > 25000:
+            sco = sco * .95
+
+        #
+        # Stage 3: Can the club faction be damaged by bounty hunting
+        #
+        if self.hasState(gconst.STATE_LOCKDOWN):
+            return 0.0, "the Club faction is in lockdown"
+
+        if self.hasState(gconst.STATE_WAR) or self.hasState(gconst.STATE_CIVIL_WAR):
+            return 0.0, "the Club faction is at war"
+
+        if self.hasState(gconst.STATE_ELECTION):
+            sco = sco * 2.0
+            bonuses.append("the Club faction being in elections")
+
+        my_string = ','.join(bonuses)
+        return round(sco, 0), my_string
+
+        ## TODO: Check self vs Investment/Lockdown
+        #msg = f'Run missions for competing factions at station {staName}.'
+        #if staDist>25000:
+        #    after += "  Note the distance to the station."
+
+    def piracyMurderScore(self) -> float:
+        return self.mySystem.piracyMurderScore()
+
+    def mineralSalesScore(self):
+        return self.mySystem.mineralSalesScore()
+
+
+
+
+

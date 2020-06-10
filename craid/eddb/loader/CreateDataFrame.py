@@ -28,6 +28,7 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
     sysId: List[int] = []
     facId: List[int] = []
     difficulty: List[float] = []
+    missionScore: List[float] = []
     salesScore: List[float] = []
     explorationScore: List[float] = []
     mineralSalesScore: List[float] = []
@@ -55,6 +56,12 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         sysId.append(factionInstance.getSystemID())
         facId.append(factionInstance.getFactionID())
         difficulty.append(factionInstance.getDifficulty())
+
+        #
+        # Activity scores
+        #
+        misScore, msg = factionInstance.missionScore()
+        missionScore.append(misScore)
         sScore, msg = factionInstance.salesScore()
         salesScore.append(sScore)
         eScore, msg = factionInstance.salesScore()
@@ -65,6 +72,10 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         smSco, msg = factionInstance.smugglingScore()
         smugglingScore.append(smSco)
         piracyMurderScore.append(factionInstance.piracyMurderScore())
+
+        #
+        # Region-related
+        #
         region.append(factionInstance.getRegionNumber())
 
     data = {
@@ -83,6 +94,7 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         'sysId'       : sysId,
         'facId'       : facId,
         'difficulty'  : difficulty,
+        'missionScore'  : missionScore,
         'salesScore'  : salesScore,
         'explorationScore':  explorationScore,
         'mineralSalesScore' :mineralSalesScore,
