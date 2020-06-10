@@ -12,4 +12,10 @@ Join the fun!
 * $n_retreats Club factions retreating
 * $n_very_easy factions rated "very easy" to attack
 
+### Recent victories
+
+* Sirius Hyperspace removed from Cail
+* Wreaken Construction removed from Kali
+
+
 

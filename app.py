@@ -176,7 +176,7 @@ tab_1 = \
                 html.Article(oracleMd, id="statistics", className="simpleColItem"),
                 html.Article("", id='faction-drilldown', className="simpleColItem"),
                 html.Article("", id='system-drilldown', className="simpleColItem"),
-                html.Article(newsMarkdown, id='system-drilldown', className="simpleColItem"),
+                html.Article(newsMarkdown, id='news', className="simpleColItem"),
                 # html.Hr(style="width: 345px;")
                 dcc.Markdown("## Cabal Operatives\n\nCommanders fighting the BGS war against The Club."),
                 html.Iframe(id="cabal-ops", src="https://discordapp.com/widget?id=439201271174660097&theme=dark", width="350", height="400"),
@@ -564,3 +564,14 @@ if __name__ == '__main__':
         app.server.run(debug=False, threaded=True, use_reloader=False)
     else:
         app.run_server(debug=True)
+
+
+
+#
+# NOTE: Links related to url handling
+#
+# Set browser url via JS: https://stackoverflow.com/questions/18396501/how-to-get-set-current-page-url-which-works-across-space-time-browsers-versions
+#
+# Dash/flask parsing url: https://community.plotly.com/t/dash-flask-request-args/25760
+#
+# Url shortener: https://pypi.org/project/gdshortener/
