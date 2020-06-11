@@ -298,7 +298,7 @@ class FactionInstance(Faction):
 
 
         #
-        # Stage 3: Can the club faction be damaged by bounty hunting
+        # Stage 3: Can the club faction be damaged by smuggling
         #
         if self.hasState(gconst.STATE_LOCKDOWN):
             return 0.0, "the Club faction is in lockdown"
@@ -333,6 +333,8 @@ class FactionInstance(Faction):
         hasRings = self.mySystem.hasRings()
         if not hasRings:
             return 0.0, "the system has no ringed bodies"
+
+        bonuses.append("having ringed planets")
 
         if self.mySystem.hasAnarchyFaction():
             score = score * 1.1

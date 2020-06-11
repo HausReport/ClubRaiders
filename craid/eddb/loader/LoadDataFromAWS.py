@@ -14,7 +14,8 @@ class LoadDataFromAWS(WebDataLoader):
         super().__init__()
 
     def getWebFilePrefix(self) -> str:
-        return "http://erlaed.s3.amazonaws.com/"
+        return "https://erlaed.s3.us-east-2.amazonaws.com/"
+        #return "http://erlaed.s3.amazonaws.com/"
 
 #if __name__ == '__main__':
     #LoadDataFromEDDB.load_data()

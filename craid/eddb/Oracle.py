@@ -78,8 +78,7 @@ class Oracle:
         self.myDict['systems_active'] = "{:,}".format(cur_active_systems)
         self.myDict['systems_active_pop'] = formatLargeNumber(cur_population)
         self.myDict['systems_control'] = "{:,}".format(cur_control_systems)
-        self.myDict['systems_control_perc'] = "{:,}".format(
-            1.0 * frame['control'].sum() / int(frame['systemName'].count()))
+        self.myDict['systems_control_perc'] = "{:,}".format( (1.0 * cur_control_systems)/ (1.0*cur_active_systems))
 
         #
         # Westernmost presence

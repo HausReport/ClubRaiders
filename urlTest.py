@@ -26,7 +26,8 @@ import requests
 # JS to copy widget to clipboard
 # https://www.w3schools.com/howto/howto_js_copy_clipboard.asp
 
-prevUrl =None
+prevUrl = "xxxfoobarnomatchlalala"
+baseUrl = None
 
 app = dash.Dash(__name__)#, external_stylesheets=external_stylesheets)
 
@@ -57,15 +58,7 @@ def handle_crap(obj, default):
 @app.callback(dash.dependencies.Output('page-content', 'children'),
               [dash.dependencies.Input('url', 'href')])
 def display_page(href):
-    global  prevUrl
-    name = ""
-    age = ""
-    host = ""
-    path = ""
-    aloc = "blaah"
-    scheme = ""
-
-
+    global prevUrl, baseUrl
 
     if href is not None:
         o = urllib3.util.parse_url(href)
@@ -90,20 +83,21 @@ def display_page(href):
         #
         # Make any updates on the dict
         #
-        params['name'] = "Hildigard"
-        params['age'] = '77'
+        # params['name'] = "Hildigard"
+        # params['age'] = '77'
 
         newQuery = urllib.parse.urlencode(params)
-        newurl = scheme + "://" + netloc + path + "?" + newQuery
+        baseUrl = scheme + "://" + netloc + path
+        newUrl = baseUrl + "?" + newQuery
 
-        print("newUrl = " + newurl)
+        print("newUrl = " + newUrl)
         if not prevUrl:
             pass
-        elif prevUrl == newurl:
+        elif prevUrl == newUrl:
             print("Matched!")
         else:
             print("Didn't match.")
-        prevUrl = newurl
+        prevUrl = newUrl
     else:
         print("href is none")
 

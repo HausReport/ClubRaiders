@@ -7,6 +7,7 @@ import math
 import os
 from random import randint
 from typing import Dict, Tuple, List
+from urllib.parse import urlencode
 
 import dash
 import dash_core_components as dcc
@@ -17,7 +18,7 @@ import numpy as np
 import pandas as pd
 import ujson
 from dash.dependencies import Input, Output
-#import dash_bootstrap_components as dbc
+# import dash_bootstrap_components as dbc
 
 import craid.eddb.loader.DataProducer as dp
 from craid.dashbd.AnnoyingCrap import AnnoyingCrap
@@ -68,7 +69,7 @@ if DEPLOY:
     #
     server = flask.Flask(appName)
     server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
-    app = dash.Dash(appName, server=server) #, external_stylesheets=[dbc.themes.CYBORG])
+    app = dash.Dash(appName, server=server)  # , external_stylesheets=[dbc.themes.CYBORG])
     app.scripts.config.serve_locally = False
     app.scripts.append_script({
         'external_url': 'https://www.googletagmanager.com/gtag/js?id=UA-61576455-2'
@@ -77,15 +78,20 @@ if DEPLOY:
         'external_url': 'https://raw.githubusercontent.com/HausReport/ClubRaiders/master/assets/gtag.js'
     })
 else:
-    app = dash.Dash(appName)#, external_stylesheets=[dbc.themes.CYBORG])
+    app = dash.Dash(appName)  # , external_stylesheets=[dbc.themes.CYBORG])
     app.scripts.config.serve_locally = True
-    #print(appName)
+    # print(appName)
 
 app.title = "Club Raiders"
 #
 # Following required for tabs
 #
 app.config.suppress_callback_exceptions = True
+
+#
+# Url encoding/parsing stuff
+#
+urlParameters: Dict = {}
 
 #
 # Initialize some UI elements
@@ -147,9 +153,12 @@ tab_1 = \
                 html.Article(newsMarkdown, id='news', className="simpleColItem"),
                 # html.Hr(style="width: 345px;")
                 dcc.Markdown("## Cabal Operatives\n\nCommanders fighting the BGS war against The Club."),
-                html.Iframe(id="cabal-ops", src="https://discordapp.com/widget?id=439201271174660097&theme=dark", width="350", height="400"),
-                dcc.Markdown("## Elite BGS\n\nFor resources, questions and discussion about the Elite Background Simulation in general."),
-                html.Iframe(id="elite-bgs", src="https://discordapp.com/widget?id=483005833853009950&theme=dark", width="350", height="400"),
+                html.Iframe(id="cabal-ops", src="https://discordapp.com/widget?id=439201271174660097&theme=dark",
+                            width="350", height="400"),
+                dcc.Markdown(
+                    "## Elite BGS\n\nFor resources, questions and discussion about the Elite Background Simulation in general."),
+                html.Iframe(id="elite-bgs", src="https://discordapp.com/widget?id=483005833853009950&theme=dark",
+                            width="350", height="400"),
                 # End of left column
             ]),  # td closed
             html.Td([
@@ -176,6 +185,7 @@ tab_1 = \
 #
 # Layout the main application
 #
+html.Label("placeholder", id='url-holder')   #move this into layout to use it
 app.layout = html.Div([
     # represents the URL bar, doesn't render anything
     dcc.Location(id='url', refresh=False),
@@ -212,7 +222,7 @@ printmem("End")
 # =============================================================
 # Tab handlers
 # =============================================================
-@app.callback( [Output('url', 'pathname'), Output('tabs-example-content', 'children')],
+@app.callback([Output('url', 'pathname'), Output('tabs-example-content', 'children')],
               [Input('tabs-example', 'value')])
 def render_content(tab):
     if tab == 'tab-1':
@@ -243,39 +253,59 @@ def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
 
 # =============================================================
 # Callback handlers below
-# =============================================================A
+# =============================================================
 #
-# When user changes filter on datatable, put the query in a visible label.
 #
-@app.callback(
-    Output('filter-notifier', 'children'),
-    [Input('datatable-interactivity', 'filter_query')])
-def filter_changed(query):
-    if query is None:
-        return "None"
-    if len(query) == -1:
-        return "None"
+#
+def updateUrl(key: str, val: str) -> str:
+    global urlParameters
+    if key is None:
+        return urlencode(urlParameters)
+    newVal = str(val)
+    if newVal=='':
+        try:
+            urlParameters.pop(key)
+        except KeyError:
+            pass
     else:
-        return str(query)
+        urlParameters[key] = newVal
+    #return str(key) + "=" + str(newVal)
+    return urlencode(urlParameters) #{key: val})
+
+# #
+# # When user changes filter on datatable, put the query in a visible label.
+# #
+# @app.callback(
+#     [Output('url-holder', 'children'), ],
+#     [)
+# def filter_changed(query):
 
 
 #
 # When user changes sort on datatable, put the query in a visible label.
 #
 @app.callback(
-    Output('sort-notifier', 'children'),
-    [Input('datatable-interactivity', 'sort_by')])
-def sort_changed(sort_by: List):
+    [Output('url-holder', 'children'), Output('filter-notifier', 'children'), Output('sort-notifier', 'children')],
+    [Input('datatable-interactivity', 'filter_query'), Input('datatable-interactivity', 'sort_by')])
+def sort_changed(query: str, sort_by: List):
+    if query is None or len(query) ==0:
+        updateUrl('filter','')
+    else:
+        print("Updating filter: " + str(query))
+        updateUrl('filter', str(query))
+
     if sort_by is None or len(sort_by) == 0:
-        return "None"
+        updateUrl('sort','')
+    else:
+        foo1 = sort_by[0]
+        if foo1['column_id'] == '':
+            sort_by.remove(foo1)
+        if len(sort_by) == 0:
+            updateUrl('sort', '')
+        else:
+            updateUrl('sort', sort_by)
 
-    foo1 = sort_by[0]
-    if foo1['column_id'] == '':
-        sort_by.remove(foo1)
-    if len(sort_by) == -1:
-        return "None"
-
-    return str(sort_by)
+    return updateUrl(None,None), str(query), str(sort_by)
 
 
 #
@@ -308,6 +338,7 @@ def was_clicked(ctx, button_id):
 
     return value, activity
 
+
 #
 # Change filter via "clear" button or a canned query
 #
@@ -318,7 +349,6 @@ def was_clicked(ctx, button_id):
      Input('activityDropdown', 'value')]
 )
 def update_filter(n_clicks: int, val3):
-
     # TODO: add url to input and output
     # check url (& change) url _after_ checking buttons
 
@@ -328,7 +358,7 @@ def update_filter(n_clicks: int, val3):
     value, act = was_clicked(ctx, 'clear-filter.n_clicks')
     if (act is None) or (act is ''):
         logging.debug("No act state (1), going with default 0")
-        #act = 0
+        # act = 0
 
     # clear filter button was clicked
     if value is not None:
@@ -342,9 +372,9 @@ def update_filter(n_clicks: int, val3):
         logging.debug("No act state (2), going with default 0")
         value = 0
 
-    #print("Selected activity: " + str(value))
+    # print("Selected activity: " + str(value))
     newFilter = AnnoyingCrap.getFilter(int(value))
-    #print("Filter: " + str(newFilter))
+    # print("Filter: " + str(newFilter))
     msg = AnnoyingCrap.getMessage(int(value))
     return newFilter, msg
 
@@ -359,10 +389,9 @@ def update_filter(n_clicks: int, val3):
     Output('datatable-interactivity', 'sort_by'),
     [Input('clear-sort', 'n_clicks'), Input('activityDropdown', 'value')])
 def update_sort(n_clicks, val3):
-
     # TODO: add url to input and output
     # check url (& change) url _after_ checking buttons
-    
+
     defaultSort = [{'column_id': 'distance', 'direction': 'asc'}]
     noSort = []
 
@@ -414,6 +443,7 @@ def update_selected_system(val0):
     _cols = theColumns
     return df.to_dict('records'), _cols
 
+
 #
 #  Does a variety of things when user clicks on a cell in the table
 #
@@ -437,7 +467,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
     if active_cell:
         row = active_cell['row']
         logical_row = row + page_cur * page_size
-        #NOTE: if a row is selected, then a filter is applied and that rownumber
+        # NOTE: if a row is selected, then a filter is applied and that rownumber
         # is higher than the number of visible rows, this would cause an error.
         # setting log_row to 0 sidesteps that case
         if logical_row >= len(rows):
@@ -469,4 +499,3 @@ if __name__ == '__main__':
         app.server.run(debug=False, threaded=True, use_reloader=False)
     else:
         app.run_server(debug=True)
-
