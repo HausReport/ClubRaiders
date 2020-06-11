@@ -35,4 +35,8 @@ del {
     min-width: 350px;
 }
 
+.dark-mode {
+  background-color: black;
+  color: white;
+}
 

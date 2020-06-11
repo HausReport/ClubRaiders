@@ -75,7 +75,8 @@ if DEPLOY:
         'external_url': 'https://www.googletagmanager.com/gtag/js?id=UA-61576455-2'
     })
     app.scripts.append_script({
-        'external_url': 'https://raw.githubusercontent.com/HausReport/ClubRaiders/master/assets/gtag.js'
+        'external_url': 'https://erlaed.s3.us-east-2.amazonaws.com/gtag.js'
+        #https://raw.githubusercontent.com/HausReport/ClubRaiders/master/assets/gtag.js'
     })
 else:
     app = dash.Dash(appName)  # , external_stylesheets=[dbc.themes.CYBORG])
@@ -102,7 +103,7 @@ systemDropdown = dcc.Dropdown(
     value='Sol',
     placeholder='Select star system',
     className="simpleColItem",
-    persistence=True,
+    #persistence=True,
 )
 
 theColumns = AnnoyingCrap.getTheColumns()
@@ -141,12 +142,13 @@ tab_1 = \
                 dcc.Dropdown(
                     id='activityDropdown',
                     options=AnnoyingCrap.getThirdDropdown(),
-                    persistence=True,
+                    #persistence=True,
                     placeholder='Select activity',
                     className="simpleColItem",
                 ),
                 html.Label("in the vicinity of", className="simpleColItem"),
                 systemDropdown,
+                #html.Button("DarkMode", id="darkModeButton", name="darkModeButton"),
                 html.Article(oracleMd, id="statistics", className="simpleColItem"),
                 html.Article("", id='faction-drilldown', className="simpleColItem"),
                 html.Article("", id='system-drilldown', className="simpleColItem"),
@@ -214,6 +216,7 @@ app.layout = html.Div([
                          ),
              ]),
     html.Div(id='tabs-example-content'),
+    #html.Script(src="assets/dm.js"),
 ])
 
 printmem("End")
