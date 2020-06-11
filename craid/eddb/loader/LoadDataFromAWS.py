@@ -8,14 +8,13 @@
 from craid.eddb.loader.WebDataLoader import WebDataLoader
 
 
-class LoadDataFromGithub(WebDataLoader):
+class LoadDataFromAWS(WebDataLoader):
 
     def __init__(self):
         super().__init__()
 
     def getWebFilePrefix(self) -> str:
-        return "https://raw.github.com/HausReport/ClubRaiders/master/data/"
-
+        return "http://erlaed.s3.amazonaws.com/"
 
 #if __name__ == '__main__':
     #LoadDataFromEDDB.load_data()

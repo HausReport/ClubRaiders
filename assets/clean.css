@@ -13,7 +13,6 @@ del {
 .20px {
     height: 20px;
     min-height: 20px;
-    background-color: green;
 }
 
 .myButton {
@@ -35,3 +34,5 @@ del {
     vertical-align: top;
     min-width: 350px;
 }
+
+

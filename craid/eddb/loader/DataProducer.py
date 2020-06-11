@@ -19,6 +19,7 @@ from craid.eddb.loader.CreateFactionInstances import getFactionInstances
 from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateStationsInClubSystems import loadStationsInClubSystems
 from craid.eddb.loader.CreateSystems import load_systems
+from craid.eddb.loader.LoadDataFromAWS import LoadDataFromAWS
 from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
 from craid.eddb.loader.MakeKeyFiles import dumpKeys, loadKeys
 
@@ -28,7 +29,7 @@ def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
     #if useEddb:
     #    myLoader = LoadDataFromEDDB()
     #else:
-    myLoader = LoadDataFromGithub()
+    myLoader = LoadDataFromAWS() #LoadDataFromGithub()
 
     playerFactionNameToSystemName: Dict[str, str] = {}
 

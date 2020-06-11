@@ -17,6 +17,7 @@ import numpy as np
 import pandas as pd
 import ujson
 from dash.dependencies import Input, Output
+#import dash_bootstrap_components as dbc
 
 import craid.eddb.loader.DataProducer as dp
 from craid.dashbd.AnnoyingCrap import AnnoyingCrap
@@ -68,26 +69,19 @@ df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
 seer: Oracle = Oracle(df)
 oracleString = AnnoyingCrap.getString("oracle-template")
 oracleMd = dcc.Markdown(seer.template(oracleString))
-#welcomeMarkdown = AnnoyingCrap.getMarkdown('welcome')
-
 newsString = AnnoyingCrap.getString("news")
 newsString = seer.template(newsString)
 newsMarkdown = dcc.Markdown(newsString)
 
-# Start the app framework
-# In non-DEPLOY mode, the " app.config.suppress_callback_exceptions = True" doesn't seem
-# to take hold and there's an annoying bug.
-#
 appName = __name__
-#appName = "ClubRaiders"
-DEPLOY = True  # KEEP THIS TRUE, SRSLY
+DEPLOY = False  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
     #
     # Heroku requirements
     #
     server = flask.Flask(appName)
     server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
-    app = dash.Dash(appName, server=server)
+    app = dash.Dash(appName, server=server) #, external_stylesheets=[dbc.themes.CYBORG])
     app.scripts.config.serve_locally = False
     app.scripts.append_script({
         'external_url': 'https://www.googletagmanager.com/gtag/js?id=UA-61576455-2'
@@ -96,9 +90,9 @@ if DEPLOY:
         'external_url': 'https://raw.githubusercontent.com/HausReport/ClubRaiders/master/assets/gtag.js'
     })
 else:
-    app = dash.Dash(appName)
+    app = dash.Dash(appName)#, external_stylesheets=[dbc.themes.CYBORG])
     app.scripts.config.serve_locally = True
-    print(appName)
+    #print(appName)
 
 app.title = "Club Raiders"
 #
@@ -166,13 +160,12 @@ tab_1 = \
                 dcc.Dropdown(
                     id='activityDropdown',
                     options=AnnoyingCrap.getThirdDropdown(),
-                    value='',  # Anti Xeno Initiative',
+                    #value='',  # Anti Xeno Initiative',
                     placeholder='Select activity',
                     className="simpleColItem",
                 ),
                 html.Label("in the vicinity of", className="simpleColItem"),
                 systemDropdown,
-
                 html.Article(oracleMd, id="statistics", className="simpleColItem"),
                 html.Article("", id='faction-drilldown', className="simpleColItem"),
                 html.Article("", id='system-drilldown', className="simpleColItem"),
