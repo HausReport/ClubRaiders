@@ -74,7 +74,7 @@ newsString = seer.template(newsString)
 newsMarkdown = dcc.Markdown(newsString)
 
 appName = __name__
-DEPLOY = False  # KEEP THIS TRUE, SRSLY
+DEPLOY = True  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
     #
     # Heroku requirements
