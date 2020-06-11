@@ -62,7 +62,7 @@ newsMarkdown = dcc.Markdown(newsString)
 # Start up Dash
 #
 appName = __name__
-DEPLOY = True  # KEEP THIS TRUE, SRSLY
+DEPLOY = False  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
     #
     # Heroku requirements
@@ -185,8 +185,8 @@ tab_1 = \
 #
 # Layout the main application
 #
-html.Label("placeholder", id='url-holder')   #move this into layout to use it
 app.layout = html.Div([
+    html.Label("placeholder", id='url-holder', style={'display':'none'}),  # move this into layout to use it
     # represents the URL bar, doesn't render anything
     dcc.Location(id='url', refresh=False),
     dcc.Tabs(id='tabs-example', value='tab-1',
@@ -305,7 +305,9 @@ def sort_changed(query: str, sort_by: List):
         else:
             updateUrl('sort', sort_by)
 
-    return updateUrl(None,None), str(query), str(sort_by)
+    ssb: str = str(sort_by)
+    logging.info( f"Query=[{query}], Sort=[{ssb}]")
+    return updateUrl(None,None), str(query), ssb
 
 
 #
