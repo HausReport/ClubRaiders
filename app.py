@@ -21,45 +21,29 @@ from dash.dependencies import Input, Output
 
 import craid.eddb.loader.DataProducer as dp
 from craid.dashbd.AnnoyingCrap import AnnoyingCrap
-#
-# Set up logging
-#
-# logging.basicConfig(filename='example.log',level=logging.DEBUG)
 from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.Oracle import Oracle
 from craid.eddb.Printmem import printmem
 from craid.eddb.SystemXYZ import SystemXYZ
 
+#
+# Set up logging
+#
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
 
-# FIXME: it'd be nice to let users link directly to certain factions, systems, etc...
-# getting the url isn't trivial, see
-# https://dash.plotly.com/dash-core-components/location
-# https://community.plotly.com/t/get-full-url-string-instead-of-only-pathname/23376
-# loc = dcc.Location(id="location-url")
-# print(loc.href)
-# if flask.has_request_context():
-# print(" url = " + str(flask.request.host_url))
-
 #
-# Load data
-# https://community.plotly.com/t/why-global-code-runs-twice/12514
+# Get data
+# NOTE: It's built into Dash that this will run twice, see  https://community.plotly.com/t/why-global-code-runs-twice/12514
 #
-# currentData:  Dict[str,object]
-# if currentData is None:
 currentData = dp.getDataArrays()
-# clubSystemInstances = currentData['allClubSystemInstances']
 sysIdFacIdToFactionInstance = currentData['sysIdFacIdToFactionInstance']
-
 systemNameToXYZ: Dict[str, Tuple[float, float, float]] = SystemXYZ.myDict  # currentData['systemNameToXYZ']
 playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
-
-annoyingCrap: AnnoyingCrap = AnnoyingCrap()  # systemNameToXYZ)
-
-
+annoyingCrap: AnnoyingCrap = AnnoyingCrap()
 df: pd.DataFrame = currentData['dataFrame']
 printmem("4")
+
 #
 # Massage data
 #
@@ -73,6 +57,9 @@ newsString = AnnoyingCrap.getString("news")
 newsString = seer.template(newsString)
 newsMarkdown = dcc.Markdown(newsString)
 
+#
+# Start up Dash
+#
 appName = __name__
 DEPLOY = True  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
@@ -109,11 +96,8 @@ systemDropdown = dcc.Dropdown(
     value='Sol',
     placeholder='Select star system',
     className="simpleColItem",
-    # autoFocus=True,
+    persistence=True,
 )
-# opts = crap.getFirstDropdown(systemNameToXYZ)
-# fopts = crap.getSecondDropdown(playerFactionNameToHomeSystemName)
-# gopts = crap.getThirdDropdown()
 
 theColumns = AnnoyingCrap.getTheColumns()
 
@@ -139,15 +123,6 @@ datatable: dash_table.DataTable = dash_table.DataTable(
 )
 
 datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
-#
-# Holding place for filter query logic
-#
-# tput("datatable-interactivity", "filtering_settings"),
-# tab.available_properties['filter_query'] = "{control} contains false && {influence} < 25"
-# datatable.filter_query = "{isHomeSystem} contains false && {vulnerable} contains War"
-# datatable.hidden_columns = {'x','y','z'}
-# for x1 in tab.available_properties:
-# print( str(x1) )
 
 #
 # Content of tab_1
@@ -160,7 +135,7 @@ tab_1 = \
                 dcc.Dropdown(
                     id='activityDropdown',
                     options=AnnoyingCrap.getThirdDropdown(),
-                    #value='',  # Anti Xeno Initiative',
+                    persistence=True,
                     placeholder='Select activity',
                     className="simpleColItem",
                 ),
@@ -202,6 +177,8 @@ tab_1 = \
 # Layout the main application
 #
 app.layout = html.Div([
+    # represents the URL bar, doesn't render anything
+    dcc.Location(id='url', refresh=False),
     dcc.Tabs(id='tabs-example', value='tab-1',
              parent_className='custom-tabs',
              className='custom-tabs-container',
@@ -235,14 +212,14 @@ printmem("End")
 # =============================================================
 # Tab handlers
 # =============================================================
-@app.callback(Output('tabs-example-content', 'children'),
+@app.callback( [Output('url', 'pathname'), Output('tabs-example-content', 'children')],
               [Input('tabs-example', 'value')])
 def render_content(tab):
     if tab == 'tab-1':
-        return tab_1
+        return "activities", tab_1
     elif tab == 'tab-2':
         print('tab-2 clicked')
-        return html.Div(children=[
+        return "aboutTheClub", html.Div(children=[
             html.Article([
                 AnnoyingCrap.getMarkdown("aboutClub")
             ]),
@@ -250,7 +227,7 @@ def render_content(tab):
         ])
     elif tab == 'tab-3':
         print('tab-3 clicked')
-        return html.Article([
+        return "aboutClubRaiders", html.Article([
             AnnoyingCrap.getMarkdown("aboutRaiders")
         ])
 
@@ -259,10 +236,6 @@ def render_content(tab):
 # Convert system name to coordiantes
 #
 def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
-    #
-    # value should be a valid system name
-    #
-    # pos: Tuple[ float, float, float ]
     pos = systemNameToXYZ.get(sName)
     if pos is None: pos = (0, 0, 0)
     return pos
@@ -305,6 +278,9 @@ def sort_changed(sort_by: List):
     return str(sort_by)
 
 
+#
+# Determines which control was used.  Perhaps the most ridiculous part of Dash.
+#
 def was_clicked(ctx, button_id):
     if not ctx.triggered:
         return None, None
@@ -316,36 +292,21 @@ def was_clicked(ctx, button_id):
     }, indent=2)
 
     aDict = ujson.loads(ctx_msg)
-
-    # print("dict:" + str(aDict))
     triggered = aDict['triggered']  # ['prop_id']
-    # print("triggered = " + str(triggered))
-
     elt0 = triggered[0]
-    # print("elt0 = " + str(elt0))
-
     prop_id = elt0['prop_id']
-    # print("prop_id = " + str(prop_id))
-
     inputs = aDict['inputs']  # ['prop_id']
-    # print("inputs = " + str(inputs))
     activity = inputs['activityDropdown.value']
 
     if (prop_id != button_id):
         return None, activity
 
     value = elt0['value']
-    # print("value = " + str(value))
 
     if value == 0:
         return None, activity
 
     return value, activity
-
-
-#
-# Clear sort & filter buttons
-#
 
 #
 # Change filter via "clear" button or a canned query
@@ -357,7 +318,9 @@ def was_clicked(ctx, button_id):
      Input('activityDropdown', 'value')]
 )
 def update_filter(n_clicks: int, val3):
-    # id of text component to change is "activity"
+
+    # TODO: add url to input and output
+    # check url (& change) url _after_ checking buttons
 
     ## NOTE:https://dash.plotly.com/advanced-callbacks
     ## NOTE: Here there be dragons.  Careful about changes.
@@ -365,7 +328,7 @@ def update_filter(n_clicks: int, val3):
     value, act = was_clicked(ctx, 'clear-filter.n_clicks')
     if (act is None) or (act is ''):
         logging.debug("No act state (1), going with default 0")
-        act = 0
+        #act = 0
 
     # clear filter button was clicked
     if value is not None:
@@ -379,9 +342,9 @@ def update_filter(n_clicks: int, val3):
         logging.debug("No act state (2), going with default 0")
         value = 0
 
-    print("Selected activity: " + str(value))
+    #print("Selected activity: " + str(value))
     newFilter = AnnoyingCrap.getFilter(int(value))
-    print("Filter: " + str(newFilter))
+    #print("Filter: " + str(newFilter))
     msg = AnnoyingCrap.getMessage(int(value))
     return newFilter, msg
 
@@ -396,6 +359,10 @@ def update_filter(n_clicks: int, val3):
     Output('datatable-interactivity', 'sort_by'),
     [Input('clear-sort', 'n_clicks'), Input('activityDropdown', 'value')])
 def update_sort(n_clicks, val3):
+
+    # TODO: add url to input and output
+    # check url (& change) url _after_ checking buttons
+    
     defaultSort = [{'column_id': 'distance', 'direction': 'asc'}]
     noSort = []
 
@@ -403,7 +370,7 @@ def update_sort(n_clicks, val3):
     value, act = was_clicked(ctx, 'clear-sort.n_clicks')
 
     # clear sort button was clicked
-    if (value != None):
+    if value is not None:
         logging.debug("Clear sort button was clicked.")
         return noSort
 
@@ -447,7 +414,6 @@ def update_selected_system(val0):
     _cols = theColumns
     return df.to_dict('records'), _cols
 
-
 #
 #  Does a variety of things when user clicks on a cell in the table
 #
@@ -461,22 +427,9 @@ def update_selected_system(val0):
      Input('datatable-interactivity', "page_current"),
      Input('datatable-interactivity', "page_size")])
 def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, page_size):
-    # When the table is first rendered, `derived_virtual_data` and
-    # `derived_virtual_selected_rows` will be `None`. This is due to an
-    # idiosyncrasy in Dash (unsupplied properties are always None and Dash
-    # calls the dependent callbacks when the component is first rendered).
-    # So, if `rows` is `None`, then the component was just rendered
-    # and its value will be the same as the component's dataframe.
-    # Instead of setting `None` in here, you could also set
-    # `derived_virtual_data=df.to_rows('dict')` when you initialize
-    # the component.
+    # From https://dash.plotly.com/datatable/interactivity
     if derived_virtual_selected_rows is None:
         derived_virtual_selected_rows = []
-
-    dff = df if rows is None else pd.DataFrame(rows)
-
-    dataColors = ['gold' if i in derived_virtual_selected_rows else 'orange'
-                  for i in range(len(dff))]
 
     factionInfo: str = ""
     systemInfo: str = ""
@@ -506,49 +459,8 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
             theSys = theFac.getSystem()
             systemInfo = theSys.template(ts, theFac)
 
-    facInfoLen: int = len(factionInfo)
-    # if facInfoLen == 0:
-    #     factionWidget = welcomeMarkdown
-    #     systemWidget = newsMarkdown
-    # else:
     factionWidget = dcc.Markdown(factionInfo)
     systemWidget = dcc.Markdown(systemInfo)
-
-    # theGraphs = [
-    #     dcc.Graph(
-    #         id=column,
-    #         figure={
-    #             "data"  : [
-    #                 {
-    #                     "x"     : dff["systemName"],
-    #                     "y"     : dff[column],
-    #                     "type"  : "bar",
-    #                     "marker": {"color": dataColors},
-    #                 }
-    #             ],
-    #             "layout": {
-    #                 "xaxis"        : {"automargin": True},
-    #                 "yaxis"        : {
-    #                     "automargin": True,
-    #                     "title"     : {"text": column},
-    #                     "type"      : "log"
-    #                 },
-    #                 "paper_bgcolor": 'rgba(-1,0,0,0)',  # TODO fix color & bg
-    #                 "plot_bgcolor" : 'rgba(-1,0,0,0)',  # TODO: fix color & bg
-    #                 "height"       : 249,
-    #                 "margin"       : {"t": 9, "l": 10, "r": 10},
-    #             },
-    #         },
-    #     )
-    #     # check if column exists - user may have deleted it
-    #     # If `column.deletable=False`, then you don't
-    #     # need to do this check.
-    #     # for column in ["difficulty", "influence", "population"] if column in dff]
-    #     for column in ["difficulty"] if column in dff]
-    #
-    # if len(theGraphs) == 0:
-    #     return factionWidget, systemWidget, [None]
-    # return factionWidget, systemWidget, [theGraphs[0]]
     return factionWidget, systemWidget
 
 
@@ -558,13 +470,3 @@ if __name__ == '__main__':
     else:
         app.run_server(debug=True)
 
-
-
-#
-# NOTE: Links related to url handling
-#
-# Set browser url via JS: https://stackoverflow.com/questions/18396501/how-to-get-set-current-page-url-which-works-across-space-time-browsers-versions
-#
-# Dash/flask parsing url: https://community.plotly.com/t/dash-flask-request-args/25760
-#
-# Url shortener: https://pypi.org/project/gdshortener/
