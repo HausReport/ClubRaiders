@@ -16,6 +16,7 @@ Join the fun!
 
 * Sirius Hyperspace removed from Cail
 * Wreaken Construction removed from Kali
-
+* Aegis Defense removed from Madrus
+* Janus Incorporated removed from HR 1183
 
 
