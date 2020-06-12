@@ -2,12 +2,14 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+import gzip
 import os
 import tempfile
 from typing import Dict
 from typing import Tuple
 
-import json_lines
+#import jsonlines
+import ujson
 
 shortName = "systems_populated.jsonl"
 tmpDir = tempfile.gettempdir()
@@ -15,8 +17,14 @@ fName = os.path.join(tmpDir, shortName) + ".gz"
 
 systemNameToXYZ: Dict[str, Tuple[int, int, int]] = {}
 nLines: int = 0
-with json_lines.open(fName, broken=True) as handle:
-    for sysLine in handle:
+# with jsonlines.open(fName) as handle:
+#    staLine: Dict
+# for staLine in handle:
+with gzip.open(fName, 'rb') as f:
+    for line in f:
+        sysLine = ujson.loads(line)
+#with jsonlines.open(fName) as handle:
+    #for sysLine in handle:
         nLines += 1
 
         tName = sysLine['name']

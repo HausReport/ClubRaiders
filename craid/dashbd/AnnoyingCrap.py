@@ -3,10 +3,10 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 import logging
-from typing import List, Dict, Tuple
+from typing import Dict, Tuple
 
 import dash_core_components as dcc
-from dash_table.Format import Format, Scheme, Symbol, Group
+from dash_table.Format import Format, Scheme, Group
 from pkg_resources import resource_string as resource_bytes
 
 from craid.eddb.SystemXYZ import SystemXYZ

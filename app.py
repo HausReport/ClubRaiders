@@ -18,7 +18,6 @@ import numpy as np
 import pandas as pd
 import ujson
 from dash.dependencies import Input, Output
-# import dash_bootstrap_components as dbc
 
 import craid.eddb.loader.DataProducer as dp
 from craid.dashbd.AnnoyingCrap import AnnoyingCrap
@@ -26,6 +25,8 @@ from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.Oracle import Oracle
 from craid.eddb.Printmem import printmem
 from craid.eddb.SystemXYZ import SystemXYZ
+
+# import dash_bootstrap_components as dbc
 
 #
 # Set up logging
@@ -361,7 +362,7 @@ def update_filter(n_clicks: int, val3):
     ## NOTE: Here there be dragons.  Careful about changes.
     ctx = dash.callback_context
     value, act = was_clicked(ctx, 'clear-filter.n_clicks')
-    if (act is None) or (act is ''):
+    if (act is None) or (act == ''):
         logging.debug("No act state (1), going with default 0")
         # act = 0
 
@@ -428,7 +429,7 @@ def update_sort(n_clicks, val3):
     [Output('datatable-interactivity', 'data'), Output('datatable-interactivity', 'columns')],
     [Input('locationDropdown', 'value')])
 def update_selected_system(val0):
-    if val0 is "":
+    if val0 == "":
         x = y = z = 0
     else:
         value = val0

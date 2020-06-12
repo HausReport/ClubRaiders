@@ -6,11 +6,12 @@
 #
 # Only now, can we populate lists of stations in **club** systems
 #
+import gzip
 import logging
 from typing import Dict
 from typing import Set
 
-import json_lines
+import ujson
 
 from craid.eddb.InhabitedSystem import InhabitedSystem
 from craid.eddb.Station import Station
@@ -26,9 +27,12 @@ def loadStationsInClubSystems(loader: DataLoader,
     nLines: int = 0
     nAdded: int = 0
     fName = loader.find_data_file('stations.jsonl')
-    with json_lines.open(fName, broken=True) as handle:
-        staLine: Dict
-        for staLine in handle:
+    #with jsonlines.open(fName) as handle:
+    #    staLine: Dict
+    #for staLine in handle:
+    with gzip.open(fName, 'rb') as f:
+        for line in f:
+            staLine = ujson.loads(line)
             nLines += 1
             #
             # Weeds out stations with no controlling faction

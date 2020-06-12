@@ -13,11 +13,11 @@ setup(
               'craid.club', 'craid.club.regions'],
     # Needed for dependencies
     install_requires=['dash', 'dash-core-components', 'dash-html-components', 'dash-table', 'dash-renderer',
-                      'flask', 'pandas', 'requests', 'setuptools', 'numpy', 'python-dateutil', 'ujson', 'json-lines', 'urllib3',
+                      'flask', 'pandas', 'requests', 'setuptools', 'numpy', 'python-dateutil', 'ujson', 'urllib3',
                       'psutil', 'plotly', 'humanize'],
     include_package_data=True,
     # *strongly* suggested for sharing
-    version='0.76',
+    version='0.77',
     # The license can be anything you like
     license='BSD-3',
     description='Placeholder description',

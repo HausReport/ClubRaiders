@@ -6,11 +6,12 @@
 #
 # Load factions
 #
+import gzip
 import logging
 from typing import Dict
 
 # from memory_profiler import profile
-import json_lines
+import ujson
 
 from craid.eddb.InhabitedSystem import InhabitedSystem
 #
@@ -24,8 +25,11 @@ def load_systems(loader: DataLoader) -> Dict[int, InhabitedSystem]:
     all_systems_dict: Dict[int, InhabitedSystem] = {}  # private
     nLines = 0
     fName = loader.find_data_file('systems_populated.jsonl')
-    with json_lines.open(fName, broken=True) as handle:
-        for sysLine in handle:
+#    with jsonlines.open(fName) as handle:
+#        for sysLine in handle:
+    with gzip.open(fName, 'rb') as f:
+         for line in f:
+            sysLine = ujson.loads(line)
             nLines += 1
             tid = int(sysLine['id'])
             foo = InhabitedSystem(sysLine)

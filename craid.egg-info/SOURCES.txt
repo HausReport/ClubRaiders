@@ -38,6 +38,7 @@ craid/dashbd/text/faction-template.md
 craid/dashbd/text/group.md
 craid/dashbd/text/mine.md
 craid/dashbd/text/missions.md
+craid/dashbd/text/news.md
 craid/dashbd/text/oracle-template.md
 craid/dashbd/text/overview.md
 craid/dashbd/text/piracyMurder.md
@@ -80,11 +81,13 @@ craid/eddb/loader/CreateSystemNameToPositionMap.py
 craid/eddb/loader/CreateSystems.py
 craid/eddb/loader/DataLoader.py
 craid/eddb/loader/DataProducer.py
+craid/eddb/loader/LoadDataFromAWS.py
 craid/eddb/loader/LoadDataFromEDDB.py
 craid/eddb/loader/LoadDataFromGithub.py
 craid/eddb/loader/MakeKeyFiles.py
 craid/eddb/loader/MakeSmolFiles.py
 craid/eddb/loader/MakeSystemsXYZDict.py
+craid/eddb/loader/WebDataLoader.py
 craid/eddb/loader/__init__.py
 craid/eddb/util/CheckEddbForRings.py
 craid/eddb/util/MessageList.py

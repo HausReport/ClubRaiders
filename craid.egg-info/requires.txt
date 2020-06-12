@@ -10,7 +10,7 @@ setuptools
 numpy
 python-dateutil
 ujson
-json-lines
 urllib3
 psutil
 plotly
+humanize

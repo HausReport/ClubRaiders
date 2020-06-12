@@ -6,16 +6,16 @@ import gzip
 import logging
 import os
 import tempfile
-from typing import Dict, List, Set
 from shutil import copyfile
+from typing import Dict, List, Set
 
-import json_lines
 import ujson
 
 from craid.eddb.loader import DataProducer
 from craid.eddb.loader.DataLoader import DataLoader
 from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 from craid.eddb.loader.MakeKeyFiles import loadKeys
+
 
 #
 # Note: For the Git part, see: https://gitpython.readthedocs.io/en/stable/reference.html#module-git.cmd
@@ -26,8 +26,14 @@ def munchFile(keys: Set[int], xinName: str):
 
     myLoader: DataLoader = LoadDataFromEDDB()
     inFile = myLoader.find_data_file(xinName)
-    with json_lines.open(inFile, broken=True) as handle:
-        for facLine in handle:
+    #with jsonlines.open(fName) as handle:
+    #    staLine: Dict
+    #for staLine in handle:
+    with gzip.open(inFile, 'rb') as f:
+        for line in f:
+            facLine = ujson.loads(line)
+    #with jsonlines.open(inFile) as handle:
+        #for facLine in handle:
             if facLine['id'] in keys:
                 tmp.append(facLine)
 

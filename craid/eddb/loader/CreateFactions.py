@@ -6,10 +6,11 @@
 #
 # Load factions
 #
+import gzip
 import logging
 from typing import Dict, Set
 
-import json_lines
+import ujson
 
 from craid.eddb.Faction import Faction
 from craid.eddb.FactionNameFilter import FactionNameFilter
@@ -26,8 +27,11 @@ def load_factions(loader: DataLoader) -> [Dict[int, Faction], Dict[int, Faction]
 
     nLines: int = 0
     fName = loader.find_data_file('factions.jsonl')
-    with json_lines.open(fName, broken=True) as handle:
-        for facLine in handle:
+#    with jsonlines.open(fName) as handle:
+#        for facLine in handle:
+    with gzip.open(fName, 'rb') as f:
+        for line in f:
+            facLine = ujson.loads(line)
             nLines += 1
             lCurFactionId = int(facLine['id'])
             curFaction = Faction(facLine)
