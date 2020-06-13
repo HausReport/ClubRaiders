@@ -31,7 +31,7 @@ from craid.eddb.SystemXYZ import SystemXYZ
 #
 # Set up logging
 #
-from craid.eddb.util.GzipString import gunzip_str
+#from craid.eddb.util.GzipString import gunzip_str
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
