@@ -14,5 +14,3 @@ urllib3
 psutil
 plotly
 humanize
-dahuffman
-zlib
