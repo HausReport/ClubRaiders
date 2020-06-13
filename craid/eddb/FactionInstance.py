@@ -57,6 +57,7 @@ class FactionInstance(Faction):
         e10 = self.getInfluence()
         if e10 == 0.0:
             return theMax
+        e10 = max(0.0, e10-2.5) #only need to get them to 2.5% to trigger retreat
         d10 = self.getPopulation()
         ret = (d10 / 15000.0) * (e10 ** 2.0) / 1000.0
 

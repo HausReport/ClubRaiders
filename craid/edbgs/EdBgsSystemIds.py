@@ -9,6 +9,8 @@ class EdBgsSystemIds(object):
 
 
     myDict: Dict[int, str] = {
+        17072   : "59e7a690d22c775be0fe1e4a",    #Sol
+        15878   : "59e8b067d22c775be0027d7e",    #Quan Gurus
         10511   : '59e80026d22c775be000497c',
         10803   : '59e8c363d22c775be002e7f7',
         10830   : '59e7c1c2d22c775be0fee69f',
