@@ -90,8 +90,10 @@ craid/eddb/loader/MakeSystemsXYZDict.py
 craid/eddb/loader/WebDataLoader.py
 craid/eddb/loader/__init__.py
 craid/eddb/util/CheckEddbForRings.py
+craid/eddb/util/GzipString.py
 craid/eddb/util/MessageList.py
 craid/eddb/util/ScoredMessage.py
+craid/eddb/util/SysDiff.py
 craid/eddb/util/TextDecoration.py
 craid/eddb/util/__init__.py
 info/My Club Diagram.png

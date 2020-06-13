@@ -31,6 +31,8 @@ from craid.eddb.SystemXYZ import SystemXYZ
 #
 # Set up logging
 #
+from craid.eddb.util.GzipString import gunzip_str
+
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
 
@@ -264,7 +266,7 @@ def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
 def updateUrl(key: str, val: str) -> str:
     global urlParameters
     if key is None:
-        return urlencode(urlParameters)
+        return str(urlParameters)
     newVal = str(val)
     if newVal=='':
         try:
@@ -274,7 +276,7 @@ def updateUrl(key: str, val: str) -> str:
     else:
         urlParameters[key] = newVal
     #return str(key) + "=" + str(newVal)
-    return urlencode(urlParameters) #{key: val})
+    return str(urlParameters) #{key: val})
 
 # #
 # # When user changes filter on datatable, put the query in a visible label.
@@ -307,10 +309,18 @@ def sort_changed(query: str, sort_by: List):
         if len(sort_by) == 0:
             updateUrl('sort', '')
         else:
+            print("Updating sort: " + str(sort_by))
             updateUrl('sort', sort_by)
 
     ssb: str = str(sort_by)
     logging.info( f"Query=[{query}], Sort=[{ssb}]")
+    # theUrl = updateUrl(None,None)
+    # print("theUrl: " + theUrl)
+    # import craid.eddb.util.GzipString
+    # comp =  str(craid.eddb.util.GzipString.gzip_str( theUrl))
+    # print("compressed: " + comp)
+    # print("decompressed: " + gunzip_str(comp))
+
     return updateUrl(None,None), str(query), ssb
 
 

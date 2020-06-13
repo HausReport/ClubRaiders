@@ -39,7 +39,10 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_syste
             if faction_id is None:
                 continue
 
-            fac = all_factions_dict[faction_id]
+            fac = all_factions_dict.get(faction_id)
+            if fac is None:
+                logging.warning("Unknown faction ID: "+ str(faction_id))
+                continue
             #factionName: str = fac.get_name2()
 
             #

@@ -15,3 +15,5 @@ urllib3~=1.25.9
 psutil~=5.7.0
 plotly~=4.8.1
 humanize~=2.4.0
+zlib~=1.2.11
+dahuffman~=0.4.1
