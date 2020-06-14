@@ -4,6 +4,7 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 
 import datetime
+import logging
 import string
 from typing import List
 
@@ -278,6 +279,9 @@ class FactionInstance(Faction):
         # in this case, the opposer is either the system's controlling faction or the non-club faction with the highest influence
 
         opposer = self.mySystem.getControllingFactionInstance()
+        if opposer is None:
+            return 0.0, "opposing faction is unknown"
+
         if opposer.isClub():
             opposer = self.mySystem.getHighestInfluenceNonClubFactionInstance()
 
@@ -355,6 +359,9 @@ class FactionInstance(Faction):
         # Stage 2: Can the opposing faction benefit from bounty hunting
         #
         opposer = sta.getControllingFactionInstance()
+        if opposer is None:
+            return 0.0, "opposing faction is unknown"
+
         if opposer.hasState(gconst.STATE_LOCKDOWN):
             return 0.0, "the opposing faction is in lockdown"
 
@@ -430,6 +437,8 @@ class FactionInstance(Faction):
         # Stage 2: Can the opposing faction benefit from missions
         #
         opposer = sta.getControllingFactionInstance()
+        if opposer is None:
+            return 0.0, "opposing faction is unknown"
 
         if opposer.hasState(gconst.STATE_WAR) or opposer.hasState(gconst.STATE_CIVIL_WAR):
             return 0.0, "opposition faction is at war"

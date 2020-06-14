@@ -3,6 +3,7 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 import gc
+import logging
 from typing import Dict, Set
 
 import pandas as pd
@@ -20,15 +21,18 @@ from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateStationsInClubSystems import loadStationsInClubSystems
 from craid.eddb.loader.CreateSystems import load_systems
 from craid.eddb.loader.LoadDataFromAWS import LoadDataFromAWS
+from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 from craid.eddb.loader.MakeKeyFiles import dumpKeys, loadKeys
 
 
 def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
 
-    #if useEddb:
-    #    myLoader = LoadDataFromEDDB()
-    #else:
-    myLoader = LoadDataFromAWS() #LoadDataFromGithub()
+    if useEddb:
+        logging.info("Loading from EDDB")
+        myLoader = LoadDataFromEDDB()
+    else:
+        logging.info("Loading from AWS")
+        myLoader = LoadDataFromAWS() #LoadDataFromGithub()
 
     playerFactionNameToSystemName: Dict[str, str] = {}
 

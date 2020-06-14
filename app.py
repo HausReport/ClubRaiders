@@ -105,7 +105,7 @@ systemDropdown = dcc.Dropdown(
     options=AnnoyingCrap.getLocationDropdown(),
     value='Sol',
     placeholder='Select star system',
-    className="simpleColItem",
+    className="dropdown-select",
     #persistence=True,
 )
 
@@ -130,6 +130,19 @@ datatable: dash_table.DataTable = dash_table.DataTable(
     page_action="native",
     page_current=0,
     page_size=30,
+    style_cell={
+        'backgroundColor': '#2c2e2f',
+        'color'          : '#a3a3a3'
+    },
+    style_header={
+        'backgroundColor': '#2c2e2f',
+        'color'          : '#a3a3a3'
+    },
+    style_filter={
+        'backgroundColor': 'black',
+        'color'          : 'white',
+        'text-color'     : 'white'
+    }
 )
 
 datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
@@ -142,15 +155,19 @@ tab_1 = \
         html.Tr(className="clean", children=[
             html.Td(className="clean2", children=[
                 html.Label("I want to:", className="simpleColItem"),
-                dcc.Dropdown(
-                    id='activityDropdown',
-                    options=AnnoyingCrap.getThirdDropdown(),
-                    #persistence=True,
-                    placeholder='Select activity',
-                    className="simpleColItem",
-                ),
+                html.Div(className="dropdown dropdown-dark", children=[
+                    dcc.Dropdown(
+                        id='activityDropdown',
+                        options=AnnoyingCrap.getThirdDropdown(),
+                        #persistence=True,
+                        placeholder='Select activity',
+                        className="dropdown-select",
+                    ),
+                    ]),
                 html.Label("in the vicinity of", className="simpleColItem"),
-                systemDropdown,
+                html.Div(className="dropdown dropdown-dark", children=[
+                    systemDropdown,
+                ]),
                 #html.Button("DarkMode", id="darkModeButton", name="darkModeButton"),
                 html.Article(oracleMd, id="statistics", className="simpleColItem"),
                 html.Article("", id='faction-drilldown', className="simpleColItem"),
@@ -190,6 +207,21 @@ tab_1 = \
 #
 # Layout the main application
 #
+tab_style = {
+    'borderBottom': '1px solid #d6d6d6',
+    'padding': '6px',
+    'backgroundColor': '#3c3f41',
+    'color': 'whitesmoke',
+}
+
+tab_selected_style = {
+    'borderTop': '1px solid #d6d6d6',
+    'borderBottom': '1px solid #d6d6d6',
+    'fontWeight': 'bold',
+    'backgroundColor': '#4e5254',
+    'color': 'white',
+    'padding': '6px'
+}
 app.layout = html.Div([
     html.Label("placeholder", id='url-holder', style={'display':'none'}),  # move this into layout to use it
     # represents the URL bar, doesn't render anything
@@ -197,25 +229,18 @@ app.layout = html.Div([
     dcc.Tabs(id='tabs-example', value='tab-1',
              parent_className='custom-tabs',
              className='custom-tabs-container',
-             style={'primary'     : 'red',
-                    'primaryColor': 'red',
-                    'selected'    : 'red'},
              children=[
                  dcc.Tab(label='Activities',
                          value='tab-1',
-                         className='mytab',
-                         selected_className='mytab-selected', children=[
-
-                     ]),  # tab-1 closed
+                         style=tab_style, selected_style=tab_selected_style,
+                         ),
                  dcc.Tab(label='About The Club',
                          value='tab-2',
-                         className='mytab',
-                         selected_className='mytab-selected',
+                         style=tab_style, selected_style=tab_selected_style,
                          ),
                  dcc.Tab(label='About Club Raiders',
                          value='tab-3',
-                         className='mytab',
-                         selected_className='mytab-selected',
+                         style=tab_style, selected_style=tab_selected_style,
                          ),
              ]),
     html.Div(id='tabs-example-content'),

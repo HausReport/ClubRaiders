@@ -70,8 +70,15 @@ def deleteOldFiles():
             os.remove(outFile)
 
 if __name__ == '__main__':
+    #
+    # Fire up logger
+    #
+    logging.getLogger().addHandler(logging.StreamHandler())
+    logging.getLogger().level = logging.DEBUG
 
-    # TODO: Delete large files from temp directory
+    #
+    # Get rid of old files
+    #
     deleteOldFiles()
 
     # download large files from eddb
