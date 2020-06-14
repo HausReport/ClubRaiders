@@ -138,11 +138,11 @@ datatable: dash_table.DataTable = dash_table.DataTable(
         'backgroundColor': '#2c2e2f',
         'color'          : '#a3a3a3'
     },
-    style_filter={
-        'backgroundColor': 'black',
-        'color'          : 'white',
-        'text-color'     : 'white'
-    }
+    # style_filter={
+    #     'backgroundColor': 'black',
+    #     'color'          : 'white',
+    #     'text-color'     : 'white'
+    # }
 )
 
 datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
@@ -183,23 +183,19 @@ tab_1 = \
                             width="350", height="400"),
                 # End of left column
             ]),  # td closed
-            html.Td([
+            html.Td(className="clean2", children=[
                 html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity"),
-                html.Div(className="horiz", children=[
+                html.Div(className="clean", children=[
                     html.Label("Current filter:", className=''),
                     html.Label(id='filter-notifier', className="filter-notifier"),
                     html.Button(id="clear-filter", className="myButton"),
                 ]),
-                html.Div(className="horiz", children=[
+                html.Div(className="clean", children=[
                     html.Label("Current sort:", className=""),
                     html.Label(id='sort-notifier', className="sort-notifier"),
                     html.Button(id="clear-sort", className="myButton"),
                 ]),
                 datatable,
-                # html.Div("...  \n...",className="20px"),
-                # html.Footer(className='footer', children=[
-                # html.Div(id='datatable-interactivity-container')
-                # ])
             ]),  # td closed
         ]),  # tr closed
     ]),  # table closed
