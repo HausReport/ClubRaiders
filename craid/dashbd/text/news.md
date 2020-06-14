@@ -1,5 +1,4 @@
 
-
 ## Clubspace News Network
 
 Player actions taking place in the Sirius region
@@ -12,11 +11,9 @@ Join the fun!
 * $n_retreats Club factions retreating
 * $n_very_easy factions rated "very easy" to attack
 
-### Recent victories
+### Recent Victories
 
 * Sirius Hyperspace removed from Cail
 * Wreaken Construction removed from Kali
 * Aegis Defense removed from Madrus
 * Janus Incorporated and Aegis Research removed from HR 1183
-
-

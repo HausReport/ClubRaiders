@@ -45,6 +45,7 @@ del {
 .simpleColItem {
   display: flex;
   flex-flow: column;
+  padding: 10px 10px 10px;
 }
 
 .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner input:not([type=radio]):not([type=checkbox]) {
@@ -70,4 +71,17 @@ a:hover {
 /* selected link */
 a:active {
   color: cornflowerblue;
+}
+
+.card {
+  /* Add shadows to create the "card" effect */
+  background-color: #2c2e2f;
+  box-shadow: 0 4px 8px 0 rgba(59, 71, 84,1.0); /*3b4754*/
+  transition: 0.3s;
+  padding: 10px 10px 24px;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }

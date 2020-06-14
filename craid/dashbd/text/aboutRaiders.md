@@ -34,9 +34,6 @@
 
 1. Numbers in the table should be formatted better.
     * This depends on a bug fix in Dash.
-1. Colors and fonts should be more Elite-y.
-    * Again, this depends on a bug fix in Dash.  About 95% of the site can be made to look elitey at the moment,
-    but the items that can't make the whole thing look ridiculous.
 1. I have a better sort query/filter query for an activity or want to add a new activity.
     * This sort of issue can be expressed on the channels mentioned above.  There's plenty of room for tweaking and improvements.
 1. I want to change some text.

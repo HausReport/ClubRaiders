@@ -7,7 +7,6 @@ import math
 import os
 from random import randint
 from typing import Dict, Tuple, List
-from urllib.parse import urlencode
 
 import dash
 import dash_core_components as dcc
@@ -31,7 +30,7 @@ from craid.eddb.SystemXYZ import SystemXYZ
 #
 # Set up logging
 #
-#from craid.eddb.util.GzipString import gunzip_str
+# from craid.eddb.util.GzipString import gunzip_str
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
@@ -79,7 +78,7 @@ if DEPLOY:
     })
     app.scripts.append_script({
         'external_url': 'https://erlaed.s3.us-east-2.amazonaws.com/gtag.js'
-        #https://raw.githubusercontent.com/HausReport/ClubRaiders/master/assets/gtag.js'
+        # https://raw.githubusercontent.com/HausReport/ClubRaiders/master/assets/gtag.js'
     })
 else:
     app = dash.Dash(appName)  # , external_stylesheets=[dbc.themes.CYBORG])
@@ -106,7 +105,7 @@ systemDropdown = dcc.Dropdown(
     value='Sol',
     placeholder='Select star system',
     className="dropdown-select",
-    #persistence=True,
+    # persistence=True,
 )
 
 theColumns = AnnoyingCrap.getTheColumns()
@@ -147,6 +146,25 @@ datatable: dash_table.DataTable = dash_table.DataTable(
 
 datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
 
+
+def enCard(contents) -> html.Div:
+    return html.Div(className="card", children=[
+        contents,
+    ])
+
+
+def makeArticleCard(contents, id_) -> html.Div:
+    return enCard(html.Article(contents, id=id_, className="simpleColItem"))
+
+
+def makeDiscordCard(msg, _id, _idnum) -> html.Div:
+    return html.Div(className="card", children=[
+        dcc.Markdown(msg),
+        html.Iframe(id=f"{_id}", src=f"https://discordapp.com/widget?id={_idnum}&theme=dark",
+                    width="350", height="400"),
+    ])
+
+
 #
 # Content of tab_1
 #
@@ -154,48 +172,52 @@ tab_1 = \
     html.Table(className="clean", children=[
         html.Tr(className="clean", children=[
             html.Td(className="clean2", children=[
-                html.Label("I want to:", className="simpleColItem"),
-                html.Div(className="dropdown dropdown-dark", children=[
-                    dcc.Dropdown(
-                        id='activityDropdown',
-                        options=AnnoyingCrap.getThirdDropdown(),
-                        #persistence=True,
-                        placeholder='Select activity',
-                        className="dropdown-select",
-                    ),
+                html.Div(className="card", children=[
+                    html.Label("I want to:", className="simpleColItem"),
+                    html.Div(className="dropdown dropdown-dark", children=[
+                        dcc.Dropdown(
+                            id='activityDropdown',
+                            options=AnnoyingCrap.getThirdDropdown(),
+                            # persistence=True,
+                            placeholder='Select activity',
+                            className="dropdown-select",
+                        ),
                     ]),
-                html.Label("in the vicinity of", className="simpleColItem"),
-                html.Div(className="dropdown dropdown-dark", children=[
-                    systemDropdown,
+                    html.Label("in the vicinity of", className="simpleColItem"),
+                    html.Div(className="dropdown dropdown-dark", children=[
+                        systemDropdown,
+                    ]),
                 ]),
-                #html.Button("DarkMode", id="darkModeButton", name="darkModeButton"),
-                html.Article(oracleMd, id="statistics", className="simpleColItem"),
-                html.Article("", id='faction-drilldown', className="simpleColItem"),
-                html.Article("", id='system-drilldown', className="simpleColItem"),
-                html.Article(newsMarkdown, id='news', className="simpleColItem"),
-                # html.Hr(style="width: 345px;")
-                dcc.Markdown("## Cabal Operatives\n\nCommanders fighting the BGS war against The Club."),
-                html.Iframe(id="cabal-ops", src="https://discordapp.com/widget?id=439201271174660097&theme=dark",
-                            width="350", height="400"),
-                dcc.Markdown(
-                    "## Elite BGS\n\nFor resources, questions and discussion about the Elite Background Simulation in general."),
-                html.Iframe(id="elite-bgs", src="https://discordapp.com/widget?id=483005833853009950&theme=dark",
-                            width="350", height="400"),
+                # html.Button("DarkMode", id="darkModeButton", name="darkModeButton"),
+                makeArticleCard(oracleMd, "statistics"),
+                makeArticleCard("", "faction-drilldown"),
+                makeArticleCard("", "system-drilldown"),
+                makeArticleCard(newsMarkdown, "news"),
+                makeDiscordCard(
+                    "## Cabal Operatives\n\nCommanders fighting the BGS war against The Club.",
+                    "cabal-ops",
+                    "439201271174660097"),
+                makeDiscordCard(
+                    "## Elite BGS\n\nFor resources, questions and discussion about the Elite Background Simulation in general.",
+                    "elite-bgs",
+                    "483005833853009950"),
                 # End of left column
             ]),  # td closed
             html.Td(className="clean2", children=[
-                html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity"),
-                html.Div(className="clean", children=[
-                    html.Label("Current filter:", className=''),
-                    html.Label(id='filter-notifier', className="filter-notifier"),
-                    html.Button(id="clear-filter", className="myButton"),
+                enCard(html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity")),
+                html.Div(className="card", children=[
+                        html.Div(className="clean", children=[
+                        html.Label("Current filter:", className=''),
+                        html.Label(id='filter-notifier', className="filter-notifier"),
+                        html.Button(id="clear-filter", className="myButton"),
+                    ]),
+                    html.Div(className="clean", children=[
+                        html.Label("Current sort:", className=""),
+                        html.Label(id='sort-notifier', className="sort-notifier"),
+                        html.Button(id="clear-sort", className="myButton"),
+                    ]),
+                    datatable,
                 ]),
-                html.Div(className="clean", children=[
-                    html.Label("Current sort:", className=""),
-                    html.Label(id='sort-notifier', className="sort-notifier"),
-                    html.Button(id="clear-sort", className="myButton"),
-                ]),
-                datatable,
             ]),  # td closed
         ]),  # tr closed
     ]),  # table closed
@@ -204,22 +226,22 @@ tab_1 = \
 # Layout the main application
 #
 tab_style = {
-    'borderBottom': '1px solid #d6d6d6',
-    'padding': '6px',
+    'borderBottom'   : '1px solid #d6d6d6',
+    'padding'        : '6px',
     'backgroundColor': '#3c3f41',
-    'color': 'whitesmoke',
+    'color'          : 'whitesmoke',
 }
 
 tab_selected_style = {
-    'borderTop': '1px solid #d6d6d6',
-    'borderBottom': '1px solid #d6d6d6',
-    'fontWeight': 'bold',
+    'borderTop'      : '1px solid #d6d6d6',
+    'borderBottom'   : '1px solid #d6d6d6',
+    'fontWeight'     : 'bold',
     'backgroundColor': '#4e5254',
-    'color': 'white',
-    'padding': '6px'
+    'color'          : 'white',
+    'padding'        : '6px'
 }
 app.layout = html.Div([
-    html.Label("placeholder", id='url-holder', style={'display':'none'}),  # move this into layout to use it
+    html.Label("placeholder", id='url-holder', style={'display': 'none'}),  # move this into layout to use it
     # represents the URL bar, doesn't render anything
     dcc.Location(id='url', refresh=False),
     dcc.Tabs(id='tabs-example', value='tab-1',
@@ -240,7 +262,7 @@ app.layout = html.Div([
                          ),
              ]),
     html.Div(id='tabs-example-content'),
-    #html.Script(src="assets/dm.js"),
+    # html.Script(src="assets/dm.js"),
 ])
 
 printmem("End")
@@ -289,15 +311,16 @@ def updateUrl(key: str, val: str) -> str:
     if key is None:
         return str(urlParameters)
     newVal = str(val)
-    if newVal=='':
+    if newVal == '':
         try:
             urlParameters.pop(key)
         except KeyError:
             pass
     else:
         urlParameters[key] = newVal
-    #return str(key) + "=" + str(newVal)
-    return str(urlParameters) #{key: val})
+    # return str(key) + "=" + str(newVal)
+    return str(urlParameters)  # {key: val})
+
 
 # #
 # # When user changes filter on datatable, put the query in a visible label.
@@ -315,14 +338,14 @@ def updateUrl(key: str, val: str) -> str:
     [Output('url-holder', 'children'), Output('filter-notifier', 'children'), Output('sort-notifier', 'children')],
     [Input('datatable-interactivity', 'filter_query'), Input('datatable-interactivity', 'sort_by')])
 def sort_changed(query: str, sort_by: List):
-    if query is None or len(query) ==0:
-        updateUrl('filter','')
+    if query is None or len(query) == 0:
+        updateUrl('filter', '')
     else:
         print("Updating filter: " + str(query))
         updateUrl('filter', str(query))
 
     if sort_by is None or len(sort_by) == 0:
-        updateUrl('sort','')
+        updateUrl('sort', '')
     else:
         foo1 = sort_by[0]
         if foo1['column_id'] == '':
@@ -334,7 +357,7 @@ def sort_changed(query: str, sort_by: List):
             updateUrl('sort', sort_by)
 
     ssb: str = str(sort_by)
-    logging.info( f"Query=[{query}], Sort=[{ssb}]")
+    logging.info(f"Query=[{query}], Sort=[{ssb}]")
     # theUrl = updateUrl(None,None)
     # print("theUrl: " + theUrl)
     # import craid.eddb.util.GzipString
@@ -342,7 +365,7 @@ def sort_changed(query: str, sort_by: List):
     # print("compressed: " + comp)
     # print("decompressed: " + gunzip_str(comp))
 
-    return updateUrl(None,None), str(query), ssb
+    return updateUrl(None, None), str(query), ssb
 
 
 #
