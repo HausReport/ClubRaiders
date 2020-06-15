@@ -13,6 +13,7 @@ Join the fun!
 
 ### Recent Victories
 
+* Sirius Hot2Cold removed from Chicoana.
 * Sirius Hyperspace removed from Cail
 * Wreaken Construction removed from Kali
 * Aegis Defense removed from Madrus

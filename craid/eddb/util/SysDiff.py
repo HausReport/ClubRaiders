@@ -18,6 +18,8 @@ logging.getLogger().level = logging.DEBUG
 newSet: Dict[int,Set[int]] = {}
 oldSet: Dict[int,Set[int]] = {}
 
+messages: Set[str] = set()
+
 sysNames: Dict[int, str] = {}
 facNames: Dict[int, str] = {}
 
@@ -73,54 +75,79 @@ logging.info("Read %s lines of systems data", str(nLines))
 for key in newSet.keys():
     oldFacs = oldSet.get(key)
     if oldFacs is None:
-        print("New club activity in system: " + str(key))
+        kStr = str(key)
+        #print("--->" + str(facNames.get(key)))
+        msg = f"Non-club faction expanded to {kStr}"
+        messages.add(msg)
+        #print(msg)
     else:
         newFacs = newSet.get(key)
         news = newFacs-oldFacs
         olds = oldFacs-newFacs
+        sName = "Unknown"
+        # if the factions have changed
         if len(news)>0 or len(olds)>0:
             sName = sysNames.get(key)
             if sName is None:
                 sName = "Unknown"
-            print("Change in system: " + sName)
+            ##print("Change in system: " + sName)
         if len(news)>0:
             for tid in news:
                 theFac = facNames.get(tid)
                 if theFac is None:
                     theFac = "Unknown"
-                print("\t\t" + theFac + " expanded here")
+                msg = f"{theFac} expanded to {sName}"
+                messages.add(msg)
+                #print(msg)
         if len(olds)>0:
             for tid in olds:
                 theFac = facNames.get(tid)
                 if theFac is None:
                     theFac = "Unknown"
-                print("\t\t" + theFac + " retreated")
+                msg = f"{theFac} retreated from {sName}"
+                messages.add(msg)
+                #print(msg)
 
 for key in oldSet.keys():
     newFacs = newSet.get(key)
     if newFacs is None:
-        print("Club removed from in system: " + str(key))
+        sKey = str(key)
+        #print("--->" + str(facNames.get(key)))
+        msg = f"Club removed from system {sKey}"
+        messages.add(msg)
+        #print(msg)
     else:
         oldFacs =oldSet.get(key)
         news = newFacs-oldFacs
         olds = oldFacs-newFacs
+        sName = "Unknown"
+
+        # if the factions have changed
         if len(news)>0 or len(olds)>0:
             sName = sysNames.get(key)
             if sName is None:
                 sName = "Unknown"
-            print("Change in system: " + sName)
+            ##print("Change in system: " + sName)
         if len(news)>0:
             for tid in news:
                 theFac = facNames.get(tid)
                 if theFac is None:
                     theFac = "Unknown"
-                print("\t\t" + theFac + " expanded here")
+                msg = f"{theFac} expanded to {sName}"
+                messages.add(msg)
+                #print(msg)
         if len(olds)>0:
             for tid in olds:
                 theFac = facNames.get(tid)
                 if theFac is None:
                     theFac = "Unknown"
-                print("\t\t" + theFac + " retreated")
+                msg = f"{theFac} retreated from {sName}"
+                messages.add(msg)
+                #print(msg)
 
+
+#print("-=========================")
+for msg in messages:
+    print(msg)
 #print("Retreats: " + str(oldSet-newSet))
 #print("Expansions: " + str(newSet-oldSet))
