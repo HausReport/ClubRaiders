@@ -208,12 +208,12 @@ tab_1 = \
                 html.Div(className="card", children=[
                         html.Div(className="clean", children=[
                         html.Label("Current filter:", className=''),
-                        html.Label(id='filter-notifier', className="filter-notifier"),
+                        html.Label(id='filter-notifier', className="code-notifier"),
                         html.Button(id="clear-filter", className="myButton"),
                     ]),
                     html.Div(className="clean", children=[
                         html.Label("Current sort:", className=""),
-                        html.Label(id='sort-notifier', className="sort-notifier"),
+                        html.Label(id='sort-notifier', className="code-notifier"),
                         html.Button(id="clear-sort", className="myButton"),
                     ]),
                     datatable,
