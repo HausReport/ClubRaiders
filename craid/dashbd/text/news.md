@@ -2,8 +2,8 @@
 ## Clubspace News Network
 
 Player actions taking place in the Sirius region
-against CQC Holdings at Hun Chonses, Corn Pin and Caelottixa.
-Join the fun!
+against CQC Holdings at Quan Gurus and LPM 607.  Mopping up
+and waiting for retreat in Corn Pin. Join the fun!
 
 * $n_wars wars in progress
 * $n_elections elections in progress
@@ -13,6 +13,7 @@ Join the fun!
 
 ### Recent Victories
 
+* CQC Holdings removed from Caelottixa.
 * Sirius Hot2Cold removed from Chicoana.
 * Sirius Hyperspace removed from Cail
 * Wreaken Construction removed from Kali
