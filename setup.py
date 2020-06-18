@@ -14,7 +14,7 @@ setup(
     # Needed for dependencies
     install_requires=['dash', 'dash-core-components', 'dash-html-components', 'dash-table', 'dash-renderer',
                       'flask', 'pandas', 'requests', 'setuptools', 'numpy', 'python-dateutil', 'ujson', 'urllib3',
-                      'psutil', 'plotly', 'humanize'],
+                      'psutil', 'plotly', 'humanize', 'boto3', 'botocore'],
     include_package_data=True,
     # *strongly* suggested for sharing
     version='0.77',

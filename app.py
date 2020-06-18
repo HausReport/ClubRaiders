@@ -63,6 +63,32 @@ newsMarkdown = dcc.Markdown(newsString)
 #
 # Start up Dash
 #
+my_meta_tags=[
+    # A description of the app, used by e.g.
+    # search engines when displaying search results.
+    {
+        'name': 'description',
+        'content': 'Tool to help Elite: Dangerous commanders identify, evaluate and eradicate factions linked to the shadowy organization known as The Club.'
+    },
+    # A tag that tells Internet Explorer (IE)
+    # to use the latest renderer version available
+    # to that browser (e.g. Edge)
+    {
+        'http-equiv': 'X-UA-Compatible',
+        'content': 'IE=edge'
+    },
+    # A tag that tells the browser not to scale
+    # desktop widths to fit mobile screens.
+    # Sets the width of the viewport (browser)
+    # to the width of the device, and the zoom level
+    # (initial scale) to 1.
+    #
+    # Necessary for "true" mobile support.
+    {
+      'name': 'viewport',
+      'content': 'width=device-width, initial-scale=1.0'
+    }
+]
 appName = __name__
 DEPLOY = True  # KEEP THIS TRUE, SRSLY
 if DEPLOY:
@@ -71,7 +97,7 @@ if DEPLOY:
     #
     server = flask.Flask(appName)
     server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
-    app = dash.Dash(appName, server=server)  # , external_stylesheets=[dbc.themes.CYBORG])
+    app = dash.Dash(appName, server=server, meta_tags=my_meta_tags)  # , external_stylesheets=[dbc.themes.CYBORG])
     app.scripts.config.serve_locally = False
     app.scripts.append_script({
         'external_url': 'https://www.googletagmanager.com/gtag/js?id=UA-61576455-2'
@@ -85,7 +111,7 @@ else:
     app.scripts.config.serve_locally = True
     # print(appName)
 
-app.title = "Club Raiders"
+app.title = "Club Raiders - fighting the BGS war against The Club in Elite: Dangerous"
 #
 # Following required for tabs
 #
