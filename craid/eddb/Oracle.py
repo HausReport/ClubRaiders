@@ -170,7 +170,7 @@ class Oracle:
         #
         self.myDict['n_wars'] = df[df["vulnerable"].str.contains("War")]["systemName"].nunique()
         self.myDict['n_elections'] = df[df["vulnerable"].str.contains("lect")]["systemName"].nunique()
-        self.myDict['n_expansions'] = df[df["vulnerable"].str.contains("xpans")]["systemName"].nunique()
+        self.myDict['n_expansions'] = df[df["vulnerable"].str.contains("xpans")]["factionName"].nunique()
         self.myDict['n_retreats'] = df[df["vulnerable"].str.contains("etre")]["systemName"].nunique()
 
         self.myDict['n_very_easy'] =  df[df["difficulty"] <= 1.0]["systemName"].nunique()

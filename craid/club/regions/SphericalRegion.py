@@ -29,7 +29,7 @@ class SphericalRegion(Region):
             dist=0
         return dist
 
-    def getSphere(self):
+    def getSurface(self):
         theta = linspace(0, 2 * pi, 100)
         phi = linspace(0, pi, 100)
         x = self.x0 + self.r * outer(cos(theta), sin(phi))
