@@ -282,6 +282,8 @@ class InhabitedSystem(System):
                 continue
             if largePads != sta.hasLargePads():
                 continue
+            if sta.isFleetCarrier():
+                continue
 
             #
             # For these, if (condition) and if not (state) then skip

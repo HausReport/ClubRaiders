@@ -77,7 +77,7 @@ for key in newSet.keys():
     if oldFacs is None:
         kStr = str(key)
         #print("--->" + str(facNames.get(key)))
-        msg = f"Non-club faction expanded to {kStr}"
+        msg = f"Club faction expanded to {kStr}"
         messages.add(msg)
         #print(msg)
     else:

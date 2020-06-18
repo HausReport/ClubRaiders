@@ -20,6 +20,10 @@ from craid.eddb.loader.MakeKeyFiles import loadKeys
 #
 # Note: For the Git part, see: https://gitpython.readthedocs.io/en/stable/reference.html#module-git.cmd
 #
+# Note: For the sleep part, see https://stackoverflow.com/questions/2031111/in-python-how-can-i-put-a-thread-to-sleep-until-a-specific-time
+#
+# Note: Heroku version of cron: https://devcenter.heroku.com/articles/clock-processes-python
+#
 
 def munchFile(keys: Set[int], xinName: str):
     tmp: List[Dict] = []

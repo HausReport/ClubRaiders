@@ -48,9 +48,15 @@ class Station(Aware):
         self.has_shipyard: bool = jsonLine.get("has_shipyard")
         self.has_docking: bool = jsonLine.get("has_docking")
         self.is_planetary: bool =jsonLine.get("is_planetary")
-        self.system_id: int =jsonLine.get("system_id")
+        self.system_id: int = jsonLine.get("system_id")
         self.stationType: str = jsonLine.get("type")
         self.controlling_minor_faction_id: int = jsonLine.get("controlling_minor_faction_id")
+        self.is_fleet_carrier: bool = True
+        if not self.stationType.startswith("Fleet"):
+            self.is_fleet_carrier = False
+
+    def isFleetCarrier(self) -> bool:
+        return self.is_fleet_carrier
 
     def getSystemId(self) -> int:
         return self.system_id
