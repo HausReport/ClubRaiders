@@ -48,3 +48,12 @@ class MultiSphericalRegion(Region):
             ret.append(reg.getSurface())
 
         return ret
+
+    def __str__(self):
+        ret = f"Multisphere: {self._name}"
+
+        for reg in self.points:
+            msg = str(reg)
+            ret = ret + "msg" + "\n"
+
+        return ret
