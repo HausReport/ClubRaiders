@@ -30,14 +30,9 @@ def munchFile(keys: Set[int], xinName: str):
 
     myLoader: DataLoader = LoadDataFromEDDB()
     inFile = myLoader.find_data_file(xinName)
-    #with jsonlines.open(fName) as handle:
-    #    staLine: Dict
-    #for staLine in handle:
     with gzip.open(inFile, 'rb') as f:
         for line in f:
             facLine = ujson.loads(line)
-    #with jsonlines.open(inFile) as handle:
-        #for facLine in handle:
             if facLine['id'] in keys:
                 tmp.append(facLine)
 

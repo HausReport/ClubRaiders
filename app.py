@@ -348,15 +348,6 @@ def updateUrl(key: str, val: str) -> str:
     return str(urlParameters)  # {key: val})
 
 
-# #
-# # When user changes filter on datatable, put the query in a visible label.
-# #
-# @app.callback(
-#     [Output('url-holder', 'children'), ],
-#     [)
-# def filter_changed(query):
-
-
 #
 # When user changes sort on datatable, put the query in a visible label.
 #

@@ -13,7 +13,7 @@ and waiting for retreat in Corn Pin. Join the fun!
 
 ### Recent Victories
 
-* Aegis Research removed from Pleiades Sector KC-V c2-11.
+* Aegis Research removed from Pleiades Sectors KC-V c2-11, KC-V c2-4, and DL-Y d65.
 * CQC Holdings removed from Caelottixa.
 * Sirius Hot2Cold removed from Chicoana.
 * Sirius Hyperspace removed from Cail

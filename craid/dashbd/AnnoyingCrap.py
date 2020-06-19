@@ -79,15 +79,6 @@ class AnnoyingCrap(object):
               [{'column_id': 'difficulty', 'direction': 'asc'}],
               "group")}
 
-    #
-    # TODO: work list
-    #
-    # cannedActions[13] = ("see the welcome message again", None, None)
-
-    #
-    # Implemented
-    #
-
     def __init__(self):
         super().__init__()
 

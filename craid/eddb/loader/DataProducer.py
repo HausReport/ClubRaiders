@@ -48,12 +48,6 @@ def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
     pm.printmem('1')
 
     #
-    # Populate dict of system name & x,y,zs
-    # Used by dropdowns in dashboard
-    #
-    #systemNameToXYZ = loadSystemNameToPositionMap(all_systems_dict)
-
-    #
     # Populate dict of player faction name -> system name
     # Used by dropdowns in dashboard
     #
@@ -85,24 +79,6 @@ def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
 
     gc.collect()
     pm.printmem('2')
-
-    # Had almost no impact on memory usage
-    # Prune down all_systems_dict to systems we're interested in
-    #
-    # key: int
-    # for key in list(all_systems_dict.keys()):
-    #     if key in club_system_keys:
-    #         continue
-    #     else:
-    #         all_systems_dict.pop(key)
-    #
-    # logging.info("Pruned systems dict down to " + str(len(all_systems_dict)))
-    # key: int
-    # for key in list(all_factions_dict.keys()):
-    #     if key in club_system_keys:
-    #         continue
-    #     else:
-    #         all_systems_dict.pop(key)
 
     #
     # Give global faction info to systems and

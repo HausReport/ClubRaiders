@@ -7,7 +7,7 @@ have one hope, but it is very well hidden. -- *[The Holdstock Report](https://do
 
 ### Who
 
-We've identified 46 minor factions that were shown in *The Holdstock Report*
+We've identified 32 minor factions that were shown in *The Holdstock Report*
 to be part of Club operations.  While many more connections exist than are indicated
 on the diagram, attempting to draw them produces something closely resembling a plate of spaghetti.
 
