@@ -1,4 +1,7 @@
+from typing import Tuple
+
 import craid
+from craid.club.regions.MultiSphericalRegion import MultiSphericalRegion
 from craid.club.regions.SphericalRegion import SphericalRegion
 from craid.club.regions.TheUnregion import TheUnregion
 
@@ -9,6 +12,9 @@ from craid.club.regions.TheUnregion import TheUnregion
 # 7: SphericalRegion("Hodack", 8, 60, 46, 23, 45, 'rgb(0,255,255)'),
 
 # TODO: might be a better pallete https://learnui.design/tools/data-color-picker.html#divergent
+from craid.eddb.SquadronXYZ import SquadronXYZ
+
+
 class RegionFactory(object):
     regionDict = {
         1: SphericalRegion("Merope", 1, -79, -150, -340, 100, 'rgb(255, 0, 0)'),
@@ -87,3 +93,16 @@ class RegionFactory(object):
         else:
             closestDistStr = "{:,.0f}".format(closestDist)
             return f'{closestDistStr} ly from {closestRegion.getTitle()}'
+
+    @staticmethod
+    def getSquadronRegion(squadName: str, radius: float, color: str):
+        aDict = SquadronXYZ.myDict.get(squadName)
+        rData = []
+        for aName in aDict.keys():
+            point = aDict.get(aName)
+            px = point[0]
+            py = point[1]
+            pz = point[2]
+            rData.append(Tuple[aName, px, py, pz])
+
+        return MultiSphericalRegion(squadName, -1, rData, radius, color)

@@ -13,15 +13,15 @@ from craid.club.regions.SphericalRegion import SphericalRegion
 
 class MultiSphericalRegion(Region):
 
-    def __init__(self, myName, num, points: List[Tuple[float, float, float]], r: float, color):
+    def __init__(self, myName, num, points: List[Tuple[str, float, float, float]], r: float, color):
         super().__init__(myName, num, color)
         self.points: List[SphericalRegion] = []
         ct: int = 0
         for point in points:
-            px = point[0]
-            py = point[1]
-            pz = point[2]
-            theName = self.getName() + "-" + str(ct)
+            theName = point[0]
+            px = point[1]
+            py = point[2]
+            pz = point[3]
             theNumber = -1
             reg = SphericalRegion(theName, theNumber, px, py, pz, r, color)
             ct = ct + 1

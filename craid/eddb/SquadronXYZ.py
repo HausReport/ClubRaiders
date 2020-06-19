@@ -6,7 +6,8 @@
 # @formatter:off
 
 class SquadronXYZ(object):
- myDict = \
+
+    myDict = \
 {'104th Phoenix Discovery Group': {'L 12-19': (113, -85, 56),
                                    'Woyo Mina': (113, -90, 57)},
  '10th Fleet': {"Barnard's Star": (-3, 1, 4)},
