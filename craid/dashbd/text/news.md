@@ -1,9 +1,7 @@
 
 ## Clubspace News Network
 
-Player actions taking place in the Sirius region
-against CQC Holdings at Quan Gurus and LPM 607.  Mopping up
-and waiting for retreat in Corn Pin. Join the fun!
+Player actions taking place in the Sirius region against Hodack Prison Colony.  
 
 * $n_wars wars in progress
 * $n_elections elections in progress
