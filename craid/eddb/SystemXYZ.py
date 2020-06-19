@@ -3,6 +3,8 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 
+# @formatter:off
+
 class SystemXYZ(object):
  myDict = \
 {
@@ -20641,3 +20643,5 @@ class SystemXYZ(object):
  "u Carinae": (90,0,30),
  "van Maanen's Star": (-6,-11,-4),
 }
+
+# @formatter:on

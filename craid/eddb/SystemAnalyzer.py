@@ -62,14 +62,13 @@ class SystemAnalyzer(object):
 
     def bountyHunting(self):
         bhSco, msg = self.theFaction.bountyHuntingScore()
-        if bhSco<=0.0:
+        if bhSco <= 0.0:
             msg = f'Bounty hunting is not recommended because {msg}.'
-        elif bhSco<=50.0:
+        elif bhSco <= 50.0:
             msg = f'Bounty hunting is effective.'
         else:
             msg = f'Bounty hunting is particularly effective for the following reasons: {msg}.'
-        self.messages.add(bhSco,msg)
-
+        self.messages.add(bhSco, msg)
 
     def warZones(self):
         wars: List[str] = self.theSystem.getClubInState(gconst.STATE_WAR)
@@ -83,21 +82,20 @@ class SystemAnalyzer(object):
 
     def missions(self):
         smSco, msg = self.theFaction.missionScore()
-        if smSco<=0.0:
+        if smSco <= 0.0:
             msg = f'Running missions is not recommended because {msg}.'
-        elif smSco<=50.0:
+        elif smSco <= 50.0:
             msg = f'Running missions is effective.'
         else:
             msg = f'Running missions is particularly effective for the following reasons: {msg}.'
 
         self.messages.add(smSco, msg)
 
-
     def smuggling(self):
         smSco, msg = self.theFaction.smugglingScore()
-        if smSco<=0.0:
+        if smSco <= 0.0:
             msg = f'Smuggling is not recommended because {msg}.'
-        elif smSco<=50.0:
+        elif smSco <= 50.0:
             msg = f'Smuggling is effective.'
         else:
             msg = f'Smuggling is particularly effective for the following reasons: {msg}.'
@@ -117,7 +115,7 @@ class SystemAnalyzer(object):
         sco: int = self.theSystem.mineralSalesScore()
         if sco < 2:
             return
-        elif sco==2:
+        elif sco == 2:
             adj = "good"
         elif sco == 3:
             adj = "very good"

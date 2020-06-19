@@ -38,7 +38,7 @@ class Station(Aware):
         # self.jsonLine: Dict[str, str] = jsonString
         self.club: bool = False
         self.distance_to_star: int = jsonLine.get('distance_to_star')
-        self.has_large_pads : bool = False
+        self.has_large_pads: bool = False
         hm: str = jsonLine.get('max_landing_pad_size')
         if hm is not None:
             if hm == "L":
@@ -47,7 +47,7 @@ class Station(Aware):
         self.has_blackmarket: bool = jsonLine.get("has_blackmarket")
         self.has_shipyard: bool = jsonLine.get("has_shipyard")
         self.has_docking: bool = jsonLine.get("has_docking")
-        self.is_planetary: bool =jsonLine.get("is_planetary")
+        self.is_planetary: bool = jsonLine.get("is_planetary")
         self.system_id: int = jsonLine.get("system_id")
         self.stationType: str = jsonLine.get("type")
         self.controlling_minor_faction_id: int = jsonLine.get("controlling_minor_faction_id")
@@ -127,11 +127,11 @@ class Station(Aware):
         from craid.eddb.Faction import Faction
         fac: Faction = Aware.getFactionById(self.getControllingFactionId())
         if fac is None:
-            return("~~Unknown~~")
+            return ("~~Unknown~~")
         return fac.get_name2()
 
     def setClub(self, param: bool):
-        #print("setting club to :" + str(param))
+        # print("setting club to :" + str(param))
         self.club = param
 
     def isClub(self) -> bool:
@@ -139,7 +139,7 @@ class Station(Aware):
 
     # a little experimental, but should be close
     def getMineralSalesScore(self) -> int:
-        from craid.eddb.InhabitedSystem import  InhabitedSystem
+        from craid.eddb.InhabitedSystem import InhabitedSystem
         tSys: InhabitedSystem = self.getSystem()
         econ: str = tSys.getEconomy()
         if not econ.startswith("Indust") and not econ.startswith("Refin"):

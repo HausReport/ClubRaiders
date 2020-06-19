@@ -23,30 +23,30 @@ class AnnoyingCrap(object):
               "{vulnerable} contains War && {isHomeSystem} contains false",
               [{'column_id': 'distance', 'direction': 'asc'}],
               "cz"),
-         3: ("hunt for bounties",
-             "{isHomeSystem} contains false && {bountyHuntingScore} >= 50",
+         3 : ("hunt for bounties",
+              "{isHomeSystem} contains false && {bountyHuntingScore} >= 50",
               [{'column_id': 'distance', 'direction': 'asc'}],
-             "bh"),
-         4: ("smuggle",
-             "{isHomeSystem} contains false && {smugglingScore} >= 50",
-             [{'column_id': 'distance', 'direction': 'asc'}],
-             "smuggle"),
-         5: ("trade",
-             "{isHomeSystem} contains false && {salesScore} > 50",
-             [{'column_id': 'distance', 'direction': 'asc'}],
-             "trade"),
-         6: ("mine",
-             "{isHomeSystem} contains false && {mineralSalesScore} > 1",
-             [{'column_id': 'distance', 'direction': 'asc'}],
-             "mine"),
-         7: ("explore",
-             "{isHomeSystem} contains false",
-             [{'column_id': 'explorationScore', 'direction': 'desc'}],
-             "explore"),
-         8: ("spy behind enemy lines",
-             '{isHomeSystem} contains false',
-             [{'column_id': 'updated', 'direction': 'asc'}],
-             "scouting"),
+              "bh"),
+         4 : ("smuggle",
+              "{isHomeSystem} contains false && {smugglingScore} >= 50",
+              [{'column_id': 'distance', 'direction': 'asc'}],
+              "smuggle"),
+         5 : ("trade",
+              "{isHomeSystem} contains false && {salesScore} > 50",
+              [{'column_id': 'distance', 'direction': 'asc'}],
+              "trade"),
+         6 : ("mine",
+              "{isHomeSystem} contains false && {mineralSalesScore} > 1",
+              [{'column_id': 'distance', 'direction': 'asc'}],
+              "mine"),
+         7 : ("explore",
+              "{isHomeSystem} contains false",
+              [{'column_id': 'explorationScore', 'direction': 'desc'}],
+              "explore"),
+         8 : ("spy behind enemy lines",
+              '{isHomeSystem} contains false',
+              [{'column_id': 'updated', 'direction': 'asc'}],
+              "scouting"),
          9 : ("go on a piracy/murder rampage",
               "{isHomeSystem} contains false && {piracyMurderScore} >= 50",
               [{'column_id': 'piracyMurderScore', 'direction': 'desc'}, {'column_id': 'distance', 'direction': 'asc'}],
@@ -94,11 +94,11 @@ class AnnoyingCrap(object):
 
     @staticmethod
     def getLocationDropdown():
-        #_systemNameToXYZ = SystemXYZ.myDict
-        #print("dropdown len=" + str(len(SystemXYZ.myDict)))
+        # _systemNameToXYZ = SystemXYZ.myDict
+        # print("dropdown len=" + str(len(SystemXYZ.myDict)))
         opts = []
         logging.debug("Loading location dropdown")
-        #keys: List[str] = sorted(SystemXYZ.myDict)
+        # keys: List[str] = sorted(SystemXYZ.myDict)
         for it in SystemXYZ.myDict.keys():
             opts.append({'label': it, 'value': it})
         return opts
@@ -115,18 +115,18 @@ class AnnoyingCrap(object):
 
     @staticmethod
     def getFilter(val3: int):
-        if val3==0: val3 = 1
+        if val3 == 0: val3 = 1
         tup = AnnoyingCrap.cannedActions[val3]
         return tup[1]
 
     @staticmethod
     def getSort(val3: int):
-        if val3==0: val3 = 1
+        if val3 == 0: val3 = 1
         return AnnoyingCrap.cannedActions[val3][2]
 
     @staticmethod
     def getMessage(val3: int):
-        if val3==0: val3 = 1
+        if val3 == 0: val3 = 1
         shortFile: str = AnnoyingCrap.cannedActions[val3][3]
         return AnnoyingCrap.getMarkdown(shortFile)
 
@@ -151,20 +151,27 @@ class AnnoyingCrap(object):
             # {"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
             # {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
             # {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-            {"name": 'Home', "id": 'isHomeSystem', "deletable": False, "hideable": allowHiddenColums, "selectable": False},
-            {"name": 'Population', "id": 'population', "deletable": False, "hideable": allowHiddenColums, "selectable": False,
-             "type": "numeric", 'format': Format( precision=0, scheme=Scheme.fixed, group=Group.yes ) },
+            {"name"      : 'Home', "id": 'isHomeSystem', "deletable": False, "hideable": allowHiddenColums,
+             "selectable": False},
+            {"name"      : 'Population', "id": 'population', "deletable": False, "hideable": allowHiddenColums,
+             "selectable": False,
+             "type"      : "numeric", 'format': Format(precision=0, scheme=Scheme.fixed, group=Group.yes)},
             {"name": 'Inf.', "id": 'influence', "deletable": False, "hideable": allowHiddenColums, "selectable": False,
-             "type": "numeric", 'format': Format( precision=2, scheme=Scheme.fixed, group=Group.yes ) },
-            {"name": 'Difficulty', "id": 'difficulty', "deletable": False, "selectable": False, "type": "numeric", 'format': Format( precision=1, scheme=Scheme.fixed, group=Group.yes ) },
+             "type": "numeric", 'format': Format(precision=2, scheme=Scheme.fixed, group=Group.yes)},
+            {"name"  : 'Difficulty', "id": 'difficulty', "deletable": False, "selectable": False, "type": "numeric",
+             'format': Format(precision=1, scheme=Scheme.fixed, group=Group.yes)},
             {"name": 'Scouted', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
-            {"name": 'Control', "id": 'control', "deletable": False, "hideable": allowHiddenColums, "selectable": False},
+            {"name"      : 'Control', "id": 'control', "deletable": False, "hideable": allowHiddenColums,
+             "selectable": False},
             {"name": 'Vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
             {"name": 'Dist.', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
-            {"name": 'MissionScore', "id": 'missionScore', "deletable": False, "selectable": False, "hideable": allowHiddenColums, "type": "numeric"},
-            {"name": 'TradeScore', "id": 'salesScore', "deletable": False, "selectable": False, "hideable": allowHiddenColums, "type": "numeric"},
+            {"name"    : 'MissionScore', "id": 'missionScore', "deletable": False, "selectable": False,
+             "hideable": allowHiddenColums, "type": "numeric"},
+            {"name"    : 'TradeScore', "id": 'salesScore', "deletable": False, "selectable": False,
+             "hideable": allowHiddenColums, "type": "numeric"},
             {"name": 'ExploreScore', "id": 'explorationScore', "hideable": allowHiddenColums, "type": "numeric"},
-            {"name": 'MineralSalesScore', "id": 'mineralSalesScore', "deletable": False, "selectable": False, "hideable": allowHiddenColums, "type": "numeric"},
+            {"name"    : 'MineralSalesScore', "id": 'mineralSalesScore', "deletable": False, "selectable": False,
+             "hideable": allowHiddenColums, "type": "numeric"},
             {"name": 'BountyHuntScore', "id": 'bountyHuntingScore', "hideable": allowHiddenColums, "type": "numeric"},
             {"name": 'SmugglingScore', "id": 'smugglingScore', "hideable": allowHiddenColums, "type": "numeric"},
             {"name": 'PiracyMurderScore', "id": 'piracyMurderScore', "hideable": allowHiddenColums, "type": "numeric"},

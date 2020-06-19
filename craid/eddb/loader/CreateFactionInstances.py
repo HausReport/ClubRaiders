@@ -17,8 +17,7 @@ from craid.eddb.States import States
 # Note: This does have to go through _all_ populated systems
 #
 def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_system_keys: Set[int],
-                        all_factions_dict: Dict[int, Faction], club_faction_keys: Set[int]  ):
-
+                        all_factions_dict: Dict[int, Faction], club_faction_keys: Set[int]):
     allClubSystemInstances: List[FactionInstance] = []  # make this one avaiable
     sysIdFacIdToFactionInstance: Dict[Tuple[int, int], FactionInstance] = {}
     factions_of_interest_keys: Set[int] = set()
@@ -27,7 +26,7 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_syste
     currentSystem: InhabitedSystem
     for currentSystem in all_systems_dict.values():
 
-        sys_id = currentSystem.get_id()     # this is the big time-saver
+        sys_id = currentSystem.get_id()  # this is the big time-saver
         if sys_id not in club_system_keys:
             continue
 
@@ -41,9 +40,9 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_syste
 
             fac = all_factions_dict.get(faction_id)
             if fac is None:
-                logging.warning("Unknown faction ID: "+ str(faction_id))
+                logging.warning("Unknown faction ID: " + str(faction_id))
                 continue
-            #factionName: str = fac.get_name2()
+            # factionName: str = fac.get_name2()
 
             #
             # Scan for interesting faction states
@@ -77,12 +76,11 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_syste
                 # Cheap trick to see if it's a player faction that
                 # was identified by the filter as a club faction
                 #
-                #if factionName.startswith("*"):
+                # if factionName.startswith("*"):
                 if factionInstance.is_player():
                     continue  # filters player factions
 
                 allClubSystemInstances.append(factionInstance)
-
 
     logging.info("Populated faction instances: {%d} items.", nFacInst)
     return allClubSystemInstances, sysIdFacIdToFactionInstance, factions_of_interest_keys

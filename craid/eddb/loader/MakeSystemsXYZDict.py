@@ -25,9 +25,9 @@ with gzip.open(fName, 'rb') as f:
         tX = int(sysLine['x'])
         tY = int(sysLine['y'])
         tZ = int(sysLine['z'])
-        systemNameToXYZ[tName]  = (tX, tY, tZ)
+        systemNameToXYZ[tName] = (tX, tY, tZ)
 
-print( "myDict = \\ \n{")
+print("myDict = \\ \n{")
 for tName in sorted(systemNameToXYZ):
     tT = systemNameToXYZ[tName]
     tX = tT[0]
@@ -37,6 +37,4 @@ for tName in sorted(systemNameToXYZ):
     msg = f' "{tName}": ({tX},{tY},{tZ}),'
     print(msg)
 
-
-print( "}")
-
+print("}")

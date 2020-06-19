@@ -25,8 +25,8 @@ class SphericalRegion(Region):
     def distanceFrom(self, x, y, z):
         dist = math.sqrt((x - self.x0) ** 2 + (y - self.y0) ** 2 + (z - self.z0) ** 2)
         dist = dist - self.r
-        if dist<0:
-            dist=0
+        if dist < 0:
+            dist = 0
         return dist
 
     def getSurface(self):

@@ -22,14 +22,13 @@ def loadStationsInClubSystems(loader: DataLoader,
                               all_systems_dict: Dict[int, InhabitedSystem],
                               club_faction_keys: Set[int],
                               club_system_keys: Set[int]) -> Set[int]:
-
     station_keys = set()
     nLines: int = 0
     nAdded: int = 0
     fName = loader.find_data_file('stations.jsonl')
-    #with jsonlines.open(fName) as handle:
+    # with jsonlines.open(fName) as handle:
     #    staLine: Dict
-    #for staLine in handle:
+    # for staLine in handle:
     with gzip.open(fName, 'rb') as f:
         for line in f:
             staLine = ujson.loads(line)
@@ -50,7 +49,7 @@ def loadStationsInClubSystems(loader: DataLoader,
                     curSys: InhabitedSystem = all_systems_dict[lCurSystemId]
                     if curSys is not None:
 
-                        #Note: playing with reducing mem requirements
+                        # Note: playing with reducing mem requirements
                         staLine.pop("selling_ships")
                         staLine.pop("selling_modules")
                         #

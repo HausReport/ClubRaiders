@@ -4,7 +4,6 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 
 import datetime
-import logging
 import string
 from typing import List
 
@@ -58,7 +57,7 @@ class FactionInstance(Faction):
         e10 = self.getInfluence()
         if e10 == 0.0:
             return theMax
-        e10 = max(0.0, e10-2.5) #only need to get them to 2.5% to trigger retreat
+        e10 = max(0.0, e10 - 2.5)  # only need to get them to 2.5% to trigger retreat
         d10 = self.getPopulation()
         ret = (d10 / 15000.0) * (e10 ** 2.0) / 1000.0
 
@@ -164,11 +163,10 @@ class FactionInstance(Faction):
     def hasState(self, state: int):
         return self.states.hasState(state)
 
-
     # shared code for trade/exploration
     def _ss(self) -> [float, List[str]]:
 
-        sco:float = 10.0
+        sco: float = 10.0
         bonuses: List[str] = []
 
         #
@@ -225,7 +223,7 @@ class FactionInstance(Faction):
         bonuses: List[str]
         sco, bonuses = self._ss()
 
-        if sco <=0.0:
+        if sco <= 0.0:
             my_string = ','.join(bonuses)
             return sco, my_string
 
@@ -247,8 +245,8 @@ class FactionInstance(Faction):
         sco: float
         bonuses: List[str]
         sco, bonuses = self._ss()
-        #sco: float, bonuses: List[str] = self._ss()
-        #sco, bonuses = self._ss()
+        # sco: float, bonuses: List[str] = self._ss()
+        # sco, bonuses = self._ss()
         my_string = ','.join(bonuses)
         return sco, my_string
 
@@ -261,7 +259,7 @@ class FactionInstance(Faction):
     # def bountyHuntingScore(self) -> float:
     #     return self.mySystem.bountyHuntingScore()
 
-    def smugglingScore(self) -> [float,str]:
+    def smugglingScore(self) -> [float, str]:
         score: float = 50.0
         bonuses: List[str] = []
 
@@ -300,8 +298,6 @@ class FactionInstance(Faction):
             score = score * 2.0
             bonuses.append("the opposing faction being in elections")
 
-
-
         #
         # Stage 3: Can the club faction be damaged by smuggling
         #
@@ -322,7 +318,7 @@ class FactionInstance(Faction):
         return self.mySystem.getEdbgsLink(self, self.get_name2())
 
     # much taken from https://forums.frontier.co.uk/threads/dev-update-07-01-2016.221826/
-    def bountyHuntingScore(self) -> [float,str] :
+    def bountyHuntingScore(self) -> [float, str]:
         score: float = 50.0
         bonuses: List[str] = []
 
@@ -409,7 +405,7 @@ class FactionInstance(Faction):
     def getRegionNumber(self):
         return self.mySystem.getRegionNumber()
 
-    def missionScore(self) -> [float,str] :
+    def missionScore(self) -> [float, str]:
         sco: float = 50.0
         bonuses: List[str] = []
         after = ""
@@ -491,8 +487,8 @@ class FactionInstance(Faction):
         return round(sco, 0), my_string
 
         ## TODO: Check self vs Investment/Lockdown
-        #msg = f'Run missions for competing factions at station {staName}.'
-        #if staDist>25000:
+        # msg = f'Run missions for competing factions at station {staName}.'
+        # if staDist>25000:
         #    after += "  Note the distance to the station."
 
     def piracyMurderScore(self) -> float:
@@ -500,8 +496,3 @@ class FactionInstance(Faction):
 
     def mineralSalesScore(self):
         return self.mySystem.mineralSalesScore()
-
-
-
-
-

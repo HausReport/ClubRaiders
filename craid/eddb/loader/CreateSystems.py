@@ -26,7 +26,7 @@ def load_systems(loader: DataLoader) -> Dict[int, InhabitedSystem]:
     nLines = 0
     fName = loader.find_data_file('systems_populated.jsonl')
     with gzip.open(fName, 'rb') as f:
-         for line in f:
+        for line in f:
             sysLine = ujson.loads(line)
             nLines += 1
             tid = int(sysLine['id'])

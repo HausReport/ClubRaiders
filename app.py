@@ -63,11 +63,11 @@ newsMarkdown = dcc.Markdown(newsString)
 #
 # Start up Dash
 #
-my_meta_tags=[
+my_meta_tags = [
     # A description of the app, used by e.g.
     # search engines when displaying search results.
     {
-        'name': 'description',
+        'name'   : 'description',
         'content': 'Tool to help Elite: Dangerous commanders identify, evaluate and eradicate factions linked to the shadowy organization known as The Club.'
     },
     # A tag that tells Internet Explorer (IE)
@@ -75,7 +75,7 @@ my_meta_tags=[
     # to that browser (e.g. Edge)
     {
         'http-equiv': 'X-UA-Compatible',
-        'content': 'IE=edge'
+        'content'   : 'IE=edge'
     },
     # A tag that tells the browser not to scale
     # desktop widths to fit mobile screens.
@@ -85,8 +85,8 @@ my_meta_tags=[
     #
     # Necessary for "true" mobile support.
     {
-      'name': 'viewport',
-      'content': 'width=device-width, initial-scale=1.0'
+        'name'   : 'viewport',
+        'content': 'width=device-width, initial-scale=1.0'
     }
 ]
 appName = __name__
@@ -232,7 +232,7 @@ tab_1 = \
             html.Td(className="clean2", children=[
                 enCard(html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity")),
                 html.Div(className="card", children=[
-                        html.Div(className="clean", children=[
+                    html.Div(className="clean", children=[
                         html.Label("Current filter:", className=''),
                         html.Label(id='filter-notifier', className="code-notifier"),
                         html.Button(id="clear-filter", className="myButton"),

@@ -96,7 +96,7 @@ class InhabitedSystem(System):
         f: FactionInstance
         for f in self.minorFactionPresences:
             ret += "| "
-            ret += f.getEdbgsLink("link") #_name2()  # decorates name for md
+            ret += f.getEdbgsLink("link")  # _name2()  # decorates name for md
             ret += " | "
             ret += "{:,}".format(f.getInfluence())
             ret += " | "
@@ -198,7 +198,7 @@ class InhabitedSystem(System):
         myDict['inara_link'] = "[link](" + self.getInaraSystemUrl() + ")"
         myDict['eddb_link'] = "[link](" + self.getEddbSystemUrl() + ")"
         myDict['edbgs_link'] = self.getEdbgsLink("link")
-        myDict['edbgs_sys'] =  self.getEdbgsLink("link")
+        myDict['edbgs_sys'] = self.getEdbgsLink("link")
         myDict['edbgs_fac_link'] = fi.getEdbgsLink("link")
 
         myDict['nearest_shipyard'] = self.getInaraNearestShipyardUrl()
@@ -216,7 +216,6 @@ class InhabitedSystem(System):
         myDict['bounty_hunting_features'] = bhFeatures
 
         myDict['region_msg'] = self.getNearestRegionMessage()
-
 
         myDict['power'] = self.getPower()
         myDict['power_state'] = self.getPowerState()
@@ -389,19 +388,19 @@ class InhabitedSystem(System):
         return bestStation
 
     def mineralSalesScore(self):
-        sta : Station
+        sta: Station
         bestScore = 0
         for sta in self.stations:
             if sta.isClub():
                 continue
             sco = sta.getMineralSalesScore()
-            if (sco>bestScore):
+            if (sco > bestScore):
                 bestScore = sco
 
         return bestScore
 
     def getEdbgsLink(self, msg: str) -> str:
-         return EdBgsSystemIds.getMarkdownLink(self.get_id(), msg)
+        return EdBgsSystemIds.getMarkdownLink(self.get_id(), msg)
 
     # def smugglingScore(self) -> float:
     #     sta: Station = self.getBestSmugglingStation()
@@ -435,12 +434,8 @@ class InhabitedSystem(System):
             if fac.isClub():
                 continue
             inf = fac.getInfluence()
-            if inf> topInf:
+            if inf > topInf:
                 topInf = inf
                 topFac = fac
 
         return topFac
-
-
-
-

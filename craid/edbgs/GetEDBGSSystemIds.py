@@ -17,7 +17,6 @@ from craid.eddb.BountyHuntingInfo import BountyHuntingInfo
 
 newDict: Dict[int, str] = {}
 
-
 for sysId in BountyHuntingInfo.bhDict.keys():
 
     if sysId in craid.edbgs.EdBgsSystemIds.EdBgsSystemIds.myDict:
@@ -50,4 +49,3 @@ for sysId in BountyHuntingInfo.bhDict.keys():
     time.sleep(10)
 
 pprint.pprint(str(newDict))
-

@@ -23,6 +23,7 @@ def dumpKeys(shortName: str, what: Set[int]):
     with open(fName, 'wb') as fileOut:
         pickle.dump(what, fileOut)
 
+
 def loadKeys(shortName: str):
     shortName = "keys-" + shortName + ".pkl"
     #
@@ -40,6 +41,7 @@ def loadKeys(shortName: str):
     #
     with open(fName, 'rb') as fileOut:
         return pickle.load(fileOut)
+
 
 if __name__ == '__main__':
     pass

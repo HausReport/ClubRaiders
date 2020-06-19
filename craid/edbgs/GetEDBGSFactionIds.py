@@ -17,10 +17,10 @@ wait = 5
 
 counter = 0
 for facId in keys:
-    #print( str(sysId))
-    counter +=1
+    # print( str(sysId))
+    counter += 1
 
-    if  EdBgsFactionIds.hasId(facId):
+    if EdBgsFactionIds.hasId(facId):
         continue
 
     url = 'https://elitebgs.app/api/ebgs/v4/factions?eddbId=' + str(facId)
@@ -37,7 +37,7 @@ for facId in keys:
     bgsId = docZero['_id']
     edId = docZero['eddb_id']
 
-    #newDict[edId] = bgsId
+    # newDict[edId] = bgsId
 
     print(f"\t{edId}:'{bgsId}',")
     # f = gzip.open(fName, 'wb')

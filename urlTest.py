@@ -21,7 +21,7 @@ import urllib3
 prevUrl = "xxxfoobarnomatchlalala"
 baseUrl = None
 
-app = dash.Dash(__name__)#, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__)  # , external_stylesheets=external_stylesheets)
 
 app.layout = html.Div([
     # represents the URL bar, doesn't render anything
@@ -35,17 +35,19 @@ app.layout = html.Div([
     html.Div(id='page-content')
 ])
 
+
 def handle_crap(obj, default):
     if not obj:
         return default
     if obj is None:
         return default
-    if len(obj) <1:
+    if len(obj) < 1:
         return default
     obj = obj[0]
-    if len(obj)<1:
+    if len(obj) < 1:
         return default
     return obj[0]
+
 
 @app.callback(dash.dependencies.Output('page-content', 'children'),
               [dash.dependencies.Input('url', 'href')])
@@ -93,9 +95,7 @@ def display_page(href):
     else:
         print("href is none")
 
-
-
-    #print("params=" + str(req.__getattribute__("params")))
+    # print("params=" + str(req.__getattribute__("params")))
     # #
     # # Parse the url and get the query
     # #
@@ -121,6 +121,8 @@ def display_page(href):
     return html.Div([
         html.H3('You are on page {}'.format(href))
     ])
+
+
 # NOTE: see also https://dash.plotly.com/urls
 
 # @app.callback(
@@ -137,7 +139,6 @@ def display_page(href):
 
 if __name__ == '__main__':
     app.run_server()
-
 
 # FIXME: it'd be nice to let users link directly to certain factions, systems, etc...
 # getting the url isn't trivial, see

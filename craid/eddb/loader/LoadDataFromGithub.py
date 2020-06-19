@@ -16,6 +16,5 @@ class LoadDataFromGithub(WebDataLoader):
     def getWebFilePrefix(self) -> str:
         return "https://raw.github.com/HausReport/ClubRaiders/master/data/"
 
-
-#if __name__ == '__main__':
-    #LoadDataFromEDDB.load_data()
+# if __name__ == '__main__':
+# LoadDataFromEDDB.load_data()

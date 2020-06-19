@@ -9,7 +9,7 @@ from craid.eddb.NamedItem import NamedItem
 
 
 class Aware(NamedItem):
-    systemsDict: Dict[ int, object] = None  # Sidestepping circular imports
+    systemsDict: Dict[int, object] = None  # Sidestepping circular imports
     factionsDict: Dict[int, object] = None  # Sidestepping circular imports
 
     # # getters/setters for id & name in superclass
@@ -61,4 +61,3 @@ class Aware(NamedItem):
         # sd Dict[int, Faction] = Aware.factionsDict
         fac: Faction = Aware.factionsDict.get(facId)
         return fac
-

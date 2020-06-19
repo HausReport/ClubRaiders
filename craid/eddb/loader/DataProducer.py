@@ -26,13 +26,12 @@ from craid.eddb.loader.MakeKeyFiles import dumpKeys, loadKeys
 
 
 def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
-
     if useEddb:
         logging.info("Loading from EDDB")
         myLoader = LoadDataFromEDDB()
     else:
         logging.info("Loading from AWS")
-        myLoader = LoadDataFromAWS() #LoadDataFromGithub()
+        myLoader = LoadDataFromAWS()  # LoadDataFromGithub()
 
     playerFactionNameToSystemName: Dict[str, str] = {}
 
@@ -74,8 +73,7 @@ def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
     # Make (2?) nifty list(s) of club faction presences
     #
     allClubSystemInstances, sysIdFacIdToFactionInstance, factions_of_interest_keys \
-            = getFactionInstances(all_systems_dict, club_system_keys, all_factions_dict, club_faction_keys )
-
+        = getFactionInstances(all_systems_dict, club_system_keys, all_factions_dict, club_faction_keys)
 
     gc.collect()
     pm.printmem('2')
@@ -92,7 +90,7 @@ def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
     # No return value - stations are stored in their respective system objects
     #
     club_station_keys: Set[int] = \
-        loadStationsInClubSystems(myLoader, all_systems_dict, club_faction_keys, club_system_keys )
+        loadStationsInClubSystems(myLoader, all_systems_dict, club_faction_keys, club_system_keys)
 
     gc.collect()
     pm.printmem('3')
@@ -107,13 +105,13 @@ def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
     #
 
     if writeKeyFiles:
-        dumpKeys("club-system-keys",club_system_keys)
-        dumpKeys("factions-of-interest-keys",factions_of_interest_keys)
-        dumpKeys("club-station-keys",club_station_keys)
+        dumpKeys("club-system-keys", club_system_keys)
+        dumpKeys("factions-of-interest-keys", factions_of_interest_keys)
+        dumpKeys("club-station-keys", club_station_keys)
 
     # FIXME - think about this
-    #if not factions_of_interest_keys:
-    #if not clubSystemKeysExists:
+    # if not factions_of_interest_keys:
+    # if not clubSystemKeysExists:
 
     allClubSystemInstances.clear()
     allClubSystemInstances = None
@@ -125,8 +123,8 @@ def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
     #
     #
     #  FIXME:playerFactionNameToSystemName  could be moved to dashboard
-    return { 'dataFrame'                     : df,
-            #'systemNameToXYZ'              : systemNameToXYZ,
+    return {'dataFrame'                    : df,
+            # 'systemNameToXYZ'              : systemNameToXYZ,
             'sysIdFacIdToFactionInstance'  : sysIdFacIdToFactionInstance,
             'playerFactionNameToSystemName': playerFactionNameToSystemName,  # used in dashboard for 2nd dropdown
             }

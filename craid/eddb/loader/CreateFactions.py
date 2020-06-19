@@ -27,8 +27,8 @@ def load_factions(loader: DataLoader) -> [Dict[int, Faction], Dict[int, Faction]
 
     nLines: int = 0
     fName = loader.find_data_file('factions.jsonl')
-#    with jsonlines.open(fName) as handle:
-#        for facLine in handle:
+    #    with jsonlines.open(fName) as handle:
+    #        for facLine in handle:
     with gzip.open(fName, 'rb') as f:
         for line in f:
             facLine = ujson.loads(line)
@@ -43,8 +43,8 @@ def load_factions(loader: DataLoader) -> [Dict[int, Faction], Dict[int, Faction]
             if curFaction.is_player():
                 player_faction_keys.add(lCurFactionId)
             if curFaction.isClub():
-               club_keys.add(lCurFactionId)
-               # clubFactionIdToInfo[lCurFactionId] = curFaction
+                club_keys.add(lCurFactionId)
+                # clubFactionIdToInfo[lCurFactionId] = curFaction
 
     logging.info("Read %s lines of faction data", str(nLines))
     return all_factions_dict, player_faction_keys, club_keys

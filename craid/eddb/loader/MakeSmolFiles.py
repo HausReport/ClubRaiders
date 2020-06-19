@@ -46,13 +46,14 @@ def munchFile(keys: Set[int], xinName: str):
             ujson.dump(foo, file)
             file.write('\n')
 
-
-    gitFile = os.path.join("..","..","..","data",outName)
+    gitFile = os.path.join("..", "..", "..", "data", outName)
     copyfile(outFile, gitFile)
 
+
 def deleteOldFiles():
-    keyFiles = [ 'keys-club-faction-keys.pkl', 'keys-club-station-keys.pkl', 'keys-club-system-keys.pkl', 'keys-factions_of_interest_keys.pkl', 'keys-factions-of-interest-keys.pkl']
-    eFiles =  [ 'factions.jsonl','stations.jsonl','systems_populated.jsonl' ]
+    keyFiles = ['keys-club-faction-keys.pkl', 'keys-club-station-keys.pkl', 'keys-club-system-keys.pkl',
+                'keys-factions_of_interest_keys.pkl', 'keys-factions-of-interest-keys.pkl']
+    eFiles = ['factions.jsonl', 'stations.jsonl', 'systems_populated.jsonl']
 
     allFiles = keyFiles
     for fname in eFiles:
@@ -67,6 +68,7 @@ def deleteOldFiles():
         if os.path.exists(outFile):
             logging.info("removing: " + outFile)
             os.remove(outFile)
+
 
 if __name__ == '__main__':
     #
@@ -83,14 +85,12 @@ if __name__ == '__main__':
     # download large files from eddb
     DataProducer.getDataArrays(writeKeyFiles=True, useEddb=True)
 
-    #load key files & munch
+    # load key files & munch
     club_faction_keys = loadKeys("factions-of-interest-keys")
-    munchFile( club_faction_keys, 'factions.jsonl')
-    club_system_keys    = loadKeys('club-system-keys')
-    munchFile( club_system_keys, 'systems_populated.jsonl')
-    club_station_keys   = loadKeys("club-station-keys")
-    munchFile( club_station_keys,'stations.jsonl' )
+    munchFile(club_faction_keys, 'factions.jsonl')
+    club_system_keys = loadKeys('club-system-keys')
+    munchFile(club_system_keys, 'systems_populated.jsonl')
+    club_station_keys = loadKeys("club-station-keys")
+    munchFile(club_station_keys, 'stations.jsonl')
 
-#inName = 'factions.jsonl'
-
-
+# inName = 'factions.jsonl'

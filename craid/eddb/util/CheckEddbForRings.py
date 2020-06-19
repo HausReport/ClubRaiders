@@ -25,8 +25,8 @@ allClubSystemInstances, sysIdFacIdToFactionInstance, factions_of_interest_keys \
 
 Aware.setFactionsDict(all_factions_dict)
 
-bhArr: List[ List] = [] #[int, str, str, str]]
-sysId : int
+bhArr: List[List] = []  # [int, str, str, str]]
+sysId: int
 for sysId in all_systems_dict.keys():
     tSys: InhabitedSystem = all_systems_dict.get(sysId)
     cf: FactionInstance = tSys.getControllingFactionInstance()
@@ -36,8 +36,8 @@ for sysId in all_systems_dict.keys():
 
     url = "https://eddb.io/system/bodies/" + str(sysId)
     sysName = tSys.get_name()
-    item = [ sysId, sysName, "unknown", "unknown", url]
+    item = [sysId, sysName, "unknown", "unknown", url]
     bhArr.append(item)
-    print(tSys.get_name()    )
+    print(tSys.get_name())
 
 pprint(bhArr)

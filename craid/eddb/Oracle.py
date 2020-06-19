@@ -14,9 +14,10 @@ from craid.eddb.PassThroughDict import PassThroughDict
 def formatLargeNumber(num: int) -> str:
     return humanize.intword(num)
 
+
 def formatLargeDiff(num: int) -> str:
     prefix: str
-    if num<0:
+    if num < 0:
         # &uarr;
         prefix = "&darr; "
         num = abs(num)
@@ -27,9 +28,10 @@ def formatLargeDiff(num: int) -> str:
 
     return prefix + humanize.intword(num)
 
+
 def formatFloatDiff(num: float) -> str:
     prefix: str
-    if num<0.0:
+    if num < 0.0:
         # &uarr;
         prefix = "&darr; "
         num = abs(num)
@@ -40,6 +42,7 @@ def formatFloatDiff(num: float) -> str:
 
     return prefix + "{0:,.2f}".format(num)
 
+
 class Oracle:
 
     def __init__(self, df: pd.DataFrame):
@@ -48,11 +51,8 @@ class Oracle:
         self.myDict['test'] = "test string"
         self.df = df
 
-
         if df is None:
             return
-
-
 
         frame: pd.DataFrame = df
 
@@ -61,7 +61,8 @@ class Oracle:
         # club faction instances
         #
         self.myDict['number_of_factions'] = "{:,}".format(int(frame['systemName'].nunique()))
-        n_by_sys = df.groupby("systemName")[["systemName", "population"]].agg( {'systemName': 'first', 'population': 'first'})
+        n_by_sys = df.groupby("systemName")[["systemName", "population"]].agg(
+            {'systemName': 'first', 'population': 'first'})
         total_pop = n_by_sys["population"].sum()
         total_systems = n_by_sys["systemName"].count()
 
@@ -74,11 +75,10 @@ class Oracle:
         cur_avg_influence = float(frame['influence'].mean())
         cur_total_influence = float(frame['influence'].sum(axis=0))
 
-
         self.myDict['systems_active'] = "{:,}".format(cur_active_systems)
         self.myDict['systems_active_pop'] = formatLargeNumber(cur_population)
         self.myDict['systems_control'] = "{:,}".format(cur_control_systems)
-        self.myDict['systems_control_perc'] = "{:,}".format( (1.0 * cur_control_systems)/ (1.0*cur_active_systems))
+        self.myDict['systems_control_perc'] = "{:,}".format((1.0 * cur_control_systems) / (1.0 * cur_active_systems))
 
         #
         # Westernmost presence
@@ -173,7 +173,7 @@ class Oracle:
         self.myDict['n_expansions'] = df[df["vulnerable"].str.contains("xpans")]["factionName"].nunique()
         self.myDict['n_retreats'] = df[df["vulnerable"].str.contains("etre")]["systemName"].nunique()
 
-        self.myDict['n_very_easy'] =  df[df["difficulty"] <= 1.0]["systemName"].nunique()
+        self.myDict['n_very_easy'] = df[df["difficulty"] <= 1.0]["systemName"].nunique()
 
         #
         #
@@ -216,4 +216,3 @@ class Oracle:
         template = string.Template(theMsg)
         ret = template.substitute(self.myDict)
         return ret
-

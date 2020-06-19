@@ -2,7 +2,6 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
-import io
 import logging
 import os
 import tempfile
@@ -26,7 +25,7 @@ def upload_file(file_name, bucket, object_name=None):
 
     # Upload the file
     s3_client = boto3.client('s3')
-    #s3_client.
+    # s3_client.
     try:
         response = s3_client.upload_file(file_name, bucket, object_name)
         response = s3_client.upload_file(
@@ -37,7 +36,6 @@ def upload_file(file_name, bucket, object_name=None):
         logging.error(e)
         return False
     return True
-
 
 
 logging.getLogger().addHandler(logging.StreamHandler())
@@ -58,8 +56,6 @@ tmpDir = tempfile.gettempdir()
 inFile = os.path.join(tmpDir, fname)
 if os.path.exists(inFile):
     logging.info("copying: " + inFile + " to AWS")
-    #f = io.BytesIO(fname)
-    #with open(fname, "rb") as f:
+    # f = io.BytesIO(fname)
+    # with open(fname, "rb") as f:
     upload_file(inFile, buck_name, "foo.html")
-
-

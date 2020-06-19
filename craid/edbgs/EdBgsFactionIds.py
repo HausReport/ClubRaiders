@@ -6,8 +6,6 @@ from typing import Dict
 
 
 class EdBgsFactionIds(object):
-
-
     myDict: Dict[int, str] = {
         75776: '59e7a61dd22c775be0fe1569',
         22530: '59eb359bd22c775be0b8520e',
@@ -690,7 +688,7 @@ class EdBgsFactionIds(object):
             return False
         return True
 
-if __name__ == '__main__':
-    ret = EdBgsFactionIds.getMarkdownLink(22980,"Hi There")
-    print(ret)
 
+if __name__ == '__main__':
+    ret = EdBgsFactionIds.getMarkdownLink(22980, "Hi There")
+    print(ret)

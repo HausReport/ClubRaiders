@@ -14,11 +14,11 @@ from craid.eddb.NamedItem import NamedItem
 class Faction(Aware):
 
     # getters/setters for id & name in superclass
-    def __init__(self, obj, fromFaction: bool=False):
+    def __init__(self, obj, fromFaction: bool = False):
 
         self.club = False
         if not fromFaction:
-            jsonString : Dict = obj
+            jsonString: Dict = obj
             name = jsonString[NamedItem.NAME]
             _id = jsonString[NamedItem.ID]
             super().__init__(name, _id)

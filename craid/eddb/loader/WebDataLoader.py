@@ -19,7 +19,7 @@ class WebDataLoader(DataLoader):
     def getPrefix(self) -> str:
         return "smol-"
 
-    def find_data_file(self, _shortName: str, forceDownload= False):
+    def find_data_file(self, _shortName: str, forceDownload=False):
         shortName = self.getPrefix() + _shortName
         #
         # If data dir exists, use that one
@@ -55,7 +55,7 @@ class WebDataLoader(DataLoader):
         if not os.path.exists(fName):
             logging.error("No data file: " + fName)
             assert False, "Couldn't get data file" + fName
-            #return None
+            # return None
         else:
             logging.info("Found data file: %s", fName)
             # with open(fName, 'r') as handle:
@@ -93,7 +93,7 @@ class WebDataLoader(DataLoader):
         assert os.path.exists(targetDirectory), "data dir doesn't exist: [" + targetDirectory + "]"
 
         prefix = self.getWebFilePrefix()
-        url = prefix+shortName+".gz"
+        url = prefix + shortName + ".gz"
 
         fName = os.path.join(targetDirectory, shortName + ".gz")
         logging.info("2 - downloading [%s] to [%s] data file.", url, fName)
@@ -103,4 +103,3 @@ class WebDataLoader(DataLoader):
         f.close()
 
         return fName
-

@@ -6,7 +6,7 @@
 
 # sysid, name, rings, res, bodies link
 
-#10931: unknown,  # Kokokomi
+# 10931: unknown,  # Kokokomi
 
 
 class BountyHuntingInfo(object):
@@ -140,8 +140,6 @@ class BountyHuntingInfo(object):
         if line is None:
             return False
         return line
-
-
 
 # if __name__ == '__main__':
 #     bhDict: Dict[int, bool] = {}
