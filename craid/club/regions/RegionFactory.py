@@ -103,6 +103,6 @@ class RegionFactory(object):
             px = point[0]
             py = point[1]
             pz = point[2]
-            rData.append(Tuple[aName, px, py, pz])
+            rData.append( (aName, px, py, pz))
 
         return MultiSphericalRegion(squadName, -1, rData, radius, color)
