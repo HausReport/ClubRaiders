@@ -43,8 +43,10 @@ class SphericalRegion(Region):
             z=z,
             opacity=0.2,
             showlegend=False,
-            hoverinfo='none',
-            colorscale=colorScale
+            showscale=False,
+            hoverinfo='skip',
+            colorscale=colorScale,
+            text = self._name
         )
         return data
 
