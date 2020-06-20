@@ -55,6 +55,6 @@ class MultiSphericalRegion(Region):
 
         for reg in self.points:
             msg = str(reg)
-            ret = ret + "msg" + "\n"
+            ret = ret + "\n" + msg
 
         return ret
