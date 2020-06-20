@@ -46,7 +46,7 @@ class SphericalRegion(Region):
             showscale=False,
             hoverinfo='skip',
             colorscale=colorScale,
-            text = self._name
+            text=self._name
         )
         return data
 
