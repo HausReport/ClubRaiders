@@ -16,19 +16,20 @@ from craid.eddb.SquadronXYZ import SquadronXYZ
 
 
 class RegionFactory(object):
-    regionDict = {
-        1: SphericalRegion("Merope",        1,  -79,  -150, -340, 100, 'rgb(255, 0, 0)'),
-        2: SphericalRegion("Rectangle",     2,  -54,   -66, -124,  75, 'rgb(255,255,0)'),
-        3: SphericalRegion("California",    3, -320,  -217, -913, 200, 'rgb(32,32,32)'),
-        4: SphericalRegion("Sirius",        4,    6,    -1,   -6,  35, 'rgb(0, 255, 0)'),
-        5: SphericalRegion("Xi Shan",       5,  155,    84,  -50,  45, 'rgb(255,0,255)'),
-        6: SphericalRegion("Abroin",        6,  -94,   110,  -40,  30, 'rgb(0,255,255)'),
-        7: SphericalRegion("Bentonia",      7,   27,   151,  -81,  35, 'rgb(0,0,255)'),
-        8: SphericalRegion("Hodack",        8,   60,    23,   46,  35, 'rgb(0,0,255)'),
-        9: SphericalRegion("Wreaken",       9,   32,    18,  114,  25, 'rgb(0,0,255)'),
-       10: SphericalRegion("CQC",          10,   18,   -11,   78,  30, 'rgb(0,0,255)'),
-    }
     unRegion = TheUnregion()
+    regionDict = {
+        "No Region" : unRegion,
+        "Merope"    : SphericalRegion("Merope",        1,  -79,  -150, -340, 100, 'rgb(255, 0, 0)'),
+        "Rectangle" : SphericalRegion("Rectangle",     2,  -54,   -66, -124,  75, 'rgb(255,255,0)'),
+        "California": SphericalRegion("California",    3, -320,  -217, -913, 200, 'rgb(32,32,32)'),
+        "Sirius"    : SphericalRegion("Sirius",        4,    6,    -1,   -6,  35, 'rgb(0, 255, 0)'),
+        "Xi Shan"   : SphericalRegion("Xi Shan",       5,  155,    84,  -50,  45, 'rgb(255,0,255)'),
+        "Abroin"    : SphericalRegion("Abroin",        6,  -94,   110,  -40,  30, 'rgb(0,255,255)'),
+        "Bentonia"  : SphericalRegion("Bentonia",      7,   27,   151,  -81,  35, 'rgb(0,0,255)'),
+        "Hodack"    : SphericalRegion("Hodack",        8,   60,    23,   46,  35, 'rgb(0,0,255)'),
+        "Wreaken"   : SphericalRegion("Wreaken",       9,   32,    18,  114,  25, 'rgb(0,0,255)'),
+        "CQC"       : SphericalRegion("CQC",          10,   18,   -11,   78,  30, 'rgb(0,0,255)'),
+    }
 
     @staticmethod
     def getRegion(x, y, z) -> SphericalRegion:
@@ -108,6 +109,9 @@ class RegionFactory(object):
     @staticmethod
     def getSquadronRegion(squadName: str, radius: float, color: str):
         aDict = SquadronXYZ.myDict.get(squadName)
+        if aDict is None:
+            return RegionFactory.unRegion
+
         rData = []
         for aName in aDict.keys():
             point = aDict.get(aName)

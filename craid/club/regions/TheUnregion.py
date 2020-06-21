@@ -9,3 +9,6 @@ class TheUnregion(Region):
 
     def __init__(self, ):
         super().__init__("UnRegion", 0, 'rgb(0,0,0)')
+
+    def contains(self, x, y, z):
+        return True

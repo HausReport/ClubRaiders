@@ -3,45 +3,89 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 
-import plotly.graph_objects as go
+import logging
+
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
+import plotly.graph_objs as go
 import ujson
 from dash.dependencies import Output, Input
 
 import craid.eddb.loader.DataProducer as dp
-import pandas as pd
-import logging
-import plotly.graph_objs as go
-from numpy import *
-
 from craid.club.regions.RegionFactory import RegionFactory
+from craid.eddb.SquadronXYZ import SquadronXYZ
+
+logging.getLogger().addHandler(logging.StreamHandler())
+logging.getLogger().level = logging.DEBUG
+
+app = dash.Dash(__name__, external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css'])
 
 styles = {
     'pre': {
-        'border'   : 'thin lightgrey solid',
-        'overflowX': 'scroll'
+        'border'    : 'thin lightgrey solid',
+        'overflowX' : 'scroll',
+        'height'    : '200px',
+        'min-height': '200px',
+        'width'     : '200px',
+        'min-width' : '200px',
     }
 }
 
 
-def setMarkerSize(df):
-    df.loc[df['control'] == True, 'marker_size'] = 8  # Medium is not home/control
-    df.loc[df['control'] == False, 'marker_size'] = 5  # Small is not home/not control
-    df.loc[df['isHomeSystem'] == True, 'marker_size'] = 15  # Large is home
+def getSquadronDropdown():
+    print("dropdown len=" + str(len(SquadronXYZ.myDict)))
+    opts = []
+    logging.debug("Loading squadron dropdown")
+    for it in SquadronXYZ.myDict.keys():
+        opts.append({'label': it, 'value': it})
+
+    # print("shape= " + str(np.shape(opts)))
+    systemDropdown = dcc.Dropdown(
+        id='squadronDropdown',
+        options=opts,
+        # value='Sol',
+        placeholder='Select squadron',
+        className="dropdown-select",
+        # persistence=True,
+    )
+    return systemDropdown
+
+
+def getRegionDropdown():
+    print("dropdown len=" + str(len(RegionFactory.regionDict)))
+    opts = []
+    # logging.debug("Loading squadron dropdown")
+    for it in RegionFactory.regionDict.keys():
+        opts.append({'label': it, 'value': it})
+
+    regionDropdown = dcc.Dropdown(
+        id='regionDropdown',
+        options=opts,
+        # value='Sol',
+        placeholder='Select region',
+        className="dropdown-select",
+        # persistence=True,
+    )
+    return regionDropdown
+
+
+def setMarkerSize(dataFrame):
+    dataFrame.loc[dataFrame['control'] == True, 'marker_size'] = 8  # Medium is not home/control
+    dataFrame.loc[dataFrame['control'] == False, 'marker_size'] = 5  # Small is not home/not control
+    dataFrame.loc[dataFrame['isHomeSystem'] == True, 'marker_size'] = 15  # Large is home
     # df["marker_size"] = df["influence"].apply(lambda x: 5+ x/5)
 
 
-def setMarkerColors(df):
-    df.loc[df['control'] == True, 'color'] = "#ffbf00"  # Yellow is control/not home
-    df.loc[df['control'] == False, 'color'] = "#00ff00"  # Green is not home/not control
-    df.loc[df['isHomeSystem'] == True, 'color'] = "#ff0000"  # Red is homesystem
+def setMarkerColors(dataFrame):
+    dataFrame.loc[dataFrame['control'] == True, 'color'] = "#ffbf00"  # Yellow is control/not home
+    dataFrame.loc[dataFrame['control'] == False, 'color'] = "#00ff00"  # Green is not home/not control
+    dataFrame.loc[dataFrame['isHomeSystem'] == True, 'color'] = "#ff0000"  # Red is homesystem
 
 
-def setHovertext(df):
-    df['htext'] = df[['systemName', 'factionName']].agg('\n'.join, axis=1)
+def setHovertext(dataFrame):
+    dataFrame['htext'] = dataFrame[['systemName', 'factionName']].agg('\n'.join, axis=1)
 
 
 def getScene():
@@ -60,27 +104,57 @@ def getScene():
             backgroundcolor="rgb(0,0,0)",
             gridcolor="grey",
             showbackground=False,
-            zerolinecolor="white", ), )
+            zerolinecolor="white", ),
+        aspectratio=dict(x=1, y=1, z=0.7),
+        aspectmode="manual"
+    )
 
 
-def getView(key: str, df):
-    squad = 'Lavigny\'s Legion'
-    squad = 'The Brotherhood of the Dark Circle'
-    # squad = 'Anti Xeno Initiative'
-    # squad = 'Close Encounters Corps'
-    # squad = 'The Silverbacks'
-    squad = 'Shadow of the Phoenix'
-
+def getView(reg, dataFrame):
     # df["marker_size"] = df["difficulty"].apply(lambda x: 1 if x<10 else log(x))       # difficult = larger
     # df["marker_size"] = df["difficulty"].apply(lambda x: 20 if x<10 else 20/log(x))    # easy = larger
 
-    reg = RegionFactory.getSquadronRegion(squad, 64, 'rgba(0,0,255,0.05)')
-    axi = df[df.apply(lambda x: reg.contains(x.x, x.y, x.z), axis=1)]
-    return axi
+    #reg = RegionFactory.getSquadronRegion(regionName, 64, 'rgba(0,0,255,0.05)')
+    return dataFrame[dataFrame.apply(lambda x: reg.contains(x.x, x.y, x.z), axis=1)]
 
+def getTrace(theFrame):
+    return go.Scatter3d(x=theFrame['x'],
+                        y=theFrame['z'],
+                        z=theFrame['y'],
+                        text=theFrame['systemName'],
+                        hoverinfo="text",
+                        hovertext=theFrame['htext'],
+                        mode='markers+text',
+                        marker=dict(size=theFrame["marker_size"],
+                                    color=theFrame["color"]))
 
-logging.getLogger().addHandler(logging.StreamHandler())
-logging.getLogger().level = logging.DEBUG
+def getLayout(theTitle):
+    return go.Layout(title=theTitle,
+                     scene=simpleScene,
+                     width=800,
+                     height=900,
+                     autosize=False,
+                     paper_bgcolor='rgb(0,0,0)',
+                     plot_bgcolor='rgb(0,0,0)',
+                     clickmode='event+select',
+                     font=dict(
+                         family="Courier New, monospace",
+                         size=12,
+                         color="#ffffff"),
+                     margin=dict(t=100, b=0, l=0, r=0),
+                     )
+
+def getFigure(region, theFrame):
+    title = "Club Activity Galaxy-Wide"
+    view = theFrame
+
+    if region is not None:
+        title = "Club Activity near " + region.getTitle()
+        view = getView(region, theFrame)
+
+    simpleTrace = getTrace(view)
+    myLayout = getLayout(title)
+    return go.Figure(data=[simpleTrace], layout=myLayout)
 
 arrays = dp.getDataArrays()
 df: pd.DataFrame = arrays['dataFrame']
@@ -89,153 +163,114 @@ setMarkerSize(df)
 setHovertext(df)
 simpleScene = getScene()
 
-squad = "Anti Xeno Initiative"
-view = getView(squad, df)
+# squad = 'Lavigny\'s Legion'
+# squad = 'The Brotherhood of the Dark Circle'
+# squad = 'Anti Xeno Initiative'
+# squad = 'Close Encounters Corps'
+# squad = 'The Silverbacks'
+squad = 'Shadow of the Phoenix'
+# squad = "Anti Xeno Initiative"
+#view = df getView(squad, df)
 
 # Create figure
-simpleTrace = go.Scatter3d(x=view['x'],
-                           y=view['z'],
-                           z=view['y'],
-                           text=view['systemName'],
-                           hoverinfo="text",
-                           hovertext=view['htext'],
-                           mode='markers+text',
-                           marker=dict(size=view["marker_size"],
-                                       color=view["color"]))
+fig = getFigure(None,df)
 
-myLayout = go.Layout(title='Club Activity near ' + squad,
-                     paper_bgcolor='rgb(0,0,0)',
-                     plot_bgcolor='rgb(0,0,0)',
-                     clickmode='event+select',
-                     font=dict(
-                         family="Courier New, monospace",
-                         size=12,
-                         color="#ffffff")
-                     )
-fig = go.Figure(data=[simpleTrace], layout=myLayout)
-
-fig.update_layout(scene=simpleScene)
-
-# Update plot sizing
-fig.update_layout(
-    width=800,
-    height=900,
-    autosize=False,
-    margin=dict(t=100, b=0, l=0, r=0),
-)
-
-# Update 3D scene options
-fig.update_scenes(
-    aspectratio=dict(x=1, y=1, z=0.7),
-    aspectmode="manual"
-)
-
-# Add drowdowns
-button_layer_1_height = 1.08
-fig.update_layout(
-    updatemenus=[
-        dict(
-            buttons=list([
-                dict(
-                    args=["colorscale", "Viridis"],
-                    label="Viridis",
-                    method="restyle"
-                ),
-                dict(
-                    args=["colorscale", "Cividis"],
-                    label="Cividis",
-                    method="restyle"
-                ),
-                dict(
-                    args=["colorscale", "Blues"],
-                    label="Blues",
-                    method="restyle"
-                ),
-                dict(
-                    args=["colorscale", "Greens"],
-                    label="Greens",
-                    method="restyle"
-                ),
+app.layout = \
+    html.Table(className="clean", children=[
+        html.Tr(className="clean", children=[
+            html.Td(className="clean2", children=[
+                dcc.Graph(id="the-graph", figure=fig),
             ]),
-            direction="down",
-            pad={"r": 10, "t": 10},
-            showactive=True,
-            x=0.1,
-            xanchor="left",
-            y=button_layer_1_height,
-            yanchor="top"
-        ),
-        dict(
-            buttons=list([
-                dict(
-                    args=["reversescale", False],
-                    label="False",
-                    method="restyle"
-                ),
-                dict(
-                    args=["reversescale", True],
-                    label="True",
-                    method="restyle"
-                )
-            ]),
-            direction="down",
-            pad={"r": 10, "t": 10},
-            showactive=True,
-            x=0.37,
-            xanchor="left",
-            y=button_layer_1_height,
-            yanchor="top"
-        ),
-        dict(
-            buttons=list([
-                dict(
-                    args=[{"contours.showlines": False, "type": "contour"}],
-                    label="Hide lines",
-                    method="restyle"
-                ),
-                dict(
-                    args=[{"contours.showlines": True, "type": "contour"}],
-                    label="Show lines",
-                    method="restyle"
-                ),
-            ]),
-            direction="down",
-            pad={"r": 10, "t": 10},
-            showactive=True,
-            x=0.58,
-            xanchor="left",
-            y=button_layer_1_height,
-            yanchor="top"
-        ),
-    ]
-)
+            html.Td(className="clean", children=[
+                html.Div(className='row', children=[
+                    getSquadronDropdown(),
+                    getRegionDropdown(),
+                    html.Div([
+                        dcc.Markdown("""
+                            **Click Data**
 
-fig.update_layout(
-    annotations=[
-        dict(text="colorscale", x=0, xref="paper", y=1.06, yref="paper",
-             align="left", showarrow=False),
-        dict(text="Reverse<br>Colorscale", x=0.25, xref="paper", y=1.07,
-             yref="paper", showarrow=False),
-        dict(text="Lines", x=0.54, xref="paper", y=1.06, yref="paper",
-             showarrow=False)
+                            Click on points in the graph.
+                        """),
+                        html.Pre(id='click-data', style=styles['pre']),
+                    ], className='three columns'),
+                    html.Div([
+                        dcc.Markdown("""
+                            **Click Data**
+
+                            Click on points in the graph.
+                        """),
+                    html.Pre(id='dd-data', style=styles['pre']),
+                ], className='three columns'),
+                ]),
+            ])
+        ]),
     ])
-
-app = dash.Dash()
-app.layout = html.Div([
-    dcc.Graph(id="fig", figure=fig),
-    html.Div([dcc.Markdown("""
-                **Click Data**
-                Click on points in the graph.
-            """),
-              html.Pre(id='click-data', style=styles['pre']), ], )
-])
-
-app.run_server(debug=True, use_reloader=True)  # Turn off reloader if inside Jupyter
-
 
 @app.callback(
     Output('click-data', 'children'),
-    [Input('fig', 'clickData')])
+    [Input('the-graph', 'clickData')])
 def display_click_data(clickData):
-    print(ujson.dumps(clickData))
-    return ujson.dumps(clickData, indent=2)
+    if clickData is not None:
+        print(ujson.dumps(clickData))
+        return ujson.dumps(clickData, indent=2)
+
+#
+# Determines which control was used.  Perhaps the most ridiculous part of Dash.
+#
+def was_clicked(ctx, button_id):
+    if not ctx.triggered:
+        return None, None
+
+    ctx_msg = ujson.dumps({
+        'states'   : ctx.states,
+        'triggered': ctx.triggered,
+        'inputs'   : ctx.inputs
+    }, indent=2)
+
+    aDict = ujson.loads(ctx_msg)
+    triggered = aDict['triggered']  # ['prop_id']
+    elt0 = triggered[0]
+    prop_id = elt0['prop_id']
+
+    print("prop_id=" + str(prop_id))
+    inputs = aDict['inputs']  # ['prop_id']
+    #activity = inputs['activityDropdown.value']
+
+    if (prop_id == button_id+".value"):
+        value = elt0['value']
+        return value
+
+    return None
+
+
+@app.callback(
+    [Output('dd-data', 'children'),Output('the-graph','figure')],
+    [Input('squadronDropdown', 'value'), Input('regionDropdown', 'value')])
+def display_click_data(squadName, regName):
+    global df
+    ctx = dash.callback_context
+    value = was_clicked(ctx, "squadronDropdown")
+    reg = None
+    val = None
+
+    if value is not None:
+        val = squadName
+        reg = RegionFactory.getSquadronRegion(val, 64, "rgb(0,0,255)")
+
+    value = was_clicked(ctx, "regionDropdown")
+    if value is not None:
+        val = regName
+        reg = RegionFactory.regionDict.get(val)
+
+    if reg is not None:
+        newFigure = getFigure(reg, df)
+        #view = getView(reg,df)
+        #fig.update_traces(x=view['x'], y=view['y'], z=view['z'], overwrite=True)
+        #fig.update_layout(title="Club activity near " + val, overwrite=True)
+
+        print("reg = " + str(reg))
+        return val, newFigure
+    return None, getFigure(None,df)
+
+if __name__ == '__main__':
+    app.run_server(debug=True, use_reloader=True)
