@@ -11,6 +11,7 @@ Player actions taking place in the Sirius region against Hodack Prison Colony.
 
 ### Recent Victories
 
+* Aegis Research removed from Pleiades Sector PD-S b4-0 and Asterope.
 * Hodack Prison Colony removed from Minarii.
 * Aegis Research removed from Pleiades Sectors KC-V c2-11, KC-V c2-4, and DL-Y d65.
 * CQC Holdings removed from Caelottixa.
