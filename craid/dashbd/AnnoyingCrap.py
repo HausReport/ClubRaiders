@@ -6,9 +6,12 @@ import logging
 from typing import Dict, Tuple
 
 import dash_core_components as dcc
+import plotly.graph_objs as go
 from dash_table.Format import Format, Scheme, Group
 from pkg_resources import resource_string as resource_bytes
 
+from craid.club.regions.RegionFactory import RegionFactory
+from craid.eddb.SquadronXYZ import SquadronXYZ
 from craid.eddb.SystemXYZ import SystemXYZ
 
 
@@ -141,7 +144,7 @@ class AnnoyingCrap(object):
 
         return gopts
 
-    ## "hidden": True,  is not a thing, unfortunately
+    # "hidden": True,  is not a thing, unfortunately
     @staticmethod
     def getTheColumns():
         allowHiddenColums = False  # INFO: pending a dash bug fix, see https://github.com/plotly/dash-table/issues/789
@@ -176,3 +179,129 @@ class AnnoyingCrap(object):
             {"name": 'SmugglingScore', "id": 'smugglingScore', "hideable": allowHiddenColums, "type": "numeric"},
             {"name": 'PiracyMurderScore', "id": 'piracyMurderScore', "hideable": allowHiddenColums, "type": "numeric"},
         ]
+
+    #
+    # 3d Map Stuff Follows
+    #
+
+    @staticmethod
+    def getSquadronDropdown():
+        print("dropdown len=" + str(len(SquadronXYZ.myDict)))
+        opts = []
+        logging.debug("Loading squadron dropdown")
+        for it in SquadronXYZ.myDict.keys():
+            opts.append({'label': it, 'value': it})
+
+        # print("shape= " + str(np.shape(opts)))
+        systemDropdown = dcc.Dropdown(
+            id='squadronDropdown',
+            options=opts,
+            # value='Sol',
+            placeholder='Select squadron',
+            className="dropdown-select",
+            # persistence=True,
+        )
+        return systemDropdown
+
+    @staticmethod
+    def getRegionDropdown():
+        print("dropdown len=" + str(len(RegionFactory.regionDict)))
+        opts = []
+        # logging.debug("Loading squadron dropdown")
+        for it in RegionFactory.regionDict.keys():
+            opts.append({'label': it, 'value': it})
+
+        regionDropdown = dcc.Dropdown(
+            id='regionDropdown',
+            options=opts,
+            # value='Sol',
+            placeholder='Select region',
+            className="dropdown-select",
+            # persistence=True,
+        )
+        return regionDropdown
+
+    @staticmethod
+    def setMarkerSize(dataFrame):
+        dataFrame.loc[dataFrame['control'] == True, 'marker_size'] = 8  # Medium is not home/control
+        dataFrame.loc[dataFrame['control'] == False, 'marker_size'] = 5  # Small is not home/not control
+        dataFrame.loc[dataFrame['isHomeSystem'] == True, 'marker_size'] = 15  # Large is home
+        # df["marker_size"] = df["influence"].apply(lambda x: 5+ x/5)
+
+    @staticmethod
+    def setMarkerColors(dataFrame):
+        dataFrame.loc[dataFrame['control'] == True, 'color'] = "#ffbf00"  # Yellow is control/not home
+        dataFrame.loc[dataFrame['control'] == False, 'color'] = "#00ff00"  # Green is not home/not control
+        dataFrame.loc[dataFrame['isHomeSystem'] == True, 'color'] = "#ff0000"  # Red is homesystem
+
+    @staticmethod
+    def setHovertext(dataFrame):
+        dataFrame['htext'] = dataFrame[['systemName', 'factionName']].agg('\n'.join, axis=1)
+
+    @staticmethod
+    def getScene():
+        return dict(
+            xaxis=dict(
+                backgroundcolor="rgb(0,0,0)",
+                gridcolor="grey",
+                showbackground=False,
+                zerolinecolor="white", ),
+            yaxis=dict(
+                backgroundcolor="rgb(0,0,0)",
+                gridcolor="grey",
+                showbackground=False,
+                zerolinecolor="white", ),
+            zaxis=dict(
+                backgroundcolor="rgb(0,0,0)",
+                gridcolor="grey",
+                showbackground=False,
+                zerolinecolor="white", ),
+            aspectratio=dict(x=1, y=1, z=0.7),
+            aspectmode="manual"
+        )
+
+    @staticmethod
+    def getView(reg, dataFrame):
+        return dataFrame[dataFrame.apply(lambda x: reg.contains(x.x, x.y, x.z), axis=1)]
+
+    @staticmethod
+    def getTrace(theFrame):
+        return go.Scatter3d(x=theFrame['x'],
+                            y=theFrame['z'],
+                            z=theFrame['y'],
+                            text=theFrame['systemName'],
+                            hoverinfo="text",
+                            hovertext=theFrame['htext'],
+                            mode='markers+text',
+                            marker=dict(size=theFrame["marker_size"],
+                                        color=theFrame["color"]))
+
+    @staticmethod
+    def getLayout(theTitle):
+        return go.Layout(title=theTitle,
+                         scene=AnnoyingCrap.getScene(),
+                         width=800,
+                         height=900,
+                         autosize=False,
+                         paper_bgcolor='rgb(0,0,0)',
+                         plot_bgcolor='rgb(0,0,0)',
+                         clickmode='event+select',
+                         font=dict(
+                             family="Courier New, monospace",
+                             size=12,
+                             color="#ffffff"),
+                         margin=dict(t=100, b=0, l=0, r=0),
+                         )
+
+    @staticmethod
+    def getFigure(region, theFrame):
+        title = "Club Activity Galaxy-Wide"
+        view = theFrame
+
+        if region is not None:
+            title = "Club Activity near " + region.getTitle()
+            view = AnnoyingCrap.getView(region, theFrame)
+
+        simpleTrace = AnnoyingCrap.getTrace(view)
+        myLayout = AnnoyingCrap.getLayout(title)
+        return go.Figure(data=[simpleTrace], layout=myLayout)

@@ -30,6 +30,13 @@ del {
     min-width: 350px;
 }
 
+.left-column {
+    vertical-align: top;
+    min-width: 400px;
+    max-width: 450px;
+    width: 450px;
+}
+
 .custom-tabs-container {
     width: 100%;
 }
@@ -46,6 +53,13 @@ del {
   display: flex;
   flex-flow: column;
   margin: 10px 10px 10px;
+}
+
+.blackColItem {
+  display: flex;
+  flex-flow: column;
+  margin: 0px 0px 0px;
+  background-color: black;
 }
 
 .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner input:not([type=radio]):not([type=checkbox]) {

@@ -12,3 +12,7 @@ class TheUnregion(Region):
 
     def contains(self, x, y, z):
         return True
+
+    def distanceFrom(self, x, y, z):
+        dist = 999999
+        return dist

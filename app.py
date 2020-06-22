@@ -25,12 +25,9 @@ from craid.eddb.Oracle import Oracle
 from craid.eddb.Printmem import printmem
 from craid.eddb.SystemXYZ import SystemXYZ
 
-# import dash_bootstrap_components as dbc
-
 #
 # Set up logging
 #
-# from craid.eddb.util.GzipString import gunzip_str
 
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
@@ -42,7 +39,7 @@ logging.getLogger().level = logging.DEBUG
 currentData = dp.getDataArrays()
 sysIdFacIdToFactionInstance = currentData['sysIdFacIdToFactionInstance']
 systemNameToXYZ: Dict[str, Tuple[float, float, float]] = SystemXYZ.myDict  # currentData['systemNameToXYZ']
-playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
+#playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
 annoyingCrap: AnnoyingCrap = AnnoyingCrap()
 df: pd.DataFrame = currentData['dataFrame']
 printmem("4")
@@ -55,7 +52,7 @@ df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
 
 seer: Oracle = Oracle(df)
 oracleString = AnnoyingCrap.getString("oracle-template")
-oracleMd = dcc.Markdown(seer.template(oracleString))
+mapOracleMd = dcc.Markdown(seer.template(oracleString))
 newsString = AnnoyingCrap.getString("news")
 newsString = seer.template(newsString)
 newsMarkdown = dcc.Markdown(newsString)
@@ -163,15 +160,9 @@ datatable: dash_table.DataTable = dash_table.DataTable(
         'backgroundColor': '#2c2e2f',
         'color'          : '#a3a3a3'
     },
-    # style_filter={
-    #     'backgroundColor': 'black',
-    #     'color'          : 'white',
-    #     'text-color'     : 'white'
-    # }
 )
 
 datatable.filter_query = "{isHomeSystem} contains false && {influence} < 25"
-
 
 def enCard(contents) -> html.Div:
     return html.Div(className="card", children=[
@@ -197,7 +188,7 @@ def makeDiscordCard(msg, _id, _idnum) -> html.Div:
 tab_1 = \
     html.Table(className="clean", children=[
         html.Tr(className="clean", children=[
-            html.Td(className="clean2", children=[
+            html.Td(className="left-column", children=[
                 html.Div(className="card", children=[
                     html.Label("I want to:", className="simpleColItem"),
                     html.Div(className="dropdown dropdown-dark", children=[
@@ -215,7 +206,7 @@ tab_1 = \
                     ]),
                 ]),
                 # html.Button("DarkMode", id="darkModeButton", name="darkModeButton"),
-                makeArticleCard(oracleMd, "statistics"),
+                makeArticleCard(mapOracleMd, "statistics"),
                 makeArticleCard("", "faction-drilldown"),
                 makeArticleCard("", "system-drilldown"),
                 makeArticleCard(newsMarkdown, "news"),
@@ -329,9 +320,6 @@ def fSystemNameToXYZ(sName: str):  # -> tuple(3): #float, float, float):
 # =============================================================
 # Callback handlers below
 # =============================================================
-#
-#
-#
 def updateUrl(key: str, val: str) -> str:
     global urlParameters
     if key is None:
@@ -521,6 +509,28 @@ def update_selected_system(val0):
     return df.to_dict('records'), _cols
 
 
+def getFacInfoSysInfo(sysId, facId):
+    global df
+    global sysIdFacIdToFactionInstance
+
+    theFac: FactionInstance = sysIdFacIdToFactionInstance.get((sysId, facId))
+    if theFac is not None:
+        print("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
+        factionInfo = theFac.get_name()
+
+        factionRows: pd.DataFrame = df[df['factionName'].str.match(factionInfo)]
+        tmpSeer: Oracle = Oracle(factionRows)
+        factionInfo = AnnoyingCrap.getString("faction-template")
+        output = tmpSeer.template(factionInfo)
+        factionInfo = theFac.template(output)
+
+        ts = AnnoyingCrap.getString("system-template")
+        theSys = theFac.getSystem()
+        systemInfo = theSys.template(ts, theFac)
+        return factionInfo, systemInfo
+
+    return "",""
+
 #
 #  Does a variety of things when user clicks on a cell in the table
 #
@@ -541,6 +551,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
     factionInfo: str = ""
     systemInfo: str = ""
 
+
     if active_cell:
         row = active_cell['row']
         logical_row = row + page_cur * page_size
@@ -552,19 +563,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
         sysId = rows[logical_row]['sysId']
         facId = rows[logical_row]['facId']
         print(str(sysId) + "/" + str(facId))
-        theFac: FactionInstance = sysIdFacIdToFactionInstance.get((sysId, facId))
-        if theFac is not None:
-            print("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
-            factionInfo = theFac.get_name()
-            gg: pd.DataFrame = df[df['factionName'].str.match(factionInfo)]
-            tmpSeer: Oracle = Oracle(gg)
-            factionInfo = AnnoyingCrap.getString("faction-template")
-            output = tmpSeer.template(factionInfo)
-            factionInfo = theFac.template(output)
-
-            ts = AnnoyingCrap.getString("system-template")
-            theSys = theFac.getSystem()
-            systemInfo = theSys.template(ts, theFac)
+        factionInfo, systemInfo = getFacInfoSysInfo(sysId, facId)
 
     factionWidget = dcc.Markdown(factionInfo)
     systemWidget = dcc.Markdown(systemInfo)
