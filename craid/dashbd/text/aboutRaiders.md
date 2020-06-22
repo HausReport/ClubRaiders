@@ -4,8 +4,8 @@
 ### Using the site
 
 1. I want to discuss an issue.
-    * Shortly, there will be a forum thread on Frontier Development's web site.  In the meantime,
-    discussion is mostly taking place on the "Cabal Operatives" Discord, linked on the main page.
+    * [There is now a forum thread on Frontier Development's web site](https://forums.frontier.co.uk/threads/club-raiders-fighting-the-club-in-the-bgs.548972).  If you are
+    a Discord user, feel free to join us at https://discord.gg/6TWATZF
 1. How do you identify club-related minor factions?
     * They were identified by [The Children of Raxxla](https://inara.cz/squadron/4980/) in [The Holdstock Report](https://docs.google.com/document/d/1MPw1EzRmor2TvRw97QvB8lNTcBT2XffrMuMwEOAXaW8/edit?usp=sharing).
     There's a big diagram on the "About The Club" tab that shows the conclusions in an accessible way.
@@ -33,10 +33,10 @@
 ### Improving the site 
 
 1. Numbers in the table should be formatted better.
-    * This depends on a bug fix in Dash.
+    * We're waiting on a bug fix in Dash.
 1. I have a better sort query/filter query for an activity or want to add a new activity.
     * This sort of issue can be expressed on the channels mentioned above.  There's plenty of room for tweaking and improvements.
-1. I want to change some text.
+1. I want to add or change some text.
     * There are two ways: one is to get added to the project on Github and the second is to talk
     to someone who is added to the project on Github.  You can join Github here: https://help.github.com/en/github/getting-started-with-github/signing-up-for-a-new-github-account
 1. I want to report a bug.
