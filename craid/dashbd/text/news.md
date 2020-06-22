@@ -20,3 +20,4 @@ Player actions taking place in the Sirius region against Hodack Prison Colony.
 * Wreaken Construction removed from Kali
 * Aegis Defense removed from Madrus
 * Janus Incorporated and Aegis Research removed from HR 1183
+
