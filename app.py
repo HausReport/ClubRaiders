@@ -19,6 +19,7 @@ import ujson
 from dash.dependencies import Input, Output
 
 import craid.eddb.loader.DataProducer as dp
+from craid.club.regions.RegionFactory import RegionFactory
 from craid.dashbd.AnnoyingCrap import AnnoyingCrap
 from craid.eddb.FactionInstance import FactionInstance
 from craid.eddb.Oracle import Oracle
@@ -32,6 +33,17 @@ from craid.eddb.SystemXYZ import SystemXYZ
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
 
+styles = {
+    'pre': {
+        'border'    : 'thin lightgrey solid',
+        'overflowX' : 'scroll',
+        'height'    : '200px',
+        'min-height': '200px',
+        'width'     : '200px',
+        'min-width' : '200px',
+    }
+}
+
 #
 # Get data
 # NOTE: It's built into Dash that this will run twice, see  https://community.plotly.com/t/why-global-code-runs-twice/12514
@@ -44,6 +56,10 @@ annoyingCrap: AnnoyingCrap = AnnoyingCrap()
 df: pd.DataFrame = currentData['dataFrame']
 printmem("4")
 
+AnnoyingCrap.setMarkerColors(df)
+AnnoyingCrap.setMarkerSize(df)
+AnnoyingCrap.setHovertext(df)
+
 #
 # Massage data
 #
@@ -52,10 +68,11 @@ df['distance'] = pd.Series(np.zeros(nrows), index=df.index)
 
 seer: Oracle = Oracle(df)
 oracleString = AnnoyingCrap.getString("oracle-template")
-mapOracleMd = dcc.Markdown(seer.template(oracleString))
+oracleMd = dcc.Markdown(seer.template(oracleString))
 newsString = AnnoyingCrap.getString("news")
 newsString = seer.template(newsString)
 newsMarkdown = dcc.Markdown(newsString)
+mapOracleMd = oracleMd
 
 #
 # Start up Dash
@@ -206,7 +223,7 @@ tab_1 = \
                     ]),
                 ]),
                 # html.Button("DarkMode", id="darkModeButton", name="darkModeButton"),
-                makeArticleCard(mapOracleMd, "statistics"),
+                makeArticleCard(oracleMd, "statistics"),
                 makeArticleCard("", "faction-drilldown"),
                 makeArticleCard("", "system-drilldown"),
                 makeArticleCard(newsMarkdown, "news"),
@@ -269,12 +286,16 @@ app.layout = html.Div([
                          value='tab-1',
                          style=tab_style, selected_style=tab_selected_style,
                          ),
-                 dcc.Tab(label='About The Club',
+                 dcc.Tab(label='Explore ClubSpace',
                          value='tab-2',
                          style=tab_style, selected_style=tab_selected_style,
                          ),
-                 dcc.Tab(label='About Club Raiders',
+                 dcc.Tab(label='About The Club',
                          value='tab-3',
+                         style=tab_style, selected_style=tab_selected_style,
+                         ),
+                 dcc.Tab(label='About Club Raiders',
+                         value='tab-4',
                          style=tab_style, selected_style=tab_selected_style,
                          ),
              ]),
@@ -293,7 +314,31 @@ printmem("End")
 def render_content(tab):
     if tab == 'tab-1':
         return "activities", tab_1
-    elif tab == 'tab-2':
+    if tab == 'tab-2':
+        fig = AnnoyingCrap.getFigure(None, df)
+        tab_2 = \
+            html.Table(className="clean", children=[
+                html.Tr(className="clean", children=[
+                    html.Td(className="left-column", children=[
+                        html.Div(className="card", children=[
+                            html.Label("Select squadron:", className="simpleColItem"),
+                            AnnoyingCrap.getSquadronDropdown(),
+                            html.Label("or galactic region:", className="simpleColItem"),
+                            AnnoyingCrap.getRegionDropdown(),
+                        ]),
+                        makeArticleCard(mapOracleMd, "map-statistics"),
+                        makeArticleCard("", "map-faction-drilldown"),
+                        makeArticleCard("", "map-system-drilldown"),
+                    ]),
+                    html.Td(className="clean", children=[
+                        html.Label("Red: Club home system, Yellow: Club controls system, Green: Club active in system", className="blackColItem"),
+                        html.Label("Drag mouse to rotate, Ctrl-mouse to pan, Alt-mouse or wheel to zoom.", className="blackColItem"),
+                        dcc.Graph(id="the-graph", figure=fig),
+                    ])
+                ]),
+            ])
+        return "clubSpace", tab_2
+    elif tab == 'tab-3':
         print('tab-2 clicked')
         return "aboutTheClub", html.Div(children=[
             html.Article([
@@ -301,8 +346,8 @@ def render_content(tab):
             ]),
             seer.getFactionTable()
         ])
-    elif tab == 'tab-3':
-        print('tab-3 clicked')
+    elif tab == 'tab-4':
+        print('tab-4 clicked')
         return "aboutClubRaiders", html.Article([
             AnnoyingCrap.getMarkdown("aboutRaiders")
         ])
@@ -568,6 +613,102 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
     factionWidget = dcc.Markdown(factionInfo)
     systemWidget = dcc.Markdown(systemInfo)
     return factionWidget, systemWidget
+
+@app.callback(
+    [Output('map-faction-drilldown', 'children'),
+     Output('map-system-drilldown', 'children')],
+    [Input('the-graph', 'clickData')])
+def display_click_data(clickData):
+    global df
+
+    factionInfo: str = ""
+    systemInfo: str = ""
+
+    if clickData is not None:
+        pts = clickData["points"]
+        if pts is not None:
+            pts0 = pts[0]
+            if pts0 is not None:
+                sysName = pts0["text"]
+                print("sysName = " + sysName)
+                systemRows = df[df['systemName'] == sysName]
+                if systemRows is not None:
+                    facId = systemRows['facId'].iloc[0]
+                    facName = systemRows['factionName'].iloc[0]
+                    sysId = systemRows['sysId'].iloc[0]
+                    print("facName = " + str(facName))
+                    print("facId = " + str(facId))
+                    print("sysId = " + str(sysId))
+                    factionInfo, systemInfo = getFacInfoSysInfo(sysId, facId)
+
+    factionWidget = dcc.Markdown(factionInfo)
+    systemWidget = dcc.Markdown(systemInfo)
+    return factionWidget, systemWidget
+
+
+#
+# Determines which control was used.  Perhaps the most ridiculous part of Dash.
+#
+def was_clicked2(ctx, button_id):
+    if not ctx.triggered:
+        return None, None
+
+    ctx_msg = ujson.dumps({
+        'states'   : ctx.states,
+        'triggered': ctx.triggered,
+        'inputs'   : ctx.inputs
+    }, indent=2)
+
+    aDict = ujson.loads(ctx_msg)
+    triggered = aDict['triggered']  # ['prop_id']
+    elt0 = triggered[0]
+    prop_id = elt0['prop_id']
+
+    print("prop_id=" + str(prop_id))
+    inputs = aDict['inputs']  # ['prop_id']
+    # activity = inputs['activityDropdown.value']
+
+    if (prop_id == button_id + ".value"):
+        value = elt0['value']
+        return value
+
+    return None
+
+@app.callback(
+    [Output('the-graph', 'figure'), Output('map-statistics','children')],
+    [Input('squadronDropdown', 'value'), Input('regionDropdown', 'value')])
+def display_click_data(squadName, regName):
+    global df
+    global mapOracleMd
+
+    ctx = dash.callback_context
+    value = was_clicked2(ctx, "squadronDropdown")
+    reg = None
+    val = None
+
+    if value is not None:
+        val = squadName
+        reg = RegionFactory.getSquadronRegion(val, 64, "rgb(0,0,255)")
+
+    value = was_clicked2(ctx, "regionDropdown")
+    if value is not None:
+        val = regName
+        reg = RegionFactory.regionDict.get(val)
+
+    if reg is not None:
+        newFigure = AnnoyingCrap.getFigure(reg, df)
+        #
+        # Local scoreboard
+        #
+        view = AnnoyingCrap.getView(reg,df)
+        seer: Oracle = Oracle(view)
+        oracleString = AnnoyingCrap.getString("oracle-template")
+        mapOracleMd = dcc.Markdown(seer.template(oracleString))
+
+        printmem("d")
+        return newFigure, mapOracleMd
+
+    return AnnoyingCrap.getFigure(None, df), mapOracleMd
 
 
 if __name__ == '__main__':
