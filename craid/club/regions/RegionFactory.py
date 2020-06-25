@@ -41,7 +41,7 @@ class RegionFactory(object):
         return RegionFactory.unRegion
 
     @staticmethod
-    def getRegionId(x:int) -> SphericalRegion:
+    def getRegionByName(x:int) -> SphericalRegion:
         reg = RegionFactory.regionDict.get(x)
         if reg is None:
             return RegionFactory.unRegion

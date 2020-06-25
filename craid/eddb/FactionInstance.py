@@ -103,6 +103,12 @@ class FactionInstance(Faction):
     def getInfluence(self):
         return self.influence
 
+    def getPowerState(self):
+        return self.mySystem.getPowerState()
+
+    def getPower(self):
+        return self.mySystem.getPower()
+
     #
     # Vulnerability is a Frankenstein's Monster atm,
     # but it will take some thought to work out.
@@ -124,17 +130,17 @@ class FactionInstance(Faction):
         return ds
 
     def printCSV(self):
-        facname = self.get_name2()
+        facName = self.get_name2()
         war = self.getVulnerableString()
-        sysname = self.getSystemName()
+        sysName = self.getSystemName()
         x = '{:04.2f}'.format(self.getX())
         y = '{:04.2f}'.format(self.getY)
         z = '{:04.2f}'.format(self.getZ)
         sinf = '{:04.2f}'.format(self.getInfluence)
         allg = self.get_allegiance()
         ds = self.getUpdatedString()
-        print(f"{facname},{sysname},{x},{y},{z},{allg},{sinf},{war},{ds}")
-        #    facname + "," + sysname + "," + x + "," + y + "," + z + "," + allg +
+        print(f"{facName},{sysName},{x},{y},{z},{allg},{sinf},{war},{ds}")
+        #    facName + "," + sysName + "," + x + "," + y + "," + z + "," + allg +
         #    "," + sinf + "," + war + "," + ds)  # + "," + allg)
 
     def isHomeSystem(self) -> bool:
