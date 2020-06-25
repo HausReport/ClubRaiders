@@ -111,15 +111,6 @@ class FactionInstance(Faction):
     def getPower(self):
         return self.mySystem.getPower()
 
-    #
-    # Vulnerability is a Frankenstein's Monster atm,
-    # but it will take some thought to work out.
-    #
-    # At the moment, it's determined on data load.
-    #
-    # def isVulnerable(self):
-    #    return self.vulnerable is not 0
-
     def getVulnerableString(self):
         assert self.states is not None, 'null vulnerable'
         retval: str = self.states.getShortString()

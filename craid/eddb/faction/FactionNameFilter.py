@@ -4,6 +4,7 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
 
 from craid.eddb.faction.Faction import Faction
 
