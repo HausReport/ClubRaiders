@@ -8,7 +8,7 @@ import string
 import humanize
 import pandas as pd
 
-from craid.eddb.PassThroughDict import PassThroughDict
+from craid.eddb.util.PassThroughDict import PassThroughDict
 
 
 def formatLargeNumber(num: int) -> str:

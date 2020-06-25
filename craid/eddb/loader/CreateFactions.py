@@ -12,8 +12,8 @@ from typing import Dict, Set
 
 import ujson
 
-from craid.eddb.Faction import Faction
-from craid.eddb.FactionNameFilter import FactionNameFilter
+from craid.eddb.faction.Faction import Faction
+from craid.eddb.faction.FactionNameFilter import FactionNameFilter
 from craid.eddb.loader.DataLoader import DataLoader
 
 

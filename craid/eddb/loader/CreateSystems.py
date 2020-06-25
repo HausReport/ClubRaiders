@@ -13,7 +13,7 @@ from typing import Dict
 # from memory_profiler import profile
 import ujson
 
-from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.system.InhabitedSystem import InhabitedSystem
 #
 # Load all inhabited systems
 #

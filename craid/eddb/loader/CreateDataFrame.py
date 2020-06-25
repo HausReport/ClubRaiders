@@ -9,7 +9,7 @@ from typing import List
 
 import pandas as pd
 
-from craid.eddb.FactionInstance import FactionInstance
+from craid.eddb.faction.FactionInstance import FactionInstance
 
 
 def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:

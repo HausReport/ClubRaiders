@@ -13,7 +13,7 @@ import requests
 import ujson
 
 import craid.edbgs.EdBgsSystemIds
-from craid.eddb.BountyHuntingInfo import BountyHuntingInfo
+from craid.eddb.system.BountyHuntingInfo import BountyHuntingInfo
 
 newDict: Dict[int, str] = {}
 

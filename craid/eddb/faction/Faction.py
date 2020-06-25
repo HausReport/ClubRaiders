@@ -2,13 +2,15 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 
 # from InhabitedSystem import InhabitedSystem
 from typing import Dict
 
 from craid.edbgs.EdBgsFactionIds import EdBgsFactionIds
-from craid.eddb.Aware import Aware
-from craid.eddb.NamedItem import NamedItem
+from craid.eddb.base.Aware import Aware
+from craid.eddb.base.NamedItem import NamedItem
 
 
 class Faction(Aware):

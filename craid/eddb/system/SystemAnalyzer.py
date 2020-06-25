@@ -2,11 +2,13 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 from typing import List
 
-import craid.eddb.GameConstants as gconst
-from craid.eddb.FactionInstance import FactionInstance
-from craid.eddb.InhabitedSystem import InhabitedSystem
+import craid.eddb.base.GameConstants as gconst
+from craid.eddb.faction.FactionInstance import FactionInstance
+from craid.eddb.system.InhabitedSystem import InhabitedSystem
 from craid.eddb.Station import Station
 from craid.eddb.util.MessageList import MessageList
 

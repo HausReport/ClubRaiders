@@ -5,9 +5,9 @@
 from pprint import pprint
 from typing import List
 
-from craid.eddb.Aware import Aware
-from craid.eddb.FactionInstance import FactionInstance
-from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.base.Aware import Aware
+from craid.eddb.faction.FactionInstance import FactionInstance
+from craid.eddb.system.InhabitedSystem import InhabitedSystem
 from craid.eddb.loader.CreateFactionInstances import getFactionInstances
 from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateSystems import load_systems

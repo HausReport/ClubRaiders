@@ -2,18 +2,20 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 
 import string
 from collections import deque
 from typing import List, Deque
 
 from craid.edbgs.EdBgsSystemIds import EdBgsSystemIds
-from craid.eddb.BountyHuntingInfo import BountyHuntingInfo
-from craid.eddb.Faction import Faction
-from craid.eddb.GameConstants import *
-from craid.eddb.PassThroughDict import PassThroughDict
+from craid.eddb.system.BountyHuntingInfo import BountyHuntingInfo
+from craid.eddb.faction.Faction import Faction
+from craid.eddb.base.GameConstants import *
+from craid.eddb.util.PassThroughDict import PassThroughDict
 from craid.eddb.Station import Station
-from craid.eddb.System import System
+from craid.eddb.system.System import System
 from craid.eddb.util.TextDecoration import boolToTorBlank, boolToYesOrNo
 
 
@@ -69,7 +71,7 @@ class InhabitedSystem(System):
         return self.getFactionInstanceById(theId)
 
     def getFactionInstanceById(self, theId: int):
-        from craid.eddb.FactionInstance import FactionInstance
+        from craid.eddb.faction.FactionInstance import FactionInstance
         fac: FactionInstance
         for fac in self.minorFactionPresences:
             if fac.get_id() == theId:
@@ -88,7 +90,7 @@ class InhabitedSystem(System):
         return f.get_name2()
 
     def getMinorFactionsAsMarkdown(self):
-        from craid.eddb.FactionInstance import FactionInstance
+        from craid.eddb.faction.FactionInstance import FactionInstance
 
         ret: str = "\n\n"
         ret += "|Name | Inf. | States | \n"  # " LPad | Club | Yard | BM | Controlling | \n"
@@ -119,7 +121,7 @@ class InhabitedSystem(System):
         return theret
 
     def hasAnarchyFaction(self):
-        from craid.eddb.FactionInstance import FactionInstance
+        from craid.eddb.faction.FactionInstance import FactionInstance
         fi: FactionInstance
         for fi in self.minorFactionPresences:
             if fi.is_anarchy():
@@ -184,7 +186,7 @@ class InhabitedSystem(System):
     # Templating
     #
     def template(self, msg: str, fix: object) -> str:
-        from craid.eddb.FactionInstance import FactionInstance
+        from craid.eddb.faction.FactionInstance import FactionInstance
         fi: FactionInstance = fix
 
         myDict: PassThroughDict[str, str] = PassThroughDict()
@@ -210,7 +212,7 @@ class InhabitedSystem(System):
 
         myDict['octant'] = "{:,}".format(self.getOctant())
 
-        from craid.eddb.SystemAnalyzer import SystemAnalyzer
+        from craid.eddb.system.SystemAnalyzer import SystemAnalyzer
         # sysA = SystemAnalyzer/bou(self)
         bhFeatures = self.bountyHuntingFeatures()
         myDict['bounty_hunting_features'] = bhFeatures
@@ -243,7 +245,7 @@ class InhabitedSystem(System):
     #
     def getClubInState(self, state: int):
         ret: List[str] = []
-        from craid.eddb.FactionInstance import FactionInstance
+        from craid.eddb.faction.FactionInstance import FactionInstance
         fi: FactionInstance
         for fi in self.minorFactionPresences:
             if fi.isClub():
@@ -257,7 +259,7 @@ class InhabitedSystem(System):
     #
     def getNonClubInState(self, state: int):
         ret: List[str] = []
-        from craid.eddb.FactionInstance import FactionInstance
+        from craid.eddb.faction.FactionInstance import FactionInstance
         fi: FactionInstance
         for fi in self.minorFactionPresences:
             if fi.isClub():
@@ -426,7 +428,7 @@ class InhabitedSystem(System):
         return self.jsonLine['primary_economy']
 
     def getHighestInfluenceNonClubFactionInstance(self):
-        from craid.eddb.FactionInstance import FactionInstance
+        from craid.eddb.faction.FactionInstance import FactionInstance
         fac: FactionInstance
         topInf = -1.0
         topFac: FactionInstance = None

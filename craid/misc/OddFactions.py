@@ -2,7 +2,7 @@ import json
 import os
 from typing import Dict
 
-from craid.eddb.Faction import Faction
+from craid.eddb.faction.Faction import Faction
 
 # GOVERNMENT = 'government'
 # MINOR_FACTION_ID = 'minor_faction_id'

@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import craid
 from craid.club.regions.MultiSphericalRegion import MultiSphericalRegion
 from craid.club.regions.SphericalRegion import SphericalRegion
@@ -12,7 +10,7 @@ from craid.club.regions.TheUnregion import TheUnregion
 # 7: SphericalRegion("Hodack", 8, 60, 46, 23, 45, 'rgb(0,255,255)'),
 
 # TODO: might be a better pallete https://learnui.design/tools/data-color-picker.html#divergent
-from craid.eddb.SquadronXYZ import SquadronXYZ
+from craid.eddb.faction.SquadronXYZ import SquadronXYZ
 
 
 class RegionFactory(object):
@@ -61,7 +59,7 @@ class RegionFactory(object):
     #     return reg.getNumber()
 
     @staticmethod
-    def getRegionNumber(sys: craid.eddb.System.System) -> SphericalRegion:
+    def getRegionNumber(sys: craid.eddb.system.System.System) -> SphericalRegion:
         reg: SphericalRegion = RegionFactory.getRegion(sys.getX(), sys.getY(), sys.getZ())
         if reg is None:
             return 0
@@ -77,17 +75,17 @@ class RegionFactory(object):
         return reg.getColor()
 
     @staticmethod
-    def getRegionColor(sys: craid.eddb.System.System) -> SphericalRegion:
+    def getRegionColor(sys: craid.eddb.system.System.System) -> SphericalRegion:
         reg = RegionFactory.getRegion(sys.getX(), sys.getY(), sys.getZ())
         return reg.getColor()
 
     @staticmethod
-    def getRegionName(sys: craid.eddb.System.System) -> SphericalRegion:
+    def getRegionName(sys: craid.eddb.system.System.System) -> SphericalRegion:
         reg = RegionFactory.getRegion(sys.getX(), sys.getY(), sys.getZ())
         return reg.getTitle()
 
     @staticmethod
-    def getNearestRegionMessage(sys: craid.eddb.System.System) -> str:
+    def getNearestRegionMessage(sys: craid.eddb.system.System.System) -> str:
         closestDist = 999999.0
         closestRegion: SphericalRegion = None
 

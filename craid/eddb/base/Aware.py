@@ -2,10 +2,12 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 
 from typing import Dict
 
-from craid.eddb.NamedItem import NamedItem
+from craid.eddb.base.NamedItem import NamedItem
 
 
 class Aware(NamedItem):
@@ -22,17 +24,17 @@ class Aware(NamedItem):
 
     @staticmethod
     def setSystemsDict(foo: Dict):  # [int, craid.eddb.InhabitedSystem]):
-        from craid.eddb.InhabitedSystem import InhabitedSystem
+        from craid.eddb.system.InhabitedSystem import InhabitedSystem
         Aware.systemsDict: Dict[int, InhabitedSystem] = foo
 
     @staticmethod
     def setFactionsDict(foo: Dict):
-        from craid.eddb.Faction import Faction
+        from craid.eddb.faction.Faction import Faction
         Aware.factionsDict: Dict[int, Faction] = foo
 
     @staticmethod
     def getSystemNameById(sysId: int):
-        from craid.eddb.InhabitedSystem import InhabitedSystem
+        from craid.eddb.system.InhabitedSystem import InhabitedSystem
         sys: InhabitedSystem = Aware.systemsDict.get(sysId)
         if sys is None:
             return "Unknown-" + str(sysId)
@@ -41,13 +43,13 @@ class Aware(NamedItem):
 
     @staticmethod
     def getSystemById(sysId: int):
-        from craid.eddb.InhabitedSystem import InhabitedSystem
+        from craid.eddb.system.InhabitedSystem import InhabitedSystem
         sys: InhabitedSystem = Aware.systemsDict.get(sysId)
         return sys
 
     @staticmethod
     def getFactionNameById(facId: int):
-        from craid.eddb.Faction import Faction
+        from craid.eddb.faction.Faction import Faction
         # sd Dict[int, Faction] = Aware.factionsDict
         fac: Faction = Aware.factionsDict.get(facId)
         if fac is None:
@@ -57,7 +59,7 @@ class Aware(NamedItem):
 
     @staticmethod
     def getFactionById(facId: int):
-        from craid.eddb.Faction import Faction
+        from craid.eddb.faction.Faction import Faction
         # sd Dict[int, Faction] = Aware.factionsDict
         fac: Faction = Aware.factionsDict.get(facId)
         return fac

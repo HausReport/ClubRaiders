@@ -4,11 +4,11 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 import logging
 
-import craid.eddb.GameConstants as gconst
-from craid.eddb.Aware import Aware
+import craid.eddb.base.GameConstants as gconst
+from craid.eddb.base.Aware import Aware
 # No Good for us
 # "type_id": 23, "type": "Non-Dockable Orbital",
-from craid.eddb.NamedItem import NamedItem
+from craid.eddb.base.NamedItem import NamedItem
 
 
 # Currently known Types
@@ -96,13 +96,13 @@ class Station(Aware):
         return self.stationType
 
     def getSystem(self):
-        from craid.eddb.InhabitedSystem import InhabitedSystem
+        from craid.eddb.system.InhabitedSystem import InhabitedSystem
         tid: int = self.getSystemId()
         tsys: InhabitedSystem = Aware.getSystemById(tid)
         return tsys
 
     def getControllingFactionInstance(self):
-        from craid.eddb.FactionInstance import FactionInstance
+        from craid.eddb.faction.FactionInstance import FactionInstance
 
         tSys = self.getSystem()
         fid: int = self.getControllingFactionId()
@@ -124,7 +124,7 @@ class Station(Aware):
         return Aware.getFactionNameById(self.getControllingFactionId())
 
     def getControllingFactionName2(self) -> str:
-        from craid.eddb.Faction import Faction
+        from craid.eddb.faction.Faction import Faction
         fac: Faction = Aware.getFactionById(self.getControllingFactionId())
         if fac is None:
             return ("~~Unknown~~")
@@ -139,7 +139,7 @@ class Station(Aware):
 
     # a little experimental, but should be close
     def getMineralSalesScore(self) -> int:
-        from craid.eddb.InhabitedSystem import InhabitedSystem
+        from craid.eddb.system.InhabitedSystem import InhabitedSystem
         tSys: InhabitedSystem = self.getSystem()
         econ: str = tSys.getEconomy()
         if not econ.startswith("Indust") and not econ.startswith("Refin"):

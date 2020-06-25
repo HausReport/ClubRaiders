@@ -8,9 +8,9 @@ from typing import Dict, Set
 
 import pandas as pd
 
-import craid.eddb.Printmem as pm
-from craid.eddb.Aware import Aware
-from craid.eddb.Faction import Faction
+import craid.eddb.util.Printmem as pm
+from craid.eddb.base.Aware import Aware
+from craid.eddb.faction.Faction import Faction
 from craid.eddb.loader.CreateClubSystemKeys import getClubSystemKeys
 #
 # Expensive function - run once, use result many times

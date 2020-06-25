@@ -6,15 +6,14 @@ import gzip
 import os
 import pprint
 import tempfile
-from typing import Dict, List, Set
+from typing import Dict, Set
 from typing import Tuple
 
 import ujson
 
-from craid.eddb.GameConstants import MINOR_FACTION_PRESENCES
-from craid.eddb.SystemXYZ import SystemXYZ
+from craid.eddb.base.GameConstants import MINOR_FACTION_PRESENCES
+from craid.eddb.system.SystemXYZ import SystemXYZ
 from craid.eddb.loader.CreateFactions import load_factions
-from craid.eddb.loader.LoadDataFromAWS import LoadDataFromAWS
 from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
 
 #

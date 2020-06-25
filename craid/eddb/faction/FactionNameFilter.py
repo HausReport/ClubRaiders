@@ -5,7 +5,7 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 
-from craid.eddb.Faction import Faction
+from craid.eddb.faction.Faction import Faction
 
 
 class FactionNameFilter(object):

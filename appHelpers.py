@@ -6,13 +6,14 @@ import logging
 from typing import Dict, Tuple
 
 import dash_core_components as dcc
+import dash_html_components as html
 import plotly.graph_objs as go
 from dash_table.Format import Format, Scheme, Group
 from pkg_resources import resource_string as resource_bytes
 
 from craid.club.regions.RegionFactory import RegionFactory
-from craid.eddb.SquadronXYZ import SquadronXYZ
-from craid.eddb.SystemXYZ import SystemXYZ
+from craid.eddb.faction.SquadronXYZ import SquadronXYZ
+from craid.eddb.system.SystemXYZ import SystemXYZ
 
 
 class AnnoyingCrap(object):
@@ -305,3 +306,65 @@ class AnnoyingCrap(object):
         simpleTrace = AnnoyingCrap.getTrace(view)
         myLayout = AnnoyingCrap.getLayout(title)
         return go.Figure(data=[simpleTrace], layout=myLayout)
+
+
+tab_style = {
+    'borderBottom'   : '1px solid #d6d6d6',
+    'padding'        : '6px',
+    'backgroundColor': '#3c3f41',
+    'color'          : 'whitesmoke',
+}
+tab_selected_style = {
+    'borderTop'      : '1px solid #d6d6d6',
+    'borderBottom'   : '1px solid #d6d6d6',
+    'fontWeight'     : 'bold',
+    'backgroundColor': '#4e5254',
+    'color'          : 'white',
+    'padding'        : '6px'
+}
+
+
+def enCard(contents) -> html.Div:
+    return html.Div(className="card", children=[
+        contents,
+    ])
+
+
+def makeArticleCard(contents, id_) -> html.Div:
+    return enCard(html.Article(contents, id=id_, className="simpleColItem"))
+
+
+def makeDiscordCard(msg, _id, _idnum) -> html.Div:
+    return html.Div(className="card", children=[
+        dcc.Markdown(msg),
+        html.Iframe(id=f"{_id}", src=f"https://discordapp.com/widget?id={_idnum}&theme=dark",
+                    width="350", height="400"),
+    ])
+
+
+my_meta_tags = [
+    # A description of the app, used by e.g.
+    # search engines when displaying search results.
+    {
+        'name'   : 'description',
+        'content': 'Tool to help Elite: Dangerous commanders identify, evaluate and eradicate factions linked to the shadowy organization known as The Club.'
+    },
+    # A tag that tells Internet Explorer (IE)
+    # to use the latest renderer version available
+    # to that browser (e.g. Edge)
+    {
+        'http-equiv': 'X-UA-Compatible',
+        'content'   : 'IE=edge'
+    },
+    # A tag that tells the browser not to scale
+    # desktop widths to fit mobile screens.
+    # Sets the width of the viewport (browser)
+    # to the width of the device, and the zoom level
+    # (initial scale) to 1.
+    #
+    # Necessary for "true" mobile support.
+    {
+        'name'   : 'viewport',
+        'content': 'width=device-width, initial-scale=1.0'
+    }
+]

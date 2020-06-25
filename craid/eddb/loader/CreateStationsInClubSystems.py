@@ -13,7 +13,7 @@ from typing import Set
 
 import ujson
 
-from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.system.InhabitedSystem import InhabitedSystem
 from craid.eddb.Station import Station
 from craid.eddb.loader.DataLoader import DataLoader
 

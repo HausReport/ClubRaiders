@@ -2,10 +2,12 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 import math
 from datetime import datetime, timedelta
 
-from craid.eddb.Aware import Aware
+from craid.eddb.base.Aware import Aware
 
 
 class System(Aware):

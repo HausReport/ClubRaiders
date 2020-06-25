@@ -4,9 +4,9 @@
 import logging
 from typing import Dict, List, Set, Tuple
 
-from craid.eddb.Faction import Faction
-from craid.eddb.FactionInstance import FactionInstance
-from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.faction.Faction import Faction
+from craid.eddb.faction.FactionInstance import FactionInstance
+from craid.eddb.system.InhabitedSystem import InhabitedSystem
 from craid.eddb.States import States
 
 

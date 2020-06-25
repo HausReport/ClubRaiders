@@ -5,7 +5,7 @@
 import logging
 from typing import Dict, Set
 
-from craid.eddb.InhabitedSystem import InhabitedSystem
+from craid.eddb.system.InhabitedSystem import InhabitedSystem
 
 
 #
