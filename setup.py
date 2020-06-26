@@ -11,7 +11,7 @@ setup(
     packages=['assets', 'craid', 'craid.eddb', 'craid.eddb.base', 'craid.eddb.faction',
               'craid.eddb.loader', 'craid.eddb.loader.strategy',
               'craid.eddb.powers', 'craid.eddb.system', 'craid.eddb.util',
-              'craid.edbgs',
+              'craid.edbgs', 'craid.history',
               'craid.dashbd', 'craid.dashbd.assets', 'craid.dashbd.queries', 'craid.dashbd.text',
               'craid.club', 'craid.club.regions'],
     # Needed for dependencies
