@@ -518,8 +518,8 @@ class FactionInstance(Faction):
         line = {
             'system'   : sys,
             'faction'  : fac,
-            'influence': inf,
             'updated'  : updated,
+            'influence': inf,
             'control'  : control,
             'region'   : region,
             'population': population

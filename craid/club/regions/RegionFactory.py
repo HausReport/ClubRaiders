@@ -33,6 +33,8 @@ class RegionFactory(object):
     def getRegion(x, y, z) -> SphericalRegion:
         for key in RegionFactory.regionDict.keys():
             reg = RegionFactory.regionDict.get(key)
+            if reg.getTitle() == RegionFactory.unRegion.getTitle():
+                continue
             if reg.contains(x, y, z):
                 return reg
 

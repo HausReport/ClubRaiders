@@ -15,7 +15,7 @@ import ujson
 
 from craid.eddb.loader import DataProducer
 from craid.eddb.loader.strategy.DataLoader import DataLoader
-from craid.eddb.loader.strategy.LoadDataFromEDDB import LoadDataFromEDDB
+from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
 from craid.eddb.loader.MakeKeyFiles import loadKeys
 
 

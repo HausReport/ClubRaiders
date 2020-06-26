@@ -15,11 +15,15 @@ from craid.eddb.loader.strategy.DataLoader import DataLoader
 
 class WebDataLoader(DataLoader):
 
-    def __init__(self):
+    def __init__(self, forceWebDownload=False):
         super().__init__()
+        self.forceWebDownload = forceWebDownload
 
     def getPrefix(self) -> str:
         return "smol-"
+
+    def getWebFileSuffix(self) -> str:
+        return ""
 
     def find_data_file(self, _shortName: str, forceDownload=False):
         shortName = self.getPrefix() + _shortName
@@ -49,7 +53,7 @@ class WebDataLoader(DataLoader):
         #
         # If neither exist, download the file to the temp dir
         #
-        if fileIsOutOfDate or not os.path.exists(fName):
+        if fileIsOutOfDate or not os.path.exists(fName) or forceDownload or self.forceWebDownload:
             logging.info("1- downloading to: " + fName)
             fName = self.download_file(shortName, tmpDir)
             # fName +=".gz"  added in download_file
@@ -95,7 +99,8 @@ class WebDataLoader(DataLoader):
         assert os.path.exists(targetDirectory), "data dir doesn't exist: [" + targetDirectory + "]"
 
         prefix = self.getWebFilePrefix()
-        url = prefix + shortName + ".gz"
+        suffix = self.getWebFileSuffix()
+        url = prefix + shortName + ".gz" + suffix
 
         fName = os.path.join(targetDirectory, shortName + ".gz")
         logging.info("2 - downloading [%s] to [%s] data file.", url, fName)

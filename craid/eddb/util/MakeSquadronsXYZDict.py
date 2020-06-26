@@ -16,7 +16,7 @@ import ujson
 from craid.eddb.base.GameConstants import MINOR_FACTION_PRESENCES
 from craid.eddb.system.SystemXYZ import SystemXYZ
 from craid.eddb.loader.CreateFactions import load_factions
-from craid.eddb.loader.strategy.LoadDataFromEDDB import LoadDataFromEDDB
+from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
 
 #
 # First, get player faction keys

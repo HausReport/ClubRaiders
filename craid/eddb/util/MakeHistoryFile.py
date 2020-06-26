@@ -14,81 +14,119 @@ from typing import List, Dict
 import ujson
 
 from craid.eddb.faction.Faction import Faction
+from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
 from craid.eddb.loader.CreateClubSystemKeys import getClubSystemKeys
 from craid.eddb.loader.CreateFactionInstances import getFactionInstances
 from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateSystems import load_systems
 from craid.eddb.loader.strategy.DataLoader import DataLoader
-from craid.eddb.loader.strategy.LoadDataFromEDDB import LoadDataFromEDDB
+from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
 
+oldRevs = ["444f58522e81c3ad6477eefa398f39c2edfc1ea9",
+           "7cd6abc33aafab80cace0c13c2beb6e1d8f1779b",
+           "ebbdc4e809cc446bbe35b1a540b3480006be4e67",
+           "50eb68e359a444de0cec194a603a3a9a339855fa",
+           "43f0480c50e9b69c0506a30e366c9f34d4fa60f8",
+           "4b7ead2c26999e9736ff179a38f38c5677c2423c",
+           "c337e9261161bbfc1be99e1a9e1a31d9b01159f0",
+           "ea8d0b6db656cd5802e5fc4595e6f364b455153e",
+           "3adfece26c3c8f7a829540fbe6e0f8b109ac8357",
+           "92578fe5ebf412523ee9fef68266dc4f7d8874f2",
+           "2fdb0b11640577d1900fd3b6ba318ec0d5bffd55",
+           "7ccef973cb7ddf50ca6124df78fa0ccbd9256aeb",
+           "d3755d00457e86102a9a79db85c1359bea6a227a",
+           "7e8ba2b9a6697fc1f01cf3c72a0d48cfff075e8e",
+           "8bb9f02d56f9653a60f6e0b69eeeef7ade9bef89",
+           "3d1e47b4ca7d2ade4259d040a0aa5261e9fecf7c",
+           "a32a807f0cb3efeb8eba568050a7c4eec0af6820",
+           "8cd07a52abeb3c0c50c67a88fcbfad03a675fec5",
+           "fdcf2cf690ada3cd1cfb801fdfcdfee9fd4d4d75",
+           "832e3fc83b2663a128fc84403202faea6f16f0ae",
+           "84851ceedc1725a2d5b35f13cd7450e8f76237c3",
+           "99aff5ca88e908dcddeb7611623ca7a40f79dffa",
+           "5e1e658849098444a10d7aec6a2f0e13542be725",
+           "4f848d61f92f772744304aeef49c7e7d0e5e9c63",
+           "066c92ef24354305b1dd94ae0e12596afc3a6fd6"]
 
 # 6/25
-# https://github.com/HausReport/ClubRaiders/raw/7cd6abc33aafab80cace0c13c2beb6e1d8f1779b/data/smol-systems_populated.jsonl.gz
+#"7cd6abc33aafab80cace0c13c2beb6e1d8f1779b",
 # 6/24
-# https://github.com/HausReport/ClubRaiders/raw/ebbdc4e809cc446bbe35b1a540b3480006be4e67/data/smol-systems_populated.jsonl.gz
+#"ebbdc4e809cc446bbe35b1a540b3480006be4e67",
 # 6/23
-# https://github.com/HausReport/ClubRaiders/raw/50eb68e359a444de0cec194a603a3a9a339855fa/data/smol-systems_populated.jsonl.gz
+#"50eb68e359a444de0cec194a603a3a9a339855fa",
 # 6/22
 # 6/21
-# https://github.com/HausReport/ClubRaiders/raw/43f0480c50e9b69c0506a30e366c9f34d4fa60f8/data/smol-systems_populated.jsonl.gz
+#"43f0480c50e9b69c0506a30e366c9f34d4fa60f8",
 # 6/20
-# https://github.com/HausReport/ClubRaiders/raw/4b7ead2c26999e9736ff179a38f38c5677c2423c/data/smol-systems_populated.jsonl.gz
+#"4b7ead2c26999e9736ff179a38f38c5677c2423c",
 # 6/19
-# https://github.com/HausReport/ClubRaiders/raw/c337e9261161bbfc1be99e1a9e1a31d9b01159f0/data/smol-systems_populated.jsonl.gz
+#"c337e9261161bbfc1be99e1a9e1a31d9b01159f0",
 # 6/18
+#"ea8d0b6db656cd5802e5fc4595e6f364b455153e",
 # 6/17
+#"3adfece26c3c8f7a829540fbe6e0f8b109ac8357",
 # 6/16
 # 6/15
-# 6/14
-# 6/13
+#"92578fe5ebf412523ee9fef68266dc4f7d8874f2",
+# 6/14i
+#"2fdb0b11640577d1900fd3b6ba318ec0d5bffd55",
+# 6/13i
+#"7ccef973cb7ddf50ca6124df78fa0ccbd9256aeb",
 # 6/12
+#"d3755d00457e86102a9a79db85c1359bea6a227a",
 # 6/11
+#"7e8ba2b9a6697fc1f01cf3c72a0d48cfff075e8e",
 # 6/10
+#"8bb9f02d56f9653a60f6e0b69eeeef7ade9bef89",
 # 6/09
+#"3d1e47b4ca7d2ade4259d040a0aa5261e9fecf7c",
 # 6/08
+#"a32a807f0cb3efeb8eba568050a7c4eec0af6820",
 # 6/07
+#"8cd07a52abeb3c0c50c67a88fcbfad03a675fec5",
 # 6/06
+#"fdcf2cf690ada3cd1cfb801fdfcdfee9fd4d4d75",
 # 6/05
+#"832e3fc83b2663a128fc84403202faea6f16f0ae",
 # 6/04
+#"84851ceedc1725a2d5b35f13cd7450e8f76237c3",
 # 6/03
+#"99aff5ca88e908dcddeb7611623ca7a40f79dffa",
 # 6/02
+#"5e1e658849098444a10d7aec6a2f0e13542be725",
 # 6/01
+#"4f848d61f92f772744304aeef49c7e7d0e5e9c63",
 # 5/31
-# ht0ps://github.com/HausReport/ClubRaiders/raw/066c92ef24354305b1dd94ae0e12596afc3a6fd6/data/smol-systems_populated.jsonl.gz
-
-# xinName = 'factions.jsonl'
-# allFactions: List[Dict] = []
-#
-# myLoader: DataLoader = LoadDataFromEDDB()
-# inFile = myLoader.find_data_file(xinName)
-# with gzip.open(inFile, 'rb') as f:
-#     for line in f:
-#         facLine = ujson.loads(line)
-#         if facLine['id'] in keys:
-#             allFactions.append(facLine)
-#             curFaction = Faction(facLine)
-#             if FactionNameFilter.proClubFaction(curFaction):
-#                 curFaction.setClub(True)
-#
-#             all_factions_dict[lCurFactionId] = curFaction
+#"066c92ef24354305b1dd94ae0e12596afc3a6fd6",
 
 #
 # Fire up logger
 #
+
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
 
 myLoader = LoadDataFromEDDB()
 playerFactionNameToSystemName: Dict[str, str] = {}
 all_factions_dict, player_faction_keys, club_faction_keys = load_factions(myLoader)
-all_systems_dict = load_systems(myLoader)
 
-club_system_keys = getClubSystemKeys(all_systems_dict, club_faction_keys)
+json_str = ""
 
-allClubSystemInstances, sysIdFacIdToFactionInstance, factions_of_interest_keys \
-    = getFactionInstances(all_systems_dict, club_system_keys, all_factions_dict, club_faction_keys)
+for rev in oldRevs:
+    myLoader = LoadDataFromGithub(True,rev,True)
+    all_systems_dict = load_systems(myLoader)
 
-for val in sysIdFacIdToFactionInstance.values():
-    if val.isClub():
-        print(val.getHistoryLine())
+    club_system_keys = getClubSystemKeys(all_systems_dict, club_faction_keys)
 
+    allClubSystemInstances, sysIdFacIdToFactionInstance, factions_of_interest_keys \
+        = getFactionInstances(all_systems_dict, club_system_keys, all_factions_dict, club_faction_keys)
+
+    for val in sysIdFacIdToFactionInstance.values():
+        if val.isClub():
+            json_str += val.getHistoryLine() + "\n"
+            #print(val.getHistoryLine())
+
+
+json_bytes = json_str.encode('utf-8')
+with gzip.GzipFile('../../../data/history.jsonl.gz', 'a+b') as fout:   # 4. gzip
+    fout.write(json_bytes)

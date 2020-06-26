@@ -20,8 +20,8 @@ from craid.eddb.loader.CreateFactionInstances import getFactionInstances
 from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateStationsInClubSystems import loadStationsInClubSystems
 from craid.eddb.loader.CreateSystems import load_systems
-from craid.eddb.loader.strategy.LoadDataFromAWS import LoadDataFromAWS
-from craid.eddb.loader.strategy.LoadDataFromEDDB import LoadDataFromEDDB
+from craid.eddb.loader.strategy.AWSLoader import LoadDataFromAWS
+from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
 from craid.eddb.loader.MakeKeyFiles import dumpKeys, loadKeys
 
 
