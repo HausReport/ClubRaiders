@@ -10,8 +10,8 @@ from craid.eddb.loader.strategy.WebLoader import WebDataLoader
 
 class LoadDataFromGithub(WebDataLoader):
 
-    def __init__(self, _forceWebDownload=False, _revision=None, _raw=False):
-        super().__init__(_forceWebDownload)
+    def __init__(self, _forceWebDownload=False, _revision=None, _raw=False,useSmol=True):
+        super().__init__(_forceWebDownload, useSmol)
         self.revision = _revision
         self.raw = _raw
 

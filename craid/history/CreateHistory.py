@@ -22,6 +22,7 @@ from craid.eddb.loader.strategy.DataLoader import DataLoader
 
 # from memory_profiler import profile
 from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
+from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
 
 
 def create_history(loader: DataLoader) -> DataFrame:
@@ -78,5 +79,5 @@ def create_history(loader: DataLoader) -> DataFrame:
 if __name__ == '__main__':
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.DEBUG
-    myLoader = LoadDataFromEDDB()
+    myLoader = LoadDataFromGithub(forceWebDownload=True, useSmol=False)
     csa = create_history(myLoader)
