@@ -18,7 +18,7 @@ from craid.eddb.system.InhabitedSystem import InhabitedSystem
 # Load all inhabited systems
 #
 # @profile
-from craid.eddb.loader.DataLoader import DataLoader
+from craid.eddb.loader.strategy.DataLoader import DataLoader
 
 
 def load_systems(loader: DataLoader) -> Dict[int, InhabitedSystem]:

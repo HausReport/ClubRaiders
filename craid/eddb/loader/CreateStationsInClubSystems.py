@@ -15,7 +15,7 @@ import ujson
 
 from craid.eddb.system.InhabitedSystem import InhabitedSystem
 from craid.eddb.Station import Station
-from craid.eddb.loader.DataLoader import DataLoader
+from craid.eddb.loader.strategy.DataLoader import DataLoader
 
 
 def loadStationsInClubSystems(loader: DataLoader,

@@ -5,17 +5,16 @@
 
 # logic for caching at:
 # https://stackoverflow.com/questions/29314287/python-requests-download-only-if-newer
-from craid.eddb.loader.WebDataLoader import WebDataLoader
+from craid.eddb.loader.strategy.WebDataLoader import WebDataLoader
 
 
-class LoadDataFromAWS(WebDataLoader):
+class LoadDataFromGithub(WebDataLoader):
 
     def __init__(self):
         super().__init__()
 
     def getWebFilePrefix(self) -> str:
-        return "https://erlaed.s3.us-east-2.amazonaws.com/"
-        # return "http://erlaed.s3.amazonaws.com/"
+        return "https://raw.github.com/HausReport/ClubRaiders/master/data/"
 
 # if __name__ == '__main__':
 # LoadDataFromEDDB.load_data()

@@ -2,6 +2,8 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 
 import datetime
 import gzip
@@ -15,7 +17,7 @@ import requests
 # https://stackoverflow.com/questions/29314287/python-requests-download-only-if-newer
 import urllib3
 
-from craid.eddb.loader.DataLoader import DataLoader
+from craid.eddb.loader.strategy.DataLoader import DataLoader
 
 
 class LoadDataFromEDDB(DataLoader):

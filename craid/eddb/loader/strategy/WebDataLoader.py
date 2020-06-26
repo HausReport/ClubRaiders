@@ -2,13 +2,15 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 import logging
 import os
 import tempfile
 
 import requests
 
-from craid.eddb.loader.DataLoader import DataLoader
+from craid.eddb.loader.strategy.DataLoader import DataLoader
 
 
 class WebDataLoader(DataLoader):

@@ -14,7 +14,7 @@ import ujson
 
 from craid.eddb.faction.Faction import Faction
 from craid.eddb.faction.FactionNameFilter import FactionNameFilter
-from craid.eddb.loader.DataLoader import DataLoader
+from craid.eddb.loader.strategy.DataLoader import DataLoader
 
 
 # from memory_profiler import profile

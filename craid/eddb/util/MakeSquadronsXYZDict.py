@@ -2,6 +2,8 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 import gzip
 import os
 import pprint
@@ -14,7 +16,7 @@ import ujson
 from craid.eddb.base.GameConstants import MINOR_FACTION_PRESENCES
 from craid.eddb.system.SystemXYZ import SystemXYZ
 from craid.eddb.loader.CreateFactions import load_factions
-from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
+from craid.eddb.loader.strategy.LoadDataFromEDDB import LoadDataFromEDDB
 
 #
 # First, get player faction keys

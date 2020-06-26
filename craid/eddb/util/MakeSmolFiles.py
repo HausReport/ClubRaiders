@@ -2,6 +2,8 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 import gzip
 import logging
 import os
@@ -12,8 +14,8 @@ from typing import Dict, List, Set
 import ujson
 
 from craid.eddb.loader import DataProducer
-from craid.eddb.loader.DataLoader import DataLoader
-from craid.eddb.loader.LoadDataFromEDDB import LoadDataFromEDDB
+from craid.eddb.loader.strategy.DataLoader import DataLoader
+from craid.eddb.loader.strategy.LoadDataFromEDDB import LoadDataFromEDDB
 from craid.eddb.loader.MakeKeyFiles import loadKeys
 
 

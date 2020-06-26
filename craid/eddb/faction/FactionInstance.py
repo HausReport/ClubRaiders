@@ -9,11 +9,13 @@ import datetime
 import string
 from typing import List
 
+import ujson
+
+from craid.eddb.States import States
 from craid.eddb.base import GameConstants as gconst
 from craid.eddb.faction.Faction import Faction
 from craid.eddb.system.InhabitedSystem import InhabitedSystem
 from craid.eddb.util.PassThroughDict import PassThroughDict
-from craid.eddb.States import States
 
 
 class FactionInstance(Faction):
@@ -121,20 +123,6 @@ class FactionInstance(Faction):
         date = self.mySystem.getUpdatedDateTime()
         ds = date.strftime("%d-%b-%Y %H:%M")
         return ds
-
-    def printCSV(self):
-        facName = self.get_name2()
-        war = self.getVulnerableString()
-        sysName = self.getSystemName()
-        x = '{:04.2f}'.format(self.getX())
-        y = '{:04.2f}'.format(self.getY)
-        z = '{:04.2f}'.format(self.getZ)
-        sinf = '{:04.2f}'.format(self.getInfluence)
-        allg = self.get_allegiance()
-        ds = self.getUpdatedString()
-        print(f"{facName},{sysName},{x},{y},{z},{allg},{sinf},{war},{ds}")
-        #    facName + "," + sysName + "," + x + "," + y + "," + z + "," + allg +
-        #    "," + sinf + "," + war + "," + ds)  # + "," + allg)
 
     def isHomeSystem(self) -> bool:
         factionHomeSystemId: int = self.get_homesystem_id()
@@ -495,3 +483,49 @@ class FactionInstance(Faction):
 
     def mineralSalesScore(self):
         return self.mySystem.mineralSalesScore()
+
+
+    #
+    # I/O functions
+    #
+    def printCSV(self):
+        facName = self.get_name2()
+        war = self.getVulnerableString()
+        sysName = self.getSystemName()
+        x = '{:04.2f}'.format(self.getX())
+        y = '{:04.2f}'.format(self.getY)
+        z = '{:04.2f}'.format(self.getZ)
+        sinf = '{:04.2f}'.format(self.getInfluence)
+        allg = self.get_allegiance()
+        ds = self.getUpdatedString()
+        print(f"{facName},{sysName},{x},{y},{z},{allg},{sinf},{war},{ds}")
+        #    facName + "," + sysName + "," + x + "," + y + "," + z + "," + allg +
+        #    "," + sinf + "," + war + "," + ds)  # + "," + allg)
+
+    def getHistoryLine(self):
+        import datetime
+
+        epoch = datetime.datetime.utcfromtimestamp(0)
+        timestamp =  round( (self.getUpdatedDateTime() - epoch).total_seconds() * 1000.0, 0)
+
+        sys = self.mySystem.get_name()
+        fac = self.get_name()
+        inf = self.getInfluence()
+        updated = int(timestamp) #self.getUpdatedDateTime()
+        control = self.controlsSystem()
+        region = self.getRegionNumber()
+        population = self.getPopulation()
+        line = {
+            'system'   : sys,
+            'faction'  : fac,
+            'influence': inf,
+            'updated'  : updated,
+            'control'  : control,
+            'region'   : region,
+            'population': population
+        }
+        json = ujson.dumps(line)
+        return json
+
+#    def unix_time_millis(self, dt):
+#        return (dt - epoch).total_seconds() * 999.0

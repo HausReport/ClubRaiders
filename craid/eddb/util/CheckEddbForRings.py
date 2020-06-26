@@ -11,7 +11,7 @@ from craid.eddb.system.InhabitedSystem import InhabitedSystem
 from craid.eddb.loader.CreateFactionInstances import getFactionInstances
 from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateSystems import load_systems
-from craid.eddb.loader.LoadDataFromGithub import LoadDataFromGithub
+from craid.eddb.loader.strategy.LoadDataFromGithub import LoadDataFromGithub
 from craid.eddb.loader.MakeKeyFiles import loadKeys
 
 myLoader = LoadDataFromGithub()
