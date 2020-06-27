@@ -109,8 +109,8 @@ class Station(Aware):
         fac: FactionInstance = tSys.getFactionInstanceById(fid)
         return fac
 
-    def hasState(self, state: int):
-        if self.is_fleet_carrier: #isFleetCarrier():
+    def hasState(self, state: int) -> bool:
+        if self.is_fleet_carrier:  # isFleetCarrier():
             return False
         fac = self.getControllingFactionInstance()
         name = self.get_name()
