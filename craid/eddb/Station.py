@@ -110,7 +110,7 @@ class Station(Aware):
         return fac
 
     def hasState(self, state: int):
-        if self.is_fleet_carrier():
+        if self.isFleetCarrier():
             return False
         fac = self.getControllingFactionInstance()
         name = self.get_name()

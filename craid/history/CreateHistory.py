@@ -26,58 +26,16 @@ from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
 
 
 def create_history(loader: DataLoader) -> DataFrame:
-    dataframe = None
 
-    system: List[str] = []
-    faction: List[str] = []
-    updated: List[datetime] = []
-    influence: List[float] =[]
-    control: List[bool] =[]
-    region: List[int] = []
-    population: List[int] = []
-
-    nLines: int = 0
     fName = loader.find_data_file('history.jsonl')
-    # with gzip.open(fName, 'rb') as f:
-    #     for line in f:
-    #         facLine = ujson.loads(line)
-    #         nLines += 1
-    #
-    #         lCurFactionId = int(facLine['id'])
-    #         sys = facLine['system']
-    #         fac = facLine['faction']
-    #         tmp = facLine['updated']
-    #         upd = datetime.datetime.fromtimestamp(tmp)
-    #         inf = facLine['influence']
-    #         ctrl= facLine['control']
-    #         reg = facLine['region']
-    #         pop = facLine['population']
-    #
-    #         system.append(sys)
-    #         faction.append(fac)
-    #         updated.append(upd)
-    #         influence.append(inf)
-    #         control.append(ctrl)
-    #         region.append(reg)
-    #         population.append(pop)
-    #
-    # data = {
-    #     'system'          : system,
-    #     'faction'         : faction,
-    #     'updated'         : updated,
-    #     'influence'       : influence,
-    #     'control'         : control,
-    #     'region'          : region,
-    #     'population'      : population
-    # }
     dataframe = pd.read_json(fName, lines=True, compression='infer')
+    dataframe.updated = pd.to_datetime(dataframe.updated, unit="ms")
 
-    #dataframe = pd.DataFrame(data=data)
     logging.info("Read %s lines of history data", str(dataframe.count()))
     return dataframe
 
 if __name__ == '__main__':
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.DEBUG
-    myLoader = LoadDataFromGithub(forceWebDownload=True, useSmol=False)
+    myLoader = LoadDataFromGithub(_forceWebDownload=True, useSmol=False)
     csa = create_history(myLoader)

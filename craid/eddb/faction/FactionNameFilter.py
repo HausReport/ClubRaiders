@@ -14,12 +14,17 @@ class FactionNameFilter(object):
     @staticmethod
     def proClubFaction(CurFaction: Faction):
         curName = CurFaction.get_name()
+        if CurFaction.is_player():
+            return False
 
         #
         # Weed out negatives first
         #
         if "Alliance Assembly" in curName: return False
         if "Zaonce Jet" in curName: return False
+        if "Black Aegis" in curName: return False
+        if "Aegis of Federal Democrats" in curName: return False
+        if "Aegis Imperium" in curName: return False
         if "Black Aegis" in curName: return False
 
         #
