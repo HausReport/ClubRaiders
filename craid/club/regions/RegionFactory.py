@@ -1,3 +1,5 @@
+from typing import List
+
 import craid
 from craid.club.regions.MultiSphericalRegion import MultiSphericalRegion
 from craid.club.regions.SphericalRegion import SphericalRegion
@@ -28,6 +30,10 @@ class RegionFactory(object):
         "Wreaken"   : SphericalRegion("Wreaken",       9,   32,    18,  114,  25, 'rgb(0,0,255)'),
         "CQC"       : SphericalRegion("CQC",          10,   18,   -11,   78,  30, 'rgb(0,0,255)'),
     }
+
+    @staticmethod
+    def getRegionNames() -> List[str]:
+        return list(craid.club.regions.RegionFactory.RegionFactory.regionDict.keys())
 
     @staticmethod
     def getRegion(x, y, z) -> SphericalRegion:
