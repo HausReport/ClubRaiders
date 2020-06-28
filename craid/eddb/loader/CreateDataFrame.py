@@ -50,7 +50,7 @@ def getDataFrame(csa: List[FactionInstance]) -> pd.DataFrame:
         population.append(factionInstance.getPopulation())
         influence.append(factionInstance.getInfluence())
         updated.append(
-            factionInstance.getUpdatedDateTime().date())  # TODO: demoted to date because no formatting in datatable
+            factionInstance.getUpdatedDateTime().curDate())  # TODO: demoted to date because no formatting in datatable
         controlsSystem.append(factionInstance.controlsSystem())
         vulnerableString.append(factionInstance.getVulnerableString())
         sysId.append(factionInstance.getSystemID())

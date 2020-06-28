@@ -1,6 +1,6 @@
 from typing import List
 
-import craid
+import craid.eddb.system.System
 from craid.club.regions.MultiSphericalRegion import MultiSphericalRegion
 from craid.club.regions.SphericalRegion import SphericalRegion
 from craid.club.regions.TheUnregion import TheUnregion
