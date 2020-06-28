@@ -50,6 +50,10 @@ class SphericalRegion(Region):
         )
         return data
 
+    def getVolume(self):
+        # 4/3 pi r^2
+        return (4.0*math.pi/3.0) * self.r * self.r
+
     def __str__(self):
         msg = f"Sphere: {self._name} at ( {self.x0}, {self.y0}, {self.z0}) radius {self.r} color {self.color}"
         return msg

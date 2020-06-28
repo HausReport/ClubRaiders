@@ -58,3 +58,10 @@ class MultiSphericalRegion(Region):
             ret = ret + "\n" + msg
 
         return ret
+
+    def getVolume(self):
+        vol = 0.0
+        for reg in self.points:
+            vol = vol + reg.getVolume()
+
+        return vol

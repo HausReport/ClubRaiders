@@ -2,6 +2,8 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+import math
+
 from craid.club.regions.Region import Region
 
 
@@ -16,3 +18,7 @@ class TheUnregion(Region):
     def distanceFrom(self, x, y, z):
         dist = 999999
         return dist
+
+    def getVolume(self):
+        # 4/3 pi r^2
+        return math.inf
