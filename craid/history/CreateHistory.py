@@ -38,5 +38,5 @@ def create_history(loader: DataLoader) -> DataFrame:
 if __name__ == '__main__':
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.DEBUG
-    myLoader = LoadDataFromGithub(_forceWebDownload=True, useSmol=False)
+    myLoader = LoadDataFromGithub(_forceWebDownload=False, useSmol=False)
     csa = create_history(myLoader)
