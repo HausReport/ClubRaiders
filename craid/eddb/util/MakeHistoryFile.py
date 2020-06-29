@@ -10,6 +10,8 @@
 import gzip
 import logging
 from typing import Dict
+import pandas as pd
+import ujson
 
 from craid.eddb.loader.CreateClubSystemKeys import getClubSystemKeys
 from craid.eddb.loader.CreateFactionInstances import getFactionInstances
@@ -44,8 +46,10 @@ oldRevs = ["444f58522e81c3ad6477eefa398f39c2edfc1ea9",
            "4f848d61f92f772744304aeef49c7e7d0e5e9c63",
            "066c92ef24354305b1dd94ae0e12596afc3a6fd6"]
 
+fName = '../../../data/history.jsonl.gz'
 
 def appendTodaysData():
+    global fName
     myLoader = LoadDataFromEDDB()
 
     playerFactionNameToSystemName: Dict[str, str] = {}
@@ -68,9 +72,24 @@ def appendTodaysData():
             json_str += hl + "\n"
 
     json_bytes = json_str.encode('utf-8')
-    with gzip.GzipFile('../../../data/history.jsonl.gz', 'a+b') as fout:  # 4. gzip
+    with gzip.GzipFile(fName, 'a+b') as fout:  # 4. gzip
         fout.write(json_bytes)
 
+
+def cleanHistoryFile():
+    global fName
+    dataframe = pd.read_json(fName, lines=True, compression='infer')
+
+    # data cleaning
+    dataframe = dataframe.drop_duplicates()
+    dataframe = dataframe[dataframe['faction'] != 'Aegis of Federal Democrats']
+    dataframe = dataframe[dataframe['faction'] != 'Aegis Imperium']
+    dataframe = dataframe[dataframe['faction'] != "Emperor's Dawn"]
+
+    with open(fName, 'w') as out_file:
+        for index, row in dataframe.iterrows():
+            print ( row.to_dict())
+            out_file.write(ujson.dumps(row.to_dict()))
 
 def makeHistoryFromEddbRevisions():
     myLoader = LoadDataFromEDDB()
@@ -106,4 +125,5 @@ if __name__ == '__main__':
     logging.getLogger().level = logging.DEBUG
 
     appendTodaysData()
+    cleanHistoryFile()
     #makeHistoryFiles()
