@@ -5,66 +5,33 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 #
+from typing import Set
 
 from craid.eddb.faction.Faction import Faction
 
+#Have gone back and forth about having 'Bill Turner' in the list
+badGuys: Set[str] = {'Abroin Universal PLC', 'Aegis Core', 'Aegis Research',
+                     "Benton's Gang", 'Bentonian Party', 'CQC Holdings',
+                     'Gallant Investment Brokers', 'Hodack Prison Colony',
+                     'Janus Incorporated', "Namarii Emperor's Dawn", 'Reyan BPS',
+                     'Reynhardt IntelliSys', 'Sirius Atmospherics', 'Sirius Catering',
+                     'Sirius Corporation', 'Sirius Drives', 'Sirius Hot2Cold',
+                     'Sirius Hyperspace', 'Sirius Industrial',
+                     'Sirius Luxury Transports', 'Sirius Mining Merope',
+                     'Sirius Mining', 'Sirius Power', 'The Greenventure Group',
+                     'The Peterson Group', 'The Rockforth Corporation',
+                     'Turner Research Group', 'Wiggins Development Trust',
+                     'Worster Insurance', 'Wreaken Construction', 'Aegis Defense'}
 
 class FactionNameFilter(object):
 
     @staticmethod
     def proClubFaction(CurFaction: Faction):
+        #global FactionNameFilter.badGuys
+        global badGuys
         curName = CurFaction.get_name()
-        if CurFaction.is_player():
-            return False
-
-        #
-        # Weed out negatives first
-        #
-        if "Alliance Assembly" in curName: return False
-        if "Zaonce Jet" in curName: return False
-        if "Black Aegis" in curName: return False
-        if "Aegis of Federal Democrats" in curName: return False
-        if "Aegis Imperium" in curName: return False
-        if "Black Aegis" in curName: return False
-
-        #
-        # Identify positives
-        #
-        if "Abroin Universal PLC" in curName: return True
-        if "Aegis" in curName: return True
-        if "Benton" in curName: return True
-        # if "Blue Netcoms" in curName: return True
-        if "CQC Holding" in curName: return True
-        # if "Crimson State" in curName: return True
-        if "Emperor's Dawn" in curName: return True
-        # if "Emperor's Grace" in curName: return True
-        if "Gallant" in curName: return True
-        if "Greenventure" in curName: return True
-        if "Hodack Prison Colony" in curName: return True
-        if "Janus" in curName: return True
-        if "Peterson" in curName: return True
-        if "Reyan BPS" in curName: return True
-        if "Reynhardt IntelliSys" in curName: return True
-        if "Rockforth" in curName: return True
-        # if "Silver Allied" in curName: return True
-        # if "Silver United" in curName: return True
-        # if "Silver Universal" in curName: return True
-        if "Sirius Atmos" in curName: return True
-        if "Sirius Cater" in curName: return True
-        if "Sirius Corporation" in curName: return True
-        if "Sirius Driv" in curName: return True
-        if "Sirius Hot2" in curName: return True
-        if "Sirius Hypers" in curName: return True
-        if "Sirius Indust" in curName: return True
-        if "Sirius Lux" in curName: return True
-        if "Sirius Min" in curName: return True
-        if "Sirius Pow" in curName: return True
-        if "Turner" in curName: return True
-        if "Wiggins" in curName: return True
-        if "Worldcraft" in curName: return True
-        if "Worster" in curName: return True
-        if "Wreaken" in curName: return True
-        # if "Zaonce" in curName: return True
+        if curName in badGuys:
+            return True
         return False
 
     @staticmethod
