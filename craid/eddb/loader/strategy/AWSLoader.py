@@ -12,8 +12,8 @@ from craid.eddb.loader.strategy.WebLoader import WebDataLoader
 
 class LoadDataFromAWS(WebDataLoader):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, forceWebDownload=False,useSmol=True):
+        super().__init__(forceWebDownload,useSmol)
 
     def getWebFilePrefix(self) -> str:
         return "https://erlaed.s3.us-east-2.amazonaws.com/"

@@ -12,6 +12,7 @@
 import gzip
 import logging
 import os
+import shutil
 from typing import Dict
 import pandas as pd
 import ujson
@@ -75,11 +76,13 @@ from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
 #         fout.write(json_bytes)
 
 #fName = '../../../../../../../data/history.jsonl.gz'
-fName = os.path.join("..", "..", "..", "data", "history.jsonl.gz")
 
+def copyIntoSource(fName: str):
+    dest = os.path.join("..","..", "..", "..", "data", "history.jsonl.gz")
+    shutil.copy(fName, dest, follow_symlinks=True)
 
-def appendTodaysData():
-    global fName
+def appendTodaysData(fName: str):
+    #global fName
     myLoader = LoadDataFromEDDB()
 
     playerFactionNameToSystemName: Dict[str, str] = {}
@@ -107,8 +110,8 @@ def appendTodaysData():
         fout.write(json_bytes)
 
 
-def cleanHistoryFile():
-    global fName
+def cleanHistoryFile(fName: str):
+    #global fName
     dataframe = pd.read_json(fName, lines=True, compression='infer')
 
     # data cleaning

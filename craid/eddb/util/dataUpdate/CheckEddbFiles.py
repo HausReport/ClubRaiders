@@ -14,20 +14,11 @@ def tempFilesAreOutOfDate():
     return localFilesAreOutOfDate(tmpDir)
 
 def localFilesAreOutOfDate(localDirectory: str) -> bool:
-    sysFrag = "systems_populated.jsonl"
-    sysFile = os.path.join(localDirectory, sysFrag + ".gz")
-    if localFileIsOutOfDate(sysFile, sysFrag):
-        return True
-
-    facFrag = "factions.jsonl"
-    facFile = os.path.join(localDirectory, facFrag + ".gz")
-    if localFileIsOutOfDate(facFile, facFrag):
-        return True
-
-    staFrag = "stations.jsonl"
-    staFile = os.path.join(localDirectory, staFrag + ".gz")
-    if localFileIsOutOfDate(staFile, staFrag):
-        return True
+    frags = [ "stations.jsonl", "systems_populated.jsonl", "factions.jsonl"]
+    for frag in frags:
+        staFile = os.path.join(localDirectory, frag + ".gz")
+        if localFileIsOutOfDate(staFile, frag):
+            return True
 
     return False
 

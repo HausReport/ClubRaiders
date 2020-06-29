@@ -2,6 +2,8 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 import logging
 import os
 import tempfile
@@ -38,24 +40,22 @@ def upload_file(file_name, bucket, object_name=None):
     return True
 
 
-logging.getLogger().addHandler(logging.StreamHandler())
-logging.getLogger().level = logging.INFO
-
-key = os.getenv('AWS_ACCESS_KEY_ID')
-reg = os.getenv('AWS_DEFAULT_REGION')
-buck_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-buck_name = os.getenv('BUCKET_NAME')
-
-print(key)
-print(reg)
-print(buck_key)
-print(buck_name)
-
-fname = "foo.html"
-tmpDir = tempfile.gettempdir()
-inFile = os.path.join(tmpDir, fname)
-if os.path.exists(inFile):
-    logging.info("copying: " + inFile + " to AWS")
-    # f = io.BytesIO(fname)
-    # with open(fname, "rb") as f:
-    upload_file(inFile, buck_name, "foo.html")
+# logging.getLogger().addHandler(logging.StreamHandler())
+# logging.getLogger().level = logging.INFO
+#
+# key = os.getenv('AWS_ACCESS_KEY_ID')
+# reg = os.getenv('AWS_DEFAULT_REGION')
+# buck_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+# buck_name = os.getenv('BUCKET_NAME')
+#
+# print(key)
+# print(reg)
+# print(buck_key)
+# print(buck_name)
+#
+# fName = "foo.html"
+# tmpDir = tempfile.gettempdir()
+# inFile = os.path.join(tmpDir, fName)
+# if os.path.exists(inFile):
+#     logging.info("copying: " + inFile + " to AWS")
+#     upload_file(inFile, buck_name, "foo.html")
