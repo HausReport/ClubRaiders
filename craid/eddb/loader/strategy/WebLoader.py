@@ -51,7 +51,7 @@ class WebDataLoader(DataLoader):
         if not forceDownload:
             pass
             # TODO: Need some extra logic here.  Like, if the day of the file is less than today, don't even check headers
-            # fileIsOutOfDate = LoadDataFromEDDB.fileIsOutOfDate(fName, shortName)
+            # localFileIsOutOfDate = LoadDataFromEDDB.localFileIsOutOfDate(fName, shortName)
 
         #
         # If neither exist, download the file to the temp dir

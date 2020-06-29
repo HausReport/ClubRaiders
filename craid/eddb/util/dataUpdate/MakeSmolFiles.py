@@ -2,8 +2,7 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
-#
-#   SPDX-License-Identifier: BSD-3-Clause
+
 import gzip
 import logging
 import os
@@ -48,7 +47,7 @@ def munchFile(keys: Set[int], xinName: str):
             ujson.dump(foo, file)
             file.write('\n')
 
-    gitFile = os.path.join("..", "..", "..", "data", outName)
+    gitFile = os.path.join("..","..", "..", "..", "data", outName)
     copyfile(outFile, gitFile)
 
 
@@ -58,15 +57,15 @@ def deleteOldFiles():
     eFiles = ['factions.jsonl', 'stations.jsonl', 'systems_populated.jsonl']
 
     allFiles = keyFiles
-    for fname in eFiles:
-        allFiles.append(fname)
-        allFiles.append(fname + ".gz")
-        allFiles.append("smol-" + fname + ".gz")
-        allFiles.append("smol-" + fname)
+    for fName in eFiles:
+        allFiles.append(fName)
+        allFiles.append(fName + ".gz")
+        allFiles.append("smol-" + fName + ".gz")
+        allFiles.append("smol-" + fName)
 
-    for fname in allFiles:
+    for fName in allFiles:
         tmpDir = tempfile.gettempdir()
-        outFile = os.path.join(tmpDir, fname)
+        outFile = os.path.join(tmpDir, fName)
         if os.path.exists(outFile):
             logging.info("removing: " + outFile)
             os.remove(outFile)
@@ -83,6 +82,9 @@ if __name__ == '__main__':
     # Get rid of old files
     #
     deleteOldFiles()
+
+    # need to add exceptions to DataProducer.getDataArrays and handle here
+
 
     # download large files from eddb
     DataProducer.getDataArrays(writeKeyFiles=True, useEddb=True)

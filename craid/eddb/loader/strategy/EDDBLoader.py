@@ -71,7 +71,7 @@ class LoadDataFromEDDB(DataLoader):
         if not forceDownload:
             pass
             # TODO: Need some extra logic here.  Like, if the day of the file is less than today, don't even check headers
-            # fileIsOutOfDate = LoadDataFromEDDB.fileIsOutOfDate(fName, shortName)
+            # localFileIsOutOfDate = LoadDataFromEDDB.localFileIsOutOfDate(fName, shortName)
 
         #
         # If neither exist, download the file to the temp dir
@@ -90,25 +90,7 @@ class LoadDataFromEDDB(DataLoader):
             # with open(fName, 'r') as handle:
             return fName
 
-    def fileIsOutOfDate(self, fName: str, _shortName: str):
-        http = urllib3.PoolManager()
-        url = "https://eddb.io/archive/v6/" + _shortName  # factions.jsonl"
 
-        u = http.request('HEAD', url)
-        meta = u.info()
-        print(meta)
-        print("Server Last Modified: " + str(meta.getheaders("Last-Modified")))
-
-        meta_modifiedtime = time.mktime(datetime.datetime.strptime(
-            ''.join(meta.getheaders("Last-Modified")), "%a, %d %b %Y %X GMT").timetuple())
-
-        file = fName
-        if os.path.getmtime(file) < meta_modifiedtime:  # change > to <
-            print("CPU file is older than server file.")
-            return True
-        else:
-            print("CPU file is NOT older than server file.")
-            return False
 
 # if __name__ == '__main__':
 # LoadDataFromEDDB.load_data()

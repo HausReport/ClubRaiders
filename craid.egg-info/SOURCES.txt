@@ -27,6 +27,7 @@ craid/dashbd/queries/QueryFactory.py
 craid/dashbd/queries/Scouting.py
 craid/dashbd/queries/TradeExplorationMissions.py
 craid/dashbd/queries/__init__.py
+craid/dashbd/text/FactionNotes.md
 craid/dashbd/text/__init__.py
 craid/dashbd/text/aboutClub.md
 craid/dashbd/text/aboutRaiders.md
@@ -90,20 +91,23 @@ craid/eddb/system/System.py
 craid/eddb/system/SystemAnalyzer.py
 craid/eddb/system/SystemXYZ.py
 craid/eddb/system/__init__.py
-craid/eddb/util/AWStest.py
 craid/eddb/util/CheckEddbForRings.py
+craid/eddb/util/GarudsHistoricalData.py
 craid/eddb/util/GzipString.py
-craid/eddb/util/MakeHistoryFile.py
-craid/eddb/util/MakeSmolFiles.py
 craid/eddb/util/MakeSquadronsXYZDict.py
 craid/eddb/util/MakeSystemsXYZDict.py
 craid/eddb/util/MessageList.py
 craid/eddb/util/PassThroughDict.py
 craid/eddb/util/Printmem.py
 craid/eddb/util/ScoredMessage.py
-craid/eddb/util/SysDiff.py
 craid/eddb/util/TextDecoration.py
 craid/eddb/util/__init__.py
+craid/eddb/util/dataUpdate/AWStest.py
+craid/eddb/util/dataUpdate/MakeHistoryFile.py
+craid/eddb/util/dataUpdate/MakeSmolFiles.py
+craid/eddb/util/dataUpdate/SysDiff.py
+craid/eddb/util/dataUpdate/__init__.py
+craid/history/CreateHistory.py
 craid/history/__init__.py
 info/My Club Diagram.png
 info/club-diagram-640.png
