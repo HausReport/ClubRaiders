@@ -86,10 +86,15 @@ def cleanHistoryFile():
     dataframe = dataframe[dataframe['faction'] != 'Aegis Imperium']
     dataframe = dataframe[dataframe['faction'] != "Emperor's Dawn"]
 
-    with open(fName, 'w') as out_file:
-        for index, row in dataframe.iterrows():
-            print ( row.to_dict())
-            out_file.write(ujson.dumps(row.to_dict()))
+    json_str = ""
+    for index, row in dataframe.iterrows():
+        #print(row.to_dict())
+        json_str += ujson.dumps(row.to_dict()) + "\n"
+
+    json_bytes = json_str.encode('utf-8')
+    with gzip.GzipFile(fName, 'wb') as fout:  # 4. gzip
+        fout.write(json_bytes)
+
 
 def makeHistoryFromEddbRevisions():
     myLoader = LoadDataFromEDDB()
