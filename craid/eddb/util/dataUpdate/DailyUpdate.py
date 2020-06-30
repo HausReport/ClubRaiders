@@ -21,23 +21,42 @@ if __name__ == '__main__':
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.DEBUG
 
+    #
+    # Check if EDDB's data is newer than ours
+    #
     try:
         filesAreOutOfDate = tempFilesAreOutOfDate()
         if not filesAreOutOfDate:
             exit(1)
-    except:
+    except Exception as e:
+        traceback.print_exc()
+        logging.error(str(e))
         exit(2)
 
+    #
+    # Get rid of old files
+    # NOTE: make copies and fall back to them in case of error?
+    #
     try:
         deleteOldFiles()
-    except:
+    except Exception as e:
+        traceback.print_exc()
+        logging.error(str(e))
         exit(3)
 
+    #
+    # Make key files from new large data files
+    #
     try:
         DataProducer.getDataArrays(writeKeyFiles=True, useEddb=True)
-    except:
+    except Exception as e:
+        traceback.print_exc()
+        logging.error(str(e))
         exit(4)
 
+    #
+    # Make smol-.gz files from keys+large data files
+    #
     try:
         club_faction_keys = loadKeys("factions-of-interest-keys")
         munchFile(club_faction_keys, 'factions.jsonl')
@@ -45,16 +64,21 @@ if __name__ == '__main__':
         munchFile(club_system_keys, 'systems_populated.jsonl')
         club_station_keys = loadKeys("club-station-keys")
         munchFile(club_station_keys, 'stations.jsonl')
-    except:
+    except Exception as e:
+        traceback.print_exc()
+        logging.error(str(e))
         exit(5)
 
+    #
+    # Get history from AWS, update & clean it
+    #
     try:
         loader: LoadDataFromAWS = LoadDataFromAWS(forceWebDownload=True, useSmol=False)
         tmpDir = tempfile.gettempdir()
         fName = loader.download_file("history.jsonl",tmpDir) #.gz is added in the function
         appendTodaysData(fName)
         cleanHistoryFile(fName)
-        copyIntoSource(fName)
+        copyIntoSource(fName)    # NOTE: Not sure about this on production server
     except Exception as e:
         traceback.print_exc()
         logging.error( str(e))
@@ -64,8 +88,14 @@ if __name__ == '__main__':
     # TODO: Test files for validity here
     #
 
+    #
+    # Upload to AWS
+    #
     try:
-        sNames = [ 'smol-factions.jsonl.gz', 'smol-systems_populated.jsonl.gz', 'smol-stations.jsonl.gz', 'history.jsonl.gz']
+        sNames = [ 'smol-factions.jsonl.gz',
+                   'smol-systems_populated.jsonl.gz',
+                   'smol-stations.jsonl.gz',
+                   'history.jsonl.gz']
         shortName: str
         for shortName in sNames:
             ret = uploadToAWSFromTemp(shortName)
@@ -77,7 +107,7 @@ if __name__ == '__main__':
 
     #
     # TODO: no copy of history exists in temp
-    # NOTE: check in te
+    # NOTE: check in to github
     #
 
     exit(0)

@@ -9,18 +9,20 @@ from datetime import datetime
 import time
 import urllib3
 
+# NOTE: This is important - this does not tell us that all files are ready on the server
 def tempFilesAreOutOfDate():
     tmpDir = tempfile.gettempdir()
     return localFilesAreOutOfDate(tmpDir)
 
+# NOTE: This is important - this does not tell us that all files are ready on the server
 def localFilesAreOutOfDate(localDirectory: str) -> bool:
     frags = [ "stations.jsonl", "systems_populated.jsonl", "factions.jsonl"]
     for frag in frags:
         staFile = os.path.join(localDirectory, frag + ".gz")
         if localFileIsOutOfDate(staFile, frag):
-            return True
+            return True  # True = at lease one is out of date
 
-    return False
+    return False  # False = all are current
 
 
 def localFileIsOutOfDate(fullLocalFilename: str, shortUrlFragment: str) -> bool:
