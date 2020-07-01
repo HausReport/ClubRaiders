@@ -9,7 +9,7 @@ import traceback
 from craid.eddb.loader import DataProducer
 from craid.eddb.loader.MakeKeyFiles import loadKeys
 from craid.eddb.loader.strategy.AWSLoader import LoadDataFromAWS
-from craid.eddb.util.dataUpdate.CheckEddbFiles import tempFilesAreOutOfDate
+from craid.eddb.util.dataUpdate.CheckEddbFiles import eddbUpdateReadyForTemp
 from craid.eddb.util.dataUpdate.MakeHistoryFile import appendTodaysData, cleanHistoryFile, copyIntoSource
 from craid.eddb.util.dataUpdate.MakeSmolFiles import deleteOldFiles, munchFile
 from craid.eddb.util.dataUpdate.UploadToAmazon import uploadToAWSFromTemp
@@ -25,8 +25,8 @@ if __name__ == '__main__':
     # Check if EDDB's data is newer than ours
     #
     try:
-        filesAreOutOfDate = tempFilesAreOutOfDate()
-        if not filesAreOutOfDate:
+        allUpdatesReady = eddbUpdateReadyForTemp()
+        if not allUpdatesReady:
             exit(1)
     except Exception as e:
         traceback.print_exc()
@@ -75,13 +75,13 @@ if __name__ == '__main__':
     try:
         loader: LoadDataFromAWS = LoadDataFromAWS(forceWebDownload=True, useSmol=False)
         tmpDir = tempfile.gettempdir()
-        fName = loader.download_file("history.jsonl",tmpDir) #.gz is added in the function
+        fName = loader.download_file("history.jsonl", tmpDir)  # .gz is added in the function
         appendTodaysData(fName)
         cleanHistoryFile(fName)
-        copyIntoSource(fName)    # NOTE: Not sure about this on production server
+        copyIntoSource(fName)  # NOTE: Not sure about this on production server
     except Exception as e:
         traceback.print_exc()
-        logging.error( str(e))
+        logging.error(str(e))
         exit(6)
 
     #
@@ -92,14 +92,14 @@ if __name__ == '__main__':
     # Upload to AWS
     #
     try:
-        sNames = [ 'smol-factions.jsonl.gz',
-                   'smol-systems_populated.jsonl.gz',
-                   'smol-stations.jsonl.gz',
-                   'history.jsonl.gz']
+        sNames = ['smol-factions.jsonl.gz',
+                  'smol-systems_populated.jsonl.gz',
+                  'smol-stations.jsonl.gz',
+                  'history.jsonl.gz']
         shortName: str
         for shortName in sNames:
             ret = uploadToAWSFromTemp(shortName)
-            logging.info( f"Uploading {shortName} to AWS status is {ret}")
+            logging.info(f"Uploading {shortName} to AWS status is {ret}")
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))

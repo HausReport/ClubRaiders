@@ -129,7 +129,7 @@ class Station(Aware):
         from craid.eddb.faction.Faction import Faction
         fac: Faction = Aware.getFactionById(self.getControllingFactionId())
         if fac is None:
-            return ("~~Unknown~~")
+            return "~~Unknown~~"
         return fac.get_name2()
 
     def setClub(self, param: bool):

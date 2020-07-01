@@ -7,6 +7,7 @@ from typing import List
 
 import craid.eddb.base.GameConstants as gconst
 
+
 # "16,Boom"
 # "32,Bust"
 # "37,Famine"

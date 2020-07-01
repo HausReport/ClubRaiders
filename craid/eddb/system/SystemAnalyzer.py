@@ -7,9 +7,9 @@
 from typing import List
 
 import craid.eddb.base.GameConstants as gconst
+from craid.eddb.Station import Station
 from craid.eddb.faction.FactionInstance import FactionInstance
 from craid.eddb.system.InhabitedSystem import InhabitedSystem
-from craid.eddb.Station import Station
 from craid.eddb.util.MessageList import MessageList
 
 

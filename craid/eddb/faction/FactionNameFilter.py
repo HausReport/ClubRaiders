@@ -9,7 +9,7 @@ from typing import Set
 
 from craid.eddb.faction.Faction import Faction
 
-#Have gone back and forth about having 'Bill Turner' in the list
+# Have gone back and forth about having 'Bill Turner' in the list
 badGuys: Set[str] = {'Abroin Universal PLC', 'Aegis Core', 'Aegis Research',
                      "Benton's Gang", 'Bentonian Party', 'CQC Holdings',
                      'Gallant Investment Brokers', 'Hodack Prison Colony',
@@ -23,14 +23,22 @@ badGuys: Set[str] = {'Abroin Universal PLC', 'Aegis Core', 'Aegis Research',
                      'Turner Research Group', 'Wiggins Development Trust',
                      'Worster Insurance', 'Wreaken Construction', 'Aegis Defense'}
 
+
 class FactionNameFilter(object):
 
     @staticmethod
     def proClubFaction(CurFaction: Faction):
-        #global FactionNameFilter.badGuys
+        # global FactionNameFilter.badGuys
         global badGuys
         curName = CurFaction.get_name()
         if curName in badGuys:
+            return True
+        return False
+
+    @staticmethod
+    def proClubFactionName(theName: str):
+        global badGuys
+        if theName in badGuys:
             return True
         return False
 

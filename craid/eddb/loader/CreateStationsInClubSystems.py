@@ -13,9 +13,9 @@ from typing import Set
 
 import ujson
 
-from craid.eddb.system.InhabitedSystem import InhabitedSystem
 from craid.eddb.Station import Station
 from craid.eddb.loader.strategy.DataLoader import DataLoader
+from craid.eddb.system.InhabitedSystem import InhabitedSystem
 
 
 def loadStationsInClubSystems(loader: DataLoader,

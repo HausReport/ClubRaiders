@@ -5,19 +5,18 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 
-import datetime
 import gzip
 import logging
 import os
 import tempfile
-import time
 
 import requests
-# logic for caching at:
-# https://stackoverflow.com/questions/29314287/python-requests-download-only-if-newer
-import urllib3
 
 from craid.eddb.loader.strategy.DataLoader import DataLoader
+
+
+# logic for caching at:
+# https://stackoverflow.com/questions/29314287/python-requests-download-only-if-newer
 
 
 class LoadDataFromEDDB(DataLoader):
@@ -89,8 +88,6 @@ class LoadDataFromEDDB(DataLoader):
             logging.info("Found data file: %s", fName)
             # with open(fName, 'r') as handle:
             return fName
-
-
 
 # if __name__ == '__main__':
 # LoadDataFromEDDB.load_data()

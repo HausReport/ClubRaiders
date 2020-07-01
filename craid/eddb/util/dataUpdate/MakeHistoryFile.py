@@ -10,10 +10,10 @@
 # Construct factioninstances
 # output to jsonl
 import gzip
-import logging
 import os
 import shutil
 from typing import Dict
+
 import pandas as pd
 import ujson
 
@@ -23,6 +23,7 @@ from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateSystems import load_systems
 from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
 from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
+
 
 # oldRevs = ["444f58522e81c3ad6477eefa398f39c2edfc1ea9",
 #            "7cd6abc33aafab80cace0c13c2beb6e1d8f1779b",
@@ -49,7 +50,7 @@ from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
 #            "5e1e658849098444a10d7aec6a2f0e13542be725",
 #            "4f848d61f92f772744304aeef49c7e7d0e5e9c63",
 #            "066c92ef24354305b1dd94ae0e12596afc3a6fd6"]
-#def makeHistoryFromEddbRevisions():
+# def makeHistoryFromEddbRevisions():
 #     myLoader = LoadDataFromEDDB()
 #
 #     playerFactionNameToSystemName: Dict[str, str] = {}
@@ -75,14 +76,15 @@ from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
 #     with gzip.GzipFile('../../../../data/history.jsonl.gz', 'a+b') as fout:  # 4. gzip
 #         fout.write(json_bytes)
 
-#fName = '../../../../../../../data/history.jsonl.gz'
+# fName = '../../../../../../../data/history.jsonl.gz'
 
 def copyIntoSource(fName: str):
-    dest = os.path.join("..","..", "..", "..", "data", "history.jsonl.gz")
+    dest = os.path.join("..", "..", "..", "..", "data", "history.jsonl.gz")
     shutil.copy(fName, dest, follow_symlinks=True)
 
+
 def appendTodaysData(fName: str):
-    #global fName
+    # global fName
     myLoader = LoadDataFromEDDB()
 
     playerFactionNameToSystemName: Dict[str, str] = {}
@@ -90,7 +92,7 @@ def appendTodaysData(fName: str):
 
     json_str = ""
 
-    myLoader = LoadDataFromGithub() #True, rev, True)
+    myLoader = LoadDataFromGithub()  # True, rev, True)
     all_systems_dict = load_systems(myLoader)
 
     club_system_keys = getClubSystemKeys(all_systems_dict, club_faction_keys)
@@ -101,17 +103,17 @@ def appendTodaysData(fName: str):
     for val in sysIdFacIdToFactionInstance.values():
         if val.isClub():
             hl = val.getHistoryLine()
-            #print(hl)
+            # print(hl)
             json_str += hl + "\n"
 
     json_bytes = json_str.encode('utf-8')
-    print ( os.path.abspath(fName))
+    print(os.path.abspath(fName))
     with gzip.GzipFile(fName, 'a+b') as fout:  # 4. gzip
         fout.write(json_bytes)
 
 
 def cleanHistoryFile(fName: str):
-    #global fName
+    # global fName
     dataframe = pd.read_json(fName, lines=True, compression='infer')
 
     # data cleaning
@@ -122,20 +124,9 @@ def cleanHistoryFile(fName: str):
 
     json_str = ""
     for index, row in dataframe.iterrows():
-        #print(row.to_dict())
+        # print(row.to_dict())
         json_str += ujson.dumps(row.to_dict()) + "\n"
 
     json_bytes = json_str.encode('utf-8')
     with gzip.GzipFile(fName, 'wb') as fout:  # 4. gzip
         fout.write(json_bytes)
-
-if __name__ == '__main__':
-    #
-    # Fire up logger
-    #
-    logging.getLogger().addHandler(logging.StreamHandler())
-    logging.getLogger().level = logging.DEBUG
-
-    appendTodaysData()
-    cleanHistoryFile()
-    #makeHistoryFiles()

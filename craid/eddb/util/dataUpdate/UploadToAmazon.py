@@ -8,9 +8,6 @@ import logging
 import os
 import tempfile
 
-import boto3
-from botocore.exceptions import ClientError
-
 from craid.eddb.util.dataUpdate.AWStest import upload_file
 
 
@@ -29,6 +26,6 @@ def uploadToAWSFromTemp(shortName: str) -> bool:
     inFile = os.path.join(tmpDir, shortName)
     if os.path.exists(inFile):
         logging.info(f"copying: {inFile} to AWS bucket {buck_name}/{shortName}")
-        return upload_file(inFile, buck_name, shortName + "-test")
+        return upload_file(inFile, buck_name, shortName)
 
     return False

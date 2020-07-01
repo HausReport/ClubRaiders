@@ -5,8 +5,6 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 import logging
-import os
-import tempfile
 
 import boto3
 from botocore.exceptions import ClientError
@@ -38,7 +36,6 @@ def upload_file(file_name, bucket, object_name=None):
         logging.error(e)
         return False
     return True
-
 
 # logging.getLogger().addHandler(logging.StreamHandler())
 # logging.getLogger().level = logging.INFO

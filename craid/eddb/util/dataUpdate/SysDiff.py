@@ -8,9 +8,12 @@ from typing import Set, Dict
 
 import ujson
 
+from craid.eddb.faction.FactionNameFilter import FactionNameFilter
 from craid.eddb.loader.strategy.AWSLoader import LoadDataFromAWS
 
 # NOTE: To get the May 31 file: $ curl "https://github.com/HausReport/ClubRaiders/blob/d5ff5b1741467618df70a75c7078fb6b6fc32fe3/data/smol-systems_populated.jsonl.gz?raw=true" -L -o smol-sys-old.jsonl.gz
+from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
+
 logging.getLogger().addHandler(logging.StreamHandler())
 logging.getLogger().level = logging.DEBUG
 
@@ -23,9 +26,9 @@ sysNames: Dict[int, str] = {}
 facNames: Dict[int, str] = {}
 
 loader = LoadDataFromAWS()
-
+loaderFac = LoadDataFromEDDB()
 nLines = 0
-fName = loader.find_data_file('factions.jsonl')
+fName = loaderFac.find_data_file('factions.jsonl')
 with gzip.open(fName, 'rb') as f:
     for line in f:
         facLine = ujson.loads(line)
@@ -46,7 +49,7 @@ with gzip.open(fName, 'rb') as f:
         mfps: Set[int] = set()
         for item in mfp:
             mfps.add(item['minor_faction_id'])
-        newSet[tid] = mfps
+        newSet[tid] = mfps    # key is system id, value is set of faction ids
 
         # foo = InhabitedSystem(sysLine)
         # all_systems_dict[tid] = foo
@@ -73,8 +76,20 @@ for key in newSet.keys():
     oldFacs = oldSet.get(key)
     if oldFacs is None:
         kStr = str(key)
+
+        fn = None
+        nfs = newSet.get(key)
+        for fid in nfs:
+            if FactionNameFilter.proClubFactionName(facNames[fid]):
+                if fn is None:
+                    fn = ""
+                else:
+                    fn += "/"
+                fn += facNames[fid]
+        if fn is None:
+            fn = "Club faction"
         # print("--->" + str(facNames.get(key)))
-        msg = f"Club faction expanded to {kStr}"
+        msg = f"{fn} expanded to {kStr}"
         messages.add(msg)
         # print(msg)
     else:
@@ -109,8 +124,18 @@ for key in oldSet.keys():
     newFacs = newSet.get(key)
     if newFacs is None:
         sKey = str(key)
+        nfs = oldSet.get(key)
+        for fid in nfs:
+            if FactionNameFilter.proClubFactionName(facNames[fid]):
+                if fn is None:
+                    fn = ""
+                else:
+                    fn += "/"
+                fn += facNames[fid]
+        if fn is None:
+            fn = "Club faction"
         # print("--->" + str(facNames.get(key)))
-        msg = f"Club removed from system {sKey}"
+        msg = f"{fn} removed from system {sKey}"
         messages.add(msg)
         # print(msg)
     else:

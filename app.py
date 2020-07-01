@@ -19,13 +19,13 @@ import ujson
 from dash.dependencies import Input, Output
 
 import craid.eddb.loader.DataProducer as dp
-from craid.club.regions.RegionFactory import RegionFactory
 from appHelpers import AnnoyingCrap, tab_style, tab_selected_style, enCard, makeArticleCard, makeDiscordCard, \
     my_meta_tags
-from craid.eddb.faction.FactionInstance import FactionInstance
+from craid.club.regions.RegionFactory import RegionFactory
 from craid.eddb.Oracle import Oracle
-from craid.eddb.util.Printmem import printmem
+from craid.eddb.faction.FactionInstance import FactionInstance
 from craid.eddb.system.SystemXYZ import SystemXYZ
+from craid.eddb.util.Printmem import printmem
 
 #
 # Set up logging
@@ -52,7 +52,7 @@ styles = {
 currentData = dp.getDataArrays()
 sysIdFacIdToFactionInstance = currentData['sysIdFacIdToFactionInstance']
 systemNameToXYZ: Dict[str, Tuple[float, float, float]] = SystemXYZ.myDict  # currentData['systemNameToXYZ']
-#playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
+# playerFactionNameToHomeSystemName: Dict[str, str] = currentData['playerFactionNameToSystemName']
 annoyingCrap: AnnoyingCrap = AnnoyingCrap()
 df: pd.DataFrame = currentData['dataFrame']
 printmem("4")
@@ -274,8 +274,10 @@ def render_content(tab):
                         makeArticleCard("", "map-system-drilldown"),
                     ]),
                     html.Td(className="clean", children=[
-                        html.Label("Red: Club home system, Yellow: Club controls system, Green: Club active in system", className="blackColItem"),
-                        html.Label("Drag mouse to rotate, Ctrl-mouse to pan, Alt-mouse or wheel to zoom.", className="blackColItem"),
+                        html.Label("Red: Club home system, Yellow: Club controls system, Green: Club active in system",
+                                   className="blackColItem"),
+                        html.Label("Drag mouse to rotate, Ctrl-mouse to pan, Alt-mouse or wheel to zoom.",
+                                   className="blackColItem"),
                         dcc.Graph(id="the-graph", figure=fig),
                     ])
                 ]),
@@ -381,7 +383,7 @@ def was_clicked(ctx, button_id):
     inputs = aDict['inputs']  # ['prop_id']
     activity = inputs['activityDropdown.value']
 
-    if (prop_id != button_id):
+    if prop_id != button_id:
         return None, activity
 
     value = elt0['value']
@@ -431,8 +433,8 @@ def update_filter(n_clicks: int, val3):
     msg = AnnoyingCrap.getMessage(int(value))
     return newFilter, msg
 
-    logging.warning("None of the filter cases hit")
-    return "", act
+    # logging.warning("None of the filter cases hit")
+    # return "", act
 
 
 #
@@ -517,7 +519,8 @@ def getFacInfoSysInfo(sysId, facId):
         systemInfo = theSys.template(ts, theFac)
         return factionInfo, systemInfo
 
-    return "",""
+    return "", ""
+
 
 #
 #  Does a variety of things when user clicks on a cell in the table
@@ -539,7 +542,6 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
     factionInfo: str = ""
     systemInfo: str = ""
 
-
     if active_cell:
         row = active_cell['row']
         logical_row = row + page_cur * page_size
@@ -556,6 +558,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
     factionWidget = dcc.Markdown(factionInfo)
     systemWidget = dcc.Markdown(systemInfo)
     return factionWidget, systemWidget
+
 
 @app.callback(
     [Output('map-faction-drilldown', 'children'),
@@ -611,14 +614,15 @@ def was_clicked2(ctx, button_id):
     inputs = aDict['inputs']  # ['prop_id']
     # activity = inputs['activityDropdown.value']
 
-    if (prop_id == button_id + ".value"):
+    if prop_id == button_id + ".value":
         value = elt0['value']
         return value
 
     return None
 
+
 @app.callback(
-    [Output('the-graph', 'figure'), Output('map-statistics','children')],
+    [Output('the-graph', 'figure'), Output('map-statistics', 'children')],
     [Input('squadronDropdown', 'value'), Input('regionDropdown', 'value')])
 def display_click_data(squadName, regName):
     global df
@@ -643,10 +647,10 @@ def display_click_data(squadName, regName):
         #
         # Local scoreboard
         #
-        view = AnnoyingCrap.getView(reg,df)
-        seer: Oracle = Oracle(view)
-        oracleString = AnnoyingCrap.getString("oracle-template")
-        mapOracleMd = dcc.Markdown(seer.template(oracleString))
+        view = AnnoyingCrap.getView(reg, df)
+        seer2: Oracle = Oracle(view)
+        oracleString2 = AnnoyingCrap.getString("oracle-template")
+        mapOracleMd = dcc.Markdown(seer2.template(oracleString2))
 
         printmem("d")
         return newFigure, mapOracleMd

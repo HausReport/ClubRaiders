@@ -302,7 +302,7 @@ class FactionInstance(Faction):
         return round(score, 0), my_string
 
     def getSystemEdbgsLink(self):
-        return self.mySystem.getEdbgsLink(self, self.get_name2())
+        return self.mySystem.getEdbgsLink(self.get_name2())
 
     # much taken from https://forums.frontier.co.uk/threads/dev-update-07-01-2016.221826/
     def bountyHuntingScore(self) -> [float, str]:
@@ -484,7 +484,6 @@ class FactionInstance(Faction):
     def mineralSalesScore(self):
         return self.mySystem.mineralSalesScore()
 
-
     #
     # I/O functions
     #
@@ -506,22 +505,22 @@ class FactionInstance(Faction):
         import datetime
 
         epoch = datetime.datetime.utcfromtimestamp(0)
-        timestamp =  round( (self.getUpdatedDateTime() - epoch).total_seconds() * 1000.0, 0)
+        timestamp = round((self.getUpdatedDateTime() - epoch).total_seconds() * 1000.0, 0)
 
         sys = self.mySystem.get_name()
         fac = self.get_name()
         inf = self.getInfluence()
-        updated = int(timestamp) #self.getUpdatedDateTime()
+        updated = int(timestamp)  # self.getUpdatedDateTime()
         control = self.controlsSystem()
         region = self.getRegionNumber()
         population = self.getPopulation()
         line = {
-            'system'   : sys,
-            'faction'  : fac,
-            'updated'  : updated,
-            'influence': inf,
-            'control'  : control,
-            'region'   : region,
+            'system'    : sys,
+            'faction'   : fac,
+            'updated'   : updated,
+            'influence' : inf,
+            'control'   : control,
+            'region'    : region,
             'population': population
         }
         json = ujson.dumps(line)

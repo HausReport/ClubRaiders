@@ -37,7 +37,7 @@ class MultiSphericalRegion(Region):
         dist = 1000000000
         for reg in self.points:
             d2 = reg.distanceFrom(x, y, z)
-            if (d2 < dist):
+            if d2 < dist:
                 dist = d2
             if dist == 0:
                 return 0
@@ -54,8 +54,8 @@ class MultiSphericalRegion(Region):
         ret = f"Multisphere: {self._name}"
 
         for reg in self.points:
-            msg = str(reg)
-            ret = ret + "\n" + msg
+            msg2 = str(reg)
+            ret = ret + "\n" + msg2
 
         return ret
 

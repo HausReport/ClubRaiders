@@ -7,12 +7,12 @@ from typing import List
 
 from craid.eddb.base.Aware import Aware
 from craid.eddb.faction.FactionInstance import FactionInstance
-from craid.eddb.system.InhabitedSystem import InhabitedSystem
 from craid.eddb.loader.CreateFactionInstances import getFactionInstances
 from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateSystems import load_systems
-from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
 from craid.eddb.loader.MakeKeyFiles import loadKeys
+from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
+from craid.eddb.system.InhabitedSystem import InhabitedSystem
 
 myLoader = LoadDataFromGithub()
 

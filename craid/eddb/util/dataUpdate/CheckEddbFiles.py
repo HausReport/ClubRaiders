@@ -5,24 +5,41 @@
 import logging
 import os
 import tempfile
-from datetime import datetime
 import time
+from datetime import datetime
+
 import urllib3
 
-# NOTE: This is important - this does not tell us that all files are ready on the server
-def tempFilesAreOutOfDate():
-    tmpDir = tempfile.gettempdir()
-    return localFilesAreOutOfDate(tmpDir)
 
-# NOTE: This is important - this does not tell us that all files are ready on the server
-def localFilesAreOutOfDate(localDirectory: str) -> bool:
-    frags = [ "stations.jsonl", "systems_populated.jsonl", "factions.jsonl"]
+def eddbUpdateReadyForTemp():
+    tmpDir = tempfile.gettempdir()
+    return eddbUpdateReady(tmpDir)
+
+
+def eddbUpdateReady(localDirectory: str) -> bool:
+    frags = ["stations.jsonl", "systems_populated.jsonl", "factions.jsonl"]
     for frag in frags:
         staFile = os.path.join(localDirectory, frag + ".gz")
-        if localFileIsOutOfDate(staFile, frag):
-            return True  # True = at lease one is out of date
+        if not localFileIsOutOfDate(staFile, frag):
+            return False
 
-    return False  # False = all are current
+    return True  # False = all are current
+
+
+# # NOTE: This is important - this does not tell us that all files are ready on the server
+# def tempFilesAreOutOfDate():
+#     tmpDir = tempfile.gettempdir()
+#     return localFilesAreOutOfDate(tmpDir)
+#
+# # NOTE: This is important - this does not tell us that all files are ready on the server
+# def localFilesAreOutOfDate(localDirectory: str) -> bool:
+#     frags = [ "stations.jsonl", "systems_populated.jsonl", "factions.jsonl"]
+#     for frag in frags:
+#         staFile = os.path.join(localDirectory, frag + ".gz")
+#         if localFileIsOutOfDate(staFile, frag):
+#             return True  # True = at lease one is out of date
+#
+#     return False  # False = all are current
 
 
 def localFileIsOutOfDate(fullLocalFilename: str, shortUrlFragment: str) -> bool:
@@ -34,11 +51,11 @@ def localFileIsOutOfDate(fullLocalFilename: str, shortUrlFragment: str) -> bool:
     # print(meta)
     print("Server Last Modified: " + str(meta.getheaders("Last-Modified")))
 
-    gmTime =datetime.strptime( ''.join(meta.getheaders("Last-Modified")),
-                           "%a, %d %b %Y %X GMT").timetuple()
-    meta_modified = time.mktime( gmTime )
+    gmTime = datetime.strptime(''.join(meta.getheaders("Last-Modified")),
+                               "%a, %d %b %Y %X GMT").timetuple()
+    # meta_modified = time.mktime(gmTime)
 
-    #file = fullLocalFilename
+    # file = fullLocalFilename
 
     if not os.path.exists(fullLocalFilename):
         return True
@@ -46,7 +63,7 @@ def localFileIsOutOfDate(fullLocalFilename: str, shortUrlFragment: str) -> bool:
     localMod = time.gmtime(os.path.getmtime(fullLocalFilename))
     localStr = time.asctime(localMod)
     print("Local Last Modified: " + localStr)
-    foo = meta_modified
+    # foo = meta_modified
 
     if localMod < gmTime:  # change > to <
         print("Local file is older than EDDB server file.")
@@ -55,10 +72,11 @@ def localFileIsOutOfDate(fullLocalFilename: str, shortUrlFragment: str) -> bool:
         print("Local file is NOT older than EDDB server file.")
         return False
 
+
 if __name__ == '__main__':
     #
     # Fire up logger
     #
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.DEBUG
-    print(tempFilesAreOutOfDate())
+    print(eddbUpdateReadyForTemp())

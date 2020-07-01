@@ -13,9 +13,9 @@ from typing import Dict, List, Set
 import ujson
 
 from craid.eddb.loader import DataProducer
+from craid.eddb.loader.MakeKeyFiles import loadKeys
 from craid.eddb.loader.strategy.DataLoader import DataLoader
 from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
-from craid.eddb.loader.MakeKeyFiles import loadKeys
 
 
 #
@@ -47,7 +47,7 @@ def munchFile(keys: Set[int], xinName: str):
             ujson.dump(foo, file)
             file.write('\n')
 
-    gitFile = os.path.join("..","..", "..", "..", "data", outName)
+    gitFile = os.path.join("..", "..", "..", "..", "data", outName)
     copyfile(outFile, gitFile)
 
 
@@ -84,7 +84,6 @@ if __name__ == '__main__':
     deleteOldFiles()
 
     # need to add exceptions to DataProducer.getDataArrays and handle here
-
 
     # download large files from eddb
     DataProducer.getDataArrays(writeKeyFiles=True, useEddb=True)

@@ -52,7 +52,7 @@ def fixRegions():
     #    print(row.to_dict())
     with open(fName, 'w') as out_file:
         for index, row in dataframe.iterrows():
-            print ( row.to_dict())
+            print(row.to_dict())
             out_file.write(ujson.dumps(row.to_dict()))
 
 

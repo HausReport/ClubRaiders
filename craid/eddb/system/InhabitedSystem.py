@@ -10,12 +10,12 @@ from collections import deque
 from typing import List, Deque
 
 from craid.edbgs.EdBgsSystemIds import EdBgsSystemIds
-from craid.eddb.system.BountyHuntingInfo import BountyHuntingInfo
-from craid.eddb.faction.Faction import Faction
-from craid.eddb.base.GameConstants import *
-from craid.eddb.util.PassThroughDict import PassThroughDict
 from craid.eddb.Station import Station
+from craid.eddb.base.GameConstants import *
+from craid.eddb.faction.Faction import Faction
+from craid.eddb.system.BountyHuntingInfo import BountyHuntingInfo
 from craid.eddb.system.System import System
+from craid.eddb.util.PassThroughDict import PassThroughDict
 from craid.eddb.util.TextDecoration import boolToTorBlank, boolToYesOrNo
 
 
@@ -396,7 +396,7 @@ class InhabitedSystem(System):
             if sta.isClub():
                 continue
             sco = sta.getMineralSalesScore()
-            if (sco > bestScore):
+            if sco > bestScore:
                 bestScore = sco
 
         return bestScore

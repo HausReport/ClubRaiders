@@ -15,13 +15,13 @@ from craid.eddb.loader.strategy.DataLoader import DataLoader
 
 class WebDataLoader(DataLoader):
 
-    def __init__(self, forceWebDownload=False,useSmol=True):
+    def __init__(self, forceWebDownload=False, useSmol=True):
         super().__init__()
         self.forceWebDownload = forceWebDownload
-        self.useSmol=useSmol
+        self.useSmol = useSmol
 
     def getPrefix(self) -> str:
-        if(self.useSmol):
+        if self.useSmol:
             return "smol-"
         return ""
 

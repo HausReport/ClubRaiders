@@ -61,7 +61,7 @@ def display_page(href):
 
         netloc = o.netloc
         path = o.path
-        if (path == "/"):
+        if path == "/":
             path = "/activities"
         query = o.query
         #
