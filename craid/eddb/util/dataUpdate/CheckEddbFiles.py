@@ -49,7 +49,7 @@ def localFileIsOutOfDate(fullLocalFilename: str, shortUrlFragment: str) -> bool:
     u = http.request('HEAD', url)
     meta = u.info()
     # print(meta)
-    print("Server Last Modified: " + str(meta.getheaders("Last-Modified")))
+    logging.info("Server Last Modified: " + str(meta.getheaders("Last-Modified")))
 
     gmTime = datetime.strptime(''.join(meta.getheaders("Last-Modified")),
                                "%a, %d %b %Y %X GMT").timetuple()
@@ -58,11 +58,12 @@ def localFileIsOutOfDate(fullLocalFilename: str, shortUrlFragment: str) -> bool:
     # file = fullLocalFilename
 
     if not os.path.exists(fullLocalFilename):
+        logging.info(f"Local file {fullLocalFilename} doesn't exist. ")
         return True
 
     localMod = time.gmtime(os.path.getmtime(fullLocalFilename))
     localStr = time.asctime(localMod)
-    print("Local Last Modified: " + localStr)
+    logging.info("Local Last Modified: " + localStr)
     # foo = meta_modified
 
     if localMod < gmTime:  # change > to <
