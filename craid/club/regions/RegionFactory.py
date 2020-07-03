@@ -33,7 +33,7 @@ class RegionFactory(object):
 
     @staticmethod
     def getRegionNameFromNumber(num: int):
-        ret = RegionFactory.number_name_dict.get(i)
+        ret = RegionFactory.number_name_dict.get(num)
         if ret is None:
             return RegionFactory.unRegion.getTitle()
         return ret
