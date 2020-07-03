@@ -341,6 +341,10 @@ def makeDiscordCard(msg, _id, _idnum) -> html.Div:
                     width="350", height="400"),
     ])
 
+def makeDiscordIframe(_id, _idnum) -> html.Iframe:
+    return html.Iframe(id=f"{_id}", src=f"https://discordapp.com/widget?id={_idnum}&theme=dark",
+                    width="350", height="400")
+
 
 my_meta_tags = [
     # A description of the app, used by e.g.

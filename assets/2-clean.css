@@ -30,6 +30,12 @@ del {
     min-width: 350px;
 }
 
+.clean-left {
+    vertical-align: top;
+    min-width: 350px;
+    text-align: left;
+}
+
 .left-column {
     vertical-align: top;
     min-width: 400px;
