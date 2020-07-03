@@ -42,8 +42,28 @@ app.layout = html.Div([
                 AnnoyingCrap.getMarkdown("IRH"),
             ])
         ]),
+        html.Tr(className="clean", children=[
+            html.Td(className="left-column", children=[
+                dcc.Markdown("![](https://github.com/HausReport/ClubRaiders/raw/master/assets/FdevForum.jpg)")
+            ]),
+            html.Td(className="clean-left", children=[
+                AnnoyingCrap.getMarkdown("FrontierForum"),
+            ])
+        ]),
+        html.Tr(className="clean", children=[
+            html.Td(className="left-column", children=[
+                makeDiscordIframe( "x-edbgs", "483005833853009950"),
+            ]),
+            html.Td(className="clean-left", children=[
+                AnnoyingCrap.getMarkdown("EliteBGS"),
+            ])
+        ]),
+
     ])
 ], className="container")
 
 if __name__ == '__main__':
     app.run_server()
+
+#discussion about the background game simulation mechanics within game Elite: Dangerous , codename : Extremely Delicious Bubble Gum Simulation
+    #

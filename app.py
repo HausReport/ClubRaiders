@@ -20,7 +20,7 @@ from dash.dependencies import Input, Output
 
 import craid.eddb.loader.DataProducer as dp
 from appHelpers import AnnoyingCrap, tab_style, tab_selected_style, enCard, makeArticleCard, makeDiscordCard, \
-    my_meta_tags
+    my_meta_tags, makeDiscordIframe
 from craid.club.regions.RegionFactory import RegionFactory
 from craid.eddb.Oracle import Oracle
 from craid.eddb.faction.FactionInstance import FactionInstance
@@ -184,14 +184,14 @@ tab_1 = \
                 makeArticleCard("", "faction-drilldown"),
                 makeArticleCard("", "system-drilldown"),
                 makeArticleCard(newsMarkdown, "news"),
-                makeDiscordCard(
-                    "## Cabal Operatives\n\nCommanders fighting the BGS war against The Club.",
-                    "cabal-ops",
-                    "439201271174660097"),
-                makeDiscordCard(
-                    "## Elite BGS\n\nFor resources, questions and discussion about the Elite Background Simulation in general.",
-                    "elite-bgs",
-                    "483005833853009950"),
+                # makeDiscordCard(
+                #     "## Cabal Operatives\n\nCommanders fighting the BGS war against The Club.",
+                #     "cabal-ops",
+                #     "439201271174660097"),
+                # makeDiscordCard(
+                #     "## Elite BGS\n\nFor resources, questions and discussion about the Elite Background Simulation in general.",
+                #     "elite-bgs",
+                #     "483005833853009950"),
                 # End of left column
             ]),  # td closed
             html.Td(className="clean2", children=[
@@ -233,12 +233,16 @@ app.layout = html.Div([
                          value='tab-2',
                          style=tab_style, selected_style=tab_selected_style,
                          ),
-                 dcc.Tab(label='About The Club',
+                 dcc.Tab(label='Community',
                          value='tab-3',
                          style=tab_style, selected_style=tab_selected_style,
                          ),
-                 dcc.Tab(label='About Club Raiders',
+                 dcc.Tab(label='About The Club',
                          value='tab-4',
+                         style=tab_style, selected_style=tab_selected_style,
+                         ),
+                 dcc.Tab(label='About Club Raiders',
+                         value='tab-5',
                          style=tab_style, selected_style=tab_selected_style,
                          ),
              ]),
@@ -284,15 +288,55 @@ def render_content(tab):
             ])
         return "clubSpace", tab_2
     elif tab == 'tab-3':
-        print('tab-2 clicked')
+        print('tab-3 clicked')
+        return "community", html.Div([
+            html.H1('ClubRaiders Community Tools & Resources'),
+            html.Table(className="clean", children=[
+                html.Tr(className="clean", children=[
+                    html.Td(className="left-column", children=[
+                        makeDiscordIframe("x-cabal-ops", "439201271174660097"),
+                    ]),
+                    html.Td(className="clean-left", children=[
+                        AnnoyingCrap.getMarkdown("CabalOperatives"),
+                    ])
+                ]),
+                html.Tr(className="clean", children=[
+                    html.Td(className="left-column", children=[
+                        makeDiscordIframe("x-irh", "530542802032001074"),
+                    ]),
+                    html.Td(className="clean-left", children=[
+                        AnnoyingCrap.getMarkdown("IRH"),
+                    ])
+                ]),
+                html.Tr(className="clean", children=[
+                    html.Td(className="left-column", children=[
+                        dcc.Markdown("![](https://github.com/HausReport/ClubRaiders/raw/master/assets/FdevForum.jpg)")
+                    ]),
+                    html.Td(className="clean-left", children=[
+                        AnnoyingCrap.getMarkdown("FrontierForum"),
+                    ])
+                ]),
+                html.Tr(className="clean", children=[
+                    html.Td(className="left-column", children=[
+                        makeDiscordIframe("x-edbgs", "483005833853009950"),
+                    ]),
+                    html.Td(className="clean-left", children=[
+                        AnnoyingCrap.getMarkdown("EliteBGS"),
+                    ])
+                ]),
+
+            ])
+        ], className="container")
+    elif tab == 'tab-4':
+        print('tab-4 clicked')
         return "aboutTheClub", html.Div(children=[
             html.Article([
                 AnnoyingCrap.getMarkdown("aboutClub")
             ]),
             seer.getFactionTable()
         ])
-    elif tab == 'tab-4':
-        print('tab-4 clicked')
+    elif tab == 'tab-5':
+        print('tab-5 clicked')
         return "aboutClubRaiders", html.Article([
             AnnoyingCrap.getMarkdown("aboutRaiders")
         ])
