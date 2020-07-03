@@ -29,6 +29,15 @@ class RegionFactory(object):
         "CQC"       : SphericalRegion("CQC", 10, 18, -11, 78, 30, 'rgb(0,0,255)'),
     }
 
+    number_name_dict = { reg.getNumber(): reg.getTitle() for reg in regionDict.values()}
+
+    @staticmethod
+    def getRegionNameFromNumber(num: int):
+        ret = RegionFactory.number_name_dict.get(i)
+        if ret is None:
+            return RegionFactory.unRegion.getTitle()
+        return ret
+
     @staticmethod
     def getRegionByNumber(which: int) -> SphericalRegion:
         for key in RegionFactory.regionDict.keys():
