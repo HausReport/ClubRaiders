@@ -5,9 +5,7 @@
 
 import plotly.graph_objs as go
 from numpy import *
-
 from craid.club.regions.Region import Region
-
 
 class SphericalRegion(Region):
 

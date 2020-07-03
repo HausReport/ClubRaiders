@@ -1,7 +1,6 @@
 from typing import List
 
 import craid.eddb.system.System
-from craid.club.regions.MultiSphericalRegion import MultiSphericalRegion
 from craid.club.regions.SphericalRegion import SphericalRegion
 from craid.club.regions.TheUnregion import TheUnregion
 # TODO: might be a better pallete https://learnui.design/tools/data-color-picker.html#divergent
@@ -134,4 +133,5 @@ class RegionFactory(object):
             pz = point[2]
             rData.append((aName, px, py, pz))
 
+        from craid.club.regions.MultiSphericalRegion import MultiSphericalRegion
         return MultiSphericalRegion(squadName, -1, rData, radius, color)
