@@ -57,6 +57,7 @@ with gzip.open(fName, 'rb') as f:
 logging.info("Read %s lines of systems data", str(nLines))
 
 nLines = 0
+# TODO: have to load this from github
 fName = loader.find_data_file('sys-old.jsonl')
 with gzip.open(fName, 'rb') as f:
     for line in f:
@@ -126,6 +127,7 @@ for key in oldSet.keys():
         sKey = str(key)
         nfs = oldSet.get(key)
         for fid in nfs:
+            fn = None
             if FactionNameFilter.proClubFactionName(facNames[fid]):
                 if fn is None:
                     fn = ""
