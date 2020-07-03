@@ -31,6 +31,15 @@ class RegionFactory(object):
     }
 
     @staticmethod
+    def getRegionByNumber(which: int) -> SphericalRegion:
+        for key in RegionFactory.regionDict.keys():
+            reg = RegionFactory.regionDict.get(key)
+            if reg.getNumber() == which:
+                return reg
+
+        return RegionFactory.unRegion
+
+    @staticmethod
     def getRegionNames() -> List[str]:
         return list(craid.club.regions.RegionFactory.RegionFactory.regionDict.keys())
 
@@ -46,7 +55,7 @@ class RegionFactory(object):
         return RegionFactory.unRegion
 
     @staticmethod
-    def getRegionByName(x: int) -> SphericalRegion:
+    def getRegionByName(x: str) -> SphericalRegion:
         reg = RegionFactory.regionDict.get(x)
         if reg is None:
             return RegionFactory.unRegion

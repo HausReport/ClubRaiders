@@ -52,3 +52,15 @@ Emperor's Dawn was involved in the murder of the Emperor.
 * Sirius subcontractor
 * “Wreaken are constructing ships for both the Federation and the Empire …
 Simultaneously!” - Saffron, Wagar, D. Premonition, 2017. p.345
+
+
+|   |   |   |   |
+|---|--:|--:|---|
+| Abroin Universal PLC  | Aegis Core  | Aegis Research  | Bentons Gang  |
+| Bentonian Party  | CQC Holdings  | Gallant Investment Brokers  | Hodack Prison Colony  |
+| Janus Incorporated  | Namarii Emperors Dawn  | Reyan BPS  | Reynhardt IntelliSys  |
+| Sirius Atmospherics  | Sirius Catering  | Sirius Corporation | Sirius Drives  |
+| Sirius Hot2Cold  | Sirius Hyperspace  | Sirius Industrial  | Sirius Luxury Transports  |
+| Sirius Mining Merope  | Sirius Mining  | Sirius Power  | The Greenventure Group,  |
+| The Peterson Group | The Rockforth Corporation  | Turner Research Group   | Wiggins Development Trust   |
+| Worster Insurance  | Wreaken Construction  | Bill Turner  | Aegis Defense  |

@@ -29,6 +29,11 @@ class SphericalRegion(Region):
             dist = 0
         return dist
 
+    # def regionDistance(self, otherRegion: Region) -> float:
+    #     d1 = self.distanceFrom()
+    #     d2 = otherRegion._regionDistance(self)
+    #     return min(d1, d2)
+
     def getSurface(self):
         theta = linspace(0, 2 * pi, 100)
         phi = linspace(0, pi, 100)
@@ -57,3 +62,12 @@ class SphericalRegion(Region):
     def __str__(self):
         msg2 = f"Sphere: {self._name} at ( {self.x0}, {self.y0}, {self.z0}) radius {self.r} color {self.color}"
         return msg2
+
+    def getX(self):
+        return self.x0
+
+    def getY(self):
+        return self.y0
+
+    def getZ(self):
+        return self.z0
