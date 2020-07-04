@@ -59,6 +59,12 @@ class States:
             if xid is gconst.STATE_FAMINE: self.state_list.append(xid)
             if xid is gconst.STATE_CIVIL_UNREST: self.state_list.append(xid)
 
+            # Added these late in the game
+            if xid is gconst.STATE_BUST: self.state_list.append(xid)
+            if xid is gconst.STATE_BLIGHT: self.state_list.append(xid)
+            if xid is gconst.STATE_DROUGHT: self.state_list.append(xid)
+            if xid is gconst.STATE_NATURAL_DISASTER: self.state_list.append(xid)
+            if xid is gconst.STATE_TERRORIST_ATTACK: self.state_list.append(xid)
             # if xid is Constants.STATE_RETREAT: self.state_list.append(xid)
             # if xid is Constants.STATE_RETREAT: self.state_list.append(xid)
             # if xid is Constants.STATE_EXPANSION: self.state_list.append(xid)
@@ -66,13 +72,13 @@ class States:
     def hasState(self, which: int) -> bool:
         return which in self.state_list
 
-    def getShortString(self,pending=False,recovering=False):
+    def getShortString(self, pending=False, recovering=False):
         war: List[str] = []
-        prefix =""
+        prefix = ""
         if pending:
-            prefix="Pend"
+            prefix = "Pend"
         elif recovering:
-            prefix="Rec"
+            prefix = "Rec"
 
         if len(prefix) == 0:
             if 4.5 >= self.influence > 0.0:
@@ -81,25 +87,54 @@ class States:
                 war.append("Anarchy")
 
         if gconst.STATE_RETREAT in self.state_list:
-            war.append(prefix+"Retreat")
+            war.append(prefix + "Retreat")
 
         if gconst.STATE_WAR in self.state_list:
-            war.append(prefix+"War")
+            war.append(prefix + "War")
         if gconst.STATE_CIVIL_WAR in self.state_list:
-            war.append(prefix+"CivilWar")
+            war.append(prefix + "CivilWar")
         if gconst.STATE_ELECTION in self.state_list:
-            war.append(prefix+"Election")
+            war.append(prefix + "Election")
 
         if gconst.STATE_OUTBREAK in self.state_list:
-            war.append(prefix+"Outbreak")
+            war.append(prefix + "Outbreak")
         if gconst.STATE_INFRASTRUCTURE_FAILURE in self.state_list:
-            war.append(prefix+"InfFail")
+            war.append(prefix + "InfFail")
         if gconst.STATE_EXPANSION in self.state_list:
-            war.append(prefix+"Expans")
+            war.append(prefix + "Expans")
 
         if len(war) == 0:
             return ""
         return ",".join(war)
 
-    # def getSort(self):
-    # return [{'column_id': 'distance', 'direction': 'asc'}]
+    def getBinary(self, which: int) -> int:
+        if which in self.state_list:
+            return 1
+
+        return 0
+
+    def getBitVector(self):
+        bv = [
+            self.getBinary(gconst.STATE_BOOM),
+            self.getBinary(gconst.STATE_BUST),
+            self.getBinary(gconst.STATE_FAMINE),
+            self.getBinary(gconst.STATE_CIVIL_UNREST),
+            self.getBinary(gconst.STATE_CIVIL_WAR),
+            self.getBinary(gconst.STATE_ELECTION),
+            self.getBinary(gconst.STATE_CIVIL_LIBERTY),
+            self.getBinary(gconst.STATE_EXPANSION),
+            self.getBinary(gconst.STATE_LOCKDOWN),
+            self.getBinary(gconst.STATE_OUTBREAK),
+            self.getBinary(gconst.STATE_WAR),
+            self.getBinary(gconst.STATE_NONE),
+            self.getBinary(gconst.STATE_PIRATE_ATTACK),
+            self.getBinary(gconst.STATE_RETREAT),
+            self.getBinary(gconst.STATE_INVESTMENT),
+            self.getBinary(gconst.STATE_BLIGHT),
+            self.getBinary(gconst.STATE_DROUGHT),
+            self.getBinary(gconst.STATE_INFRASTRUCTURE_FAILURE),
+            self.getBinary(gconst.STATE_NATURAL_DISASTER),
+            self.getBinary(gconst.STATE_PUBLIC_HOLIDAY),
+            self.getBinary(gconst.STATE_TERRORIST_ATTACK),
+        ]
+        return bv
