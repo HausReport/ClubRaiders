@@ -115,7 +115,7 @@ class Station(Aware):
         fac = self.getControllingFactionInstance()
         name = self.get_name()
         if fac is None:
-            logging.info("station controlling faction nexist" + name)
+            logging.info("station controlling faction doesn't exist: " + name)
             return False
         return fac.hasState(state)
 

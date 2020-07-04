@@ -66,29 +66,36 @@ class States:
     def hasState(self, which: int) -> bool:
         return which in self.state_list
 
-    def getShortString(self):
+    def getShortString(self,pending=False,recovering=False):
         war: List[str] = []
-        if 4.5 >= self.influence > 0.0:
-            war.append("LowInf")
-        if self.govt == "Anarchy":
-            war.append("Anarchy")
+        prefix =""
+        if pending:
+            prefix="Pend"
+        elif recovering:
+            prefix="Rec"
+
+        if len(prefix) == 0:
+            if 4.5 >= self.influence > 0.0:
+                war.append("LowInf")
+            if self.govt == "Anarchy":
+                war.append("Anarchy")
 
         if gconst.STATE_RETREAT in self.state_list:
-            war.append("Retreat")
+            war.append(prefix+"Retreat")
 
         if gconst.STATE_WAR in self.state_list:
-            war.append("War")
+            war.append(prefix+"War")
         if gconst.STATE_CIVIL_WAR in self.state_list:
-            war.append("CivilWar")
+            war.append(prefix+"CivilWar")
         if gconst.STATE_ELECTION in self.state_list:
-            war.append("Election")
+            war.append(prefix+"Election")
 
         if gconst.STATE_OUTBREAK in self.state_list:
-            war.append("Outbreak")
+            war.append(prefix+"Outbreak")
         if gconst.STATE_INFRASTRUCTURE_FAILURE in self.state_list:
-            war.append("InfFail")
+            war.append(prefix+"InfFail")
         if gconst.STATE_EXPANSION in self.state_list:
-            war.append("Expans")
+            war.append(prefix+"Expans")
 
         if len(war) == 0:
             return ""

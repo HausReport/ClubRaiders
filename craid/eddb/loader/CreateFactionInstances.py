@@ -49,13 +49,15 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_syste
             #
             govt = currentSystem.getGovernment()
             inf = faction_ptr['influence']
-            vulnerabilities: States = States(govt, inf, faction_ptr['active_states'])
+            active_states: States = States(govt, inf, faction_ptr['active_states'])
+            pending_states: States = States(govt, inf, faction_ptr['pending_states'])
+            recovering_states: States = States(govt, inf, faction_ptr['recovering_states'])
 
             #
             # Create the faction instance and pop it in the appropriate bins
             #
             nFacInst += 1
-            factionInstance = FactionInstance(fac, currentSystem, inf, vulnerabilities)
+            factionInstance = FactionInstance(fac, currentSystem, inf, active_states, recovering_states, pending_states)
             factions_of_interest_keys.add(faction_id)
 
             # seems redundant, but

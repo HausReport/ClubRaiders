@@ -21,11 +21,14 @@ from craid.eddb.util.PassThroughDict import PassThroughDict
 class FactionInstance(Faction):
 
     # getters/setters for id & name in superclass
-    def __init__(self, par: Faction, _mySystem: InhabitedSystem, inf: float, _states: States):
+    def __init__(self, par: Faction, _mySystem: InhabitedSystem, inf: float,
+                 activeStates: States, recoveringStates: States, pendingStates: States):
         super().__init__(par, True)
         self.mySystem: InhabitedSystem = _mySystem
         self.influence: float = inf
-        self.states: States = _states
+        self.active_states: States = activeStates
+        self.recovering_states: States = recoveringStates
+        self.pending_states: States = pendingStates
 
     def getSystem(self):
         return self.mySystem
@@ -114,8 +117,19 @@ class FactionInstance(Faction):
         return self.mySystem.getPower()
 
     def getVulnerableString(self):
-        assert self.states is not None, 'null vulnerable'
-        retval: str = self.states.getShortString()
+        assert self.active_states is not None, 'null vulnerable'
+        retval: str = self.active_states.getShortString()
+        retval2: str = self.pending_states.getShortString(pending=True)
+        if len(retval) > 0 and len(retval2) > 0:
+            retval = retval + "," + retval2
+        else:
+            retval += retval2
+        retval2: str = self.recovering_states.getShortString(recovering=True)
+        if len(retval) > 0 and len(retval2) > 0:
+            retval = retval + "," + retval2
+        else:
+            retval += retval2
+
         assert retval is not None, 'null vulnerable 2'
         return retval
 
@@ -148,7 +162,7 @@ class FactionInstance(Faction):
         return output
 
     def hasState(self, state: int):
-        return self.states.hasState(state)
+        return self.active_states.hasState(state)
 
     # shared code for trade/exploration
     def _ss(self) -> [float, List[str]]:
