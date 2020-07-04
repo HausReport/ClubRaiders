@@ -11,7 +11,6 @@ Player actions taking place in the Sirius region against Hodack Prison Colony.
 
 ### Recent Victories
 
-* Aegis Defense removed from system 20712.
 * Aegis Research removed from Pleiades Sector HR-W d1-41.
 * Janus Incorporated removed from HIP 17497 and Celaeno.
 * Aegis Research removed from Pleiades Sector PD-S b4-0 and Asterope.

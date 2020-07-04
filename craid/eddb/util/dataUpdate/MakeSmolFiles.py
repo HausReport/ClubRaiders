@@ -56,6 +56,12 @@ def deleteOldFiles():
                 'keys-factions_of_interest_keys.pkl', 'keys-factions-of-interest-keys.pkl']
     eFiles = ['factions.jsonl', 'stations.jsonl', 'systems_populated.jsonl']
 
+    tmpDir = tempfile.gettempdir()
+    inFile = os.path.join(tmpDir, 'smol-systems_populated.jsonl.gz')
+    if os.path.exists(inFile):
+        outFile = os.path.join(tmpDir, 'smol-sys-old.jsonl.gz')
+        copyfile(inFile,outFile)
+
     allFiles = keyFiles
     for fName in eFiles:
         allFiles.append(fName)
