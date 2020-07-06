@@ -15,8 +15,9 @@ from pandas import DataFrame
 
 from craid.eddb.loader.strategy.AWSLoader import LoadDataFromAWS
 from craid.eddb.loader.strategy.DataLoader import DataLoader
+
+
 # from memory_profiler import profile
-from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
 
 
 class History(object):
@@ -26,13 +27,13 @@ class History(object):
 
     def __new__(cls):
         if cls._instance is None:
-             print('Creating the object')
-             cls._instance = super(History, cls).__new__(cls)
-             myLoader = LoadDataFromAWS(forceWebDownload=False, useSmol=False)
-             cls._rawFrame = cls._getRawDataFrame(cls, myLoader)
-             cls._normalizedFrame = cls._getNormalizedDataFrame(cls)
+            print('Creating the object')
+            cls._instance = super(History, cls).__new__(cls)
+            myLoader = LoadDataFromAWS(forceWebDownload=False, useSmol=False)
+            cls._rawFrame = cls._getRawDataFrame(cls, myLoader)
+            cls._normalizedFrame = cls._getNormalizedDataFrame(cls)
 
-             # Put any initialization here.
+            # Put any initialization here.
         return cls._instance
 
     def getRawDataFrame(self) -> DataFrame:
@@ -71,10 +72,11 @@ class History(object):
 
         return target
 
+
 if __name__ == '__main__':
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.DEBUG
-    #myLoader = LoadDataFromGithub(_forceWebDownload=False, useSmol=False)
+    # myLoader = LoadDataFromGithub(_forceWebDownload=False, useSmol=False)
     hist = History()
     csa = hist.getRawDataFrame()
     print(csa)
