@@ -39,7 +39,28 @@ class Region(ABC):
         return self.color
 
     def getView(self, dataFrame):
-        return dataFrame[dataFrame.apply(lambda x: self.contains(x.x, x.y, x.z), axis=1)]
+        view = dataFrame[dataFrame.apply(lambda x: self.contains(x.x, x.y, x.z), axis=1)]
+        Region.setMarkerSize(view)
+        Region.setMarkerColors(view)
+        Region.setHovertext(view)
+
+    @staticmethod
+    def setMarkerSize(dataFrame):
+        dataFrame.loc[dataFrame['control'] == True, 'marker_size'] = 8  # Medium is not home/control
+        dataFrame.loc[dataFrame['control'] == False, 'marker_size'] = 5  # Small is not home/not control
+        dataFrame.loc[dataFrame['isHomeSystem'] == True, 'marker_size'] = 15  # Large is home
+        # df["marker_size"] = df["influence"].apply(lambda x: 5+ x/5)
+
+    @staticmethod
+    def setMarkerColors(dataFrame):
+        dataFrame.loc[dataFrame['control'] == True, 'color'] = "#ffbf00"  # Yellow is control/not home
+        dataFrame.loc[dataFrame['control'] == False, 'color'] = "#00ff00"  # Green is not home/not control
+        dataFrame.loc[dataFrame['isHomeSystem'] == True, 'color'] = "#ff0000"  # Red is homesystem
+
+    @staticmethod
+    def setHovertext(dataFrame):
+        dataFrame['htext'] = dataFrame[['systemName', 'factionName']].agg('\n'.join, axis=1)
+
 
     def getFigure(self, theFrame):
 
