@@ -5,7 +5,9 @@
 
 import plotly.graph_objs as go
 from numpy import *
+
 from craid.club.regions.Region import Region
+
 
 class SphericalRegion(Region):
 
@@ -16,7 +18,7 @@ class SphericalRegion(Region):
         self.z0 = z0
         self.r = r
 
-    def contains(self, x, y, z):
+    def contains(self, x, y, z) -> bool:
         dist = math.sqrt((x - self.x0) ** 2 + (y - self.y0) ** 2 + (z - self.z0) ** 2)
         return dist <= self.r
 

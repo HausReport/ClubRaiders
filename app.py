@@ -19,9 +19,10 @@ import ujson
 from dash.dependencies import Input, Output
 
 import craid.eddb.loader.DataProducer as dp
-from appHelpers import AnnoyingCrap, tab_style, tab_selected_style, enCard, makeArticleCard, makeDiscordCard, \
-    my_meta_tags, makeDiscordIframe
+from appHelpers import AnnoyingCrap, tab_style, tab_selected_style, enCard, makeArticleCard, my_meta_tags, \
+    makeDiscordIframe
 from craid.club.regions.RegionFactory import RegionFactory
+from craid.club.regions.TheUnregion import TheUnregion
 from craid.eddb.Oracle import Oracle
 from craid.eddb.faction.FactionInstance import FactionInstance
 from craid.eddb.system.SystemXYZ import SystemXYZ
@@ -262,7 +263,8 @@ def render_content(tab):
     if tab == 'tab-1':
         return "activities", tab_1
     if tab == 'tab-2':
-        fig = AnnoyingCrap.getFigure(None, df)
+        unreg = TheUnregion()
+        fig = unreg.getFigure(df)
         tab_2 = \
             html.Table(className="clean", children=[
                 html.Tr(className="clean", children=[
@@ -687,11 +689,11 @@ def display_click_data(squadName, regName):
         reg = RegionFactory.regionDict.get(val)
 
     if reg is not None:
-        newFigure = AnnoyingCrap.getFigure(reg, df)
+        newFigure = reg.getFigure( df)
         #
         # Local scoreboard
         #
-        view = AnnoyingCrap.getView(reg, df)
+        view = reg.getView(df)
         seer2: Oracle = Oracle(view)
         oracleString2 = AnnoyingCrap.getString("oracle-template")
         mapOracleMd = dcc.Markdown(seer2.template(oracleString2))
@@ -699,7 +701,8 @@ def display_click_data(squadName, regName):
         printmem("d")
         return newFigure, mapOracleMd
 
-    return AnnoyingCrap.getFigure(None, df), mapOracleMd
+    unreg = TheUnregion()
+    return unreg.getFigure(df), mapOracleMd
 
 
 if __name__ == '__main__':

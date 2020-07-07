@@ -7,7 +7,6 @@ from typing import Dict, Tuple
 
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.graph_objs as go
 from dash_table.Format import Format, Scheme, Group
 from pkg_resources import resource_string as resource_bytes
 
@@ -107,16 +106,6 @@ class AnnoyingCrap(object):
             opts.append({'label': it, 'value': it})
         return opts
 
-    # @staticmethod
-    # def getSecondDropdown(playerFactionNameToHomeSystemName):
-    #     fopts = []
-    #     keys: List[str] = sorted(playerFactionNameToHomeSystemName.keys())
-    #     for it in keys:
-    #         val: str = playerFactionNameToHomeSystemName.get(it)
-    #         if val is not None:
-    #             fopts.append({'label': it, 'value': val})
-    #     return fopts
-
     @staticmethod
     def getFilter(val3: int):
         if val3 == 0: val3 = 1
@@ -148,37 +137,37 @@ class AnnoyingCrap(object):
     # "hidden": True,  is not a thing, unfortunately
     @staticmethod
     def getTheColumns():
-        allowHiddenColums = False  # INFO: pending a dash bug fix, see https://github.com/plotly/dash-table/issues/789
+        allowHiddenColumns = False  # INFO: pending a dash bug fix, see https://github.com/plotly/dash-table/issues/789
         return [
             {"name": 'System', "id": 'systemName', "deletable": False, "selectable": False},
             {"name": 'Faction', "id": 'factionName', "deletable": False, "selectable": False},
             # {"name": 'x', "id": 'x', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
             # {"name": 'y', "id": 'y', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
             # {"name": 'z', "id": 'z', "deletable": False, "selectable": False, "hideable": True, "type": "numeric"},
-            {"name"      : 'Home', "id": 'isHomeSystem', "deletable": False, "hideable": allowHiddenColums,
+            {"name"      : 'Home', "id": 'isHomeSystem', "deletable": False, "hideable": allowHiddenColumns,
              "selectable": False},
-            {"name"      : 'Population', "id": 'population', "deletable": False, "hideable": allowHiddenColums,
+            {"name"      : 'Population', "id": 'population', "deletable": False, "hideable": allowHiddenColumns,
              "selectable": False,
              "type"      : "numeric", 'format': Format(precision=0, scheme=Scheme.fixed, group=Group.yes)},
-            {"name": 'Inf.', "id": 'influence', "deletable": False, "hideable": allowHiddenColums, "selectable": False,
+            {"name": 'Inf.', "id": 'influence', "deletable": False, "hideable": allowHiddenColumns, "selectable": False,
              "type": "numeric", 'format': Format(precision=2, scheme=Scheme.fixed, group=Group.yes)},
             {"name"  : 'Difficulty', "id": 'difficulty', "deletable": False, "selectable": False, "type": "numeric",
              'format': Format(precision=1, scheme=Scheme.fixed, group=Group.yes)},
             {"name": 'Scouted', "id": 'updated', "deletable": False, "selectable": False, "type": "datetime"},
-            {"name"      : 'Control', "id": 'control', "deletable": False, "hideable": allowHiddenColums,
+            {"name"      : 'Control', "id": 'control', "deletable": False, "hideable": allowHiddenColumns,
              "selectable": False},
             {"name": 'Vulnerable', "id": 'vulnerable', "deletable": False, "selectable": False},
             {"name": 'Dist.', "id": 'distance', "deletable": False, "selectable": False, "type": "numeric"},
             {"name"    : 'MissionScore', "id": 'missionScore', "deletable": False, "selectable": False,
-             "hideable": allowHiddenColums, "type": "numeric"},
+             "hideable": allowHiddenColumns, "type": "numeric"},
             {"name"    : 'TradeScore', "id": 'salesScore', "deletable": False, "selectable": False,
-             "hideable": allowHiddenColums, "type": "numeric"},
-            {"name": 'ExploreScore', "id": 'explorationScore', "hideable": allowHiddenColums, "type": "numeric"},
+             "hideable": allowHiddenColumns, "type": "numeric"},
+            {"name": 'ExploreScore', "id": 'explorationScore', "hideable": allowHiddenColumns, "type": "numeric"},
             {"name"    : 'MineralSalesScore', "id": 'mineralSalesScore', "deletable": False, "selectable": False,
-             "hideable": allowHiddenColums, "type": "numeric"},
-            {"name": 'BountyHuntScore', "id": 'bountyHuntingScore', "hideable": allowHiddenColums, "type": "numeric"},
-            {"name": 'SmugglingScore', "id": 'smugglingScore', "hideable": allowHiddenColums, "type": "numeric"},
-            {"name": 'PiracyMurderScore', "id": 'piracyMurderScore', "hideable": allowHiddenColums, "type": "numeric"},
+             "hideable": allowHiddenColumns, "type": "numeric"},
+            {"name": 'BountyHuntScore', "id": 'bountyHuntingScore', "hideable": allowHiddenColumns, "type": "numeric"},
+            {"name": 'SmugglingScore', "id": 'smugglingScore', "hideable": allowHiddenColumns, "type": "numeric"},
+            {"name": 'PiracyMurderScore', "id": 'piracyMurderScore', "hideable": allowHiddenColumns, "type": "numeric"},
         ]
 
     #
@@ -239,73 +228,6 @@ class AnnoyingCrap(object):
     def setHovertext(dataFrame):
         dataFrame['htext'] = dataFrame[['systemName', 'factionName']].agg('\n'.join, axis=1)
 
-    @staticmethod
-    def getScene():
-        return dict(
-            xaxis=dict(
-                backgroundcolor="rgb(0,0,0)",
-                gridcolor="grey",
-                showbackground=False,
-                zerolinecolor="white", ),
-            yaxis=dict(
-                backgroundcolor="rgb(0,0,0)",
-                gridcolor="grey",
-                showbackground=False,
-                zerolinecolor="white", ),
-            zaxis=dict(
-                backgroundcolor="rgb(0,0,0)",
-                gridcolor="grey",
-                showbackground=False,
-                zerolinecolor="white", ),
-            aspectratio=dict(x=1, y=1, z=0.7),
-            aspectmode="manual"
-        )
-
-    @staticmethod
-    def getView(reg, dataFrame):
-        return dataFrame[dataFrame.apply(lambda x: reg.contains(x.x, x.y, x.z), axis=1)]
-
-    @staticmethod
-    def getTrace(theFrame):
-        return go.Scatter3d(x=theFrame['x'],
-                            y=theFrame['z'],
-                            z=theFrame['y'],
-                            text=theFrame['systemName'],
-                            hoverinfo="text",
-                            hovertext=theFrame['htext'],
-                            mode='markers+text',
-                            marker=dict(size=theFrame["marker_size"],
-                                        color=theFrame["color"]))
-
-    @staticmethod
-    def getLayout(theTitle):
-        return go.Layout(title=theTitle,
-                         scene=AnnoyingCrap.getScene(),
-                         width=800,
-                         height=900,
-                         autosize=False,
-                         paper_bgcolor='rgb(0,0,0)',
-                         plot_bgcolor='rgb(0,0,0)',
-                         clickmode='event+select',
-                         font=dict(
-                             family="Courier New, monospace",
-                             size=12,
-                             color="#ffffff"),
-                         margin=dict(t=100, b=0, l=0, r=0),
-                         )
-
-    @staticmethod
-    def getFigure(region, theFrame):
-        title = "Club Activity Galaxy-Wide"
-        view = theFrame
-
-        if region is not None:
-            title = "Club Activity near " + region.getTitle()
-            view = AnnoyingCrap.getView(region, theFrame)
-
-        simpleTrace = AnnoyingCrap.getTrace(view)
-        myLayout = AnnoyingCrap.getLayout(title)
-        return go.Figure(data=[simpleTrace], layout=myLayout)
 
 
 tab_style = {

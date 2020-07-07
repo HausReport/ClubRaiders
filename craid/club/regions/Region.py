@@ -3,17 +3,31 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 # from craid.club.regions.SphericalRegion import _name, num, color
-#from craid.club.regions.MultiSphericalRegion import MultiSphericalRegion
-#from craid.club.regions.SphericalRegion import SphericalRegion
-#from craid.club.regions.TheUnregion import TheUnregion
+# from craid.club.regions.MultiSphericalRegion import MultiSphericalRegion
+# from craid.club.regions.SphericalRegion import SphericalRegion
+# from craid.club.regions.TheUnregion import TheUnregion
+from abc import ABC, abstractmethod
 
+import plotly.graph_objs as go
 
-class Region(object):
+class Region(ABC):
 
     def __init__(self, _name, num, color):
         self.color = color
         self.num = num
         self._name = _name
+
+    @abstractmethod
+    def contains(self, x, y, z) -> bool:
+        pass
+
+    @abstractmethod
+    def distanceFrom(self, x, y, z) -> bool:
+        pass
+
+    @abstractmethod
+    def getVolume(self) -> bool:
+        pass
 
     def getTitle(self):
         return "The " + self._name + " Region"
@@ -24,49 +38,70 @@ class Region(object):
     def getColor(self):
         return self.color
 
-    # def regionDistance(self, otherRegion):
-    #     if isinstance(self,TheUnregion) or isinstance(otherRegion,TheUnregion):
-    #         return 0.0
-    #     if isinstance(self, SphericalRegion) and isinstance(otherRegion, SphericalRegion):
-    #         d1 = self.distanceFrom(otherRegion.getX(), otherRegion.getY(), otherRegion.getZ())
-    #         d2 = otherRegion.distanceFrom(self.getX(), self.getY(), self.getZ())
-    #         return min(d1, d2)
-    #     if isinstance(self,MultiSphericalRegion) and isinstance(otherRegion,SphericalRegion):
-    #         d1 = self.distanceFrom(otherRegion.getX(), otherRegion.getY(), otherRegion.getZ())
-    #         dist = 1000000000
-    #         for p in self.points:
-    #             d2 = otherRegion.distanceFrom(p[0], p[1], p[2])
-    #             if d2<dist:
-    #                 dist = d2
-    #         return min(d1,dist)
-    #     if isinstance(self,SphericalRegion) and isinstance(otherRegion,MultiSphericalRegion):
-    #         d1 = otherRegion.distanceFrom(self.getX(), self.getY(), self.getZ())
-    #         dist = 1000000000
-    #         for p in otherRegion.points:
-    #             d2 = self.distanceFrom(p[0], p[1], p[2])
-    #             if d2<dist:
-    #                 dist = d2
-    #         return min(d1,dist)
-    #     if isinstance(self,MultiSphericalRegion) and isinstance(otherRegion,MultiSphericalRegion):
-    #         dist = 1000000000
-    #         for p in self.points:
-    #             d2 = otherRegion.distanceFrom(p[0], p[1], p[2])
-    #             if d2 < dist:
-    #                 dist = d2
-    #         for p in otherRegion.points:
-    #             d2 = self.distanceFrom(p[0], p[1], p[2])
-    #             if d2<dist:
-    #                 dist = d2
-    #         return dist
-    #     assert False, "No region distance case matched"
+    def getView(self, dataFrame):
+        return dataFrame[dataFrame.apply(lambda x: self.contains(x.x, x.y, x.z), axis=1)]
 
-# def __init__(self, name, labelx, labely, x0, y0, x1, y1, shape, color):
-#     self.name = name
-#     self.labelx = labelx
-#     self.labely = labely
-#     self.x0 = x0
-#     self.y0 = y0
-#     self.x1 = x1
-#     self.y1 = y1
-#     self.shape = shape
-#     self.color = color
+    def getFigure(self, theFrame):
+
+        from craid.club.regions.TheUnregion import TheUnregion
+        if isinstance(self, TheUnregion):
+            title = "Club Activity Galaxy-Wide"
+            view = theFrame
+        else:
+            title = "Club Activity near " + self.getTitle()
+            view = self.getView(theFrame)
+
+        simpleTrace = Region.getTrace(view)
+        myLayout = Region.getLayout(title)
+        return go.Figure(data=[simpleTrace], layout=myLayout)
+
+    @staticmethod
+    def getLayout(theTitle):
+        return go.Layout(title=theTitle,
+                         scene=Region.getScene(),
+                         width=800,
+                         height=900,
+                         autosize=False,
+                         paper_bgcolor='rgb(0,0,0)',
+                         plot_bgcolor='rgb(0,0,0)',
+                         clickmode='event+select',
+                         font=dict(
+                             family="Courier New, monospace",
+                             size=12,
+                             color="#ffffff"),
+                         margin=dict(t=100, b=0, l=0, r=0),
+                         )
+
+    @staticmethod
+    def getScene():
+        return dict(
+            xaxis=dict(
+                backgroundcolor="rgb(0,0,0)",
+                gridcolor="grey",
+                showbackground=False,
+                zerolinecolor="white", ),
+            yaxis=dict(
+                backgroundcolor="rgb(0,0,0)",
+                gridcolor="grey",
+                showbackground=False,
+                zerolinecolor="white", ),
+            zaxis=dict(
+                backgroundcolor="rgb(0,0,0)",
+                gridcolor="grey",
+                showbackground=False,
+                zerolinecolor="white", ),
+            aspectratio=dict(x=1, y=1, z=0.7),
+            aspectmode="manual"
+        )
+
+    @staticmethod
+    def getTrace(theFrame):
+        return go.Scatter3d(x=theFrame['x'],
+                            y=theFrame['z'],
+                            z=theFrame['y'],
+                            text=theFrame['systemName'],
+                            hoverinfo="text",
+                            hovertext=theFrame['htext'],
+                            mode='markers+text',
+                            marker=dict(size=theFrame["marker_size"],
+                                        color=theFrame["color"]))

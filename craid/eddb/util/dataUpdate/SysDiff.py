@@ -10,7 +10,6 @@ import ujson
 
 from craid.eddb.faction.FactionNameFilter import FactionNameFilter
 from craid.eddb.loader.strategy.AWSLoader import LoadDataFromAWS
-
 # NOTE: To get the May 31 file: $ curl "https://github.com/HausReport/ClubRaiders/blob/d5ff5b1741467618df70a75c7078fb6b6fc32fe3/data/smol-systems_populated.jsonl.gz?raw=true" -L -o smol-sys-old.jsonl.gz
 from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
 

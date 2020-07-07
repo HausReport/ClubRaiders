@@ -4,14 +4,9 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 
 import dash
-from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
-
 import flask
-import pandas as pd
-import time
-import os
 
 from appHelpers import makeDiscordIframe, AnnoyingCrap
 

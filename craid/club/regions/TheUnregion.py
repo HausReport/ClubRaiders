@@ -3,16 +3,17 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 import math
+from abc import ABC
 
-from craid.club.regions.Region import Region
+import craid
 
 
-class TheUnregion(Region):
+class TheUnregion(craid.club.regions.Region.Region):
 
     def __init__(self, ):
         super().__init__("UnRegion", 0, 'rgb(0,0,0)')
 
-    def contains(self, x, y, z):
+    def contains(self, x, y, z) -> bool:
         return True
 
     def distanceFrom(self, x, y, z):
