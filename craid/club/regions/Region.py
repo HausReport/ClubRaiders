@@ -43,6 +43,7 @@ class Region(ABC):
         Region.setMarkerSize(view)
         Region.setMarkerColors(view)
         Region.setHovertext(view)
+        return view
 
     @staticmethod
     def setMarkerSize(dataFrame):
@@ -65,10 +66,9 @@ class Region(ABC):
     def getFigure(self, theFrame):
 
         from craid.club.regions.TheUnregion import TheUnregion
-        if isinstance(self, TheUnregion):
-            title = "Club Activity Galaxy-Wide"
-            view = theFrame
-        else:
+        title = "Club Activity Galaxy-Wide"
+        view = theFrame
+        if not isinstance(self, TheUnregion):
             title = "Club Activity near " + self.getTitle()
             view = self.getView(theFrame)
 
