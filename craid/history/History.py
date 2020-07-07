@@ -70,6 +70,10 @@ class History(object):
             else:
                 single_date = single_date + relativedelta(days=1)
 
+        #drop problemmatic dates
+        target.drop(target[target.updated == "2020-06-14"].index, inplace=True)
+        target.drop(target[target.updated == "2020-06-22"].index, inplace=True)
+        target.drop(target[target.updated == "2020-07-01"].index, inplace=True)
         return target
 
 
