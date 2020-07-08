@@ -695,7 +695,7 @@ def display_click_data(squadName, regName):
         #
         view = reg.getView(df)
         seer2: Oracle = Oracle(view)
-        oracleString2 = AnnoyingCrap.getString("oracle-template")
+        oracleString2 = AnnoyingCrap.getString("region-oracle")
         mapOracleMd = dcc.Markdown(seer2.template(oracleString2))
 
         printmem("d")

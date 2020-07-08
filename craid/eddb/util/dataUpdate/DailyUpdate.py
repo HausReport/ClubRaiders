@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # Fire up logger
     #
     logging.getLogger().addHandler(logging.StreamHandler())
-    logging.getLogger().level = logging.DEBUG
+    logging.getLogger().level = logging.INFO
 
     #
     # Check if EDDB's data is newer than ours
