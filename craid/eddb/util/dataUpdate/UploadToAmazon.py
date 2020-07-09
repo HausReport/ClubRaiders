@@ -17,10 +17,10 @@ def uploadToAWSFromTemp(shortName: str) -> bool:
     buck_key = os.getenv('AWS_SECRET_ACCESS_KEY')
     buck_name = os.getenv('BUCKET_NAME')
 
-    print(key)
-    print(reg)
-    print(buck_key)
-    print(buck_name)
+    #print(key)
+    #print(reg)
+    #print(buck_key)
+    #print(buck_name)
 
     tmpDir = tempfile.gettempdir()
     inFile = os.path.join(tmpDir, shortName)
