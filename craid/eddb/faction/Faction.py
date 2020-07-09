@@ -26,6 +26,9 @@ class Faction(Aware):
             super().__init__(name, _id)
             self.allegiance = jsonString['allegiance']
             self.government = jsonString['government']
+            self.government_id = jsonString['government_id']
+            self.allegiance_id = jsonString['allegiance_id']
+
             self.homesystem_id = jsonString['home_system_id']
             self.player = jsonString['is_player_faction']
         else:
@@ -44,6 +47,9 @@ class Faction(Aware):
 
     def get_government(self):
         return self.government
+
+    # def get_government_id(self):
+    #     return self.government_id
 
     def get_homesystem_id(self):
         return self.homesystem_id

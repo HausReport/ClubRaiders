@@ -138,3 +138,27 @@ class States:
             self.getBinary(gconst.STATE_TERRORIST_ATTACK),
         ]
         return bv
+
+    def getBitDict(self, key_prefix="", key_suffix=""):
+        return {
+            key_prefix+"boom"+key_suffix : self.getBinary(gconst.STATE_BOOM),
+            key_prefix+"bust"+key_suffix : self.getBinary(gconst.STATE_BUST),
+            key_prefix+"famine"+key_suffix : self.getBinary(gconst.STATE_FAMINE),
+            key_prefix+"civ_unrest"+key_suffix : self.getBinary(gconst.STATE_CIVIL_UNREST),
+            key_prefix+"civ_war"+key_suffix : self.getBinary(gconst.STATE_CIVIL_WAR),
+            key_prefix+"election"+key_suffix : self.getBinary(gconst.STATE_ELECTION),
+            key_prefix+"civ_lib"+key_suffix : self.getBinary(gconst.STATE_CIVIL_LIBERTY),
+            key_prefix+"expansion"+key_suffix : self.getBinary(gconst.STATE_EXPANSION),
+            key_prefix+"lockdown"+key_suffix : self.getBinary(gconst.STATE_LOCKDOWN),
+            key_prefix+"outbreak"+key_suffix : self.getBinary(gconst.STATE_OUTBREAK),
+            key_prefix+"war"+key_suffix : self.getBinary(gconst.STATE_WAR),
+            key_prefix+"none"+key_suffix : self.getBinary(gconst.STATE_NONE),
+            key_prefix+"pirate"+key_suffix : self.getBinary(gconst.STATE_PIRATE_ATTACK),
+            key_prefix+"retreat"+key_suffix : self.getBinary(gconst.STATE_RETREAT),
+            key_prefix+"invest"+key_suffix : self.getBinary(gconst.STATE_INVESTMENT),
+            key_prefix+"blight"+key_suffix : self.getBinary(gconst.STATE_BLIGHT),
+            key_prefix+"drought"+key_suffix : self.getBinary(gconst.STATE_DROUGHT),
+            key_prefix+"inf_fail"+key_suffix : self.getBinary(gconst.STATE_INFRASTRUCTURE_FAILURE),
+            key_prefix+"nat_dis"+key_suffix : self.getBinary(gconst.STATE_NATURAL_DISASTER),
+            key_prefix+"pub_hol"+key_suffix : self.getBinary(gconst.STATE_PUBLIC_HOLIDAY),
+        }

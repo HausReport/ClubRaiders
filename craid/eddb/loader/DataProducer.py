@@ -25,13 +25,18 @@ from craid.eddb.loader.strategy.AWSLoader import LoadDataFromAWS
 from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
 
 
-def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
-    if useEddb:
-        logging.info("Loading from EDDB")
-        myLoader = LoadDataFromEDDB()
+def getDataArrays(writeKeyFiles=False, useEddb=False, loader=None, clubSystemsOnly=True) -> Dict[str, object]:
+
+    if loader is not None:
+        logging.info("Using supplied loader")
+        myLoader = loader
     else:
-        logging.info("Loading from AWS")
-        myLoader = LoadDataFromAWS()  # LoadDataFromGithub()
+        if useEddb:
+            logging.info("Loading from EDDB")
+            myLoader = LoadDataFromEDDB()
+        else:
+            logging.info("Loading from AWS")
+            myLoader = LoadDataFromAWS()  # LoadDataFromGithub()
 
     playerFactionNameToSystemName: Dict[str, str] = {}
 
@@ -73,7 +78,7 @@ def getDataArrays(writeKeyFiles=False, useEddb=False) -> Dict[str, object]:
     # Make (2?) nifty list(s) of club faction presences
     #
     allClubSystemInstances, sysIdFacIdToFactionInstance, factions_of_interest_keys \
-        = getFactionInstances(all_systems_dict, club_system_keys, all_factions_dict, club_faction_keys)
+        = getFactionInstances(all_systems_dict, club_system_keys, all_factions_dict, club_faction_keys, clubSystemsOnly=clubSystemsOnly)
 
     gc.collect()
     pm.printmem('2')

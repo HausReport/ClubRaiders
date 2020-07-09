@@ -36,6 +36,11 @@ class InhabitedSystem(System):
         self.stations: List[Station] = []
         self.minorFactionPresences: List[object] = []
 
+        self.allegiance_id = jsonString['allegiance_id']
+        self.government_id = jsonString['government_id']
+        self.security_id = jsonString['security_id']
+        self.primary_economy_id = jsonString['primary_economy_id']
+        self.power_state_id = jsonString['power_state_id']
     # ================================================================================
     # General statistics
     #
@@ -47,6 +52,21 @@ class InhabitedSystem(System):
 
     def getPowerState(self):
         return self.jsonLine[POWER_STATE]
+
+    def get_security_id(self):
+        return self.security_id
+
+    def get_allegiance_id(self):
+        return self.allegiance_id
+
+    def get_government_id(self):
+        return self.government_id
+
+    def get_primary_economy_id(self):
+        return self.primary_economy_id
+
+    def get_power_state_id(self):
+        return self.power_state_id
 
     def getPower(self):
         return self.jsonLine['power']

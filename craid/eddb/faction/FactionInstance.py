@@ -36,6 +36,12 @@ class FactionInstance(Faction):
     def getFactionID(self):
         return self.get_id()
 
+    def get_happiness_id(self):
+        return self.happiness_id
+
+    def set_happiness_id(self, hid):
+        self.happiness_id = hid
+
     def getPopulation(self):
         return self.mySystem.getPopulation()
 
@@ -48,6 +54,20 @@ class FactionInstance(Faction):
     def getSystemNameById(self, _id):
         return super().getSystemNameById(_id)
 
+    def get_government_id(self):
+        return self.mySystem.get_government_id()
+
+    def get_allegiance_id(self):
+        return self.mySystem.get_allegiance_id()
+
+    def get_security_id(self):
+        return self.mySystem.get_security_id()
+
+    def get_primary_economy_id(self):
+        return self.mySystem.get_primary_economy_id()
+
+    def get_power_state_id(self):
+        return self.mySystem.get_power_state_id()
     # def getUpdated(self):
     #    return self.mySystem.getUpdated()
 
@@ -539,6 +559,51 @@ class FactionInstance(Faction):
         }
         json = ujson.dumps(line)
         return json
+
+    def getNetDict(self):
+        pass
+        #return { self.getSystemID() : littleDict}
+
+    def getANNRow(self):
+        row = {}
+        row['sysid'] = self.getSystemID()
+        row['facid'] = self.get_id()
+        row['updated'] = self.getUpdatedDateTime()
+
+        row['pop'] = self.getPopulation()
+        row['gov_id'] = self.get_government_id()
+        row['all_id'] = self.get_allegiance_id()
+        row['secure_id'] = self.get_security_id()
+        row['econ_id'] = self.get_primary_economy_id()
+        row['pow_state_id'] = self.get_power_state_id()
+
+        row['happiness_id'] = self.get_happiness_id()
+
+        perm = 0.0
+        if self.mySystem.needsPermit():
+            perm = 1.0
+        row['permit'] = perm
+        row['allid'] = self.get_allegiance_id()
+
+        # make dict of my happiness, influence, states
+
+        # make dict of other happiness, influence, states
+        # sorted by decreasing influence
+
+        #systems is jul4
+        state_dict = self.get_states_dict()
+        row.update(state_dict)
+        return row
+
+    def get_states_dict(self,prefix=""):
+        ret = {}
+        state_dict = self.active_states.getBitDict(key_prefix="state-"+prefix)
+        ret.update(state_dict)
+        state_dict = self.pending_states.getBitDict(key_prefix="state-"+prefix, key_suffix="-pend")
+        ret.update(state_dict)
+        state_dict = self.recovering_states.getBitDict(key_prefix="state-"+prefix, key_suffix="-rec")
+        ret.update(state_dict)
+        return ret
 
 #    def unix_time_millis(self, dt):
 #        return (dt - epoch).total_seconds() * 999.0

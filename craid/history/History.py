@@ -54,7 +54,7 @@ class History(object):
     def _getNormalizedDataFrame(self) -> DataFrame:
         target = pd.DataFrame()
         start_date = date(2018, 5, 15)
-        daily_date = date(2020, 5, 30)
+        daily_date = date(2020, 6, 1)
         end_date = date.today() + timedelta(days=1)  # date(2020, 6, 28)
 
         csa = self._rawFrame
@@ -74,6 +74,9 @@ class History(object):
         target.drop(target[target.updated == "2020-06-14"].index, inplace=True)
         target.drop(target[target.updated == "2020-06-22"].index, inplace=True)
         target.drop(target[target.updated == "2020-07-01"].index, inplace=True)
+        target.drop(target[target.updated == "2020-06-11"].index, inplace=True)
+        target.drop(target[target.updated == "2020-06-27"].index, inplace=True)
+
         return target
 
 

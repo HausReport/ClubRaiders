@@ -17,7 +17,7 @@ from craid.eddb.system.InhabitedSystem import InhabitedSystem
 # Note: This does have to go through _all_ populated systems
 #
 def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_system_keys: Set[int],
-                        all_factions_dict: Dict[int, Faction], club_faction_keys: Set[int]):
+                        all_factions_dict: Dict[int, Faction], club_faction_keys: Set[int], clubSystemsOnly=True):
     allClubSystemInstances: List[FactionInstance] = []  # make this one avaiable
     sysIdFacIdToFactionInstance: Dict[Tuple[int, int], FactionInstance] = {}
     factions_of_interest_keys: Set[int] = set()
@@ -27,7 +27,7 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_syste
     for currentSystem in all_systems_dict.values():
 
         sys_id = currentSystem.get_id()  # this is the big time-saver
-        if sys_id not in club_system_keys:
+        if clubSystemsOnly and (sys_id not in club_system_keys):
             continue
 
         mfp = currentSystem._getMinorFactionPresencesDict()
@@ -59,6 +59,9 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_syste
             nFacInst += 1
             factionInstance = FactionInstance(fac, currentSystem, inf, active_states, recovering_states, pending_states)
             factions_of_interest_keys.add(faction_id)
+
+            happ_id = faction_ptr['happiness_id']
+            factionInstance.set_happiness_id(happ_id)
 
             # seems redundant, but
             if fac.isClub():
