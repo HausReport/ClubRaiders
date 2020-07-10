@@ -144,11 +144,12 @@ class FactionInstance(Faction):
             retval = retval + "," + retval2
         else:
             retval += retval2
-        retval2: str = self.recovering_states.getShortString(recovering=True)
-        if len(retval) > 0 and len(retval2) > 0:
-            retval = retval + "," + retval2
+
+        retval3: str = self.recovering_states.getShortString(recovering=True)
+        if len(retval) > 0 and len(retval3) > 0:
+            retval = retval + "," + retval3
         else:
-            retval += retval2
+            retval += retval3
 
         assert retval is not None, 'null vulnerable 2'
         return retval

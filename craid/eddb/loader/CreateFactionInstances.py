@@ -50,8 +50,8 @@ def getFactionInstances(all_systems_dict: Dict[int, InhabitedSystem], club_syste
             govt = currentSystem.getGovernment()
             inf = faction_ptr['influence']
             active_states: States = States(govt, inf, faction_ptr['active_states'])
-            pending_states: States = States(govt, inf, faction_ptr['pending_states'])
             recovering_states: States = States(govt, inf, faction_ptr['recovering_states'])
+            pending_states: States = States(govt, inf, faction_ptr['pending_states'])
 
             #
             # Create the faction instance and pop it in the appropriate bins
