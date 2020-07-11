@@ -584,7 +584,7 @@ class FactionInstance(Faction):
         if self.mySystem.needsPermit():
             perm = 1.0
         row['permit'] = perm
-        row['allid'] = self.get_allegiance_id()
+        #row['allid'] = self.get_allegiance_id()
 
         # make dict of my happiness, influence, states
 
