@@ -705,6 +705,9 @@ def display_click_data(squadName, regName):
     unreg = TheUnregion()
     return unreg.getFigure(df), mapOracleMd
 
+#
+# Unfortunately, this doesn't help.... need to restart all dynos.
+#
 @app.server.route('/shutdown', methods=['GET','POST'])
 def shutdown():
     #shutdown_server()

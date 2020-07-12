@@ -2,8 +2,6 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
-#
-#   SPDX-License-Identifier: BSD-3-Clause
 import logging
 import os
 import tempfile
@@ -19,6 +17,15 @@ from craid.eddb.util.dataUpdate.MakeHistoryFile import appendTodaysData, cleanHi
 from craid.eddb.util.dataUpdate.MakeSmolFiles import deleteOldFiles, munchFile, unDeleteOldFiles
 from craid.eddb.util.dataUpdate.UploadToAmazon import uploadToAWSFromTemp
 
+OKEY_DOKEY = 0
+ERROR_UPLOADING_TO_AWS = 7
+ERROR_UPDATING_HISTORY_FILE = 6
+ERROR_MAKING_KEY_FILES = 5
+ERROR_GETTING_DATA_ARRAYS = 4
+ERROR_DELETING_FILES = 3
+ERROR_CHECKING_TIMES = 2
+NOT_ALL_UPDATES_READY = 1
+
 if __name__ == '__main__':
     #
     # Fire up logger
@@ -26,9 +33,9 @@ if __name__ == '__main__':
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.INFO
 
-    requests.post(url='http://127.0.0.1:5000/shutdown')
+    #requests.post(url='http://127.0.0.1:5000/shutdown')
     #print( str(os.getcwd() ))
-    exit(0)
+    #exit(0)
 
     #
     # Check if EDDB's data is newer than ours
@@ -36,11 +43,11 @@ if __name__ == '__main__':
     try:
         allUpdatesReady = eddbUpdateReadyForTemp()
         if not allUpdatesReady:
-            exit(1)
+            exit(NOT_ALL_UPDATES_READY)
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))
-        exit(2)
+        exit(ERROR_CHECKING_TIMES)
 
     #
     # Get rid of old files
@@ -51,7 +58,7 @@ if __name__ == '__main__':
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))
-        exit(3)
+        exit(ERROR_DELETING_FILES)
 
     #
     # Make key files from new large data files
@@ -62,7 +69,7 @@ if __name__ == '__main__':
         traceback.print_exc()
         logging.error(str(e))
         unDeleteOldFiles() #NOTE: new
-        exit(4)
+        exit(ERROR_GETTING_DATA_ARRAYS)
 
     #
     # Make smol-.gz files from keys+large data files
@@ -78,7 +85,7 @@ if __name__ == '__main__':
         traceback.print_exc()
         logging.error(str(e))
         unDeleteOldFiles() #NOTE: new
-        exit(5)
+        exit(ERROR_MAKING_KEY_FILES)
 
     #
     # Get history from AWS, update & clean it
@@ -93,8 +100,8 @@ if __name__ == '__main__':
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))
-        # ?????????????? unDeleteOldFiles() #NOTE: new
-        exit(6)
+        # ?????????????? unDeleteOldFiles() # NOTE: not sure about this
+        exit(ERROR_UPDATING_HISTORY_FILE)
 
     #
     # TODO: Test files for validity here
@@ -123,10 +130,14 @@ if __name__ == '__main__':
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))
-        exit(7)
+        exit(ERROR_UPLOADING_TO_AWS)
 
     #
     # FIXME: check new files into github
     #
 
-    exit(0)
+    #
+    # Restarts the production app server
+    #
+    requests.post(url='https://club-raiders.herokuapp.com/shutdown')
+    exit(OKEY_DOKEY)
