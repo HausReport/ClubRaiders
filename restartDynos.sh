@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # Set up the Heroku scheduler to run this command every hour. See example setup at https://goo.gl/nMCSH3
 #
 # Requires env vars to be set in Heroku with `heroku config:set`:
