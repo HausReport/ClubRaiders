@@ -6,6 +6,7 @@
 import gzip
 import logging
 import os
+import shutil
 import tempfile
 from shutil import copyfile
 from typing import Dict, List, Set
@@ -56,12 +57,29 @@ def deleteOldFiles():
                 'keys-factions_of_interest_keys.pkl', 'keys-factions-of-interest-keys.pkl']
     eFiles = ['factions.jsonl', 'stations.jsonl', 'systems_populated.jsonl']
 
+    #
+    # Step 0: Clean recovery directory
+    #
     tmpDir = tempfile.gettempdir()
-    inFile = os.path.join(tmpDir, 'smol-systems_populated.jsonl.gz')
-    if os.path.exists(inFile):
-        outFile = os.path.join(tmpDir, 'smol-sys-old.jsonl.gz')
-        copyfile(inFile,outFile)
+    recoverDir = os.path.join(tmpDir, "crec")
+    if not os.path.exists(recoverDir):
+        os.makedirs(recoverDir)
+    else:
+        clearRecoveryFolder()
 
+    #
+    # Step 1: copy old systems file to new old-systems file
+    #
+    inFile = os.path.join(tmpDir, 'smol-systems_populated.jsonl.gz')
+    outFile = os.path.join(tmpDir, 'smol-sys-old.jsonl.gz')
+    recFile = os.path.join(recoverDir, 'smol-sys-old.jsonl.gz')
+    if os.path.exists(inFile):
+        copyfile(outFile, recFile)
+        copyfile(inFile, outFile)
+
+    #
+    # Step 2: generate all filename permutations
+    #
     allFiles = keyFiles
     for fName in eFiles:
         allFiles.append(fName)
@@ -69,12 +87,40 @@ def deleteOldFiles():
         allFiles.append("smol-" + fName + ".gz")
         allFiles.append("smol-" + fName)
 
+    #
+    # Step 3: delete the files (move to recovery dir)
+    #
     for fName in allFiles:
         tmpDir = tempfile.gettempdir()
         outFile = os.path.join(tmpDir, fName)
+        recFile = os.path.join(recoverDir, fName)
         if os.path.exists(outFile):
             logging.info("removing: " + outFile)
+            shutil.copy2(outFile, recFile)  # NOTE: copy2 to preserve file modification time
             os.remove(outFile)
+
+
+def unDeleteOldFiles():
+    tmpDir = tempfile.gettempdir()
+    recoveryDir = os.path.join(tmpDir, "crec")
+    for filename in os.listdir(recoveryDir):
+        fromFile = os.path.join(recoveryDir, filename)
+        toFile = os.path.join(tmpDir, filename)
+        shutil.copy2(fromFile, toFile)  # NOTE: copy2 to preserve file modification time
+
+
+def clearRecoveryFolder():
+    tmpDir = tempfile.gettempdir()
+    folder = os.path.join(tmpDir, "crec")
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
 
 
 if __name__ == '__main__':

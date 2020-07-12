@@ -5,6 +5,7 @@
 import logging
 import math
 import os
+import sys
 from random import randint
 from typing import Dict, Tuple, List
 
@@ -87,7 +88,7 @@ if DEPLOY:
     #
     server = flask.Flask(appName)
     server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
-    app = dash.Dash(appName, server=server, meta_tags=my_meta_tags)  # , external_stylesheets=[dbc.themes.CYBORG])
+    app = dash.Dash(appName, server=server, meta_tags=my_meta_tags )  # , external_stylesheets=[dbc.themes.CYBORG])
     app.scripts.config.serve_locally = False
     app.scripts.append_script({
         'external_url': 'https://www.googletagmanager.com/gtag/js?id=UA-61576455-2'
@@ -704,9 +705,16 @@ def display_click_data(squadName, regName):
     unreg = TheUnregion()
     return unreg.getFigure(df), mapOracleMd
 
+@app.server.route('/shutdown', methods=['GET','POST'])
+def shutdown():
+    #shutdown_server()
+    print('Server shutting down...')
+    sys.exit(0)
 
 if __name__ == '__main__':
+    #HOT_RELOAD = True
     if DEPLOY:
-        app.server.run(debug=False, threaded=True, use_reloader=False)
+        app.server.run(debug=False, threaded=True, use_reloader=True)
+        #app.run_server(debug=False, threaded=True, use_reloader=False, dev_tools_hot_reload=HOT_RELOAD)
     else:
         app.run_server(debug=True)

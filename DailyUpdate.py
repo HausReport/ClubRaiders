@@ -2,16 +2,21 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+#
+#   SPDX-License-Identifier: BSD-3-Clause
 import logging
+import os
 import tempfile
 import traceback
+
+import requests
 
 from craid.eddb.loader import DataProducer
 from craid.eddb.loader.MakeKeyFiles import loadKeys
 from craid.eddb.loader.strategy.AWSLoader import LoadDataFromAWS
 from craid.eddb.util.dataUpdate.CheckEddbFiles import eddbUpdateReadyForTemp
 from craid.eddb.util.dataUpdate.MakeHistoryFile import appendTodaysData, cleanHistoryFile, copyIntoSource
-from craid.eddb.util.dataUpdate.MakeSmolFiles import deleteOldFiles, munchFile
+from craid.eddb.util.dataUpdate.MakeSmolFiles import deleteOldFiles, munchFile, unDeleteOldFiles
 from craid.eddb.util.dataUpdate.UploadToAmazon import uploadToAWSFromTemp
 
 if __name__ == '__main__':
@@ -20,6 +25,10 @@ if __name__ == '__main__':
     #
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.INFO
+
+    requests.post(url='http://127.0.0.1:5000/shutdown')
+    #print( str(os.getcwd() ))
+    exit(0)
 
     #
     # Check if EDDB's data is newer than ours
@@ -38,7 +47,7 @@ if __name__ == '__main__':
     # NOTE: make copies and fall back to them in case of error?
     #
     try:
-        deleteOldFiles()
+        deleteOldFiles()   # NOTE: could move them to tmp/craid-working
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))
@@ -52,6 +61,7 @@ if __name__ == '__main__':
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))
+        unDeleteOldFiles() #NOTE: new
         exit(4)
 
     #
@@ -67,6 +77,7 @@ if __name__ == '__main__':
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))
+        unDeleteOldFiles() #NOTE: new
         exit(5)
 
     #
@@ -78,15 +89,24 @@ if __name__ == '__main__':
         fName = loader.download_file("history.jsonl", tmpDir)  # .gz is added in the function
         appendTodaysData(fName)
         cleanHistoryFile(fName)
-        copyIntoSource(fName)  # NOTE: Not sure about this on production server
+        copyIntoSource(fName)  # FIXME: Not sure about this on production server
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))
+        # ?????????????? unDeleteOldFiles() #NOTE: new
         exit(6)
 
     #
     # TODO: Test files for validity here
     #
+
+    # factions should be more than 30 rows long
+    # factioninstances should be more than 30 rows long
+    # club factions should be more than 30 rows long
+    # systems should be more than 30 rows long
+
+    # if necessary
+    #unDeleteOldFiles() #NOTE: new
 
     #
     # Upload to AWS
@@ -106,8 +126,7 @@ if __name__ == '__main__':
         exit(7)
 
     #
-    # TODO: no copy of history exists in temp
-    # NOTE: check in to github
+    # FIXME: check new files into github
     #
 
     exit(0)
