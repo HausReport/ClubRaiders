@@ -10,14 +10,36 @@ from datetime import datetime
 
 import urllib3
 
+frags = ["stations.jsonl", "systems_populated.jsonl", "factions.jsonl"]
+
 
 def eddbUpdateReadyForTemp():
     tmpDir = tempfile.gettempdir()
     return eddbUpdateReady(tmpDir)
 
+def oldestLocalEddbFile() -> datetime:
+    global frags
+    tmpDir = tempfile.gettempdir()
+    now = time.time()
+    oldestSecondsSinceEpoch = now
+
+    # if a file is missing, return 1970
+    # otherwise, return timestamp of oldest file
+    for frag in frags:
+        staFile = os.path.join(tmpDir, "smol-" + frag + ".gz")
+        if os.path.exists(staFile):
+            secs = os.path.getmtime(staFile)
+        else:
+            secs = 0
+        if secs< oldestSecondsSinceEpoch:
+            oldestSecondsSinceEpoch = secs
+
+    dt = datetime.fromtimestamp(oldestSecondsSinceEpoch)  #local tz
+    return dt
+
 
 def eddbUpdateReady(localDirectory: str) -> bool:
-    frags = ["stations.jsonl", "systems_populated.jsonl", "factions.jsonl"]
+    global frags
     for frag in frags:
         staFile = os.path.join(localDirectory, frag + ".gz")
         if not localFileIsOutOfDate(staFile, frag):
@@ -67,10 +89,10 @@ def localFileIsOutOfDate(fullLocalFilename: str, shortUrlFragment: str) -> bool:
     # foo = meta_modified
 
     if localMod < gmTime:  # change > to <
-        print("Local file is older than EDDB server file.")
+        print(f"Local file [{fullLocalFilename}] is older than EDDB server file.")
         return True
     else:
-        print("Local file is NOT older than EDDB server file.")
+        print(f"Local file [{fullLocalFilename}] is NOT older than EDDB server file.")
         return False
 
 
