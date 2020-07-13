@@ -3,10 +3,10 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 import logging
-import os
 import tempfile
 import traceback
 
+import os
 import requests
 
 from craid.eddb.loader import DataProducer
@@ -26,65 +26,30 @@ ERROR_DELETING_FILES = 3
 ERROR_CHECKING_TIMES = 2
 NOT_ALL_UPDATES_READY = 1
 
-def restartAllDynos():
-    #app_name = "club-raiders"  #"${HEROKU_APP_NAME}
-    #uname = 'tj_willis@hotmail.com' #"${HEROKU_CLI_USER}
-    #tok = '143ef375-777d-481d-9397-705fae12aa5b' # ${HEROKU_CLI_TOKEN}"
-
-    app_name = os.getenv('HEROKU_APP_NAME')
-    uname = os.getenv('HEROKU_CLI_USER')
-    tok = os.getenv('HEROKU_CLI_TOKEN')
-
-    #print(app_name)
-    #print(uname)
-    #print(tok)
-
-    auth = (uname,tok)
-    url = f"https://api.heroku.com/apps/{app_name}/dynos"
-    print( str(url))
-    headers = { "Content-Type" : "application/json",
-                "Accept"       : "application/vnd.heroku+json; version=3"}
-    req = requests.delete(url=url, auth=auth, headers=headers)
-    print( str(req))
-    print( req.content)
-
-
-if __name__ == '__main__':
-    #
-    # Fire up logger
-    #
-    logging.getLogger().addHandler(logging.StreamHandler())
-    logging.getLogger().level = logging.INFO
-
-    #restartAllDynos()
-    #exit(0)
-    #requests.post(url='http://127.0.0.1:5000/shutdown')
-    #print( str(os.getcwd() ))
-    #exit(0)
-
+def runUpdate(checked=False) -> int:
     #
     # Check if EDDB's data is newer than ours
     #
     try:
         allUpdatesReady = eddbUpdateReadyForTemp()
         if not allUpdatesReady:
-            exit(NOT_ALL_UPDATES_READY)
+            return(NOT_ALL_UPDATES_READY)
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))
-        exit(ERROR_CHECKING_TIMES)
+        return(ERROR_CHECKING_TIMES)
 
     #
     # Get rid of old files
     # NOTE: make copies and fall back to them in case of error?
     #
     try:
-        # FIXME: this chokes if smol-sys-old.jsonl.gz isnt in tmp
         deleteOldFiles()   # NOTE: could move them to tmp/craid-working
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))
-        exit(ERROR_DELETING_FILES)
+        unDeleteOldFiles() #NOTE: new
+        return(ERROR_DELETING_FILES)
 
     #
     # Make key files from new large data files
@@ -95,7 +60,7 @@ if __name__ == '__main__':
         traceback.print_exc()
         logging.error(str(e))
         unDeleteOldFiles() #NOTE: new
-        exit(ERROR_GETTING_DATA_ARRAYS)
+        return(ERROR_GETTING_DATA_ARRAYS)
 
     #
     # Make smol-.gz files from keys+large data files
@@ -111,7 +76,7 @@ if __name__ == '__main__':
         traceback.print_exc()
         logging.error(str(e))
         unDeleteOldFiles() #NOTE: new
-        exit(ERROR_MAKING_KEY_FILES)
+        return(ERROR_MAKING_KEY_FILES)
 
     #
     # Get history from AWS, update & clean it
@@ -127,7 +92,7 @@ if __name__ == '__main__':
         traceback.print_exc()
         logging.error(str(e))
         # ?????????????? unDeleteOldFiles() # NOTE: not sure about this
-        exit(ERROR_UPDATING_HISTORY_FILE)
+        return(ERROR_UPDATING_HISTORY_FILE)
 
     #
     # TODO: Test files for validity here
@@ -156,7 +121,7 @@ if __name__ == '__main__':
     except Exception as e:
         traceback.print_exc()
         logging.error(str(e))
-        exit(ERROR_UPLOADING_TO_AWS)
+        return(ERROR_UPLOADING_TO_AWS)
 
     #
     # FIXME: check new files into github
@@ -168,4 +133,14 @@ if __name__ == '__main__':
     # this only restarts 1 dyno: requests.post(url='https://club-raiders.herokuapp.com/shutdown')
     # this restarts all dynos
     #restartAllDynos()
-    exit(OKEY_DOKEY)
+    return(OKEY_DOKEY)
+
+if __name__ == '__main__':
+    #
+    # Fire up logger
+    #
+    logging.getLogger().addHandler(logging.StreamHandler())
+    logging.getLogger().level = logging.INFO
+
+    ret = runUpdate()
+    exit(ret)
