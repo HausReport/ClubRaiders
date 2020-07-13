@@ -26,6 +26,29 @@ ERROR_DELETING_FILES = 3
 ERROR_CHECKING_TIMES = 2
 NOT_ALL_UPDATES_READY = 1
 
+def restartAllDynos():
+    #app_name = "club-raiders"  #"${HEROKU_APP_NAME}
+    #uname = 'tj_willis@hotmail.com' #"${HEROKU_CLI_USER}
+    #tok = '143ef375-777d-481d-9397-705fae12aa5b' # ${HEROKU_CLI_TOKEN}"
+
+    app_name = os.getenv('HEROKU_APP_NAME')
+    uname = os.getenv('HEROKU_CLI_USER')
+    tok = os.getenv('HEROKU_CLI_TOKEN')
+
+    #print(app_name)
+    #print(uname)
+    #print(tok)
+
+    auth = (uname,tok)
+    url = f"https://api.heroku.com/apps/{app_name}/dynos"
+    print( str(url))
+    headers = { "Content-Type" : "application/json",
+                "Accept"       : "application/vnd.heroku+json; version=3"}
+    req = requests.delete(url=url, auth=auth, headers=headers)
+    print( str(req))
+    print( req.content)
+
+
 if __name__ == '__main__':
     #
     # Fire up logger
@@ -33,6 +56,8 @@ if __name__ == '__main__':
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.INFO
 
+    #restartAllDynos()
+    #exit(0)
     #requests.post(url='http://127.0.0.1:5000/shutdown')
     #print( str(os.getcwd() ))
     #exit(0)
@@ -139,5 +164,8 @@ if __name__ == '__main__':
     #
     # Restarts the production app server
     #
-    requests.post(url='https://club-raiders.herokuapp.com/shutdown')
+    # this only restarts 1 dyno
+    #requests.post(url='https://club-raiders.herokuapp.com/shutdown')
+    # this restarts all dynos
+    #restartAllDynos()
     exit(OKEY_DOKEY)
