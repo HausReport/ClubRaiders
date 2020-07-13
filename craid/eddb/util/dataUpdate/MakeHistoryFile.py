@@ -79,7 +79,8 @@ from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
 # fName = '../../../../../../../data/history.jsonl.gz'
 
 def copyIntoSource(fName: str):
-    dest = os.path.join("..", "..", "..", "..", "data", "history.jsonl.gz")
+    #dest = os.path.join("..", "..", "..", "..", "data", "history.jsonl.gz")
+    dest = os.path.join("data", "history.jsonl.gz")
     shutil.copy(fName, dest, follow_symlinks=True)
 
 

@@ -79,6 +79,7 @@ if __name__ == '__main__':
     # NOTE: make copies and fall back to them in case of error?
     #
     try:
+        # FIXME: this chokes if smol-sys-old.jsonl.gz isnt in tmp
         deleteOldFiles()   # NOTE: could move them to tmp/craid-working
     except Exception as e:
         traceback.print_exc()
@@ -164,8 +165,7 @@ if __name__ == '__main__':
     #
     # Restarts the production app server
     #
-    # this only restarts 1 dyno
-    #requests.post(url='https://club-raiders.herokuapp.com/shutdown')
+    # this only restarts 1 dyno: requests.post(url='https://club-raiders.herokuapp.com/shutdown')
     # this restarts all dynos
     #restartAllDynos()
     exit(OKEY_DOKEY)

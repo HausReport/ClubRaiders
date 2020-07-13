@@ -48,7 +48,8 @@ def munchFile(keys: Set[int], xinName: str):
             ujson.dump(foo, file)
             file.write('\n')
 
-    gitFile = os.path.join("..", "..", "..", "..", "data", outName)
+    #gitFile = os.path.join("..", "..", "..", "..", "data", outName)
+    gitFile = os.path.join("data", outName)
     copyfile(outFile, gitFile)
 
 
@@ -73,8 +74,9 @@ def deleteOldFiles():
     inFile = os.path.join(tmpDir, 'smol-systems_populated.jsonl.gz')
     outFile = os.path.join(tmpDir, 'smol-sys-old.jsonl.gz')
     recFile = os.path.join(recoverDir, 'smol-sys-old.jsonl.gz')
-    if os.path.exists(inFile):
+    if os.path.exists(outFile):
         copyfile(outFile, recFile)
+    if os.path.exists(inFile):
         copyfile(inFile, outFile)
 
     #
@@ -123,29 +125,29 @@ def clearRecoveryFolder():
             print('Failed to delete %s. Reason: %s' % (file_path, e))
 
 
-if __name__ == '__main__':
-    #
-    # Fire up logger
-    #
-    logging.getLogger().addHandler(logging.StreamHandler())
-    logging.getLogger().level = logging.DEBUG
-
-    #
-    # Get rid of old files
-    #
-    deleteOldFiles()
-
-    # need to add exceptions to DataProducer.getDataArrays and handle here
-
-    # download large files from eddb
-    DataProducer.getDataArrays(writeKeyFiles=True, useEddb=True)
-
-    # load key files & munch
-    club_faction_keys = loadKeys("factions-of-interest-keys")
-    munchFile(club_faction_keys, 'factions.jsonl')
-    club_system_keys = loadKeys('club-system-keys')
-    munchFile(club_system_keys, 'systems_populated.jsonl')
-    club_station_keys = loadKeys("club-station-keys")
-    munchFile(club_station_keys, 'stations.jsonl')
+# if __name__ == '__main__':
+#     #
+#     # Fire up logger
+#     #
+#     logging.getLogger().addHandler(logging.StreamHandler())
+#     logging.getLogger().level = logging.DEBUG
+#
+#     #
+#     # Get rid of old files
+#     #
+#     deleteOldFiles()
+#
+#     # need to add exceptions to DataProducer.getDataArrays and handle here
+#
+#     # download large files from eddb
+#     DataProducer.getDataArrays(writeKeyFiles=True, useEddb=True)
+#
+#     # load key files & munch
+#     club_faction_keys = loadKeys("factions-of-interest-keys")
+#     munchFile(club_faction_keys, 'factions.jsonl')
+#     club_system_keys = loadKeys('club-system-keys')
+#     munchFile(club_system_keys, 'systems_populated.jsonl')
+#     club_station_keys = loadKeys("club-station-keys")
+#     munchFile(club_station_keys, 'stations.jsonl')
 
 # inName = 'factions.jsonl'

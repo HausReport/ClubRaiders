@@ -708,16 +708,14 @@ def display_click_data(squadName, regName):
 #
 # Unfortunately, this doesn't help.... need to restart all dynos.
 #
-@app.server.route('/shutdown', methods=['GET','POST'])
-def shutdown():
-    #shutdown_server()
-    print('Server shutting down...')
-    sys.exit(0)
+# @app.server.route('/shutdown', methods=['GET','POST'])
+# def shutdown():
+#     #shutdown_server()
+#     print('Server shutting down...')
+#     sys.exit(0)
 
 if __name__ == '__main__':
-    #HOT_RELOAD = True
     if DEPLOY:
         app.server.run(debug=False, threaded=True, use_reloader=True)
-        #app.run_server(debug=False, threaded=True, use_reloader=False, dev_tools_hot_reload=HOT_RELOAD)
     else:
         app.run_server(debug=True)
