@@ -54,11 +54,11 @@ class DailyUpdate(object):
         # NOTE: make copies and fall back to them in case of error?
         #
         try:
-            deleteOldFiles()  # NOTE: could move them to tmp/craid-working
+            deleteOldFiles()
         except Exception as e:
             traceback.print_exc()
             logging.error(str(e))
-            unDeleteOldFiles()  # NOTE: new
+            unDeleteOldFiles()
             return DailyUpdate.ERROR_DELETING_FILES
 
         #

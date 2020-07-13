@@ -52,7 +52,7 @@ if __name__ == '__main__':
     logging.getLogger().level = logging.INFO
 
     logging.info("Pausing 5 minutes for startup...")
-    # pause.minutes(5)   FIXME: uncomment
+    # pause.minutes(5)   FIXME: uncomment for production
 
     dup = DailyUpdate()
 
