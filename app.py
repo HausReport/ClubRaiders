@@ -8,6 +8,7 @@ import os
 import sys
 from random import randint
 from typing import Dict, Tuple, List
+from multiprocessing import Process
 
 import dash
 import dash_core_components as dcc
@@ -20,6 +21,7 @@ import ujson
 from dash.dependencies import Input, Output
 
 import craid.eddb.loader.DataProducer as dp
+from DailyUpdate import DailyUpdate
 from appHelpers import AnnoyingCrap, tab_style, tab_selected_style, enCard, makeArticleCard, my_meta_tags, \
     makeDiscordIframe
 from craid.club.regions.RegionFactory import RegionFactory
@@ -717,6 +719,10 @@ def display_click_data(squadName, regName):
 #     sys.exit(0)
 
 if __name__ == '__main__':
+    dup = DailyUpdate()
+    p = Process(target=dup.run) #, args=('bob',))
+    p.start()
+    #dup.run()
     if DEPLOY:
         app.server.run(debug=False, threaded=True, use_reloader=True)
     else:

@@ -202,7 +202,7 @@ class Oracle:
         #
 
     def getFactionTable(self):
-        n_by_sys = self.df.groupby("factionName")["factionName", "systemName", "population", "influence"].agg(
+        n_by_sys = self.df.groupby("factionName")[["factionName", "systemName", "population", "influence"]].agg(
             {'factionName': 'first', 'systemName': 'count', 'population': 'sum', 'influence': 'sum'})
         n_by_sys.columns = ['Faction Name', 'Systems', 'Population', 'Total Influence']
         import dash_table

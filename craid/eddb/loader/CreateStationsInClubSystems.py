@@ -70,5 +70,5 @@ def loadStationsInClubSystems(loader: DataLoader,
                         #
                         curSys.addStation(sta)
 
-    logging.info("Read %d lines of station data, adding %d\n", nLines, nAdded)
+    logging.info("Read %d lines of station data, adding %d", nLines, nAdded)
     return station_keys
