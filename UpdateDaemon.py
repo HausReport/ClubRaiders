@@ -54,7 +54,7 @@ if __name__ == '__main__':
         datefmt='%Y-%m-%d %H:%M:%S')
 
     logging.info("Pausing 5 minutes for startup...")
-    # pause.minutes(5)   FIXME: uncomment for production
+    pause.minutes(5)   #FIXME: uncomment for production
 
     dup = DailyUpdate()
 
