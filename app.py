@@ -32,9 +32,12 @@ from craid.eddb.util.Printmem import printmem
 #
 # Set up logging
 #
-
-logging.getLogger().addHandler(logging.StreamHandler())
-logging.getLogger().level = logging.DEBUG
+logging.basicConfig(
+    format='APP - %(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S')
+#logging.getLogger().addHandler(logging.StreamHandler())
+#logging.getLogger().level = logging.DEBUG
 
 styles = {
     'pre': {
@@ -254,7 +257,6 @@ app.layout = html.Div([
 
 printmem("End")
 
-
 # =============================================================
 # Tab handlers
 # =============================================================
@@ -291,7 +293,7 @@ def render_content(tab):
             ])
         return "clubSpace", tab_2
     elif tab == 'tab-3':
-        print('tab-3 clicked')
+        #print('tab-3 clicked')
         return "community", html.Div([
             html.H1('ClubRaiders Community Tools & Resources'),
             html.Table(className="clean", children=[
@@ -331,7 +333,7 @@ def render_content(tab):
             ])
         ], className="container")
     elif tab == 'tab-4':
-        print('tab-4 clicked')
+        #print('tab-4 clicked')
         return "aboutTheClub", html.Div(children=[
             html.Article([
                 AnnoyingCrap.getMarkdown("aboutClub")
@@ -339,7 +341,7 @@ def render_content(tab):
             seer.getFactionTable()
         ])
     elif tab == 'tab-5':
-        print('tab-5 clicked')
+        #print('tab-5 clicked')
         return "aboutClubRaiders", html.Article([
             AnnoyingCrap.getMarkdown("aboutRaiders")
         ])
@@ -383,7 +385,7 @@ def sort_changed(query: str, sort_by: List):
     if query is None or len(query) == 0:
         updateUrl('filter', '')
     else:
-        print("Updating filter: " + str(query))
+        logging.debug("Updating filter: " + str(query))
         updateUrl('filter', str(query))
 
     if sort_by is None or len(sort_by) == 0:
@@ -395,7 +397,7 @@ def sort_changed(query: str, sort_by: List):
         if len(sort_by) == 0:
             updateUrl('sort', '')
         else:
-            print("Updating sort: " + str(sort_by))
+            logging.debug("Updating sort: " + str(sort_by))
             updateUrl('sort', sort_by)
 
     ssb: str = str(sort_by)
@@ -508,9 +510,9 @@ def update_sort(n_clicks, val3):
     value, act = was_clicked(ctx, 'activityDropdown.value')
     # activity was clicked
     if value is not None and value != '':
-        print("Sort: selected activity: " + str(value))
+        logging.debug("Sort: selected activity: " + str(value))
         newSort = AnnoyingCrap.getSort(int(value))
-        print("Sort: " + str(newSort))
+        logging.debug("Sort: " + str(newSort))
         return newSort
 
     logging.warning("None of the sort cases hit")
@@ -552,7 +554,7 @@ def getFacInfoSysInfo(sysId, facId):
 
     theFac: FactionInstance = sysIdFacIdToFactionInstance.get((sysId, facId))
     if theFac is not None:
-        print("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
+        logging.debug("I think that's system %s and faction %s", theFac.getSystemName(), theFac.get_name())
         factionInfo = theFac.get_name()
 
         factionRows: pd.DataFrame = df[df['factionName'].str.match(factionInfo)]
@@ -599,7 +601,7 @@ def update_graphs(rows, derived_virtual_selected_rows, active_cell, page_cur, pa
             logical_row = 0
         sysId = rows[logical_row]['sysId']
         facId = rows[logical_row]['facId']
-        print(str(sysId) + "/" + str(facId))
+        logging.debug(str(sysId) + "/" + str(facId))
         factionInfo, systemInfo = getFacInfoSysInfo(sysId, facId)
 
     factionWidget = dcc.Markdown(factionInfo)
@@ -623,15 +625,15 @@ def display_click_data(clickData):
             pts0 = pts[0]
             if pts0 is not None:
                 sysName = pts0["text"]
-                print("sysName = " + sysName)
+                logging.debug("sysName = " + sysName)
                 systemRows = df[df['systemName'] == sysName]
                 if systemRows is not None:
                     facId = systemRows['facId'].iloc[0]
                     facName = systemRows['factionName'].iloc[0]
                     sysId = systemRows['sysId'].iloc[0]
-                    print("facName = " + str(facName))
-                    print("facId = " + str(facId))
-                    print("sysId = " + str(sysId))
+                    logging.debug("facName = " + str(facName))
+                    logging.debug("facId = " + str(facId))
+                    logging.debug("sysId = " + str(sysId))
                     factionInfo, systemInfo = getFacInfoSysInfo(sysId, facId)
 
     factionWidget = dcc.Markdown(factionInfo)
@@ -657,7 +659,7 @@ def was_clicked2(ctx, button_id):
     elt0 = triggered[0]
     prop_id = elt0['prop_id']
 
-    print("prop_id=" + str(prop_id))
+    #print("prop_id=" + str(prop_id))
     inputs = aDict['inputs']  # ['prop_id']
     # activity = inputs['activityDropdown.value']
 

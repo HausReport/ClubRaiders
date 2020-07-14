@@ -176,7 +176,7 @@ class AnnoyingCrap(object):
 
     @staticmethod
     def getSquadronDropdown():
-        print("dropdown len=" + str(len(SquadronXYZ.myDict)))
+        logging.info("dropdown len=" + str(len(SquadronXYZ.myDict)))
         opts = []
         logging.debug("Loading squadron dropdown")
         for it in SquadronXYZ.myDict.keys():
@@ -195,7 +195,7 @@ class AnnoyingCrap(object):
 
     @staticmethod
     def getRegionDropdown():
-        print("dropdown len=" + str(len(RegionFactory.regionDict)))
+        logging.info("dropdown len=" + str(len(RegionFactory.regionDict)))
         opts = []
         # logging.debug("Loading squadron dropdown")
         for it in RegionFactory.regionDict.keys():

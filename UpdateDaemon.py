@@ -25,12 +25,12 @@ def restartAllDynos():
 
     auth = (uname, tok)
     url = f"https://api.heroku.com/apps/{app_name}/dynos"
-    print(str(url))
+    logging.info(str(url))
     headers = {"Content-Type": "application/json",
                "Accept"      : "application/vnd.heroku+json; version=3"}
     req = requests.delete(url=url, auth=auth, headers=headers)
-    print(str(req))
-    print(req.content)
+    logging.info(str(req))
+    logging.info(req.content)
 
 
 # 0. WAIT 5 MINUTES (LET WEB SERVER STARTUP & GET FILES.  AVOID RACE CONDITION.)
@@ -48,8 +48,10 @@ if __name__ == '__main__':
     #
     # Fire up logger
     #
-    logging.getLogger().addHandler(logging.StreamHandler())
-    logging.getLogger().level = logging.INFO
+    logging.basicConfig(
+        format='DMN - %(asctime)s %(levelname)-8s %(message)s',
+        level=logging.INFO,
+        datefmt='%Y-%m-%d %H:%M:%S')
 
     logging.info("Pausing 5 minutes for startup...")
     # pause.minutes(5)   FIXME: uncomment for production
