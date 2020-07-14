@@ -76,7 +76,7 @@ class LoadDataFromEDDB(DataLoader):
         # If neither exist, download the file to the temp dir
         #
         if forceDownload or fileIsOutOfDate or not os.path.exists(fName):
-            logging.info("1- downloading to: " + fName)
+            #logging.info("1- downloading to: " + fName)
             fName = self.download_file(shortName, tmpDir)
             # fName +=".gz"  added in download_file
 

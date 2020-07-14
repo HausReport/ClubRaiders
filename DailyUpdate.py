@@ -35,7 +35,14 @@ class DailyUpdate(object):
         if cls._instance is None:
             #print('Creating the object')
             cls._instance = super(DailyUpdate, cls).__new__(cls)
+            logging.basicConfig(
+                format='DMN - %(asctime)s %(levelname)-8s %(message)s',
+                level=logging.INFO,
+                datefmt='%Y-%m-%d %H:%M:%S')
+            logging.info("Creating dailyupdate singleton")
             # Put any initialization here.
+        else:
+            logging.info("Reusing dailyupdate singleton")
         return cls._instance
 
     def run(self):
