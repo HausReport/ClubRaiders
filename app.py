@@ -718,6 +718,7 @@ def display_click_data(squadName, regName):
 #     print('Server shutting down...')
 #     sys.exit(0)
 
+print(f"########### __name__ = [{__name__}]")
 if __name__ == '__main__':
     print('-----------> TOP OF MAIN <-----------------')
     #
