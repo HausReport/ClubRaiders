@@ -719,6 +719,7 @@ def display_click_data(squadName, regName):
 #     sys.exit(0)
 
 if __name__ == '__main__':
+    print('-----------> TOP OF MAIN <-----------------')
     #
     # Start Daily Update Daemon
     #

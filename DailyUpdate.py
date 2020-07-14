@@ -33,7 +33,7 @@ class DailyUpdate(object):
 
     def __new__(cls):
         if cls._instance is None:
-            #print('Creating the object')
+            print('-----------> CREATING THE SINGLETON <-----------------')
             cls._instance = super(DailyUpdate, cls).__new__(cls)
             logging.basicConfig(
                 format='DMN - %(asctime)s %(levelname)-8s %(message)s',
