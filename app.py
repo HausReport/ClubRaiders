@@ -39,6 +39,8 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S')
 
+
+
 styles = {
     'pre': {
         'border'    : 'thin lightgrey solid',
@@ -717,8 +719,11 @@ def display_click_data(squadName, regName):
 #     sys.exit(0)
 
 if __name__ == '__main__':
+    #
+    # Start Daily Update Daemon
+    #
     dup = DailyUpdate()
-    p = Process(target=dup.run) #, args=('bob',))
+    p = Process(target=dup.run)  # , args=('bob',))
     p.start()
     #dup.run()
     if DEPLOY:

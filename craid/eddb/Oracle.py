@@ -55,16 +55,70 @@ class Oracle:
             return
 
         frame: pd.DataFrame = df
+        numUniqueSystems = int(frame['systemName'].nunique())
 
         #
-        # This was a little nuanced - was double-counting population of sytems with two
+        # This was a little nuanced - was double-counting population of systems with two
         # club faction instances
         #
-        self.myDict['number_of_factions'] = "{:,}".format(int(frame['systemName'].nunique()))
+        self.myDict['number_of_factions'] = "{:,}".format(numUniqueSystems)
         n_by_sys = df.groupby("systemName")[["systemName", "population"]].agg(
             {'systemName': 'first', 'population': 'first'})
         total_pop = n_by_sys["population"].sum()
         total_systems = n_by_sys["systemName"].count()
+
+        if total_systems==0:
+            self.myDict['systems_active'] = 0
+            self.myDict['systems_active_pop'] = 0
+            self.myDict['systems_control'] = 0
+            self.myDict['systems_control_perc'] = 0.0
+            self.myDict['west_fac_name'] = ""
+            self.myDict['west_sys_name'] = ""
+            self.myDict['west_sys_x'] = 0
+            self.myDict['east_fac_name'] = ""
+            self.myDict['east_sys_name'] = ""
+            self.myDict['east_sys_x'] = 0
+            self.myDict['north_fac_name'] = ""
+            self.myDict['north_sys_name'] = ""
+            self.myDict['north_sys_z'] = 0
+            self.myDict['south_fac_name'] = ""
+            self.myDict['south_sys_name'] = ""
+            self.myDict['south_sys_z'] = 0
+            self.myDict['zenith_fac_name'] = ""
+            self.myDict['zenith_sys_name'] = ""
+            self.myDict['zenith_sys_y'] = 0
+            self.myDict['nadir_fac_name'] = ""
+            self.myDict['nadir_sys_name'] = ""
+            self.myDict['nadir_sys_y'] = 0
+            self.myDict['population_min'] = 0
+            self.myDict['population_max'] = 0
+            self.myDict['population_avg'] = 0
+            self.myDict['population_sum'] = 0
+            self.myDict['population_50p'] = 0
+            self.myDict['population_25p'] = 0
+            self.myDict['influence_min'] = 0
+            self.myDict['influence_max'] = 0
+            self.myDict['influence_avg'] = 0
+            self.myDict['influence_sum'] = 0
+            self.myDict['influence_50p'] = 0
+            self.myDict['influence_25p'] = 0
+            self.myDict['uncontrol_influence_min'] = 0
+            self.myDict['uncontrol_influence_max'] = 0
+            self.myDict['uncontrol_influence_avg'] = 0
+            self.myDict['uncontrol_influence_sum'] = 0
+            self.myDict['uncontrol_influence_50p'] = 0
+            self.myDict['uncontrol_influence_25p'] = 0
+            self.myDict['n_wars'] = 0
+            self.myDict['n_elections'] = 0
+            self.myDict['n_expansions'] = 0
+            self.myDict['n_retreats'] = 0
+            self.myDict['n_very_easy'] = 0
+            self.myDict['diff_active_systems'] = 0 # formatLargeDiff(diff_active_systems)
+            self.myDict['diff_population'] = 0 # formatLargeDiff(diff_population)
+            self.myDict['diff_control_systems'] = 0 #formatLargeDiff(diff_control_systems)
+            self.myDict['diff_avg_influence'] = 0 #formatFloatDiff(diff_avg_influence)
+            self.myDict['diff_total_influence'] = 0 #formatFloatDiff(diff_total_influence)
+            return
 
         #
         # General statistics
