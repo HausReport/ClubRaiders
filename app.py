@@ -719,6 +719,17 @@ def display_click_data(squadName, regName):
 #     sys.exit(0)
 
 print(f"########### __name__ = [{__name__}]")
+#
+# Running on Heroku
+#
+if __name__ == 'app':
+    print('-----------> TOP OF APP <-----------------')
+    dup = DailyUpdate()
+    p = Process(target=dup.run)  # , args=('bob',))
+    p.start()
+#
+# Running on Dev
+#
 if __name__ == '__main__':
     print('-----------> TOP OF MAIN <-----------------')
     #
