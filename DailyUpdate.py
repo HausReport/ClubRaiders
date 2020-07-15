@@ -65,7 +65,7 @@ class DailyUpdate(object):
                 logging.info("Detected old or missing datafile.")
                 returnValue = -1
                 while returnValue != 0:
-                    returnValue = dup.runUpdate(forceDownload=force)
+                    returnValue = self.runUpdate(forceDownload=force)
 
                     if returnValue == DailyUpdate.OKEY_DOKEY:
                         logging.info("Successfully updated files.")
