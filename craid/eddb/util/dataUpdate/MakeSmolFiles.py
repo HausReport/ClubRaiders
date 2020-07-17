@@ -8,6 +8,7 @@ import logging
 import os
 import shutil
 import tempfile
+import traceback
 from shutil import copyfile
 from typing import Dict, List, Set
 
@@ -98,8 +99,14 @@ def deleteOldFiles():
         recFile = os.path.join(recoverDir, fName)
         if os.path.exists(outFile):
             logging.info("removing: " + outFile)
-            shutil.copy2(outFile, recFile)  # NOTE: copy2 to preserve file modification time
-            os.remove(outFile)
+            try:
+                shutil.copy2(outFile, recFile)  # NOTE: copy2 to preserve file modification time
+                os.remove(outFile)
+            except Exception as e:
+                # FIXME: not really sure how missing file problem can happen here
+                # but according to the logs it can happen
+                traceback.print_exc()
+                logging.error(str(e))
 
 
 def unDeleteOldFiles():
