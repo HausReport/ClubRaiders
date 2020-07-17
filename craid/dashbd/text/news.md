@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-Player actions taking place in the Sirius region against Hodack Prison Colony.  
+"Turning The Wheel" is working to remove Hodack Prison Colony from HR 4979.  
 
 * $n_wars wars in progress
 * $n_elections elections in progress
