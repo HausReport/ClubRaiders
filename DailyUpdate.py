@@ -7,6 +7,7 @@ import traceback
 from craid.eddb.loader import DataProducer
 from craid.eddb.loader.MakeKeyFiles import loadKeys
 from craid.eddb.loader.strategy.AWSLoader import LoadDataFromAWS
+from craid.eddb.util.Singleton import Singleton
 from craid.eddb.util.dataUpdate.CheckEddbFiles import eddbUpdateReadyForTemp
 from craid.eddb.util.dataUpdate.MakeHistoryFile import appendTodaysData, cleanHistoryFile, copyIntoSource
 from craid.eddb.util.dataUpdate.MakeSmolFiles import deleteOldFiles, munchFile, unDeleteOldFiles
@@ -20,7 +21,7 @@ import requests
 from craid.eddb.util.dataUpdate.CheckEddbFiles import oldestLocalEddbFile
 
 
-class DailyUpdate(object):
+class DailyUpdate(object, metaclass=Singleton):
     _instance = None
     OKEY_DOKEY = 0
     ERROR_UPLOADING_TO_AWS = 7
@@ -31,21 +32,30 @@ class DailyUpdate(object):
     ERROR_CHECKING_TIMES = 2
     NOT_ALL_UPDATES_READY = 1
 
-    def __new__(cls):
-        if cls._instance is None:
-            print('-----------> CREATING THE SINGLETON <-----------------')
-            cls._instance = super(DailyUpdate, cls).__new__(cls)
-            logging.basicConfig(
+    # def __new__(cls):
+    #     if cls._instance is None:
+    #         print('-----------> CREATING THE SINGLETON <-----------------')
+    #         cls._instance = super(DailyUpdate, cls).__new__(cls)
+    #         logging.basicConfig(
+    #             format='DMN - %(asctime)s %(levelname)-8s %(message)s',
+    #             level=logging.INFO,
+    #             datefmt='%Y-%m-%d %H:%M:%S')
+    #         logging.info("Creating dailyupdate singleton")
+    #         # Put any initialization here.
+    #     else:
+    #         logging.info("Reusing dailyupdate singleton")
+    #     return cls._instance
+
+
+
+    def run(self):
+        print('-----------> RUNNING THE SINGLETON <-----------------')
+        logging.basicConfig(
                 format='DMN - %(asctime)s %(levelname)-8s %(message)s',
                 level=logging.INFO,
                 datefmt='%Y-%m-%d %H:%M:%S')
-            logging.info("Creating dailyupdate singleton")
-            # Put any initialization here.
-        else:
-            logging.info("Reusing dailyupdate singleton")
-        return cls._instance
+        logging.info("Creating dailyupdate singleton")
 
-    def run(self):
         logging.info("Pausing 5 minutes for startup...")
         pause.minutes(5)  # FIXME: uncomment for production
         while True:
