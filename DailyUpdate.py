@@ -79,8 +79,10 @@ class DailyUpdate(object, metaclass=Singleton):
                 while returnValue != 0:
                     # HERE for lock.acquire()
                     DailyUpdate.lock.acquire()
+                    logging.info("Acquired lock.")
                     returnValue = self.runUpdate(forceDownload=force)
-                    DailyUpdate.lock.acquire()
+                    logging.info("Releasing lock.")
+                    DailyUpdate.lock.release()
                     # HERE for lock.release()
 
                     if returnValue == DailyUpdate.OKEY_DOKEY:
