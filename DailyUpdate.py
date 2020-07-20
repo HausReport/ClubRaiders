@@ -2,6 +2,7 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+import multiprocessing
 import tempfile
 import traceback
 from craid.eddb.loader import DataProducer
@@ -31,6 +32,7 @@ class DailyUpdate(object, metaclass=Singleton):
     ERROR_DELETING_FILES = 3
     ERROR_CHECKING_TIMES = 2
     NOT_ALL_UPDATES_READY = 1
+    lock = multiprocessing.Lock()
 
     # def __new__(cls):
     #     if cls._instance is None:
@@ -75,7 +77,11 @@ class DailyUpdate(object, metaclass=Singleton):
                 logging.info("Detected old or missing datafile.")
                 returnValue = -1
                 while returnValue != 0:
+                    # HERE for lock.acquire()
+                    DailyUpdate.lock.acquire()
                     returnValue = self.runUpdate(forceDownload=force)
+                    DailyUpdate.lock.acquire()
+                    # HERE for lock.release()
 
                     if returnValue == DailyUpdate.OKEY_DOKEY:
                         logging.info("Successfully updated files.")
