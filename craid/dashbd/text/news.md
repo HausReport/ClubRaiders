@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-"Turning The Wheel" is working to remove Hodack Prison Colony from HR 4979.  
+Join the fun in Pleione and HIP 17225!
 
 * $n_wars wars in progress
 * $n_elections elections in progress
