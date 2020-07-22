@@ -517,7 +517,7 @@ def update_sort(n_clicks, val3):
         logging.debug("Sort: " + str(newSort))
         return newSort
 
-    logging.warning("None of the sort cases hit")
+    logging.debug("None of the sort cases hit")
     return defaultSort
 
 
