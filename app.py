@@ -5,7 +5,6 @@
 import logging
 import math
 import os
-import sys
 from random import randint
 from typing import Dict, Tuple, List
 from multiprocessing import Process
@@ -191,15 +190,6 @@ tab_1 = \
                 makeArticleCard("", "faction-drilldown"),
                 makeArticleCard("", "system-drilldown"),
                 makeArticleCard(newsMarkdown, "news"),
-                # makeDiscordCard(
-                #     "## Cabal Operatives\n\nCommanders fighting the BGS war against The Club.",
-                #     "cabal-ops",
-                #     "439201271174660097"),
-                # makeDiscordCard(
-                #     "## Elite BGS\n\nFor resources, questions and discussion about the Elite Background Simulation in general.",
-                #     "elite-bgs",
-                #     "483005833853009950"),
-                # End of left column
             ]),  # td closed
             html.Td(className="clean2", children=[
                 enCard(html.Div(AnnoyingCrap.getMarkdown('overview'), id="activity")),
@@ -740,6 +730,6 @@ if __name__ == '__main__':
     p.start()
     #dup.run()
     if DEPLOY:
-        app.server.run(debug=False, threaded=True, use_reloader=True)
+        app.server.run(debug=False) #, threaded=True, use_reloader=True)
     else:
         app.run_server(debug=True)
