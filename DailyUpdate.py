@@ -2,24 +2,26 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+import logging
 import multiprocessing
+import os
 import tempfile
 import traceback
+from datetime import date, timedelta
+from datetime import datetime
+
+import pause
+import requests
+
 from craid.eddb.loader import DataProducer
 from craid.eddb.loader.MakeKeyFiles import loadKeys
 from craid.eddb.loader.strategy.AWSLoader import LoadDataFromAWS
 from craid.eddb.util.Singleton import Singleton
 from craid.eddb.util.dataUpdate.CheckEddbFiles import eddbUpdateReadyForTemp
+from craid.eddb.util.dataUpdate.CheckEddbFiles import oldestLocalEddbFile
 from craid.eddb.util.dataUpdate.MakeHistoryFile import appendTodaysData, cleanHistoryFile, copyIntoSource
 from craid.eddb.util.dataUpdate.MakeSmolFiles import deleteOldFiles, munchFile, unDeleteOldFiles
 from craid.eddb.util.dataUpdate.UploadToAmazon import uploadToAWSFromTemp
-import logging
-import os
-from datetime import date, timedelta
-from datetime import datetime
-import pause
-import requests
-from craid.eddb.util.dataUpdate.CheckEddbFiles import oldestLocalEddbFile
 
 
 class DailyUpdate(object, metaclass=Singleton):
@@ -48,81 +50,80 @@ class DailyUpdate(object, metaclass=Singleton):
     #         logging.info("Reusing dailyupdate singleton")
     #     return cls._instance
 
-
-
     def run(self):
-        print('-----------> RUNNING THE SINGLETON <-----------------')
-        logging.basicConfig(
+        with DailyUpdate.lock:
+            print('-----------> RUNNING THE SINGLETON: LOCK ACQUIRED <-----------------')
+            logging.basicConfig(
                 format='DMN - %(asctime)s %(levelname)-8s %(message)s',
                 level=logging.INFO,
                 datefmt='%Y-%m-%d %H:%M:%S')
-        logging.info("Creating dailyupdate singleton")
+            logging.info("Creating dailyupdate singleton")
 
-        logging.info("Pausing 5 minutes for startup...")
-        pause.minutes(5)  # FIXME: uncomment for production
-        while True:
-            today = date.today()
-            lastnight = datetime.combine(today, datetime.min.time())
-            tonight = lastnight + timedelta(days=1, hours=2)
-            twoDaysAgo = lastnight + timedelta(days=-2, minutes=5)
-            dt: datetime = oldestLocalEddbFile()
+            logging.info("Pausing 5 minutes for startup...")
+            pause.minutes(5)  # FIXME: uncomment for production
+            while True:
+                today = date.today()
+                lastnight = datetime.combine(today, datetime.min.time())
+                tonight = lastnight + timedelta(days=1, hours=2)
+                twoDaysAgo = lastnight + timedelta(days=-2, minutes=5)
+                dt: datetime = oldestLocalEddbFile()
 
-            retries = 0
+                retries = 0
 
-            if dt < lastnight:
-                force = False
-                # case of one or more missing files
-                if dt < twoDaysAgo:
-                    force = True
-                logging.info("Detected old or missing datafile.")
-                returnValue = -1
-                while returnValue != 0:
-                    # HERE for lock.acquire()
-                    DailyUpdate.lock.acquire()
-                    logging.info("Acquired lock.")
-                    returnValue = self.runUpdate(forceDownload=force)
-                    logging.info("Releasing lock.")
-                    DailyUpdate.lock.release()
-                    # HERE for lock.release()
+                if dt < lastnight:
+                    force = False
+                    # case of one or more missing files
+                    if dt < twoDaysAgo:
+                        force = True
+                    logging.info("Detected old or missing datafile.")
+                    returnValue = -1
+                    while returnValue != 0:
+                        # HERE for lock.acquire()
+                        # DailyUpdate.lock.acquire()
+                        # logging.info("Acquired lock.")
+                        returnValue = self.runUpdate(forceDownload=force)
+                        # logging.info("Releasing lock.")
+                        # DailyUpdate.lock.release()
+                        # HERE for lock.release()
 
-                    if returnValue == DailyUpdate.OKEY_DOKEY:
-                        logging.info("Successfully updated files.")
-                    else:
-                        if returnValue == DailyUpdate.NOT_ALL_UPDATES_READY:
-                            logging.info("Not all updates are ready.")
-                        elif returnValue == DailyUpdate.ERROR_UPLOADING_TO_AWS:
-                            logging.error(f"Error {returnValue} uploading to AWS.")
-                        elif returnValue == DailyUpdate.ERROR_UPDATING_HISTORY_FILE:
-                            logging.error(f"Error {returnValue} updating history file.")
-                        elif returnValue == DailyUpdate.ERROR_MAKING_KEY_FILES:
-                            logging.error(f"Error {returnValue} making key files.")
-                        elif returnValue == DailyUpdate.ERROR_GETTING_DATA_ARRAYS:
-                            logging.error(f"Error {returnValue} getting data arrays.")
-                        elif returnValue == DailyUpdate.ERROR_DELETING_FILES:
-                            logging.error(f"Error {returnValue} deleting files.")
-                        elif returnValue == DailyUpdate.ERROR_CHECKING_TIMES:
-                            logging.error(f"Error {returnValue} checking times.")
+                        if returnValue == DailyUpdate.OKEY_DOKEY:
+                            logging.info("Successfully updated files.")
                         else:
-                            logging.error(f"Error with unknown return value {returnValue}")
+                            if returnValue == DailyUpdate.NOT_ALL_UPDATES_READY:
+                                logging.info("Not all updates are ready.")
+                            elif returnValue == DailyUpdate.ERROR_UPLOADING_TO_AWS:
+                                logging.error(f"Error {returnValue} uploading to AWS.")
+                            elif returnValue == DailyUpdate.ERROR_UPDATING_HISTORY_FILE:
+                                logging.error(f"Error {returnValue} updating history file.")
+                            elif returnValue == DailyUpdate.ERROR_MAKING_KEY_FILES:
+                                logging.error(f"Error {returnValue} making key files.")
+                            elif returnValue == DailyUpdate.ERROR_GETTING_DATA_ARRAYS:
+                                logging.error(f"Error {returnValue} getting data arrays.")
+                            elif returnValue == DailyUpdate.ERROR_DELETING_FILES:
+                                logging.error(f"Error {returnValue} deleting files.")
+                            elif returnValue == DailyUpdate.ERROR_CHECKING_TIMES:
+                                logging.error(f"Error {returnValue} checking times.")
+                            else:
+                                logging.error(f"Error with unknown return value {returnValue}")
 
-                        retries = retries + 1
-                        if retries > 12:
-                            # give up for the day
-                            logging.warning("12 retries - giving up for the day.")
-                            retries = 0
-                            force = True
-                            pause.until(tonight)
-                        else:
-                            logging.info("Pausing 30 minutes before retrying.")
-                            pause.minutes(30)
+                            retries = retries + 1
+                            if retries > 12:
+                                # give up for the day
+                                logging.warning("12 retries - giving up for the day.")
+                                retries = 0
+                                force = True
+                                pause.until(tonight)
+                            else:
+                                logging.info("Pausing 30 minutes before retrying.")
+                                pause.minutes(30)
 
-                logging.info("Restarting all dynos.")
-                self.restartAllDynos()  # This should kill off this process when running in production
-            else:
-                logging.info("Detected no old or missing datafiles.")
+                    logging.info("Restarting all dynos.")
+                    self.restartAllDynos()  # This should kill off this process when running in production
+                else:
+                    logging.info("Detected no old or missing datafiles.")
 
-            logging.info("Pausing until midnight.")
-            pause.until(tonight)
+                logging.info("Pausing until midnight.")
+                pause.until(tonight)
 
     def runUpdate(self, forceDownload=False) -> int:
         #
@@ -257,5 +258,7 @@ if __name__ == '__main__':
     logging.getLogger().level = logging.INFO
 
     dup = DailyUpdate()
-    ret = dup.runUpdate()
-    exit(ret)
+    ret = dup.run()
+    exit(0)
+    #ret = dup.runUpdate()
+    #exit(ret)
