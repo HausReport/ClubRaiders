@@ -15,12 +15,13 @@ def uploadToAWSFromTemp(shortName: str) -> bool:
     key = os.getenv('AWS_ACCESS_KEY_ID')
     reg = os.getenv('AWS_DEFAULT_REGION')
     buck_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-    buck_name = os.getenv('BUCKET_NAME')
+    #buck_name = os.getenv('BUCKET_NAME')
+    buck_name = "erlaed"
 
-    #print(key)
-    #print(reg)
-    #print(buck_key)
-    #print(buck_name)
+    print(key)
+    print(reg)
+    print(buck_key)
+    print(buck_name)
 
     tmpDir = tempfile.gettempdir()
     inFile = os.path.join(tmpDir, shortName)
