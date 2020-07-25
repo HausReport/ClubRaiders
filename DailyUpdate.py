@@ -59,8 +59,8 @@ class DailyUpdate(object, metaclass=Singleton):
                 datefmt='%Y-%m-%d %H:%M:%S')
             logging.info("Creating dailyupdate singleton")
 
-            logging.info("Pausing 5 minutes for startup...")
-            pause.minutes(0)  # FIXME: uncomment for production
+            logging.info("Pausing 1 minute(s) for startup...")
+            pause.minutes(1)  # FIXME: uncomment for production
             while True:
                 today = date.today()
                 lastnight = datetime.combine(today, datetime.min.time())
