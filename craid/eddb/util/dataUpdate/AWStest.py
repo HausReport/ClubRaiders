@@ -27,7 +27,7 @@ def upload_file(file_name, bucket, object_name=None):
     s3_client = boto3.client('s3')
     # s3_client.
     try:
-        response = s3_client.upload_file(file_name, bucket, object_name)
+        #response = s3_client.upload_file(file_name, bucket, object_name)
         response = s3_client.upload_file(
             file_name, bucket, object_name,
             ExtraArgs={'ACL': 'public-read'}

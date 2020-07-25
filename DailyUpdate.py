@@ -50,7 +50,14 @@ class DailyUpdate(object, metaclass=Singleton):
     #         logging.info("Reusing dailyupdate singleton")
     #     return cls._instance
 
-    def run(self):
+    def run(self,key=None, reg=None, buck_key=None ):
+        if key is not None:
+            os.environ['AWS_ACCESS_KEY_ID'] = key
+        if reg is not None:
+            os.environ['AWS_DEFAULT_REGION'] = reg
+        if buck_key is not None:
+            os.environ['AWS_SECRET_ACCESS_KEY'] = buck_key
+
         with DailyUpdate.lock:
             print('-----------> RUNNING THE SINGLETON: LOCK ACQUIRED <-----------------')
             logging.basicConfig(

@@ -715,7 +715,11 @@ print(f"########### __name__ = [{__name__}]")
 if __name__ == 'app':
     print('-----------> TOP OF APP <-----------------')
     dup = DailyUpdate()
-    p = Process(target=dup.run)  # , args=('bob',))
+    key = os.getenv('AWS_ACCESS_KEY_ID')
+    reg = os.getenv('AWS_DEFAULT_REGION')
+    buck_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+    p = Process(target=dup.run, kwargs={'key':key, 'reg':reg, 'buck_key':buck_key})  # , args=('bob',))
+    p.daemon = True
     p.start()
 #
 # Running on Dev
@@ -726,7 +730,11 @@ if __name__ == '__main__':
     # Start Daily Update Daemon
     #
     dup = DailyUpdate()
-    p = Process(target=dup.run)  # , args=('bob',))
+    key = os.getenv('AWS_ACCESS_KEY_ID')
+    reg = os.getenv('AWS_DEFAULT_REGION')
+    buck_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+    p = Process(target=dup.run, kwargs={'key':key, 'reg':reg, 'buck_key':buck_key})  # , args=('bob',))
+    p.daemon = True
     p.start()
     #dup.run()
     if DEPLOY:
