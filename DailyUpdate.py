@@ -51,12 +51,23 @@ class DailyUpdate(object, metaclass=Singleton):
     #     return cls._instance
 
     def run(self,key=None, reg=None, buck_key=None ):
+
+
         if key is not None:
+            logging.info(f"Setting key to ${key}")
             os.environ['AWS_ACCESS_KEY_ID'] = key
+        else:
+            logging.info("Key is none")
         if reg is not None:
+            logging.info(f"Setting reg to ${reg}")
             os.environ['AWS_DEFAULT_REGION'] = reg
+        else:
+            logging.info("Reg is none")
         if buck_key is not None:
+            logging.info(f"Setting sec to ${buck_key}")
             os.environ['AWS_SECRET_ACCESS_KEY'] = buck_key
+        else:
+            logging.info("buck_key is none")
 
         with DailyUpdate.lock:
             print('-----------> RUNNING THE SINGLETON: LOCK ACQUIRED <-----------------')
