@@ -11,6 +11,7 @@ Join the fun in Pleione and HIP 17225!
 
 ### Recent Victories
 
+* The Dark Wheel replaced Hodack Prison Colony in HR 4979.
 * Sirius Mining Merope removed from Atlas.
 * Sirius Hyperspace removed from HIP 17412.
 * Aegis Research removed from Pleiades Sector HR-W d1-41.
