@@ -718,6 +718,10 @@ if __name__ == 'app':
     key = os.getenv('AWS_ACCESS_KEY_ID')
     reg = os.getenv('AWS_DEFAULT_REGION')
     buck_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+
+    logging.info(f"In app - key is ${key}")
+    logging.info(f"In app - reg is ${reg}")
+    logging.info(f"In app - sec is ${buck_key}")
     p = Process(target=dup.run, kwargs={'key':key, 'reg':reg, 'buck_key':buck_key})  # , args=('bob',))
     p.daemon = True
     p.start()
