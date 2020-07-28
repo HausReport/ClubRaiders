@@ -11,6 +11,7 @@ Join the fun in Pleione and HIP 17225!
 
 ### Recent Victories
 
+* CQC Holdings removed from Salleda.
 * The Dark Wheel replaced Hodack Prison Colony in HR 4979.
 * Sirius Mining Merope removed from Atlas.
 * Sirius Hyperspace removed from HIP 17412.

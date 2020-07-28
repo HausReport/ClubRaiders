@@ -275,8 +275,12 @@ if __name__ == '__main__':
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.INFO
 
+    key = os.getenv('AWS_ACCESS_KEY_ID')
+    reg = os.getenv('AWS_DEFAULT_REGION')
+    buck_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+
     dup = DailyUpdate()
-    ret = dup.run()
+    ret = dup.run(key=key, reg=reg, buck_key=buck_key)
     exit(0)
     #ret = dup.runUpdate()
     #exit(ret)
