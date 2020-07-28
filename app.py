@@ -717,9 +717,9 @@ if __name__ == 'app':
     print('-----------> TOP OF APP <-----------------')
     pprint(dict(os.environ), width=1)
     dup = DailyUpdate()
-    key = os.getenv('AWS_ACCESS_KEY_ID')
-    reg = os.getenv('AWS_DEFAULT_REGION')
-    buck_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+    key = os.getenv('BUCKETEER_AWS_ACCESS_KEY_ID')
+    reg = os.getenv('BUCKETEER_AWS_DEFAULT_REGION')
+    buck_key = os.getenv('BUCKETEER_AWS_SECRET_ACCESS_KEY')
 
     logging.info(f"In app - key is ${key}")
     logging.info(f"In app - reg is ${reg}")
