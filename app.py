@@ -5,6 +5,7 @@
 import logging
 import math
 import os
+from pprint import pprint
 from random import randint
 from typing import Dict, Tuple, List
 from multiprocessing import Process
@@ -714,6 +715,7 @@ print(f"########### __name__ = [{__name__}]")
 #
 if __name__ == 'app':
     print('-----------> TOP OF APP <-----------------')
+    pprint(dict(os.environ), width=1)
     dup = DailyUpdate()
     key = os.getenv('AWS_ACCESS_KEY_ID')
     reg = os.getenv('AWS_DEFAULT_REGION')
@@ -730,6 +732,7 @@ if __name__ == 'app':
 #
 if __name__ == '__main__':
     print('-----------> TOP OF MAIN <-----------------')
+    pprint(dict(os.environ), width=1)
     #
     # Start Daily Update Daemon
     #
