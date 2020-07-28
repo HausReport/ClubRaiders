@@ -2,22 +2,23 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
-#
-#   SPDX-License-Identifier: BSD-3-Clause
 
 import pprint
 import time
-from typing import Dict
+from typing import Dict, Set
 
 import requests
 import ujson
 
 import craid.edbgs.EdBgsSystemIds
 from craid.eddb.system.BountyHuntingInfo import BountyHuntingInfo
+import craid.eddb.loader.MakeKeyFiles as kf
 
 newDict: Dict[int, str] = {}
+keys: Set[int] = kf.loadKeys('club-system-keys')
+keyLen = len(keys)
 
-for sysId in BountyHuntingInfo.bhDict.keys():
+for sysId in keys: #BountyHuntingInfo.bhDict.keys():
 
     if sysId in craid.edbgs.EdBgsSystemIds.EdBgsSystemIds.myDict:
         continue
@@ -46,6 +47,6 @@ for sysId in BountyHuntingInfo.bhDict.keys():
     # f.write(r.content)
     # f.close()
 
-    time.sleep(10)
+    time.sleep(5)
 
 pprint.pprint(str(newDict))
