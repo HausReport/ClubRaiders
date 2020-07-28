@@ -12,7 +12,7 @@ import craid.eddb.loader.MakeKeyFiles as kf
 from craid.edbgs.EdBgsFactionIds import EdBgsFactionIds
 
 keys: Set[int] = kf.loadKeys('factions-of-interest-keys')
-
+keyLen = len(keys)
 wait = 5
 
 counter = 0
