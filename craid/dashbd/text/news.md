@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-Join the fun in Pleione and HIP 17225!
+Join the fun in Pleione and Delphi!
 
 * $n_wars wars in progress
 * $n_elections elections in progress
