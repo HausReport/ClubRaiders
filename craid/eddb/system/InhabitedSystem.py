@@ -4,7 +4,7 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 #
 #   SPDX-License-Identifier: BSD-3-Clause
-
+import logging
 import string
 from collections import deque
 from typing import List, Deque
@@ -98,7 +98,12 @@ class InhabitedSystem(System):
                 return fac
 
     def getControllingFactionId(self):
-        return int(self.jsonLine['controlling_minor_faction_id'])
+        tmp: str = self.jsonLine['controlling_minor_faction_id']
+        if tmp is None:
+            logging.info("No controlling faction ID")
+            return -1
+        else:
+            return int(self.jsonLine['controlling_minor_faction_id'])
 
     def getControllingFactionName(self):
         cf: int = self.getControllingFactionId()

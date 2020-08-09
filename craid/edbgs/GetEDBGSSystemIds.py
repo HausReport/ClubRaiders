@@ -31,6 +31,7 @@ for sysId in keys: #BountyHuntingInfo.bhDict.keys():
     r = requests.get(url, allow_redirects=True)  # , headers=headers)
     myDict = ujson.loads(r.content)
     docs = myDict['docs']
+
     if len(docs) < 1:
         continue
     docZero = docs[0]

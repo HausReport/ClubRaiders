@@ -6,6 +6,7 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 
 import datetime
+import logging
 import string
 from typing import List
 
@@ -450,6 +451,9 @@ class FactionInstance(Faction):
 
         staName = sta.get_name()
         staDist = sta.getDistanceToStar()
+        if staDist is None:
+            logging.error("Station Distance is None")
+            return 0, ["no suitable station"]
 
         #
         # Stage 2: Can the opposing faction benefit from missions
