@@ -16,6 +16,7 @@ from craid.eddb.States import States
 from craid.eddb.base import GameConstants as gconst
 from craid.eddb.faction.Faction import Faction
 from craid.eddb.system.InhabitedSystem import InhabitedSystem
+
 from craid.eddb.util.PassThroughDict import PassThroughDict
 
 
@@ -169,6 +170,10 @@ class FactionInstance(Faction):
         cid = self.mySystem.getControllingFactionId()
         mid: int = int(self.get_id())
         return cid == mid
+
+    def getControllingFactionName(self) -> str:
+        cn = self.mySystem.getControllingFactionName()
+        return cn
 
     def template(self, msg: str) -> str:
         myDict: PassThroughDict[str, str] = PassThroughDict()

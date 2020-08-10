@@ -168,6 +168,8 @@ class AnnoyingCrap(object):
             {"name": 'BountyHuntScore', "id": 'bountyHuntingScore', "hideable": allowHiddenColumns, "type": "numeric"},
             {"name": 'SmugglingScore', "id": 'smugglingScore', "hideable": allowHiddenColumns, "type": "numeric"},
             {"name": 'PiracyMurderScore', "id": 'piracyMurderScore', "hideable": allowHiddenColumns, "type": "numeric"},
+            {"name": 'controllingFaction', "id": 'controllingFaction', "deletable": False, "selectable": False},
+
         ]
 
     #

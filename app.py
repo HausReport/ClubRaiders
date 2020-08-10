@@ -292,10 +292,10 @@ def render_content(tab):
             html.Table(className="clean", children=[
                 html.Tr(className="clean", children=[
                     html.Td(className="left-column", children=[
-                        makeDiscordIframe("x-cabal-ops", "439201271174660097"),
+                        makeDiscordIframe("x-pleiades-historical-society", "738106543815524362"),
                     ]),
                     html.Td(className="clean-left", children=[
-                        AnnoyingCrap.getMarkdown("CabalOperatives"),
+                        AnnoyingCrap.getMarkdown("PleiadesHistoricalSociety"),
                     ])
                 ]),
                 html.Tr(className="clean", children=[
@@ -322,7 +322,14 @@ def render_content(tab):
                         AnnoyingCrap.getMarkdown("EliteBGS"),
                     ])
                 ]),
-
+                html.Tr(className="clean", children=[
+                    html.Td(className="left-column", children=[
+                        makeDiscordIframe("x-cabal-ops", "439201271174660097"),
+                    ]),
+                    html.Td(className="clean-left", children=[
+                        AnnoyingCrap.getMarkdown("CabalOperatives"),
+                    ])
+                ]),
             ])
         ], className="container")
     elif tab == 'tab-4':
