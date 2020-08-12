@@ -43,13 +43,13 @@ class BountyHuntingInfo(object):
               11559   : False,  # Lapannodaya
               11614   : True,  # LAWD 26
               11884   : False,  # LHS 1951
-              12791   : True,  # LTT 6714
               11897   : True,  # LHS 2065
               11944   : False,  # LHS 2477
               11974   : True,  # LHS 2887
               12063   : True,  # LHS 380
               12539   : True,  # LPM 607
               12745   : True,  # LTT 4835
+              12791   : True,  # LTT 6714
               12801   : True,  # LTT 7370
               12908   : False,  # Lu Yupik
               12934   : False,  # Luhman 16
