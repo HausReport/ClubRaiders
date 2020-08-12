@@ -11,6 +11,7 @@ Join the fun in Pleione and Delphi!
 
 ### Recent Victories
 
+* Wreaken Construction removed from HIP 78267.
 * CQC Holdings removed from Salleda.
 * The Dark Wheel replaced Hodack Prison Colony in HR 4979.
 * Sirius Mining Merope removed from Atlas.
