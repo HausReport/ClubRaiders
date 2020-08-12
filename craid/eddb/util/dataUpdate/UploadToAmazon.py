@@ -18,10 +18,10 @@ def uploadToAWSFromTemp(shortName: str) -> bool:
     #buck_name = os.getenv('BUCKET_NAME')
     buck_name = "erlaed"
 
-    logging.info(f"------------->AWS KEY: [{key}]")
-    logging.info(f"------------->AWS REG: [{reg}]")
-    logging.info(f"------------->AWS SKEY: [{buck_key}]")
-    logging.info(f"------------->AWS BUCK: [{buck_name}]")
+    #logging.info(f"------------->AWS KEY: [{key}]")
+    #logging.info(f"------------->AWS REG: [{reg}]")
+    #logging.info(f"------------->AWS SKEY: [{buck_key}]")
+    #logging.info(f"------------->AWS BUCK: [{buck_name}]")
 
     tmpDir = tempfile.gettempdir()
     inFile = os.path.join(tmpDir, shortName)

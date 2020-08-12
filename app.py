@@ -728,9 +728,9 @@ if __name__ == 'app':
     reg = os.getenv('BUCKETEER_AWS_REGION')
     buck_key = os.getenv('BUCKETEER_AWS_SECRET_ACCESS_KEY')
 
-    logging.info(f"In app - key is ${key}")
-    logging.info(f"In app - reg is ${reg}")
-    logging.info(f"In app - sec is ${buck_key}")
+    # logging.info(f"In app - key is ${key}")
+    # logging.info(f"In app - reg is ${reg}")
+    # logging.info(f"In app - sec is ${buck_key}")
     p = Process(target=dup.run, kwargs={'key':key, 'reg':reg, 'buck_key':buck_key})  # , args=('bob',))
     p.daemon = True
     p.start()
