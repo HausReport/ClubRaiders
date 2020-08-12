@@ -17,7 +17,7 @@ class RegionFactory(object):
     unRegion = TheUnregion()
     regionDict = {
         "No Region" : unRegion,
-        "Merope"    : SphericalRegion("The PleiadesI", 1, -79, -150, -340, 100, 'rgb(255, 0, 0)'),
+        "Merope"    : SphericalRegion("The Pleiades", 1, -79, -150, -340, 100, 'rgb(255, 0, 0)'),
         "Rectangle" : SphericalRegion("Rectangle", 2, -54, -66, -124, 75, 'rgb(255,255,0)'),
         "California": SphericalRegion("California", 3, -320, -217, -913, 200, 'rgb(32,32,32)'),
         "Sirius"    : SphericalRegion("Sirius", 4, 6, -1, -6, 35, 'rgb(0, 255, 0)'),
