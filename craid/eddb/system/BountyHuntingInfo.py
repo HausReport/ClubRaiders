@@ -10,7 +10,71 @@
 
 
 class BountyHuntingInfo(object):
-    bhDict = {394     : True,  # Abroin
+    bhDict = {
+        292   : False,  # 64 Ceti https://eddb.io/system/bodies/292
+        718   : True,  # Alioth https://eddb.io/system/bodies/718
+        883   : False,  # Anandariti https://eddb.io/system/bodies/883
+        1097  : True,  # Aoniken https://eddb.io/system/bodies/1097
+        1512  : False,  # Auserine https://eddb.io/system/bodies/1512
+        1671  : True,  # Baiame https://eddb.io/system/bodies/1671
+        1980  : True,  # BD+33 801 https://eddb.io/system/bodies/1980
+        2185  : False,  # Ben Sakha https://eddb.io/system/bodies/2185
+        4274  : False,  # Djamitra https://eddb.io/system/bodies/4274
+        4467  : True,  # Ega https://eddb.io/system/bodies/4467
+        5473  : True,  # Guan Gong https://eddb.io/system/bodies/5473
+        5865  : False,  # Hemaki https://eddb.io/system/bodies/5865
+        7731  : False,  # HIP 47050 https://eddb.io/system/bodies/7731
+        7847  : True,  # HIP 51487 https://eddb.io/system/bodies/7847
+        8211: True,  # HIP 66267 https://eddb.io/system/bodies/8211
+        8278: True,  # HIP 68796 https://eddb.io/system/bodies/8278
+        8308: True,  # HIP 69767 https://eddb.io/system/bodies/8308
+        8329: True,  # HIP 70255 https://eddb.io/system/bodies/8329
+        8596: True,  # HIP 80242 https://eddb.io/system/bodies/8596
+        9113 : False,  # Hodack https://eddb.io/system/bodies/9113
+        9344 : False,  # HR 5975 https://eddb.io/system/bodies/9344
+        9562 : False,  # Hun Hsinas https://eddb.io/system/bodies/9562
+        10365: True,  # Kamcab https://eddb.io/system/bodies/10365
+        10931: False,  # Kokokomi https://eddb.io/system/bodies/10931
+        11352: False,  # Kweleutahe https://eddb.io/system/bodies/11352
+        11513: False,  # Lambda Arae https://eddb.io/system/bodies/11513
+        11630: True,  # Leesti https://eddb.io/system/bodies/11630
+        12142: False,  # Li Bestina https://eddb.io/system/bodies/12142
+        13273: False,  # Mantobices https://eddb.io/system/bodies/13273
+        13812: False,  # Mons https://eddb.io/system/bodies/13812
+        13951: True,  # Mundindja https://eddb.io/system/bodies/13951
+        14102: False,  # Nanangolans https://eddb.io/system/bodies/14102
+        15320: True,  # Parhaiya https://eddb.io/system/bodies/15320
+        15343: True,  # Parthians https://eddb.io/system/bodies/15343
+        15492: True,  # Phanes https://eddb.io/system/bodies/15492
+        15878 : False,  # Quan Gurus https://eddb.io/system/bodies/15878
+        16010 : True,  # Raurt https://eddb.io/system/bodies/16010
+        16195 : True,  # Ross 47 https://eddb.io/system/bodies/16195
+        16693 : False,  # Sepathians https://eddb.io/system/bodies/16693
+        16977 : False,  # Sirius https://eddb.io/system/bodies/16977
+        17049 : True,  # Socho https://eddb.io/system/bodies/17049
+        17072 : True,  # Sol https://eddb.io/system/bodies/17072
+        17077 : False,  # Song Ku https://eddb.io/system/bodies/17077
+        17245 : False,  # Superty https://eddb.io/system/bodies/17245
+        17300 : True,  # Swazahua https://eddb.io/system/bodies/17300
+        18056 : False,  # Tupeng Yu https://eddb.io/system/bodies/18056
+        18620 : False,  # Vito https://eddb.io/system/bodies/18620
+        19375 : False,  # Xi Shan https://eddb.io/system/bodies/19375
+        20713: True,  # HR 1185 https://eddb.io/system/bodies/20713
+        21114: True,  # Maia https://eddb.io/system/bodies/21114
+        21180: True,  # Pleiades Sector IH-V c2-5 https://eddb.io/system/bodies/21180
+        22854: True,  # 42 n Persei https://eddb.io/system/bodies/22854
+        22957: True,  # Exphiay https://eddb.io/system/bodies/22957
+        24413: False,  # Sothis https://eddb.io/system/bodies/24413
+        24948: False,  # Te Kaha https://eddb.io/system/bodies/24948
+        25694 : True,  # HIP 17694 https://eddb.io/system/bodies/25694
+        38503 : True,  # California Sector BA-A e6 https://eddb.io/system/bodies/38503
+        49117 : True,  # HIP 51652 https://eddb.io/system/bodies/49117
+        50651 : False,  # CD-43 11917 https://eddb.io/system/bodies/50651
+        56577 : True,  # Arietis Sector BV-Y c7 https://eddb.io/system/bodies/56577
+        85965 : True,  # Arietis Sector XE-Z b4 https://eddb.io/system/bodies/85965
+        144447: False,  # Antliae Sector BQ-Y c4 https://eddb.io/system/bodies/144447
+        341020: True,  # California Sector BV-Y c7 https://eddb.io/system/bodies/341020
+              394     : True,  # Abroin
               621     : True,  # Akandi
               798     : True,  # Amalangkan
               1500    : True,  # Aurus

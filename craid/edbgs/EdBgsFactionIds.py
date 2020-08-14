@@ -7,6 +7,18 @@ from typing import Dict
 
 class EdBgsFactionIds(object):
     myDict: Dict[int, str] = {
+        57671: '59fdb40bd22c775be052c677',
+        57673: '5a18c7e553582c78c9c7f0d5',
+        76135: '5ae4c9b0d1b6a37c3c954d33',
+        74324: '59e93108d22c775be077ff03',
+        68205: '59e7a567d22c775be0fe03c2',
+        68206: '59e7a567d22c775be0fe03c0',
+        68207: '59e7a567d22c775be0fe03d4',
+        68208: '59e7a567d22c775be0fe03cb',
+        68209: '59e7a567d22c775be0fe03cd',
+        75108: '59e7a62cd22c775be0fe16ca',
+        75119: '59e81af1d22c775be000a8a4',
+        75120: '59e8eb10d22c775be003c257',
         55359: '59e8b5f9d22c775be0029942',
         75994: '5ae4d16ad1b6a37c3c95f2b2',
         53492: '59eaf009d22c775be0b7880e',

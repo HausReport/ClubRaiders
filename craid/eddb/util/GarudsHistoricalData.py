@@ -131,7 +131,7 @@ if __name__ == '__main__':
                'Bentonian Party', 'Sirius Industrial',
                'The Greenventure Group', 'Sirius Power', 'Reynhardt IntelliSys',
                'Reyan BPS', "Namarii Emperor's Dawn", 'The Peterson Group',
-               'Sirius Catering']
+               'Sirius Catering', 'Pleaides Resource Enterprise']
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().level = logging.DEBUG
     fixRegions()

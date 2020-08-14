@@ -12,7 +12,10 @@ from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateSystems import load_systems
 from craid.eddb.loader.MakeKeyFiles import loadKeys
 from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
+from craid.eddb.system.BountyHuntingInfo import BountyHuntingInfo
 from craid.eddb.system.InhabitedSystem import InhabitedSystem
+
+bhDict = BountyHuntingInfo.bhDict
 
 myLoader = LoadDataFromGithub()
 
@@ -27,17 +30,26 @@ Aware.setFactionsDict(all_factions_dict)
 
 bhArr: List[List] = []  # [int, str, str, str]]
 sysId: int
-for sysId in all_systems_dict.keys():
+sorted_systems = sorted(club_system_keys)
+
+for sysId in sorted_systems: #club_system_keys: #all_systems_dict.keys():
     tSys: InhabitedSystem = all_systems_dict.get(sysId)
+    if sysId in bhDict:
+        continue
+
     cf: FactionInstance = tSys.getControllingFactionInstance()
 
-    if cf.isHomeSystem():
+    if cf is None:
+        print(f"System {tSys.get_name()} controlling faction is none")
         continue
+
+    #if cf.isHomeSystem():
+        #continue
 
     url = "https://eddb.io/system/bodies/" + str(sysId)
     sysName = tSys.get_name()
     item = [sysId, sysName, "unknown", "unknown", url]
     bhArr.append(item)
-    print(tSys.get_name())
+    print(f"\t\t{sysId} : False, # {sysName} {url}")
 
-pprint(bhArr)
+#pprint(bhArr)

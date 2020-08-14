@@ -7,6 +7,13 @@ from typing import Dict
 
 class EdBgsSystemIds(object):
     myDict: Dict[int, str] = {
+        25694: '59e7ba56d22c775be0fe8f60',
+        21114: '59e7a567d22c775be0fe03b8',
+        2185 : '5a18c7e353582c78c9c7ed88',
+        21180: '59e7a62cd22c775be0fe16c6',
+        20713: '59e7c500d22c775be0ff022b',
+        22854: '59e8eb10d22c775be003c250',
+        85965: '59e81af1d22c775be000a89d',
         9113 : '59ecfc62d22c775be07bb963',
         22957: '59e7a9a7d22c775be0fe5749',
         19375: '59e8b2fad22c775be0028972',
