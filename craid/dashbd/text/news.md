@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-Join the fun in Pleione and Delphi!
+[Player campaigns in LTT 6714, Pleione and Delphi!](https://discord.gg/PdaCsRA)
 
 * $n_wars wars in progress
 * $n_elections elections in progress
@@ -11,6 +11,7 @@ Join the fun in Pleione and Delphi!
 
 ### Recent Victories
 
+* Sirius Mining Merope removed from Pleione.
 * Wreaken Construction removed from HIP 78267.
 * CQC Holdings removed from Salleda.
 * The Dark Wheel replaced Hodack Prison Colony in HR 4979.
