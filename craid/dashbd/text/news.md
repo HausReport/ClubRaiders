@@ -11,7 +11,7 @@
 
 ### Recent Victories
 
-* Sirius Mining Merope removed from Pleione.
+* Sirius Mining Merope removed from Pleione and Celaeno.
 * Wreaken Construction removed from HIP 78267.
 * CQC Holdings removed from Salleda.
 * The Dark Wheel replaced Hodack Prison Colony in HR 4979.
