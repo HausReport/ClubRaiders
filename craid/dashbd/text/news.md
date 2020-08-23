@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-[Player campaigns in HR 1183, Pleione and Delphi!](https://discord.gg/PdaCsRA)
+[Player campaigns in Pleione, Wolf 202 and Pleiades Sector PD-S b4-0!](https://discord.gg/PdaCsRA)
 
 * $n_wars wars in progress
 * $n_elections elections in progress
@@ -11,7 +11,8 @@
 
 ### Recent Victories
 
-* Sirius Mining Merope removed from Pleione and Celaeno.
+* Sirius Corporation removed from Ross 47.
+* Sirius Mining Merope removed from HR 1183, Pleione, and Celaeno.
 * Wreaken Construction removed from HIP 78267.
 * CQC Holdings removed from Salleda.
 * The Dark Wheel replaced Hodack Prison Colony in HR 4979.
