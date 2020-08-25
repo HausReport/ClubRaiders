@@ -143,7 +143,7 @@ class SystemAnalyzer(object):
         msg2 = ""
         infra: bool = sta.hasState(gconst.STATE_INFRASTRUCTURE_FAILURE)
         if infra:
-           msg2 = "Delivery of food and machinery will aid controlling faction's infrastructure failure"
+            msg2 = "Delivery of food and machinery will aid controlling faction's infrastructure failure"
         else:
             boom: bool = sta.hasState(gconst.STATE_BOOM)
             inv: bool = sta.hasState(gconst.STATE_INVESTMENT)
