@@ -140,16 +140,19 @@ class SystemAnalyzer(object):
         ## TODO: Boom, Investment
         msg = f'Trade or sell exploration data to opposing faction at {staName}.'
 
-        boom: bool = sta.hasState(gconst.STATE_BOOM)
-        inv: bool = sta.hasState(gconst.STATE_INVESTMENT)
-
         msg2 = ""
-        if boom and inv:
-            msg2 = "  Effects are significantly increased by the controlling faction being in boom and investment states."
-        elif boom:
-            msg2 = "  Effects are increased by the controlling faction being in a boom state."
-        elif inv:
-            msg2 = "  Effects are increased by the controlling faction being in an investment state."
+        infra: bool = sta.hasState(gconst.STATE_INFRASTRUCTURE_FAILURE)
+        if infra:
+           msg2 = "Delivery of food and machinery will aid controlling faction's infrastructure failure"
+        else:
+            boom: bool = sta.hasState(gconst.STATE_BOOM)
+            inv: bool = sta.hasState(gconst.STATE_INVESTMENT)
+            if boom and inv:
+                msg2 = "  Effects are significantly increased by the controlling faction being in boom and investment states."
+            elif boom:
+                msg2 = "  Effects are increased by the controlling faction being in a boom state."
+            elif inv:
+                msg2 = "  Effects are increased by the controlling faction being in an investment state."
 
         msg += msg2
 
