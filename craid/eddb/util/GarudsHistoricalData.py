@@ -120,12 +120,15 @@ if __name__ == '__main__':
     # 'Bill Turner'
     # "Emperor's Dawn"
     # 'Aegis Defense',
-    allFacs = ['Sirius Drives', 'Worster Insurance', 'Abroin Universal PLC',
+    allFacs = ['Sirius Drives',
+               #'Worster Insurance',
+               'Abroin Universal PLC',
                'Hodack Prison Colony', 'Turner Research Group',
                'Sirius Luxury Transports', 'Aegis Core',
                'Aegis Research', 'Sirius Mining Merope',
                'Wiggins Development Trust', 'CQC Holdings', 'Sirius Hot2Cold',
-               "Benton's Gang", 'Janus Incorporated', 'The Rockforth Corporation',
+               #"Benton's Gang",
+               'Janus Incorporated', 'The Rockforth Corporation',
                'Sirius Mining', 'Sirius Atmospherics', 'Sirius Hyperspace',
                'Wreaken Construction', 'Gallant Investment Brokers',
                #'Bentonian Party',

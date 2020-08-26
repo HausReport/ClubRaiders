@@ -22,7 +22,8 @@ badGuys: Set[str] = {'Abroin Universal PLC', 'Aegis Core', 'Aegis Research',
                      'Sirius Mining', 'Sirius Power', 'The Greenventure Group',
                      'The Peterson Group', 'The Rockforth Corporation',
                      'Turner Research Group', 'Wiggins Development Trust',
-                     'Worster Insurance', 'Wreaken Construction', 'Aegis Defense', 'Pleiades Resource Enterprise'}
+                     #'Worster Insurance',
+                     'Wreaken Construction', 'Aegis Defense', 'Pleiades Resource Enterprise'}
 
 
 class FactionNameFilter(object):
