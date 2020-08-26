@@ -128,7 +128,8 @@ if __name__ == '__main__':
                "Benton's Gang", 'Janus Incorporated', 'The Rockforth Corporation',
                'Sirius Mining', 'Sirius Atmospherics', 'Sirius Hyperspace',
                'Wreaken Construction', 'Gallant Investment Brokers',
-               'Bentonian Party', 'Sirius Industrial',
+               #'Bentonian Party',
+               'Sirius Industrial',
                'The Greenventure Group', 'Sirius Power', 'Reynhardt IntelliSys',
                'Reyan BPS', "Namarii Emperor's Dawn", 'The Peterson Group',
                'Sirius Catering', 'Pleaides Resource Enterprise']

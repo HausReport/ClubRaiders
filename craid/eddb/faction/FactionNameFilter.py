@@ -11,7 +11,8 @@ from craid.eddb.faction.Faction import Faction
 
 # Have gone back and forth about having 'Bill Turner' in the list
 badGuys: Set[str] = {'Abroin Universal PLC', 'Aegis Core', 'Aegis Research',
-                     "Benton's Gang", 'Bentonian Party', 'CQC Holdings',
+                     #"Benton's Gang", 'Bentonian Party',
+                     'CQC Holdings',
                      'Gallant Investment Brokers', 'Hodack Prison Colony',
                      'Janus Incorporated', "Namarii Emperor's Dawn", 'Reyan BPS',
                      'Reynhardt IntelliSys', 'Sirius Atmospherics', 'Sirius Catering',
