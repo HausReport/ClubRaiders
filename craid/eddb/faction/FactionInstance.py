@@ -112,6 +112,17 @@ class FactionInstance(Faction):
 
     def canRetreat(self) -> bool:
         if self.isHomeSystem(): return False
+        fn = self.get_name()
+        sn = self.getSystemName()
+        if fn is not None and sn is not None:
+
+            #
+            # Hardcoded factions that can't be retreated
+            #
+            if fn =="Aegis Research" and sn =="HIP 17044":
+                return False
+            if fn =="Aegis Research" and sn =="Pleiades Sector HR-W d1-57":
+                return False
 
         # FIXME: can't call getDifficulty here
         # if self.getDifficulty() == 999999: return False

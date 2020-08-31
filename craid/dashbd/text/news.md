@@ -11,7 +11,7 @@
 
 ### Recent Victories
 
-* Sirius Corporation removed from Ross 47.
+* Sirius Corporation removed from Ross 47 and Barnard's Star.
 * Sirius Mining Merope removed from HR 1183, Pleione, and Celaeno.
 * Wreaken Construction removed from HIP 78267.
 * CQC Holdings removed from Salleda.
