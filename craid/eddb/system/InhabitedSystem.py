@@ -145,6 +145,11 @@ class InhabitedSystem(System):
         # print(theret)
         return theret
 
+    def getNumberOfFactionsInSystem(self) -> int:
+        if self.minorFactionPresences is None:
+            return 0
+        return len(self.minorFactionPresences)
+
     def hasAnarchyFaction(self):
         from craid.eddb.faction.FactionInstance import FactionInstance
         fi: FactionInstance

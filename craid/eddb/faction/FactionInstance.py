@@ -81,6 +81,10 @@ class FactionInstance(Faction):
     # d=pop, e = inf
     def getDifficulty(self) -> float:
         theMax = 999999.0
+
+        if self.mySystem.getNumberOfFactionsInSystem()<4:
+            return 400000.0
+
         if not self.canRetreat():
             return theMax
         e10 = self.getInfluence()
@@ -114,15 +118,14 @@ class FactionInstance(Faction):
         if self.isHomeSystem(): return False
         fn = self.get_name()
         sn = self.getSystemName()
-        if fn is not None and sn is not None:
-
+        #if fn is not None and sn is not None:
             #
             # Hardcoded factions that can't be retreated
             #
-            if fn =="Aegis Research" and sn =="HIP 17044":
-                return False
-            if fn =="Aegis Research" and sn =="Pleiades Sector HR-W d1-57":
-                return False
+            # if fn =="Aegis Research" and sn =="HIP 17044":
+            #     return False
+            # if fn =="Aegis Research" and sn =="Pleiades Sector HR-W d1-57":
+            #     return False
 
         # FIXME: can't call getDifficulty here
         # if self.getDifficulty() == 999999: return False

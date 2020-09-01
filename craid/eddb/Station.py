@@ -62,7 +62,17 @@ class Station(Aware):
         return self.system_id
 
     def getDistanceToStar(self) -> int:
-        return self.distance_to_star
+        ret: int = -1
+        if self.distance_to_star is None:
+            self.distance_to_star = -1
+
+        try:
+            ret = int(self.distance_to_star)
+        except ValueError:
+            logging.warning(f"Invalid distance to star: {self.distance_to_star}")
+            ret = -1
+
+        return ret
 
     def hasLargePads(self) -> bool:
         return self.has_large_pads

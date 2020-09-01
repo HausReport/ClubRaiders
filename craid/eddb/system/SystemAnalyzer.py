@@ -23,10 +23,17 @@ class SystemAnalyzer(object):
         diff: float = theFaction.getDifficulty()
         homeSys: bool = theFaction.isHomeSystem()
 
-        if not homeSys and diff == 999999:
-            msg = f'It is impossible to force the faction out of this system for reasons that are not understood.\n'
-            self.messages.add(110.0, msg)
-            return
+        nFacs = theSystem.getNumberOfFactionsInSystem()
+
+        if not homeSys:
+            if nFacs< 4:
+                msg = f'It is impossible to retreat a faction when there are fewer than 4 factions in the system\n'
+                self.messages.add(110.0, msg)
+                return
+            elif diff == 999999:
+                msg = f'It is impossible to force the faction out of this system for reasons that are not understood.\n'
+                self.messages.add(110.0, msg)
+                return
         elif homeSys:
             msg = f"This is the faction's home system, so it cannot be forced out.  Effort may be better spent elsewhere.\n"
             self.messages.add(110.0, msg)
