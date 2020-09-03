@@ -11,6 +11,7 @@
 
 ### Recent Victories
 
+* Hodack Prison Colony removed from LHS 2477.
 * Sirius Corporation removed from Ross 47 and Barnard's Star.
 * Sirius Mining Merope removed from HR 1183, Pleione, and Celaeno.
 * Wreaken Construction removed from HIP 78267.
