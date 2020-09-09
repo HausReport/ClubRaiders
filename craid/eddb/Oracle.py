@@ -235,12 +235,20 @@ class Oracle:
         #
         #
         #
+        # base_date = "2020-06-02 09:00"
+        # base_active_systems = 172
+        # base_population = 80566632766
+        # base_control_systems = 40
+        # base_avg_influence = 21.29
+        # base_total_influence = 3960.53
+
+        # adjusted for addition of Pleiades Resource Enterprise
         base_date = "2020-06-02 09:00"
-        base_active_systems = 172
-        base_population = 80566632766
-        base_control_systems = 40
-        base_avg_influence = 21.29
-        base_total_influence = 3960.53
+        base_active_systems = 184
+        base_population = 80566632766 + 6920000
+        base_control_systems = 40 + 2
+        base_total_influence = 3960.53 + 320
+        base_avg_influence = base_total_influence/base_active_systems
 
         diff_active_systems = cur_active_systems - base_active_systems
         diff_population = cur_population - base_population
