@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-[Player campaigns in Pleione, Wolf 202 and Pleiades Sector PD-S b4-0!](https://discord.gg/PdaCsRA)
+[Player campaigns in Delphi and Pleiades Sector PD-S b4-0!](https://discord.gg/PdaCsRA)
 
 * $n_wars wars in progress
 * $n_elections elections in progress
@@ -11,6 +11,8 @@
 
 ### Recent Victories
 
+* Sirius Hyperspace removed from Wolf 202.
+* Aegis Research removed from Pleione.
 * Hodack Prison Colony removed from LHS 2477.
 * Sirius Corporation removed from Ross 47 and Barnard's Star.
 * Sirius Mining Merope removed from HR 1183, Pleione, and Celaeno.
