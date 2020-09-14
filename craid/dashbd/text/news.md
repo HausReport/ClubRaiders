@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-[Player campaigns in Delphi and Pleiades Sector PD-S b4-0!](https://discord.gg/PdaCsRA)
+[Player campaigns in Pleiades Sector PD-S b4-0 and 42 n Persei!](https://discord.gg/PdaCsRA)
 
 * $n_wars wars in progress
 * $n_elections elections in progress
