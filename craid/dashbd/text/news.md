@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-[Player campaigns in Pleiades Sector PD-S b4-0 and 42 n Persei!](https://discord.gg/PdaCsRA)
+[Player campaign in Pleiades Sector PD-S b4-0!](https://discord.gg/PdaCsRA)
 
 * $n_wars wars in progress
 * $n_elections elections in progress
@@ -11,6 +11,8 @@
 
 ### Recent Victories
 
+* Pleiades Resources Enterprise removed from Delphi.
+* Installation Chief Industry Board removed from PRE in 42 N Persei.
 * Sirius Hyperspace removed from Wolf 202.
 * Aegis Research removed from Pleione.
 * Hodack Prison Colony removed from LHS 2477.
