@@ -12,6 +12,8 @@
 ### Recent Victories
 
 * Pleiades Resources Enterprise removed from Delphi.
+* Janus Incorporated removed from Pleiades Sector DL-Y d65.
+* Wreaken Construction removed from system LTT 6714.
 * Installation Chief Industry Board removed from PRE in 42 N Persei.
 * Sirius Hyperspace removed from Wolf 202.
 * Aegis Research removed from Pleione.
