@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-[Player campaign in Pleiades Sector PD-S b4-0!](https://discord.gg/PdaCsRA)
+[Player campaign in Daik!](https://discord.gg/PdaCsRA)
 
 * $n_wars wars in progress
 * $n_elections elections in progress
@@ -11,6 +11,8 @@
 
 ### Recent Victories
 
+* Sirius Mining Merope down from 7 systems to zombie in their home.
+* Sirius Mining Merope removed from Pleiades Sector PD-S B4-0.
 * Pleiades Resources Enterprise removed from Delphi.
 * Janus Incorporated removed from Pleiades Sector DL-Y d65.
 * Wreaken Construction removed from system LTT 6714.
