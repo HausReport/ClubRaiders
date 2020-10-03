@@ -11,7 +11,7 @@
 
 ### Recent Victories
 
-* Sirius Mining Merope down from 7 systems to zombie in their home.
+* Sirius Mining Merope: was in 7 systems, now a zombie in 1.
 * Sirius Mining Merope removed from Pleiades Sector PD-S B4-0.
 * Pleiades Resources Enterprise removed from Delphi.
 * Janus Incorporated removed from Pleiades Sector DL-Y d65.
