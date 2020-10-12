@@ -10,20 +10,27 @@ from typing import Set
 from craid.eddb.faction.Faction import Faction
 
 # Have gone back and forth about having 'Bill Turner' in the list
-badGuys: Set[str] = {'Abroin Universal PLC', 'Aegis Core', 'Aegis Research',
-                     #"Benton's Gang", 'Bentonian Party',
+badGuys: Set[str] = {'Abroin Universal PLC',
+                     'Aegis Core', 'Aegis Defense', 'Aegis Research',
+                     'Bill Turner',
                      'CQC Holdings',
                      'Gallant Investment Brokers', 'Hodack Prison Colony',
-                     'Janus Incorporated', "Namarii Emperor's Dawn", 'Reyan BPS',
-                     'Reynhardt IntelliSys', 'Sirius Atmospherics', 'Sirius Catering',
-                     'Sirius Corporation', 'Sirius Drives', 'Sirius Hot2Cold',
-                     'Sirius Hyperspace', 'Sirius Industrial',
-                     'Sirius Luxury Transports', 'Sirius Mining Merope',
-                     'Sirius Mining', 'Sirius Power', 'The Greenventure Group',
+                     'Janus Incorporated', "Namarii Emperor's Dawn",
+                     'Pleiades Resource Enterprise',
+                     'Reyan BPS', 'Reynhardt IntelliSys',
+                     'Sirius Atmospherics', 'Sirius Catering', 'Sirius Corporation',
+                     'Sirius Drives', 'Sirius Hot2Cold', 'Sirius Hyperspace',
+                     'Sirius Industrial', 'Sirius Luxury Transports', 'Sirius Mining Merope',
+                     'Sirius Mining', 'Sirius Power',
+                     'The Greenventure Group',
                      'The Peterson Group', 'The Rockforth Corporation',
                      'Turner Research Group', 'Wiggins Development Trust',
-                     #'Worster Insurance',
-                     'Wreaken Construction', 'Aegis Defense', 'Pleiades Resource Enterprise'}
+                     'Wreaken Construction'
+                     }
+
+
+# "Benton's Gang", 'Bentonian Party',
+# 'Worster Insurance',
 
 
 class FactionNameFilter(object):

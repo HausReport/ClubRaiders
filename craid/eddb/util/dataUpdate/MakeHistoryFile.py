@@ -122,6 +122,9 @@ def cleanHistoryFile(fName: str):
     # dataframe = dataframe[dataframe['faction'] != 'Aegis of Federal Democrats']
     # dataframe = dataframe[dataframe['faction'] != 'Aegis Imperium']
     # dataframe = dataframe[dataframe['faction'] != "Emperor's Dawn"]
+    dataframe = dataframe[dataframe.faction != "Benton's Gang"]
+    dataframe = dataframe[dataframe.faction != "Bentonian Party"]
+    dataframe = dataframe[dataframe.faction != "Worster Insurance"]
 
     json_str = ""
     for index, row in dataframe.iterrows():
