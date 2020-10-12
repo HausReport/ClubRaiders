@@ -11,6 +11,7 @@
 
 ### Recent Victories
 
+* Sirius Hot2Cold removed from Hemaki
 * Sirius Mining Merope: was in 7 systems, now a zombie in 1.
 * Sirius Mining Merope removed from Pleiades Sector PD-S B4-0.
 * Pleiades Resources Enterprise removed from Delphi.
