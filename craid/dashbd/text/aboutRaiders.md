@@ -1,6 +1,16 @@
 
 ## FAQ
 
+### Joining The Fight
+
+1. Much of ClubRaiders activity is coordinated on the [Pleiades Historical Society discord](https://discord.gg/PdaCsRA).  All commanders are welcome.  There, you can 
+ * join existing actions with other commanders, 
+ * create a new action of your own, 
+ * learn more about The Club in the extensive library, 
+ * and discuss the project with commanders with a wide range of experience from squadrons spanning the populated galaxy.
+2. Interested in building an Anti-Club Squadron from the ground up?  The Pleiades Historical Society [PLOR] is a fledgling squadron
+dedicated to removing The Club from the Pleiades and solving the remaining mysteries at play in the region.
+
 ### Using the site
 
 1. I want to discuss an issue.
