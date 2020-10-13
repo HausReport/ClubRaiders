@@ -8,8 +8,9 @@
  * create a new action of your own, 
  * learn more about The Club in the extensive library, 
  * and discuss the project with commanders with a wide range of experience from squadrons spanning the populated galaxy.
-2. Interested in building an Anti-Club Squadron from the ground up?  The Pleiades Historical Society [PLOR] is a fledgling squadron
+2. Interested in building an Anti-Club Squadron from the ground up?  The Pleiades Historical Society (PLOR) is a fledgling squadron
 dedicated to removing The Club from the Pleiades and solving the remaining mysteries at play in the region.
+3. PHS has written a useful guide [How to Retreat a Minor Faction](https://docs.google.com/document/d/1gP8cRjFQGlzH-HcQj1vIKJMLSi9h0i7qHvggL39A618/edit#).
 
 ### Using the site
 
