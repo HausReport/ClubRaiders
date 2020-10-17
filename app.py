@@ -300,6 +300,14 @@ def render_content(tab):
                 ]),
                 html.Tr(className="clean", children=[
                     html.Td(className="left-column", children=[
+                        makeDiscordIframe("x-cec", "301454399597969409"),
+                    ]),
+                    html.Td(className="clean-left", children=[
+                        AnnoyingCrap.getMarkdown("CloseEncountersCorps"),
+                    ])
+                ]),
+                html.Tr(className="clean", children=[
+                    html.Td(className="left-column", children=[
                         makeDiscordIframe("x-irh", "530542802032001074"),
                     ]),
                     html.Td(className="clean-left", children=[
