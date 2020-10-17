@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-[Player campaign in Daik!](https://discord.gg/PdaCsRA)
+[Player campaigns in Daik and Mooramba!](https://discord.gg/PdaCsRA)
 
 * $n_wars wars in progress
 * $n_elections elections in progress
