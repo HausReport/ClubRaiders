@@ -45,8 +45,8 @@ class Simulation:
             ptinf = tinf
 
             # Get next day's numbers
-            ainf = strat.expandOneDay(ainf, pop)
-            tinf = strat.retreatOneDay(tinf, pop)
+            ainf = self.strat.expandOneDay(ainf, pop)
+            tinf = self.strat.retreatOneDay(tinf, pop)
 
             # detect crossing
             if ((painf < ptinf) and (ainf >= tinf)):
@@ -76,7 +76,7 @@ class Simulation:
                 targ_infs.append(tinf)
                 targ_note.append(note)
 
-                note = ""
+                note: str = ""
                 if ainf > 75.0:
                     if expansion_day < 5:
                         note = "Pending Expansion day " + str(expansion_day + 1)
@@ -109,33 +109,61 @@ class Simulation:
         return df
 
     def daysToPendingExpansion(self, inf: float, pop: int):
-        tinf = inf
+        currentInf = inf
         day = 0
-        while tinf < 75.0:
+        while currentInf < 75.0:
             day += 1
-            tinf = self.strat.expandOneDay(tinf, pop)
+            currentInf = self.strat.expandOneDay(currentInf, pop)
         return day
 
     def daysToPendingRetreat(self, inf: float, pop: int):
-        tinf = inf
+        currentInf = inf
         day = 0
-        while tinf > 2.5:
+        while currentInf > 2.5:
             day += 1
-            tinf = self.strat.retreatOneDay(tinf, pop)
+            currentInf = self.strat.retreatOneDay(currentInf, pop)
         return day
 
     def daysToExpansion(self, inf: float, pop: int):
-        ret = self.strat.daysToPendingExpansion(inf, pop)
+        ret = self.daysToPendingExpansion(inf, pop)
         ret += 5  # pending days
         ret += 7  # active expansion https://discordapp.com/channels/483005833853009950/483005833853009952/759126832750002186
         return ret
 
     def daysToRetreat(self, inf: float, pop: int):
-        ret = self.strat.daysToPendingRetreat(inf, pop)
+        ret = self.daysToPendingRetreat(inf, pop)
         ret += 1  # pending day
         ret += 6  # active retreat
         ret += 1
         return ret
 
+    def getSimulationFigure(self, sim: pd.DataFrame):
+        ally_color = "pink"
+        target_color = "red"
+        conflict_color = "yellow"
+        expansion_color = "magenta"
+        retreat_color = "deeppink"
 
-
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=sim.date, y=sim.ally_inf,
+                                 mode='lines',
+                                 name='Ally',
+                                 marker_color='blue'))
+        fig.add_trace(go.Scatter(x=sim.date, y=sim.target_inf,
+                                 mode='lines',
+                                 name='Target',
+                                 marker_color='red'))
+        retLine = list(2.5 for i in range(sim.dayNum.size))
+        expLine = list(75.0 for i in range(sim.dayNum.size))
+        fig.add_trace(go.Scatter(x=sim.date, y=retLine,
+                                 mode='lines',
+                                 name='Retreat',
+                                 marker_color='#ff0000',
+                                 line_dash='dot'))
+        fig.add_trace(go.Scatter(x=sim.date, y=expLine,
+                                 mode='lines',
+                                 name='Expand',
+                                 marker_color='#00ff00',
+                                 line_dash='dot'))
+        # fig.update_yaxes(type="log")
+        return fig
