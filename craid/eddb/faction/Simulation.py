@@ -51,7 +51,7 @@ class Simulation:
             targetInf = self.strat.retreatOneDay(targetInf , pop)
 
             # detect crossing
-            if ((prevAllyInf < prevTargInf) and (allyInf >= targetInf )):
+            if ((prevAllyInf <= prevTargInf) and (allyInf >= targetInf )):
                 minf = (allyInf + targetInf ) / 2.0
                 for i in range(5):
                     dayNum.append(day)
