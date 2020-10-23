@@ -31,8 +31,8 @@ class History(object):
             print('Creating the object')
             cls._instance = super(History, cls).__new__(cls)
             myLoader = LoadDataFromAWS(forceWebDownload=False, useSmol=False)
-            cls._rawFrame = cls.xgetRawDataFrame(myLoader)
-            cls._normalizedFrame = cls.xgetNormalizedDataFrame()
+            cls._rawFrame = cls._getRawDataFrame(cls, myLoader)
+            cls._normalizedFrame = cls._getNormalizedDataFrame(cls)
 
             # Put any initialization here.
         return cls._instance
@@ -40,7 +40,7 @@ class History(object):
     def getRawDataFrame(self) -> DataFrame:
         return self._rawFrame
 
-    def xgetRawDataFrame(self, loader: DataLoader) -> DataFrame:
+    def _getRawDataFrame(self, loader: DataLoader) -> DataFrame:
         fName = loader.find_data_file('history.jsonl')
         dataframe = pd.read_json(fName, lines=True, compression='infer')
         dataframe.updated = pd.to_datetime(dataframe.updated, unit="ms")
@@ -55,7 +55,7 @@ class History(object):
     def getNormalizedDataFrame(self) -> DataFrame:
         return self._normalizedFrame
 
-    def xgetNormalizedDataFrame(self) -> DataFrame:
+    def _getNormalizedDataFrame(self) -> DataFrame:
         target = pd.DataFrame()
         start_date = date(2018, 5, 15)
         daily_date = date(2020, 6, 1)
