@@ -31,8 +31,8 @@ class History(object):
             print('Creating the object')
             cls._instance = super(History, cls).__new__(cls)
             myLoader = LoadDataFromAWS(forceWebDownload=False, useSmol=False)
-            cls._rawFrame = cls._instance.xgetRawDataFrame(myLoader)
-            cls._normalizedFrame = cls._instance.xgetNormalizedDataFrame()
+            cls._rawFrame = cls.xgetRawDataFrame(myLoader)
+            cls._normalizedFrame = cls.xgetNormalizedDataFrame()
 
             # Put any initialization here.
         return cls._instance
