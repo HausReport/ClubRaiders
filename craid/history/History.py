@@ -8,6 +8,7 @@
 #
 import logging
 from datetime import date, timedelta
+import datetime as dt
 
 import pandas as pd
 from dateutil.relativedelta import relativedelta
@@ -30,8 +31,8 @@ class History(object):
             print('Creating the object')
             cls._instance = super(History, cls).__new__(cls)
             myLoader = LoadDataFromAWS(forceWebDownload=False, useSmol=False)
-            cls._rawFrame = cls._getRawDataFrame(cls, myLoader)
-            cls._normalizedFrame = cls._getNormalizedDataFrame(cls)
+            cls._rawFrame = cls.xgetRawDataFrame(myLoader)
+            cls._normalizedFrame = cls.xgetNormalizedDataFrame()
 
             # Put any initialization here.
         return cls._instance
@@ -39,7 +40,7 @@ class History(object):
     def getRawDataFrame(self) -> DataFrame:
         return self._rawFrame
 
-    def _getRawDataFrame(self, loader: DataLoader) -> DataFrame:
+    def xgetRawDataFrame(self, loader: DataLoader) -> DataFrame:
         fName = loader.find_data_file('history.jsonl')
         dataframe = pd.read_json(fName, lines=True, compression='infer')
         dataframe.updated = pd.to_datetime(dataframe.updated, unit="ms")
@@ -54,7 +55,7 @@ class History(object):
     def getNormalizedDataFrame(self) -> DataFrame:
         return self._normalizedFrame
 
-    def _getNormalizedDataFrame(self) -> DataFrame:
+    def xgetNormalizedDataFrame(self) -> DataFrame:
         target = pd.DataFrame()
         start_date = date(2018, 5, 15)
         daily_date = date(2020, 6, 1)
@@ -136,7 +137,7 @@ class History(object):
         date_time_obj = dt.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S')
 
         hist = History()
-        df2 = getHistoryForFacationAndSystem(faction, system).copy()
+        df2 = self.getHistoryForFacationAndSystem(faction, system).copy()
 
         #
         # Convert to daily and clean
