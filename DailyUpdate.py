@@ -237,7 +237,7 @@ class DailyUpdate(object, metaclass=Singleton):
             shortName: str
             for shortName in sNames:
                 retVal = uploadToAWSFromTemp(shortName)
-                logging.info(f"Uploading {shortName} to AWS status is {retVal}")
+                logging.info(f"Uploading {shortName} to AWS.  Status is {retVal}")
         except Exception as e:
             traceback.print_exc()
             logging.error(str(e))
