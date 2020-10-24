@@ -140,7 +140,7 @@ class Simulation:
         return ret
 
     # noinspection PyTypeChecker
-    def getSimulationFigure(self, sim: pd.DataFrame):
+    def getSimulationFigure(self, sim: pd.DataFrame, title="Retreat Simulation", ally="Ally", target="Target"):
         ally_color = "pink"
         target_color = "red"
         conflict_color = "yellow"
@@ -150,11 +150,11 @@ class Simulation:
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=sim.date, y=sim.ally_inf,
                                  mode='lines',
-                                 name='Ally',
+                                 name=ally,
                                  marker_color='blue'))
         fig.add_trace(go.Scatter(x=sim.date, y=sim.target_inf,
                                  mode='lines',
-                                 name='Target',
+                                 name=target,
                                  marker_color='red'))
         retLine: List[float] = list(2.5 for i in range(sim.dayNum.size))
         expLine: List[float] = list(75.0 for i in range(sim.dayNum.size))
@@ -168,5 +168,7 @@ class Simulation:
                                  name='Expand',
                                  marker_color='#00ff00',
                                  line_dash='dot'))
+
+        fig.update_layout( title=title)
         # fig.update_yaxes(type="log")
         return fig
