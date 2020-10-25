@@ -4,9 +4,11 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 import gc
 import logging
-from typing import Dict, Set
 import multiprocessing
+from typing import Dict, Set
+
 import pandas as pd
+
 import craid.eddb.util.Printmem as pm
 from craid.eddb.base.Aware import Aware
 from craid.eddb.faction.Faction import Faction

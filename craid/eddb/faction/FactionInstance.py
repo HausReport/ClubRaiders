@@ -16,7 +16,6 @@ from craid.eddb.States import States
 from craid.eddb.base import GameConstants as gconst
 from craid.eddb.faction.Faction import Faction
 from craid.eddb.system.InhabitedSystem import InhabitedSystem
-
 from craid.eddb.util.PassThroughDict import PassThroughDict
 
 

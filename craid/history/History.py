@@ -3,12 +3,12 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 
+import datetime as dt
 #
 # Load factions
 #
 import logging
 from datetime import date, timedelta
-import datetime as dt
 
 import pandas as pd
 from dateutil.relativedelta import relativedelta

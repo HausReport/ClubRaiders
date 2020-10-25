@@ -4,15 +4,14 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 import os
 import shutil
-from pprint import pprint
 from typing import Dict, List
 
-from craid.eddb.loader.CreateFactions import load_factions
-from craid.eddb.loader.CreateSystems import load_systems
-from craid.eddb.loader.DataProducer import getDataArrays
-from craid.eddb.loader.strategy.DirectoryLoader import DirectoryLoader
 import pandas as pd
 import winsound
+
+from craid.eddb.loader.DataProducer import getDataArrays
+from craid.eddb.loader.strategy.DirectoryLoader import DirectoryLoader
+
 
 def beep():
     duration = 2000  # milliseconds

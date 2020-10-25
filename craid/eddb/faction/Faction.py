@@ -107,4 +107,6 @@ class Faction(Aware):
         return self.club
 
     def getEdbgsLink(self, msg: str) -> str:
-        return EdBgsFactionIds.getMarkdownLink(self.get_id(), self.get_name2())
+        #return EdBgsFactionIds.getMarkdownLink(self.get_id(), self.get_name2())
+        url = "https://elitebgs.app/faction/eddbId-" + str(self.get_id())
+        return f"[{msg}]({url})"

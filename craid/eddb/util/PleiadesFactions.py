@@ -4,23 +4,13 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 import gzip
 import logging
-from pprint import pprint
-from typing import List, Dict, Set
+from typing import Dict
 
 import ujson
 
 from craid.club.regions.RegionFactory import RegionFactory
-from craid.eddb.base.Aware import Aware
-from craid.eddb.faction.FactionInstance import FactionInstance
-from craid.eddb.loader.CreateFactionInstances import getFactionInstances
-from craid.eddb.loader.CreateFactions import load_factions
-from craid.eddb.loader.CreateSystems import load_systems
-from craid.eddb.loader.MakeKeyFiles import loadKeys
 from craid.eddb.loader.strategy.AWSLoader import LoadDataFromAWS
 from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
-from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
-from craid.eddb.system.BountyHuntingInfo import BountyHuntingInfo
-from craid.eddb.system.InhabitedSystem import InhabitedSystem
 
 counts: Dict[str,int] = {}
 pleiades = RegionFactory.getRegionByNumber(1)

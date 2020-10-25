@@ -10,6 +10,7 @@ from abc import ABC, abstractmethod
 
 import plotly.graph_objs as go
 
+
 class Region(ABC):
 
     def __init__(self, _name, num, color):

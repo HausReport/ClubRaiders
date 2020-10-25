@@ -11,7 +11,6 @@ import requests
 import ujson
 
 import craid.edbgs.EdBgsSystemIds
-from craid.eddb.system.BountyHuntingInfo import BountyHuntingInfo
 import craid.eddb.loader.MakeKeyFiles as kf
 
 newDict: Dict[int, str] = {}

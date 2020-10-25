@@ -6,9 +6,6 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 import logging
 import os
-import tempfile
-
-import requests
 
 from craid.eddb.loader.strategy.DataLoader import DataLoader
 

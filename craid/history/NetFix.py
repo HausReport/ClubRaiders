@@ -4,8 +4,10 @@
 #   SPDX-License-Identifier: BSD-3-Clause
 import os
 from typing import List, Dict
+
 import pandas as pd
 import winsound
+
 
 def beep():
     duration = 2000  # milliseconds

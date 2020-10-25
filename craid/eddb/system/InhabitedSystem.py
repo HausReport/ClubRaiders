@@ -9,7 +9,6 @@ import string
 from collections import deque
 from typing import List, Deque
 
-from craid.edbgs.EdBgsSystemIds import EdBgsSystemIds
 from craid.eddb.Station import Station
 from craid.eddb.base.GameConstants import *
 from craid.eddb.faction.Faction import Faction
@@ -432,7 +431,9 @@ class InhabitedSystem(System):
         return bestScore
 
     def getEdbgsLink(self, msg: str) -> str:
-        return EdBgsSystemIds.getMarkdownLink(self.get_id(), msg)
+        url = "https://elitebgs.app/system/eddbId-" + str(self.get_id())
+        return f"[{msg}]({url})"
+        #return EdBgsSystemIds.getMarkdownLink(self.get_id(), msg)
 
     # def smugglingScore(self) -> float:
     #     sta: Station = self.getBestSmugglingStation()

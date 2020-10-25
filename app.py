@@ -5,10 +5,10 @@
 import logging
 import math
 import os
+from multiprocessing import Process
 from pprint import pprint
 from random import randint
 from typing import Dict, Tuple, List
-from multiprocessing import Process
 
 import dash
 import dash_core_components as dcc

@@ -2,12 +2,11 @@
 #   https://github.com/HausReport/ClubRaiders
 #
 #   SPDX-License-Identifier: BSD-3-Clause
+import datetime as dt
 from typing import List
 
 import pandas as pd
 import plotly.graph_objects as go
-import humanize
-import datetime as dt
 
 from craid.eddb.faction.Strategy import Strategy
 

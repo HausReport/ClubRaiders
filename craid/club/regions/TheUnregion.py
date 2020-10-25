@@ -3,7 +3,6 @@
 #
 #   SPDX-License-Identifier: BSD-3-Clause
 import math
-from abc import ABC
 
 import craid
 
