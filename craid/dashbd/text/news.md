@@ -26,7 +26,7 @@
 * Wreaken Construction removed from HIP 78267.
 * CQC Holdings removed from Salleda.
 * The Dark Wheel replaced Hodack Prison Colony in HR 4979.
-* Sirius Mining Merope removed from Atlas.
+* Sirius Mining Merope, Janus Incorporated, and Aegis Research removed from Atlas.
 * Sirius Hyperspace removed from HIP 17412.
 * Aegis Research removed from Pleiades Sector HR-W d1-41.
 * Janus Incorporated removed from HIP 17497 and Celaeno.
@@ -39,4 +39,20 @@
 * Wreaken Construction removed from Kali
 * Aegis Defense removed from Madrus
 * Janus Incorporated and Aegis Research removed from HR 1183
+* CQC Holdings removed from LTT 6830.
+* Sirius Mining Merope removed from HIP 17497.
+* Aegis Research and Sirius Mining Merope removed from HIP 17694.
+* Janus Incorporated removed from Pleiades Sector KC-V c2-4.
+* Aegis Research removed from HIP 16753.
+* Hodack Prison Colony removed from Codorain.
+* Sirius Drives removed from Lei Manako.
+* Aegis Research removed from Pleiades Sector GW-W c1-13.
+* Janus Incorporated and Aegis Research removed from Hyades Sector AB-W b2-2.
+* Wreaken Construction removed from Jurarti.
+* Aegis Research removed from Pleiades Sector IH-V c2-5.
+* Wreaken Construction removed from Clee.
+* Sirius Corporation removed from LHS 200.
+* Sirius Drives removed from Malanquiya.
+* Aegis Research removed from HIP 17892.
+
 

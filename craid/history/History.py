@@ -75,6 +75,32 @@ class History(object):
                 single_date = single_date + relativedelta(days=1)
         return target
 
+    def getHistorySlice(self, fac: str = None, sys: str = None, startDate: str = None, endDate: str = None,
+                        reg: int = -1):
+        tmp = self.getRawDataFrame().copy()
+        if fac is not None:
+            tmp = tmp[tmp['faction'] == fac]
+        if sys is not None:
+            tmp = tmp[tmp['system'] == sys]
+        theStartDate = None
+        theEndDate = None
+        if startDate is not None:
+            date_time_str = startDate + " 00:00:00"  # '2020-10-05 00:00:00'
+            theStartDate = dt.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S')
+        if endDate is not None:
+            date_time_str = startDate + " 00:00:00"  # '2020-10-05 00:00:00'
+            theEndDate = dt.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S')
+
+        if theStartDate is not None:
+            tmp = tmp[tmp['updated'] >= theStartDate]
+        if theEndDate is not None:
+            tmp = tmp[tmp['updated'] <= theEndDate]
+
+        if reg != -1:
+            tmp = tmp[tmp['region'] == reg]
+        return tmp
+
+
     def getHistoryForFactionAndSystem(self, fac: str, sys: str):
         # hist = History()
         tmp = self.getRawDataFrame()
@@ -132,7 +158,7 @@ class History(object):
         tmp = tmp.loc[tmp.groupby(['faction', 'system', 'month']).updated.idxmax()]
         return tmp.sort_values(['faction', 'system'])
 
-    def getSmallFrame(self, faction, system, startDate:str =None, endDate:str=None):
+    def getSmallFrame(self, faction, system, startDate: str = None, endDate: str = None):
         theStartDate = None
         theEndDate = None
         if startDate is not None:
