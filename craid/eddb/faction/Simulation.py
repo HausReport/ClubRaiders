@@ -14,9 +14,9 @@ from craid.eddb.faction.Strategy import Strategy
 class Simulation:
 
     def __init__(self, strat: Strategy):
-        self.strat = strat
+        self.strategy = strat
 
-    def getSimulationFrame(self, ally_inf: float, targ_inf: float, pop: int):
+    def getSimulationFrame(self, initAllyInf: float, initTargetInf: float, population: int):
         # nDays = daysToRetreat(inf, pop)
 
         dayNum = []
@@ -28,13 +28,13 @@ class Simulation:
         day = 0
 
         dayNum.append(day)
-        targ_infs.append(targ_inf)
-        ally_infs.append(ally_inf)
+        targ_infs.append(initTargetInf)
+        ally_infs.append(initAllyInf)
         targ_note.append("")
         ally_note.append("")
 
-        targetInf  = targ_inf
-        allyInf = ally_inf
+        targetInf  = initTargetInf
+        allyInf = initAllyInf
 
         expansion_day = 0
         retreat_day = 0
@@ -46,8 +46,8 @@ class Simulation:
             prevTargInf = targetInf
 
             # Get next day's numbers
-            allyInf = self.strat.expandOneDay(allyInf, pop)
-            targetInf = self.strat.retreatOneDay(targetInf , pop)
+            allyInf = self.strategy.expandOneDay(allyInf, population)
+            targetInf = self.strategy.retreatOneDay(targetInf, population)
 
             # detect crossing
             if ((prevAllyInf <= prevTargInf) and (allyInf >= targetInf )):
@@ -114,7 +114,7 @@ class Simulation:
         day = 0
         while currentInf < 75.0:
             day += 1
-            currentInf = self.strat.expandOneDay(currentInf, pop)
+            currentInf = self.strategy.expandOneDay(currentInf, pop)
         return day
 
     def daysToPendingRetreat(self, inf: float, pop: int):
@@ -122,7 +122,7 @@ class Simulation:
         day = 0
         while currentInf > 2.5:
             day += 1
-            currentInf = self.strat.retreatOneDay(currentInf, pop)
+            currentInf = self.strategy.retreatOneDay(currentInf, pop)
         return day
 
     def daysToExpansion(self, inf: float, pop: int):
