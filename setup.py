@@ -12,7 +12,7 @@ setup(
               'craid.eddb.loader', 'craid.eddb.loader.strategy',
               'craid.eddb.powers', 'craid.eddb.system',
               'craid.eddb.util', 'craid.eddb.util.dataUpdate',
-              'craid.edbgs', 'craid.history',
+              'craid.history',
               'craid.dashbd', 'craid.dashbd.assets', 'craid.dashbd.queries', 'craid.dashbd.text',
               'craid.club', 'craid.club.regions'],
     # Needed for dependencies
@@ -21,7 +21,7 @@ setup(
                       'psutil', 'plotly', 'humanize', 'boto3', 'botocore'],
     include_package_data=True,
     # *strongly* suggested for sharing
-    version='0.8692',
+    version='0.8693',
     # The license can be anything you like
     license='BSD-3',
     description='Club-Raiders API and application for Elite Dangerous',

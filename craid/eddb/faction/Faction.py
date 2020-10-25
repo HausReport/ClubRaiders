@@ -8,7 +8,6 @@
 # from InhabitedSystem import InhabitedSystem
 from typing import Dict
 
-from craid.edbgs.EdBgsFactionIds import EdBgsFactionIds
 from craid.eddb.base.Aware import Aware
 from craid.eddb.base.NamedItem import NamedItem
 
