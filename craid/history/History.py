@@ -75,12 +75,12 @@ class History(object):
                 single_date = single_date + relativedelta(days=1)
         return target
 
-    def getHistoryForFacationAndSystem(self, fac: str, sys: str):
+    def getHistoryForFactionAndSystem(self, fac: str, sys: str):
         # hist = History()
         tmp = self.getRawDataFrame()
         return tmp[(tmp['faction'] == fac) & (tmp['system'] == sys)]
 
-    def getHistoryForFacation(self, fac: str):
+    def getHistoryForFaction(self, fac: str):
         # hist = History()
         tmp = self.getRawDataFrame()
         return tmp[(tmp['faction'] == fac)]
@@ -132,19 +132,29 @@ class History(object):
         tmp = tmp.loc[tmp.groupby(['faction', 'system', 'month']).updated.idxmax()]
         return tmp.sort_values(['faction', 'system'])
 
-    def getSmallFrame(self, dateStr: str, faction, system):
-        date_time_str = dateStr + " 00:00:00"  # '2020-10-05 00:00:00'
-        date_time_obj = dt.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S')
+    def getSmallFrame(self, faction, system, startDate:str =None, endDate:str=None):
+        theStartDate = None
+        theEndDate = None
+        if startDate is not None:
+            date_time_str = startDate + " 00:00:00"  # '2020-10-05 00:00:00'
+            theStartDate = dt.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S')
+        if endDate is not None:
+            date_time_str = startDate + " 00:00:00"  # '2020-10-05 00:00:00'
+            theEndDate = dt.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S')
 
-        hist = History()
-        df2 = self.getHistoryForFacationAndSystem(faction, system).copy()
+        df2 = self.getHistoryForFactionAndSystem(faction, system).copy()
 
         #
         # Convert to daily and clean
         #
         df2['updated'] = pd.to_datetime(df2.updated, unit='ms')
         df2['updated'] = pd.to_datetime(df2.updated).dt.to_period('D').dt.to_timestamp()
-        df2 = df2[df2['updated'] >= date_time_obj]
+
+        if theStartDate is not None:
+            df2 = df2[df2['updated'] >= theStartDate]
+        if theEndDate is not None:
+            df2 = df2[df2['updated'] <= theEndDate]
+
         df2 = df2.drop_duplicates(subset=['system', 'faction', 'updated'])
         return df2.sort_values(['updated'])
 
