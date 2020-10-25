@@ -44,7 +44,7 @@ class History(object):
         fName = loader.find_data_file('history.jsonl')
         dataframe = pd.read_json(fName, lines=True, compression='infer')
         dataframe.updated = pd.to_datetime(dataframe.updated, unit="ms")
-        dataframe['updated'] = dataframe['updated'].dt.date
+        #dataframe['updated'] = dataframe['updated'].dt.date
         dataframe['updated'] = dataframe.updated.dt.round("D")  # truncate to day
 
         # renamed systems
