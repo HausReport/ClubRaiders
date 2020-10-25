@@ -21,7 +21,7 @@ setup(
                       'psutil', 'plotly', 'humanize', 'boto3', 'botocore'],
     include_package_data=True,
     # *strongly* suggested for sharing
-    version='0.8691',
+    version='0.8692',
     # The license can be anything you like
     license='BSD-3',
     description='Club-Raiders API and application for Elite Dangerous',
