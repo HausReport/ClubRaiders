@@ -46,6 +46,7 @@ class History(object):
         dataframe.updated = pd.to_datetime(dataframe.updated, unit="ms")
         #dataframe['updated'] = dataframe['updated'].dt.date
         dataframe['updated'] = dataframe.updated.dt.round("D")  # truncate to day
+        dataframe['updated'] = dataframe.updated + dt.timedelta(days=-1)
 
         # renamed systems
         dataframe.drop(dataframe[dataframe.system == "Pleiades Sector IR-W d1-55"].index, inplace=True)
