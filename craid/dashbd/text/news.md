@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-[Player campaigns in Daik and Mooramba!](https://discord.gg/PdaCsRA)
+[Player campaigns in Mooramba and Maia!](https://discord.gg/PdaCsRA)
 
 * $n_wars wars in progress
 * $n_elections elections in progress
@@ -11,6 +11,7 @@
 
 ### Recent Victories
 
+* Sirius Hyperspace removed from Daik.
 * CQC Holdings removed from Ye'kua'gsa.
 * Sirius Hot2Cold removed from Hemaki.
 * Sirius Mining Merope: was in 7 systems, now a zombie in 1.

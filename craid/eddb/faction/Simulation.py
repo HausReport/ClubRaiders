@@ -109,30 +109,34 @@ class Simulation:
         df['date'] = dates
         return df
 
-    def daysToPendingExpansion(self, inf: float, pop: int):
-        currentInf = inf
+    def daysToPendingExpansion(self, allyInf: float, targetInf: float, pop: int):
+        currentInf = allyInf
         day = 0
         while currentInf < 75.0:
             day += 1
             currentInf = self.strategy.expandOneDay(currentInf, pop)
+        if allyInf < targetInf:
+            day +=5    #conflict for control
         return day
 
-    def daysToPendingRetreat(self, inf: float, pop: int):
-        currentInf = inf
+    def daysToPendingRetreat(self, targetInf: float, allyInf: float, pop: int):
+        currentInf = targetInf
         day = 0
         while currentInf > 2.5:
             day += 1
             currentInf = self.strategy.retreatOneDay(currentInf, pop)
+        if allyInf < targetInf:
+            day +=5    #conflict for control
         return day
 
-    def daysToExpansion(self, inf: float, pop: int):
-        ret = self.daysToPendingExpansion(inf, pop)
+    def daysToExpansion(self, allyInf: float, targetInf:float, pop: int):
+        ret = self.daysToPendingExpansion(allyInf, targetInf, pop)
         ret += 5  # pending days
         ret += 7  # active expansion https://discordapp.com/channels/483005833853009950/483005833853009952/759126832750002186
         return ret
 
-    def daysToRetreat(self, inf: float, pop: int):
-        ret = self.daysToPendingRetreat(inf, pop)
+    def daysToRetreat(self, targetInf: float, allyInf: float, pop: int):
+        ret = self.daysToPendingRetreat(targetInf, allyInf, pop)
         ret += 1  # pending day
         ret += 6  # active retreat
         ret += 1
