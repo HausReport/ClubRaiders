@@ -12,6 +12,7 @@
 import gzip
 import os
 import shutil
+import tempfile
 from typing import Dict
 
 import pandas as pd
@@ -21,9 +22,11 @@ from craid.eddb.loader.CreateClubSystemKeys import getClubSystemKeys
 from craid.eddb.loader.CreateFactionInstances import getFactionInstances
 from craid.eddb.loader.CreateFactions import load_factions
 from craid.eddb.loader.CreateSystems import load_systems
+from craid.eddb.loader.strategy.AWSLoader import LoadDataFromAWS
 from craid.eddb.loader.strategy.EDDBLoader import LoadDataFromEDDB
 from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
 
+import logging
 
 # oldRevs = ["444f58522e81c3ad6477eefa398f39c2edfc1ea9",
 #            "7cd6abc33aafab80cace0c13c2beb6e1d8f1779b",
@@ -77,14 +80,19 @@ from craid.eddb.loader.strategy.GithubLoader import LoadDataFromGithub
 #         fout.write(json_bytes)
 
 # fName = '../../../../../../../data/history.jsonl.gz'
+from craid.eddb.util.dataUpdate.UploadToAmazon import uploadToAWSFromTemp
+
 
 def copyIntoSource(fName: str):
+    logging.error("In copyIntoSource")
     #dest = os.path.join("..", "..", "..", "..", "data", "history.jsonl.gz")
-    dest = os.path.join("data", "history.jsonl.gz")
+    dest = os.path.join("..","..","..","..", "data", "history.jsonl.gz")
+    logging.error("Destination file:" + os.path.abspath(dest))
     shutil.copy(fName, dest, follow_symlinks=True)
 
 
 def appendTodaysData(fName: str):
+    logging.error("In appendTodaysData")
     # global fName
     myLoader = LoadDataFromEDDB()
 
@@ -114,6 +122,7 @@ def appendTodaysData(fName: str):
 
 
 def cleanHistoryFile(fName: str):
+    logging.error("In cleanHistoryFile")
     # global fName
     dataframe = pd.read_json(fName, lines=True, compression='infer')
 
@@ -134,3 +143,12 @@ def cleanHistoryFile(fName: str):
     json_bytes = json_str.encode('utf-8')
     with gzip.GzipFile(fName, 'wb') as fout:  # 4. gzip
         fout.write(json_bytes)
+
+if __name__ == '__main__':
+    loader: LoadDataFromAWS = LoadDataFromAWS(forceWebDownload=True, useSmol=False)
+    tmpDir = tempfile.gettempdir()
+    fName = loader.download_file("history.jsonl", tmpDir)  # .gz is added in the function
+    appendTodaysData(fName)
+    cleanHistoryFile(fName)
+    copyIntoSource(fName)  # FIXME: Not sure about this on production server
+    uploadToAWSFromTemp("history.jsonl.gz")

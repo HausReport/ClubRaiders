@@ -99,7 +99,7 @@ class InhabitedSystem(System):
     def getControllingFactionId(self):
         tmp: str = self.jsonLine['controlling_minor_faction_id']
         if tmp is None:
-            logging.info("No controlling faction ID")
+            logging.info("IS: No controlling faction ID")
             return -1
         else:
             return int(self.jsonLine['controlling_minor_faction_id'])
