@@ -86,7 +86,7 @@ from craid.eddb.util.dataUpdate.UploadToAmazon import uploadToAWSFromTemp
 def copyIntoSource(fName: str):
     logging.error("In copyIntoSource")
     #dest = os.path.join("..", "..", "..", "..", "data", "history.jsonl.gz")
-    dest = os.path.join("..","..","..","..", "data", "history.jsonl.gz")
+    dest = os.path.join("data", "history.jsonl.gz")
     logging.error("Destination file:" + os.path.abspath(dest))
     shutil.copy(fName, dest, follow_symlinks=True)
 
@@ -150,5 +150,5 @@ if __name__ == '__main__':
     fName = loader.download_file("history.jsonl", tmpDir)  # .gz is added in the function
     appendTodaysData(fName)
     cleanHistoryFile(fName)
-    copyIntoSource(fName)  # FIXME: Not sure about this on production server
+    copyIntoSource(fName)
     uploadToAWSFromTemp("history.jsonl.gz")
