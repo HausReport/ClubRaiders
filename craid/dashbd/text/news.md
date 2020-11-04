@@ -1,7 +1,7 @@
 
 ## Clubspace News Network
 
-[Player campaigns in Mooramba and Maia!](https://discord.gg/PdaCsRA)
+[Player campaigns in Maia and Honoto!](https://discord.gg/PdaCsRA)
 
 * $n_wars wars in progress
 * $n_elections elections in progress
