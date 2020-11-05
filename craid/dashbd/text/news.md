@@ -11,6 +11,7 @@
 
 ### Recent Victories
 
+* Sirius Hyperspace removed from Mooramba.
 * Sirius Hyperspace removed from Daik.
 * CQC Holdings removed from Ye'kua'gsa.
 * Sirius Hot2Cold removed from Hemaki.
