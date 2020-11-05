@@ -39,6 +39,11 @@ class Simulation:
         expansion_day = 0
         retreat_day = 0
 
+        conflictStartDate = 4
+        conflictStartInf = 11.0
+        conflictLength = 5
+
+
         while retreat_day <= 7:
             day += 1
             # Save current day's numbers
