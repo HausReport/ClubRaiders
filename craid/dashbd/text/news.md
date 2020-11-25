@@ -1,7 +1,4 @@
-
 ## Clubspace News Network
-
-[Player campaigns in Maia, Honoto, Pleione and HIP 17692!](https://discord.gg/PdaCsRA)
 
 * $n_wars wars in progress
 * $n_elections elections in progress
@@ -9,7 +6,15 @@
 * $n_retreats Club factions retreating
 * $n_very_easy factions rated "very easy" to attack
 
+### Current Campaigns
+* [Close Encounter Corps fighting Hodack Prison Colony in Honoto](https://discord.gg/PdaCsRA)
+* [Minutemen fighting Sirius Corp in LAWD 26](https://discord.gg/PdaCsRA)
+* [Pleiades Historical Society fighting Hodack Prison Colony in Akandi](https://discord.gg/PdaCsRA)
+* [Pleiades Squadrons fighting Pleiades Resource Enterprise in Pleione](https://discord.gg/PdaCsRA)
+
 ### Recent Victories
+
+* Pleiades Squardrons remove Pleiades Resource Enterprise from HIP 177692, HIP 17694.
 
 * Sirius Hyperspace removed from Mooramba.
 * Sirius Hyperspace removed from Daik.
