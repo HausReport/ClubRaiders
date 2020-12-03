@@ -2,8 +2,8 @@ import logging
 import os
 from typing import Dict
 
-from modules.DailyPlan import DailyPlan
-from modules.Status import Status
+from DailyPlan import DailyPlan
+from Status import Status
 
 
 class LogReporter:
