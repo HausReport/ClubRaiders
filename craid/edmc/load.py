@@ -193,12 +193,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     elif (event == 'RedeemVoucher' and entry['Type'] == 'bounty'):  # bounties collected
         dailyPlans.checkBounty(event)
     elif event == 'MarketSell':  # Trade Profit
-        if this.StationFaction.get().lower() == this.FactionName.get().lower() and this.SystemName.get().lower() == system.lower():
-            cost = entry['Count'] * entry['AvgPricePaid']
-            profit = entry['TotalSale'] - cost
-            this.TradeProfit.set(this.TradeProfit.get() + profit)
-            this.tradeprofit2['text'] = human_format(this.TradeProfit.get())
-
+        dailyPlans.checkTrade(event)
     elif event == 'FSDJump' or event == 'CarrierJump':  # get factions at jump
         #
         # Update system stuff
@@ -230,5 +225,3 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             except KeyError:
                 this.FactionStates['Factions'][z]['States'].append({'State': 'None'})
             z += 1
-
-    # FIXME: set system, factions, address, etc at CarrierJump also

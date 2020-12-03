@@ -186,19 +186,47 @@ class DailyPlan:
         if self.currentlyInTargetSystem():
             factionName = self.currentStationFaction
             if factionName is not None:
-                bounty = entry['TotalEarnings']
+                earnings = entry['TotalEarnings']
                 if self.isHeroFactionName(factionName):
-                    msg = f"Cartography Contribution for Hero Faction {factionName} of {bounty} credits."
+                    msg = f"Cartography Contribution for Hero Faction {factionName} of {earnings} credits."
                     ret.add(Status(1, msg))
                 elif self.isTargetFactionName(factionName):
-                    msg = f"Cartography Contribution for Enemy Faction {factionName} of {bounty} credits."
+                    msg = f"Cartography Contribution for Enemy Faction {factionName} of {earnings} credits."
                     ret.add(Status(-1, msg))
                 else:
-                    msg = f"Cartography Contribution for Competitor Faction {factionName} of {bounty} credits."
+                    msg = f"Cartography Contribution for Competitor Faction {factionName} of {earnings} credits."
                     ret.add(Status(-1, msg))
         return ret
 
-    def checkTrade(self, event: Dict) -> List[Status]:
+    def checkTrade(self, entry: Dict) -> List[Status]:
+        ret: List[Status] = []
+        if self.currentlyInTargetSystem():
+            factionName = self.currentStationFaction
+            if factionName is not None:
+                cost = entry['Count'] * entry['AvgPricePaid']
+                profit = entry['TotalSale'] - cost
+                if profit>0:
+                    if self.isHeroFactionName(factionName):
+                        msg = f"Positive Trade Contribution for Hero Faction {factionName} of {profit} credits."
+                        ret.add(Status(1, msg))
+                    elif self.isTargetFactionName(factionName):
+                        msg = f"Positive Trade Contribution for Enemy Faction {factionName} of {profit} credits."
+                        ret.add(Status(-1, msg))
+                    else:
+                        msg = f"Positive Trade Contribution for Competitor Faction {factionName} of {profit} credits."
+                        ret.add(Status(-1, msg))
+                else:
+                    if self.isHeroFactionName(factionName):
+                        msg = f"Negative Trade Contribution against Hero Faction {factionName} of {profit} credits."
+                        ret.add(Status(-1, msg))
+                    elif self.isTargetFactionName(factionName):
+                        msg = f"Negative Trade Contribution against Enemy Faction {factionName} of {profit} credits."
+                        ret.add(Status(1, msg))
+                    else:
+                        msg = f"Negative Trade Contribution against Competitor Faction {factionName} of {profit} credits."
+                        ret.add(Status(-1, msg))
+
+        return ret
         # handle profit and loss cases
         a = 4
         #
