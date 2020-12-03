@@ -205,23 +205,27 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         dailyPlans.setCurrentStationFaction(None)
         modules.globals.add_system_and_address(sn, sa)
 
+
+        #FIXME: Not sure we'd need list of local faction names
+        #FIXME: Having a list of faction states, however would be useful for
+        # boom/investment bonuses, detecting war/civil war/exotic states
         #
         # Update faction stuff
         #
-        this.FactionNames = []
-        this.FactionStates = {'Factions': []}
-        z = 0
-        for i in entry['Factions']:
-            if i['Name'] == "Pilots' Federation Local Branch":
-                continue
-
-            this.FactionNames.append(i['Name'])
-            this.FactionStates['Factions'].append(
-                {'Faction': i['Name'], 'Happiness': i['Happiness_Localised'], 'States': []})
-
-            try:
-                for x in i['ActiveStates']:
-                    this.FactionStates['Factions'][z]['States'].append({'State': x['State']})
-            except KeyError:
-                this.FactionStates['Factions'][z]['States'].append({'State': 'None'})
-            z += 1
+        # this.FactionNames = []
+        # this.FactionStates = {'Factions': []}
+        # z = 0
+        # for i in entry['Factions']:
+        #     if i['Name'] == "Pilots' Federation Local Branch":
+        #         continue
+        #
+        #     this.FactionNames.append(i['Name'])
+        #     this.FactionStates['Factions'].append(
+        #         {'Faction': i['Name'], 'Happiness': i['Happiness_Localised'], 'States': []})
+        #
+        #     try:
+        #         for x in i['ActiveStates']:
+        #             this.FactionStates['Factions'][z]['States'].append({'State': x['State']})
+        #     except KeyError:
+        #         this.FactionStates['Factions'][z]['States'].append({'State': 'None'})
+        #     z += 1

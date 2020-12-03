@@ -1,7 +1,7 @@
 # System Name
 # Hero Faction
 # Target Faction
-# Webhook?
+# Discord Webhook?
 
 
 # === Positive Levers ===
@@ -25,8 +25,8 @@
 # Other states?
 from typing import List, Dict
 
-from modules import GlobalDictionaries
-from modules.Status import Status
+import GlobalDictionaries
+import Status
 
 
 class DailyPlan:
@@ -216,41 +216,17 @@ class DailyPlan:
                         msg = f"Positive Trade Contribution for Competitor Faction {factionName} of {profit} credits."
                         ret.add(Status(-1, msg))
                 else:
-                    if self.isHeroFactionName(factionName):
-                        msg = f"Negative Trade Contribution against Hero Faction {factionName} of {profit} credits."
-                        ret.add(Status(-1, msg))
-                    elif self.isTargetFactionName(factionName):
+                    if self.isTargetFactionName(factionName):
                         msg = f"Negative Trade Contribution against Enemy Faction {factionName} of {profit} credits."
                         ret.add(Status(1, msg))
+                    elif self.isHeroFactionName(factionName):
+                        msg = f"Negative Trade Contribution against Hero Faction {factionName} of {profit} credits."
+                        ret.add(Status(-1, msg))
                     else:
                         msg = f"Negative Trade Contribution against Competitor Faction {factionName} of {profit} credits."
                         ret.add(Status(-1, msg))
 
         return ret
-        # handle profit and loss cases
-        a = 4
-        #
-        # If benefits hero faction in goal system
-        #
-        if a == 0:
-            return Status(1, "Trade Contribution for Hero Faction")
-
-        #
-        # If benefits target faction in goal system
-        #
-        if a == 0:
-            return Status(-1, "Trade Contribution for Enemy Faction")
-
-        #
-        # If benefits competitor faction in goal system
-        #
-        if a == 0:
-            return Status(-1, "Trade Contribution for Competitor Faction")
-
-        #
-        # Otherwise
-        #
-        return Status(0, "No Effect Trade Contribution")
 
     def checkMissionFail(self, event: Dict) -> List[Status]:
         a = 4
