@@ -229,51 +229,47 @@ class DailyPlan:
         return ret
 
     def checkMissionFail(self, event: Dict) -> List[Status]:
+        ret: List[Status] = []
         a = 4
         #
         # If attacks enemy faction in goal system
         #
         if a == 0:
-            return Status(1, "Failed Mission against Enemy Faction")
+            ret.add(Status(1, "Failed Mission against Enemy Faction"))
 
         #
         # If benefits hero faction in goal system
         #
         if a == 0:
-            return Status(-1, "Failed Mission against Hero Faction")
+            ret.add(Status(-1, "Failed Mission against Hero Faction"))
 
         #
         # If benefits competitor faction in goal system
         #
         if a == 0:
-            return Status(-1, "Failed Mission against Neutral Faction")
+            ret.add(Status(-1, "Failed Mission against Neutral Faction"))
 
-        #
-        # Otherwise
-        #
-        return Status(0, "No Effect Failed Mission")
+        return ret
 
     def checkMurder(self, event: Dict) -> List[Status]:
+        ret: List[Status] = []
         a = 4
         #
         # If attacks enemy faction in goal system
         #
         if a == 0:
-            return Status(1, "Murder against Enemy Faction")
+            ret.add(Status(1, "Murder against Enemy Faction"))
 
         #
         # If attacks hero faction in goal system
         #
         if a == 0:
-            return Status(-1, "Murder against Hero Faction")
+            ret.add(Status(-1, "Murder against Hero Faction"))
 
         #
         # If attacks neutral faction in goal system
         #
         if a == 0:
-            return Status(-1, "Murder against Neutral Faction")
+            ret.add(Status(-1, "Murder against Neutral Faction"))
 
-        #
-        # Otherwise
-        #
-        return Status(0, "No effect Murder")
+        return ret

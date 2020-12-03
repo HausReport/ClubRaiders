@@ -11,15 +11,11 @@ It adds a single button to the EDMC interface that displays the number of times 
 import logging
 import os
 import tkinter as tk
-from typing import Optional, Set, List
+from typing import Optional
 
 import myNotebook as nb
 from config import appname, config
 
-import modules.ClubFactionNames
-
-# PLUGIN_NAME = "edmClub"
-# This could also be returned from plugin_start3()
 from craid.edmc.modules import GlobalDictionaries
 from modules.DailyPlans import DailyPlans
 from modules.LogReporter import LogReporter
@@ -54,7 +50,7 @@ logReporter: LogReporter = LogReporter(logger)
 # FACTION_COMPETITOR = -1
 # FACTION_TARGET = -2
 
-class edmClub:
+class EdmClub:
     """
     ClickCounter implements the EDMC plugin interface.
     It adds a button to the EDMC UI that displays the number of times it has been clicked, and a preference to set
@@ -129,7 +125,7 @@ class edmClub:
         return frame
 
 
-cc = edmClub()
+cc = EdmClub()
 
 #
 # Direct EDMC callbacks to class
