@@ -17,6 +17,7 @@ import myNotebook as nb
 from config import appname, config
 
 from craid.edmc.modules import GlobalDictionaries
+from craid.edmc.modules.DailyPlan import DailyPlan
 from modules.DailyPlans import DailyPlans
 from modules.LogReporter import LogReporter
 
@@ -126,6 +127,15 @@ class EdmClub:
 
 
 cc = EdmClub()
+samplePlan: DailyPlan = DailyPlan("LHS 2477","Federal Reclamation Co","Hodack Prison Colony")
+samplePlan.addMissionInfluenceGoal(60)
+samplePlan.addBountyGoal(16000000)
+samplePlan.addCartographyGoal(8000000)
+samplePlan.addTradeProfitGoal(16000000)
+
+
+dailyPlans: DailyPlans = DailyPlans(logReporter)
+dailyPlans.addPlan(samplePlan)
 
 #
 # Direct EDMC callbacks to class
@@ -153,7 +163,6 @@ def plugin_app(parent: tk.Frame) -> Optional[tk.Frame]:
     return cc.setup_main_ui(parent)
 
 
-dailyPlans: DailyPlans = DailyPlans(logReporter)
 
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):

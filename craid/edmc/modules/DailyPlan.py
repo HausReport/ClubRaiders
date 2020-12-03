@@ -28,6 +28,14 @@ from typing import List, Dict
 import GlobalDictionaries
 import Status
 
+CAT_MISSION_SUCCESS = "MissionSuccess"
+CAT_BOUNTY = "Bounty"
+CAT_CARTOGRAPHY = "Cartography"
+CAT_TRADE_PROFIT = "TradeProfit"
+CAT_TRADE_LOSS = "TradeLoss"
+CAT_MISSION_FAIL = "MissionFail"
+CAT_MURDER = "Murder"
+
 
 class DailyPlan:
     #
@@ -133,6 +141,7 @@ class DailyPlan:
     def addMurderGoal(self, murd: int = 12):
         self.murderGoal = murd
 
+
     #
     # Lever checks
     # return -1 for harmful action
@@ -154,13 +163,13 @@ class DailyPlan:
                 if self.isSystemName(entrySystemName):  # FIXME: revisit case of two systems with same name
                     if self.isHeroFactionName(factionName):
                         msg = f"Mission Contribution for Hero Faction {factionName} of {inf} points."
-                        ret.add(Status(1, msg))
+                        ret.add(Status(1, msg, CAT_MISSION_SUCCESS,inf))
                     elif self.isTargetFactionName(factionName):
                         msg = f"Mission Contribution for Target Faction {factionName} of {inf} points."
-                        ret.add(Status(-1, msg))
+                        ret.add(Status(-1, msg,CAT_MISSION_SUCCESS, inf))
                     else:
                         msg = f"Mission Contribution for Competitor Faction {factionName} of {inf} points."
-                        ret.add(Status(-1, msg))
+                        ret.add(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
 
         return ret
 
@@ -172,13 +181,13 @@ class DailyPlan:
                 bounty = z['Amount']
                 if self.isHeroFactionName(factionName):
                     msg = f"Bounty Contribution for Hero Faction {factionName} of {bounty} credits."
-                    ret.add(Status(1, msg))
+                    ret.add(Status(1, msg,CAT_BOUNTY,bounty))
                 elif self.isTargetFactionName(factionName):
                     msg = f"Bounty Contribution for Enemy Faction {factionName} of {bounty} credits."
-                    ret.add(Status(-1, msg))
+                    ret.add(Status(-1, msg,CAT_BOUNTY,bounty))
                 else:
                     msg = f"Bounty Contribution for Competitor Faction {factionName} of {bounty} credits."
-                    ret.add(Status(-1, msg))
+                    ret.add(Status(-1, msg,CAT_BOUNTY,bounty))
         return ret
 
     def checkCartography(self, entry: Dict) -> List[Status]:
@@ -189,14 +198,15 @@ class DailyPlan:
                 earnings = entry['TotalEarnings']
                 if self.isHeroFactionName(factionName):
                     msg = f"Cartography Contribution for Hero Faction {factionName} of {earnings} credits."
-                    ret.add(Status(1, msg))
+                    ret.add(Status(1, msg, CAT_CARTOGRAPHY,earnings))
                 elif self.isTargetFactionName(factionName):
                     msg = f"Cartography Contribution for Enemy Faction {factionName} of {earnings} credits."
-                    ret.add(Status(-1, msg))
+                    ret.add(Status(-1, msg, CAT_CARTOGRAPHY, earnings))
                 else:
                     msg = f"Cartography Contribution for Competitor Faction {factionName} of {earnings} credits."
-                    ret.add(Status(-1, msg))
+                    ret.add(Status(-1, msg, CAT_CARTOGRAPHY, earnings))
         return ret
+
 
     def checkTrade(self, entry: Dict) -> List[Status]:
         ret: List[Status] = []
@@ -208,25 +218,26 @@ class DailyPlan:
                 if profit>0:
                     if self.isHeroFactionName(factionName):
                         msg = f"Positive Trade Contribution for Hero Faction {factionName} of {profit} credits."
-                        ret.add(Status(1, msg))
+                        ret.add(Status(1, msg, CAT_TRADE_PROFIT, profit))
                     elif self.isTargetFactionName(factionName):
                         msg = f"Positive Trade Contribution for Enemy Faction {factionName} of {profit} credits."
-                        ret.add(Status(-1, msg))
+                        ret.add(Status(-1, msg, CAT_TRADE_PROFIT, profit))
                     else:
                         msg = f"Positive Trade Contribution for Competitor Faction {factionName} of {profit} credits."
-                        ret.add(Status(-1, msg))
+                        ret.add(Status(-1, msg, CAT_TRADE_PROFIT, profit))
                 else:
                     if self.isTargetFactionName(factionName):
                         msg = f"Negative Trade Contribution against Enemy Faction {factionName} of {profit} credits."
-                        ret.add(Status(1, msg))
+                        ret.add(Status(1, msg, CAT_TRADE_LOSS, profit))
                     elif self.isHeroFactionName(factionName):
                         msg = f"Negative Trade Contribution against Hero Faction {factionName} of {profit} credits."
-                        ret.add(Status(-1, msg))
+                        ret.add(Status(-1, msg, CAT_TRADE_LOSS, profit))
                     else:
                         msg = f"Negative Trade Contribution against Competitor Faction {factionName} of {profit} credits."
-                        ret.add(Status(-1, msg))
+                        ret.add(Status(-1, msg, CAT_TRADE_LOSS, profit))
 
         return ret
+
 
     def checkMissionFail(self, event: Dict) -> List[Status]:
         ret: List[Status] = []
@@ -235,21 +246,22 @@ class DailyPlan:
         # If attacks enemy faction in goal system
         #
         if a == 0:
-            ret.add(Status(1, "Failed Mission against Enemy Faction"))
+            ret.add(Status(1, "Failed Mission against Enemy Faction", CAT_MISSION_FAIL,1))
 
         #
         # If benefits hero faction in goal system
         #
         if a == 0:
-            ret.add(Status(-1, "Failed Mission against Hero Faction"))
+            ret.add(Status(-1, "Failed Mission against Hero Faction", CAT_MISSION_FAIL,1))
 
         #
         # If benefits competitor faction in goal system
         #
         if a == 0:
-            ret.add(Status(-1, "Failed Mission against Neutral Faction"))
+            ret.add(Status(-1, "Failed Mission against Neutral Faction",CAT_MISSION_FAIL,1))
 
         return ret
+
 
     def checkMurder(self, event: Dict) -> List[Status]:
         ret: List[Status] = []
@@ -258,18 +270,18 @@ class DailyPlan:
         # If attacks enemy faction in goal system
         #
         if a == 0:
-            ret.add(Status(1, "Murder against Enemy Faction"))
+            ret.add(Status(1, "Murder against Enemy Faction", CAT_MURDER,1))
 
         #
         # If attacks hero faction in goal system
         #
         if a == 0:
-            ret.add(Status(-1, "Murder against Hero Faction"))
+            ret.add(Status(-1, "Murder against Hero Faction", CAT_MURDER, 1))
 
         #
         # If attacks neutral faction in goal system
         #
         if a == 0:
-            ret.add(Status(-1, "Murder against Neutral Faction"))
+            ret.add(Status(-1, "Murder against Neutral Faction", CAT_MURDER,1))
 
         return ret
