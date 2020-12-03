@@ -9,13 +9,13 @@
 ### Current Campaigns
 * [Close Encounter Corps fighting Hodack Prison Colony in Honoto](https://discord.gg/PdaCsRA)
 * [Minutemen fighting Sirius Corp in LAWD 26](https://discord.gg/PdaCsRA)
-* [Pleiades Historical Society fighting Hodack Prison Colony in Akandi](https://discord.gg/PdaCsRA)
+* [Pleiades Squadrons fighting Pleiades Resource Enterprise in Pleiades Sector DL-Y d65](https://discord.gg/PdaCsRA)
 * [Pleiades Squadrons fighting Pleiades Resource Enterprise in Pleione](https://discord.gg/PdaCsRA)
 
 ### Recent Victories
 
-* Pleiades Squardrons remove Pleiades Resource Enterprise from HIP 177692, HIP 17694.
-
+* Hodack Prison Colony removed from Akandi and Delkar.
+* Pleiades Squardrons removed Pleiades Resource Enterprise from HIP 177692, HIP 17694.
 * Sirius Hyperspace removed from Mooramba.
 * Sirius Hyperspace removed from Daik.
 * CQC Holdings removed from Ye'kua'gsa.
