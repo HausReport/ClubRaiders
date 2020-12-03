@@ -4,9 +4,10 @@ from typing import Dict
 
 from DailyPlan import DailyPlan
 from Status import Status
+from Reporter import Reporter
 
 
-class LogReporter:
+class LogReporter(Reporter):
 
     def __init__(self, logger):
         self.logger = logger

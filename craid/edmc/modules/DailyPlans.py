@@ -1,7 +1,7 @@
 from typing import List, Dict
 
-from modules.DailyPlan import DailyPlan
-from modules.LogReporter import LogReporter
+from DailyPlan import DailyPlan
+from LogReporter import LogReporter
 
 
 class DailyPlans:
