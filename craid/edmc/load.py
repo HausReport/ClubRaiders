@@ -3,6 +3,11 @@ Example EDMC plugin.
 It adds a single button to the EDMC interface that displays the number of times it has been clicked.
 """
 
+#   Copyright (c) 2020 Club Raiders Project
+#   https://github.com/HausReport/ClubRaiders
+#
+#   SPDX-License-Identifier: BSD-3-Clause
+
 import logging
 import os
 import tkinter as tk
@@ -186,12 +191,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     elif ( (event == 'SellExplorationData') or (event == 'MultiSellExplorationData')) :  # get carto data value
         dailyPlans.checkCartography(event)
     elif (event == 'RedeemVoucher' and entry['Type'] == 'bounty'):  # bounties collected
-        for z in entry['Factions']:
-            if z['Faction'].lower() == this.FactionName.get().lower() and this.SystemName.get().lower() == system.lower():
-                Bounty = z['Amount']
-                this.BountiesCollected.set(this.BountiesCollected.get() + Bounty)
-                this.bountiescollected2['text'] = human_format(this.BountiesCollected.get())
-
+        dailyPlans.checkBounty(event)
     elif event == 'MarketSell':  # Trade Profit
         if this.StationFaction.get().lower() == this.FactionName.get().lower() and this.SystemName.get().lower() == system.lower():
             cost = entry['Count'] * entry['AvgPricePaid']

@@ -62,6 +62,9 @@ class DailyPlan:
         self.heroFaction = heroFaction
         self.targetFaction = targetFaction
 
+    def currentlyInTargetSystem(self) -> bool:
+        return self.isSystemName(self.currentSystem)
+
     def isSystemName(self, name: str) -> bool:
         return name.lower() == self.systemName.lower()
 
@@ -157,30 +160,22 @@ class DailyPlan:
 
         return ret
 
-    def checkBounty(self, event: Dict) -> List[Status]:
-        a = 4
-        #
-        # If benefits hero faction in goal system
-        #
-        if a == 0:
-            return Status(1, "Bounty Contribution for Hero Faction")
-
-        #
-        # If benefits target faction in goal system
-        #
-        if a == 0:
-            return Status(-1, "Bounty Contribution for Enemy Faction")
-
-        #
-        # If benefits competitor faction in goal system
-        #
-        if a == 0:
-            return Status(-1, "Bounty Contribution for Competitor Faction")
-
-        #
-        # Otherwise
-        #
-        return Status(0, "No effect bounty")
+    def checkBounty(self, entry: Dict) -> List[Status]:
+        ret: List[Status] = []
+        if self.currentlyInTargetSystem():
+            for z in entry['Factions']:
+                factionName = z['Faction']
+                bounty = z['Amount']
+                if self.isHeroFactionName(factionName):
+                    msg = f"Bounty Contribution for Hero Faction {factionName} of {bounty} credits."
+                    ret.add(Status(1, msg))
+                elif self.isTargetFactionName(factionName):
+                    msg = f"Bounty Contribution for Enemy Faction {factionName} of {bounty} credits."
+                    ret.add(Status(-1, msg))
+                else:
+                    msg = f"Bounty Contribution for Competitor Faction {factionName} of {bounty} credits."
+                    ret.add(Status(-1, msg))
+        return ret
 
     def checkCartography(self, event: Dict) -> List[Status]:
         if this.StationFaction.get().lower() == this.FactionName.get().lower() and this.SystemName.get().lower() == system.lower():
