@@ -18,8 +18,9 @@ from config import appname, config
 
 import modules.ClubFactionNames
 
-#PLUGIN_NAME = "edmClub"
+# PLUGIN_NAME = "edmClub"
 # This could also be returned from plugin_start3()
+from craid.edmc.modules import GlobalDictionaries
 from modules.DailyPlans import DailyPlans
 from modules.LogReporter import LogReporter
 
@@ -38,17 +39,20 @@ if not logger.hasHandlers():
 
     logger.setLevel(level)
     logger_channel = logging.StreamHandler()
-    logger_formatter = logging.Formatter(f'%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(lineno)d:%(funcName)s: %(message)s')
+    logger_formatter = logging.Formatter(
+        f'%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(lineno)d:%(funcName)s: %(message)s')
     logger_formatter.default_time_format = '%Y-%m-%d %H:%M:%S'
     logger_formatter.default_msec_format = '%s.%03d'
     logger_channel.setFormatter(logger_formatter)
     logger.addHandler(logger_channel)
 
 logReporter: LogReporter = LogReporter(logger)
-FACTION_HERO = 1
-FACTION_NONE = 0
-FACTION_COMPETITOR = -1
-FACTION_TARGET = -2
+
+
+# FACTION_HERO = 1
+# FACTION_NONE = 0
+# FACTION_COMPETITOR = -1
+# FACTION_TARGET = -2
 
 class edmClub:
     """
@@ -127,6 +131,9 @@ class edmClub:
 
 cc = edmClub()
 
+#
+# Direct EDMC callbacks to class
+#
 
 # Note that all of these could be simply replaced with something like:
 # plugin_start3 = cc.on_load
@@ -150,24 +157,13 @@ def plugin_app(parent: tk.Frame) -> Optional[tk.Frame]:
     return cc.setup_main_ui(parent)
 
 
-# def is_system_of_interest() -> bool:
-#     return False
-#
-# def is_target_faction() -> bool:
-#     return False
-#
-# def is_hero_faction() -> bool:
-#     return False
-#
-# def is_competitor_faction() -> bool:
-#     return False
-
 dailyPlans: DailyPlans = DailyPlans(logReporter)
+
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
     event = entry['event']
 
-    if event == 'Docked' or (event =='Location' and entry['Docked']==True):
+    if event == 'Docked' or (event == 'Location' and entry['Docked'] == True):
         sf = entry['StationFaction']
         sa = entry['SystemAddress']
         ss = entry['StarSystem']
@@ -175,20 +171,20 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         dailyPlans.setCurrentSystem(ss)
         dailyPlans.setCurrentStation(station)
         dailyPlans.setCurrentStationFaction(stationFactionName)
-        modules.globals.add_system_and_address(ss, sa)
+        GlobalDictionaries.add_system_and_address(ss, sa)
     elif event == 'Undocked':
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
-    elif (event == 'Location'):
+    elif event == 'Location':
         sn = entry['StarSystem']
         sa = entry['SystemAddress']
         dailyPlans.setCurrentSystem(sn)
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
-        modules.globals.add_system_and_address(sn, sa)
+        GlobalDictionaries.add_system_and_address(sn, sa)
     elif event == 'MissionCompleted':  # get mission influence value
         dailyPlans.checkMissionSuccess(event)
-    elif ( (event == 'SellExplorationData') or (event == 'MultiSellExplorationData')) :  # get carto data value
+    elif (event == 'SellExplorationData') or (event == 'MultiSellExplorationData'):  # get carto data value
         dailyPlans.checkCartography(event)
     elif (event == 'RedeemVoucher' and entry['Type'] == 'bounty'):  # bounties collected
         dailyPlans.checkBounty(event)
@@ -203,11 +199,10 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         dailyPlans.setCurrentSystem(sn)
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
-        modules.globals.add_system_and_address(sn, sa)
+        GlobalDictionaries.add_system_and_address(sn, sa)
 
-
-        #FIXME: Not sure we'd need list of local faction names
-        #FIXME: Having a list of faction states, however would be useful for
+        # FIXME: Not sure we'd need list of local faction names
+        # FIXME: Having a list of faction states, however would be useful for
         # boom/investment bonuses, detecting war/civil war/exotic states
         #
         # Update faction stuff
