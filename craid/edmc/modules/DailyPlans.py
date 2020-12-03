@@ -28,6 +28,11 @@ class DailyPlans:
         for plan in self.plans:
             plan.setCurrentSystemStation(sta)
 
+    def setCurrentStationFaction(self, fac:str):
+        for plan in self.plans:
+            plan.setCurrentSystemStationFaction(fac)
+
+
     #
     # Checks against each of the plans in the list
     #

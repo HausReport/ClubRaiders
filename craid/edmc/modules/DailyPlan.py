@@ -45,6 +45,7 @@ class DailyPlan:
     # currentSystemAddress = None
     currentSystemFactions = None
     currentStation = None
+    currentStationFaction = None
 
     #
     # Goals
@@ -101,6 +102,9 @@ class DailyPlan:
 
     def setCurrentStation(self, sta: str):
         self.currentStation: str = sta
+
+    def setCurrentStationFaction(self, fac: str):
+        self.currentStationFaction: str = fac
 
     #
     # Positive Levers
@@ -177,33 +181,22 @@ class DailyPlan:
                     ret.add(Status(-1, msg))
         return ret
 
-    def checkCartography(self, event: Dict) -> List[Status]:
-        if this.StationFaction.get().lower() == this.FactionName.get().lower() and this.SystemName.get().lower() == system.lower():
-            this.CartDataSold.set(this.CartDataSold.get() + entry['TotalEarnings'])
-            this.cartdata2["text"] = human_format(this.CartDataSold.get())
-        a = 4
-        #
-        # If benefits hero faction in goal system
-        #
-        if a == 0:
-            return Status(1, "Cartography Contribution for Hero Faction")
-
-        #
-        # If benefits target faction in goal system
-        #
-        if a == 0:
-            return Status(1, "Cartography Contribution for Enemy Faction")
-
-        #
-        # If benefits competitor faction in goal system
-        #
-        if a == 0:
-            return Status(1, "Cartography Contribution for Competitor Faction")
-
-        #
-        # Otherwise
-        #
-        return Status(1, "No Effect Cartography Contribution")
+    def checkCartography(self, entry: Dict) -> List[Status]:
+        ret: List[Status] = []
+        if self.currentlyInTargetSystem():
+            factionName = self.currentStationFaction
+            if factionName is not None:
+                bounty = entry['TotalEarnings']
+                if self.isHeroFactionName(factionName):
+                    msg = f"Cartography Contribution for Hero Faction {factionName} of {bounty} credits."
+                    ret.add(Status(1, msg))
+                elif self.isTargetFactionName(factionName):
+                    msg = f"Cartography Contribution for Enemy Faction {factionName} of {bounty} credits."
+                    ret.add(Status(-1, msg))
+                else:
+                    msg = f"Cartography Contribution for Competitor Faction {factionName} of {bounty} credits."
+                    ret.add(Status(-1, msg))
+        return ret
 
     def checkTrade(self, event: Dict) -> List[Status]:
         # handle profit and loss cases
