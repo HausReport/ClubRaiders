@@ -8,7 +8,7 @@ setup(
     author_email='Erlaed2@fdev.not',
     # Needed to actually package something
     # packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
-    packages=['assets', 'craid', 'craid.eddb', 'craid.eddb.base', 'craid.eddb.faction',
+    packages=['assets', 'craid', 'craid.bgsBuddy', 'craid.eddb', 'craid.eddb.base', 'craid.eddb.faction',
               'craid.eddb.loader', 'craid.eddb.loader.strategy',
               'craid.eddb.powers', 'craid.eddb.system',
               'craid.eddb.util', 'craid.eddb.util.dataUpdate',
