@@ -17,9 +17,9 @@ import myNotebook as nb
 from config import appname, config
 
 import GlobalDictionaries
-from modules.DailyPlan import DailyPlan
-from modules.DailyPlans import DailyPlans
-from modules.LogReporter import LogReporter
+from helpers.DailyPlan import DailyPlan
+from helpers.DailyPlans import DailyPlans
+from helpers.LogReporter import LogReporter
 
 plugin_name = os.path.basename(os.path.dirname(__file__))
 

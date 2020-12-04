@@ -1,7 +1,7 @@
 from typing import List, Dict
 
-from DailyPlan import DailyPlan
-from LogReporter import LogReporter
+from .DailyPlan import DailyPlan
+from .LogReporter import LogReporter
 
 
 class DailyPlans:
@@ -11,7 +11,7 @@ class DailyPlans:
         self.reporter = reporter
 
     def addPlan(self, plan: DailyPlan):
-        self.plans.add(plan)
+        self.plans.append(plan)
 
     #
     # Updated by DailyPlans as ship moves

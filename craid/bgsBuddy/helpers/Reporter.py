@@ -5,8 +5,8 @@
 from abc import ABC, abstractmethod
 from typing import Dict
 
-from craid.bgs DailyPlan import DailyPlan
-from Status import Status
+from .DailyPlan import DailyPlan
+from .Status import Status
 
 class Reporter(ABC):
 

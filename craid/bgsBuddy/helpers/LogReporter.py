@@ -2,9 +2,9 @@ import logging
 import os
 from typing import Dict
 
-from DailyPlan import DailyPlan
-from Status import Status
-from Reporter import Reporter
+from .DailyPlan import DailyPlan
+from .Status import Status
+from .Reporter import Reporter
 
 
 class LogReporter(Reporter):

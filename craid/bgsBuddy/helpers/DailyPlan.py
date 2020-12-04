@@ -25,8 +25,8 @@
 # Other states?
 from typing import List, Dict
 
-#import GlobalDictionaries
-from Status import Status
+from .Status import Status
+#from ..GlobalDictionaries import *
 
 CAT_MISSION_SUCCESS = "MissionSuccess"
 CAT_BOUNTY = "Bounty"
@@ -157,6 +157,7 @@ class DailyPlan:
             print(factionName)
             for influenceEntry in influenceEntries:
                 entrySystemAddress = str(influenceEntry['SystemAddress'])
+                from .. import GlobalDictionaries
                 entrySystemName = GlobalDictionaries.get_system_by_address(entrySystemAddress)
                 inf = len(influenceEntry['Influence'])
                 if self.isSystemName(entrySystemName):  # FIXME: revisit case of two systems with same name
