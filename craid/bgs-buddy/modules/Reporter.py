@@ -5,9 +5,8 @@
 from abc import ABC, abstractmethod
 from typing import Dict
 
-from craid.edmc.modules.DailyPlan import DailyPlan
-from craid.edmc.modules.Status import Status
-
+from craid.bgs DailyPlan import DailyPlan
+from Status import Status
 
 class Reporter(ABC):
 

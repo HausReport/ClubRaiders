@@ -16,8 +16,8 @@ from typing import Optional
 import myNotebook as nb
 from config import appname, config
 
-from craid.edmc.modules import GlobalDictionaries
-from craid.edmc.modules.DailyPlan import DailyPlan
+import GlobalDictionaries
+from modules.DailyPlan import DailyPlan
 from modules.DailyPlans import DailyPlans
 from modules.LogReporter import LogReporter
 
@@ -74,7 +74,8 @@ class EdmClub:
     def on_unload(self) -> None:
         """
         on_unload is called by plugin_stop below.
-        It is the last thing called before EDMC shuts down. Note that blocking code here will hold the shutdown process.
+        It is the last thing called before EDMC shuts down. :1
+        Note that blocking code here will hold the shutdown process.
         """
         self.on_preferences_closed("", False)  # Save our prefs
 
@@ -169,29 +170,29 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     event = entry['event']
 
     if event == 'Docked' or (event == 'Location' and entry['Docked'] == True):
-        sf = entry['StationFaction']
-        sa = entry['SystemAddress']
-        ss = entry['StarSystem']
-        stationFactionName = sf['Name']
-        dailyPlans.setCurrentSystem(ss)
+        stationFaction = entry['StationFaction']
+        systemAddress = entry['SystemAddress']
+        systemName = entry['StarSystem']
+        stationFactionName = stationFaction['Name']
+        dailyPlans.setCurrentSystem(systemName)
         dailyPlans.setCurrentStation(station)
         dailyPlans.setCurrentStationFaction(stationFactionName)
-        GlobalDictionaries.add_system_and_address(ss, sa)
+        GlobalDictionaries.add_system_and_address(systemName, systemAddress)
     elif event == 'Undocked':
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
     elif event == 'Location':
-        sn = entry['StarSystem']
-        sa = entry['SystemAddress']
-        dailyPlans.setCurrentSystem(sn)
+        systemName = entry['StarSystem']
+        systemAddress = entry['SystemAddress']
+        dailyPlans.setCurrentSystem(systemName)
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
-        GlobalDictionaries.add_system_and_address(sn, sa)
+        GlobalDictionaries.add_system_and_address(systemName, systemAddress)
     elif event == 'MissionCompleted':  # get mission influence value
         dailyPlans.checkMissionSuccess(event)
     elif (event == 'SellExplorationData') or (event == 'MultiSellExplorationData'):  # get carto data value
         dailyPlans.checkCartography(event)
-    elif (event == 'RedeemVoucher' and entry['Type'] == 'bounty'):  # bounties collected
+    elif event == 'RedeemVoucher' and entry['Type'] == 'bounty':  # bounties collected
         dailyPlans.checkBounty(event)
     elif event == 'MarketSell':  # Trade Profit
         dailyPlans.checkTrade(event)
@@ -199,12 +200,12 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         #
         # Update system stuff
         #
-        sn = entry['StarSystem']
-        sa = entry['SystemAddress']
-        dailyPlans.setCurrentSystem(sn)
+        systemName = entry['StarSystem']
+        systemAddress = entry['SystemAddress']
+        dailyPlans.setCurrentSystem(systemName)
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
-        GlobalDictionaries.add_system_and_address(sn, sa)
+        GlobalDictionaries.add_system_and_address(systemName, systemAddress)
 
         # FIXME: Not sure we'd need list of local faction names
         # FIXME: Having a list of faction states, however would be useful for

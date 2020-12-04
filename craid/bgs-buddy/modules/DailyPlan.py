@@ -25,7 +25,7 @@
 # Other states?
 from typing import List, Dict
 
-import GlobalDictionaries
+#import GlobalDictionaries
 from Status import Status
 
 CAT_MISSION_SUCCESS = "MissionSuccess"
