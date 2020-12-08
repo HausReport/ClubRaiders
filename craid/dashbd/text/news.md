@@ -14,7 +14,8 @@
 ### Recent Victories
 
 * Hodack Prison Colony removed from Honoto and LHS 2477.
-* Pleiades Squadrons removed Pleiades Resource Enterprise Pleiades Sector DL-Y d65.
+* CQC Holdings removed from Auserine and Ye'kua'gsa.
+* Pleiades Squadrons removed Pleiades Resource Enterprise Pleiades Sector DL-Y d65 and Pleiades Sector IH-V c2-5.
 * Hodack Prison Colony removed from Akandi and Delkar.
 * Pleiades Squadrons removed Pleiades Resource Enterprise from HIP 177692, HIP 17694.
 * Sirius Hyperspace removed from Mooramba.
