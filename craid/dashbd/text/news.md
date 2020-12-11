@@ -7,12 +7,13 @@
 * $n_very_easy factions rated "very easy" to attack
 
 ### Current Campaigns
-* [Close Enconters Corps/Pleiades Historical Society fighting Wreaken Construction in HR 5975](https://discord.gg/PdaCsRA)
+* [Close Enconters Corps/Pleiades Historical Society fighting Hodack Prison Colony in Solati](https://discord.gg/PdaCsRA)
 * [Minutemen fighting Sirius Corp in LAWD 26](https://discord.gg/PdaCsRA)
 * [Pleiades Squadrons fighting Pleiades Resource Enterprise in Pleione](https://discord.gg/PdaCsRA)
 
 ### Recent Victories
 
+* Wreaken Construction removed from HR 5975.
 * Hodack Prison Colony removed from Honoto and LHS 2477.
 * CQC Holdings removed from Auserine and Ye'kua'gsa.
 * Pleiades Squadrons removed Pleiades Resource Enterprise Pleiades Sector DL-Y d65 and Pleiades Sector IH-V c2-5.
